@@ -12,6 +12,7 @@
     - [FAQ](#faq)
     - [Core concept](#core-concept)
     - [? pagina amici](#-pagina-amici)
+  - [Navigazione](#navigazione)
   - [UX dal primo momento](#ux-dal-primo-momento)
     - [Short term reward](#short-term-reward)
   - [Obbiettivi](#obbiettivi)
@@ -43,15 +44,53 @@
 
 ### Pagina progresso
 
+visualizzazione Progressi in base al raggio temporale (giorno, settimana, mese, anno)
+
+possibili implementazioni
+
+1. Tema Città
+   1. "Giorno per Giorno", "mese per mese" ...
+      1. la rappresentazione *giorno* è la più "piccola" dei dati, disponendo in ordine cronologico il tempo impiegato su ogni determinata task (più alto è il bloccco, maggior tempo è stato impiegato)
+      2. la rappresentazione *settimana* viene dopo di quella giornaliera, si può effettuare il focus di una settimana cliccando sulla torre, si verrà portati alla rappresentazione inferiore (in questo caso giorno)
+      3. dalla rappresentazione *settimana* in poi, le torri sono formate da blocchi che sono la somma del tempo impiegato per ogni tag 
+
+   2. "Interno giorno"
+      1. simile a giorno per giorno, ma si può visualizzare il giorno, settimana, mese, ..., corrente
+
+![mockup citta](./md_img/mockup_citta.png)
+
+
+- Tema Foresta
+  - visualizzazione (griglia 2D o isometrica), un albero sano per ogni task completata, uno secco per ogni task abbandonata prima dello scadere del tempo.
+  - Tipi di visualizzazione:
+    - giorno
+    - settimana
+    - mese
+    - anno
+  - Cliccando su un albero si apre una finestra pop-up con indicato il tempo impiegato nella task, il tipo di albero, il tag e se la task è stata completata o meno.
+
 
 ### Login - registrazione
 
+altra finestra che prende il focus, di base su Login, cliccando su un pulsante si passa alla registrazione
+
+filtri password usando le regex, mostrando all'utente i filtri che falliscono
 
 ### impostazioni
 
 
+
 ### FAQ
 
+Frequently asked questions
+
+- Quali modalità per tenere traccia del tempo ci sono?
+- A cosa servono i tag?
+- Come si crea un tag?
+- Come si elimina un tag?
+- Dove posso vedere le statistiche?
+- Dove trovo le impostazioni?
+- Come posso cambiare tra tema chiaro e quello scuro?
 
 ### Core concept
 
@@ -61,6 +100,10 @@
 Se è stato effettuato il login  viene visuaizzata la lista amici con la classifica del tempo di concentrazione, altrimenti viene rimandato l'utente alla schermata di login (o di registrazione se non ha mia loggato).
 
 ___
+
+## Navigazione
+
+
 
 ## UX dal primo momento
 
@@ -139,8 +182,8 @@ che lo richiede, quali:
 ### Possibili temi
 
 - Foresta
-  - seme
-  - pianta cresiuta 
+  - arboscello
+  - pianta cresiuta
 - Foresta Minecraft
 - Orto di zio
 - Città
