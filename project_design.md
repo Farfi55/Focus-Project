@@ -160,12 +160,14 @@ che lo richiede, quali:
   - impostazioni audio
 - Short-cut
   - lista di short-cut
+- Easter Eggs :egg: :rabbit:
 
 
 ### feature secondarie 
 
 - tema light - dark
 - FAQ
+- Frasi motivazionali
 - Musica di sottofondo
 - Core concept
   - tutorial
@@ -182,10 +184,12 @@ che lo richiede, quali:
 ### Possibili temi
 
 - Foresta
+  - ![vista progressi alberi](md_img/three_view.png)
   - arboscello
   - pianta cresiuta
 - Foresta Minecraft
 - Orto di zio
 - Città
+  - ![design improvvisato](md_img/layout_cani.png)
 - Acquario
 - Zoo
