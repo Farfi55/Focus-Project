@@ -167,6 +167,7 @@ che lo richiede, quali:
 
 - tema light - dark
 - FAQ
+- Modallità Focus-Break (metodo pomodoro)
 - Frasi motivazionali
 - Musica di sottofondo
 - Core concept
