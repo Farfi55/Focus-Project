@@ -4,7 +4,6 @@
 
 - [Design Focus Project](#design-focus-project)
   - [Pagine applicazione](#pagine-applicazione)
-    - [Schermata caricamento](#schermata-caricamento)
     - [Pagina principale](#pagina-principale)
     - [Pagina progresso](#pagina-progresso)
     - [Login - registrazione](#login---registrazione)
@@ -22,10 +21,17 @@
 
 ## Pagine applicazione
 
-### Schermata caricamento
-
-- Logo
-- Progressbar
+- pagina Home
+  - timer
+  - cronometro
+- pagina progresso
+  - selezione 
+- pagina statistiche
+- pagina tags
+- pagina help
+  - scorciatoie
+- pagina impostazioni
+  - 
 
 
 ### Pagina principale
@@ -172,9 +178,9 @@ che lo richiede, quali:
 - Musica di sottofondo
 - Core concept
   - tutorial
-- shop con cose aquistabili utilizzando le monete ottenute dai task
+<!-- - shop con cose aquistabili utilizzando le monete ottenute dai task
   - alberi
-  - suono di task completata
+  - suono di task completata -->
 - amici
   - classifica amici
 - Achievement
