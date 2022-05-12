@@ -8,11 +8,11 @@
 <?import org.kordamp.ikonli.javafx.StackedFontIcon?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.BaseController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #D4FFCC;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.BaseController">
    <children>
       <BorderPane layoutX="240.0" layoutY="150.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane minWidth="70.0" prefWidth="70.0" BorderPane.alignment="TOP_LEFT">
+            <AnchorPane minWidth="70.0" prefWidth="70.0" style="-fx-background-color: #FFF;" BorderPane.alignment="TOP_LEFT">
                <children>
                   <VBox prefHeight="280.0" prefWidth="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -20,7 +20,7 @@
                            <graphic>
                               <StackedFontIcon>
                                  <children>
-                                    <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" />
+                                    <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" text="󰚡" />
                                  </children>
                               </StackedFontIcon>
                            </graphic>
@@ -54,7 +54,7 @@
                         </MFXButton>
                      </children>
                   </VBox>
-                  <VBox alignment="BOTTOM_LEFT" prefHeight="140.0" prefWidth="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox alignment="BOTTOM_LEFT" prefHeight="210.0" prefWidth="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavInfoClick" prefHeight="70.0" prefWidth="70.0" text="Info" textAlignment="CENTER">
                            <graphic>
