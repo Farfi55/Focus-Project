@@ -28,7 +28,12 @@
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
-            <version>12.2.0</version>
+            <version>12.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-materialdesign2-pack</artifactId>
+            <version>12.3.1</version>
         </dependency>
         <dependency>
             <groupId>io.github.palexdev</groupId>
@@ -70,7 +75,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                mafiadelprimobanco.focusproject/mafiadelprimobanco.focusproject.HelloApplication
+                                mafiadelprimobanco.focusproject/mafiadelprimobanco.focusproject.MainApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
