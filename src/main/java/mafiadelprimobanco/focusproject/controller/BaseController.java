@@ -3,7 +3,7 @@ package mafiadelprimobanco.focusproject.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
-import mafiadelprimobanco.focusproject.controller.handlers.SceneHandler;
+import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject.controller.handlers;
+package mafiadelprimobanco.focusproject;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

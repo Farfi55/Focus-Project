@@ -2,7 +2,6 @@ package mafiadelprimobanco.focusproject;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import mafiadelprimobanco.focusproject.controller.handlers.SceneHandler;
 
 import java.io.IOException;
 
