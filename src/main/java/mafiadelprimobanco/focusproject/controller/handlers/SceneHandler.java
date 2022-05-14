@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.controller.handlers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class SceneHandler
 	public void init(Stage stage) throws IOException
 	{
 		this.stage = stage;
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ViewReferences.BASE));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLReferences.BASE));
 		this.scene = new Scene(fxmlLoader.load(), 900, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);

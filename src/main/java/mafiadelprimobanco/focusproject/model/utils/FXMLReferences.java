@@ -1,6 +1,6 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.model.utils;
 
-public class ViewReferences
+public class FXMLReferences
 {
 	public static final String BASE = "Base-view.fxml";
 	public static final String HOME = "";

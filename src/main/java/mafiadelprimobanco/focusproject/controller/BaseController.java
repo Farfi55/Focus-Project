@@ -1,8 +1,10 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
+import mafiadelprimobanco.focusproject.controller.handlers.SceneHandler;
+import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
 
@@ -14,25 +16,25 @@ public class BaseController
 	@FXML
 	void onNavHomeClick(ActionEvent ignoredEvent)
 	{
-		navTo(ViewReferences.HOME, "Home");
+		navTo(FXMLReferences.HOME, "Home");
 	}
 
 	@FXML
 	void onNavProgressClick(ActionEvent ignoredEvent)
 	{
-		navTo(ViewReferences.PROGRESS, "Progressi");
+		navTo(FXMLReferences.PROGRESS, "Progressi");
 	}
 
 	@FXML
 	void onNavStatisticsClick(ActionEvent ignoredEvent)
 	{
-		navTo(ViewReferences.STATISTICS, "Statistiche");
+		navTo(FXMLReferences.STATISTICS, "Statistiche");
 	}
 
 	@FXML
 	void onNavTagClick(ActionEvent ignoredEvent)
 	{
-		navTo(ViewReferences.TAGS, "Tag");
+		navTo(FXMLReferences.TAGS, "Tag");
 	}
 
 	@FXML
