@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
@@ -10,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #D4FFCC;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.BaseController">
    <children>
-      <BorderPane layoutX="240.0" layoutY="150.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane fx:id="baseBorderPane" layoutX="240.0" layoutY="150.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <AnchorPane minWidth="70.0" prefWidth="70.0" style="-fx-background-color: #FFF;" BorderPane.alignment="TOP_LEFT">
                <children>
@@ -20,10 +21,13 @@
                            <graphic>
                               <StackedFontIcon>
                                  <children>
-                                    <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" text="󰚡" />
+                                    <FontIcon focusTraversable="true" iconLiteral="mdi2h-home-outline" iconSize="50" text="󰚡" />
                                  </children>
                               </StackedFontIcon>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Home" />
+                           </tooltip>
                         </MFXButton>
                         <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavProgressClick" prefHeight="70.0" prefWidth="70.0" text="Progress" textAlignment="CENTER">
                            <graphic>
@@ -33,6 +37,9 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Progressi" />
+                           </tooltip>
                         </MFXButton>
                         <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxWidth="70.0" minWidth="70.0" onAction="#onNavStatisticsClick" prefHeight="70.0" prefWidth="70.0" text="Statistics" textAlignment="CENTER">
                            <graphic>
@@ -42,6 +49,9 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Statistiche" />
+                           </tooltip>
                         </MFXButton>
                         <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavTagClick" prefHeight="70.0" prefWidth="70.0" text="Tags" textAlignment="CENTER">
                            <graphic>
@@ -51,6 +61,9 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Tags" />
+                           </tooltip>
                         </MFXButton>
                      </children>
                   </VBox>
@@ -64,6 +77,9 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Informazioni" />
+                           </tooltip>
                         </MFXButton>
                         <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavUserClick" prefHeight="70.0" prefWidth="70.0" text="User" textAlignment="CENTER">
                            <graphic>
@@ -73,6 +89,9 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Account" />
+                           </tooltip>
                         </MFXButton>
                         <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavSettingsClick" prefHeight="70.0" prefWidth="70.0" text="Settings" textAlignment="CENTER">
                            <graphic>
@@ -82,6 +101,9 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
+                           <tooltip>
+                              <Tooltip text="Impostazioni" />
+                           </tooltip>
                         </MFXButton>
                      </children>
                   </VBox>
