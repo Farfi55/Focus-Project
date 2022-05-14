@@ -1,16 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="mafiadelprimobanco.focusproject.BaseController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #D4FFCC;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.BaseController">
+   <children>
+      <BorderPane layoutX="240.0" layoutY="150.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <left>
+            <AnchorPane minWidth="70.0" prefWidth="70.0" style="-fx-background-color: #FFF;" BorderPane.alignment="TOP_LEFT">
+               <children>
+                  <VBox prefHeight="280.0" prefWidth="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavHomeClick" prefHeight="70.0" prefWidth="70.0" text="Home" textAlignment="CENTER">
+                           <graphic>
+                              <StackedFontIcon>
+                                 <children>
+                                    <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" text="󰚡" />
+                                 </children>
+                              </StackedFontIcon>
+                           </graphic>
+                        </MFXButton>
+                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavProgressClick" prefHeight="70.0" prefWidth="70.0" text="Progress" textAlignment="CENTER">
+                           <graphic>
+                              <StackedFontIcon>
+                                 <children>
+                                    <FontIcon iconLiteral="mdi2t-tree-outline" iconSize="50" />
+                                 </children>
+                              </StackedFontIcon>
+                           </graphic>
+                        </MFXButton>
+                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxWidth="70.0" minWidth="70.0" onAction="#onNavStatisticsClick" prefHeight="70.0" prefWidth="70.0" text="Statistics" textAlignment="CENTER">
+                           <graphic>
+                              <StackedFontIcon>
+                                 <children>
+                                    <FontIcon iconLiteral="mdi2c-chart-line" iconSize="40" />
+                                 </children>
+                              </StackedFontIcon>
+                           </graphic>
+                        </MFXButton>
+                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavTagClick" prefHeight="70.0" prefWidth="70.0" text="Tags" textAlignment="CENTER">
+                           <graphic>
+                              <StackedFontIcon>
+                                 <children>
+                                    <FontIcon iconLiteral="mdi2t-tag-text-outline" iconSize="45" />
+                                 </children>
+                              </StackedFontIcon>
+                           </graphic>
+                        </MFXButton>
+                     </children>
+                  </VBox>
+                  <VBox alignment="BOTTOM_LEFT" prefHeight="210.0" prefWidth="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavInfoClick" prefHeight="70.0" prefWidth="70.0" text="Info" textAlignment="CENTER">
+                           <graphic>
+                              <StackedFontIcon>
+                                 <children>
+                                    <FontIcon iconLiteral="mdi2i-information-variant" iconSize="50" />
+                                 </children>
+                              </StackedFontIcon>
+                           </graphic>
+                        </MFXButton>
+                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavUserClick" prefHeight="70.0" prefWidth="70.0" text="User" textAlignment="CENTER">
+                           <graphic>
+                              <StackedFontIcon>
+                                 <children>
+                                    <FontIcon iconLiteral="mdi2a-account-circle-outline" iconSize="50" />
+                                 </children>
+                              </StackedFontIcon>
+                           </graphic>
+                        </MFXButton>
+                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavSettingsClick" prefHeight="70.0" prefWidth="70.0" text="Settings" textAlignment="CENTER">
+                           <graphic>
+                              <StackedFontIcon>
+                                 <children>
+                                    <FontIcon iconLiteral="mdi2c-cog-outline" iconSize="50" />
+                                 </children>
+                              </StackedFontIcon>
+                           </graphic>
+                        </MFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>
