@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class SceneHandler
 	private final Alert alert;
 	private Stage stage;
 	private Scene scene;
+	private BorderPane baseBorderPane;
 
 	private SceneHandler()
 	{
@@ -32,9 +34,9 @@ public class SceneHandler
 	}
 
 
-	public void setBaseBorderPane(AnchorPane baseBorderPane)
+	public void setBaseBorderPane(BorderPane baseBorderPane)
 	{
-
+		this.baseBorderPane = baseBorderPane;
 	}
 
 

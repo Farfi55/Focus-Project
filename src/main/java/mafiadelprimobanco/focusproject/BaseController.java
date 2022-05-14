@@ -3,11 +3,12 @@ package mafiadelprimobanco.focusproject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 public class BaseController
 {
 	@FXML
-	private AnchorPane baseBorderPane;
+	private BorderPane baseBorderPane;
 
 
 	@FXML
