@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
