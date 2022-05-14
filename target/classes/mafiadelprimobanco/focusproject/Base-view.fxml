@@ -15,7 +15,7 @@
                <children>
                   <VBox prefHeight="280.0" prefWidth="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavHomeClick" prefHeight="70.0" prefWidth="70.0" text="Home" textAlignment="CENTER">
+                        <MFXButton accessibleHelp="Home" alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavHomeClick" prefHeight="70.0" prefWidth="70.0" text="Home" textAlignment="CENTER">
                            <graphic>
                               <StackedFontIcon>
                                  <children>

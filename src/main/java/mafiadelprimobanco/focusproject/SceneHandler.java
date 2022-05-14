@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -26,31 +25,26 @@ public class SceneHandler
 	public void init(Stage stage) throws IOException
 	{
 		this.stage = stage;
-		FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("Base-view.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ViewReferences.BASE));
 		this.scene = new Scene(fxmlLoader.load(), 900, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);
 		stage.show();
 	}
 
-
-	public void setBaseBorderPane(BorderPane baseBorderPane)
+	public void loadPage(String pagePathRef) throws IOException
 	{
-		this.baseBorderPane = baseBorderPane;
+		assert baseBorderPane != null;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(pagePathRef));
+		baseBorderPane.setCenter(loader.load());
 	}
-
-
-	public void loadScene(String sceneFile)
-	{
-
-	}
-
-	// alert methods
 
 	public void showInfoMessage(String title, String header, String message)
 	{
 		showMessage(title, header, message, Alert.AlertType.INFORMATION);
 	}
+
+	// alert methods
 
 	public void showInfoMessage(String title, String message)
 	{
@@ -92,9 +86,12 @@ public class SceneHandler
 		return alert.getResult();
 	}
 
-	public static SceneHandler getInstance() {return instance;}
+	public static SceneHandler getInstance() { return instance; }
 
-
+	public void setBaseBorderPane(BorderPane baseBorderPane)
+	{
+		this.baseBorderPane = baseBorderPane;
+	}
 
 
 }
