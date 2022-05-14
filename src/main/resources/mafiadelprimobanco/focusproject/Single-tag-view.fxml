@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="50.0" prefWidth="474.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <MFXButton ellipsisString="   " prefHeight="25.0" prefWidth="38.0" style="-fx-background-radius: 6em; -fx-border-radius: 6em;">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" top="12.0" />
+                     </HBox.margin>
+                  </MFXButton>
+                  <MFXTextField minHeight="20.0" minWidth="200.0" prefHeight="30.0" prefWidth="230.0">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="5.0" top="10.0" />
+                     </HBox.margin>
+                  </MFXTextField>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onAction="#onNavInfoClick" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 5em; -fx-background-color: rgba(0,0,0,0);" text="Info" textAlignment="CENTER">
+                     <graphic>
+                        <StackedFontIcon iconSize="25" prefHeight="12.0" prefWidth="30.0">
+                           <children>
+                              <FontIcon iconLiteral="mdi2c-close-circle-outline" iconSize="50" text="󰅚" />
+                           </children>
+                        </StackedFontIcon>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="10.0" top="5.0" />
+                     </HBox.margin>
+                  </MFXButton>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
