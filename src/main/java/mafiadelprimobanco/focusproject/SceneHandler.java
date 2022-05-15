@@ -16,17 +16,15 @@ import java.util.Objects;
 
 public class SceneHandler
 {
+
 	private static final SceneHandler instance = new SceneHandler();
 
+	public static SceneHandler getInstance() { return instance; }
 	private final Alert alert;
 	private Stage stage;
 	private Scene scene;
-
 	private BorderPane baseBorderPane;
-
-
-	private final String defaultTheme = "light";
-	//	private String currentTheme = defaultTheme;
+	private String currentTheme = "light";
 
 	private SceneHandler()
 	{
@@ -40,6 +38,7 @@ public class SceneHandler
 		this.scene = new Scene(fxmlLoader.load(), 900, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);
+		loadFonts();
 		loadStyle();
 
 		stage.show();
@@ -52,12 +51,12 @@ public class SceneHandler
 		baseBorderPane.setCenter(loader.load());
 	}
 
+	// alert methods
+
 	public void showInfoMessage(String title, String header, String message)
 	{
 		showMessage(title, header, message, Alert.AlertType.INFORMATION);
 	}
-
-	// alert methods
 
 	public void showInfoMessage(String title, String message)
 	{
@@ -89,6 +88,8 @@ public class SceneHandler
 		return showMessage(title, header, message, Alert.AlertType.CONFIRMATION);
 	}
 
+	// Style & Font methods
+
 	private ButtonType showMessage(String title, String header, String message, Alert.AlertType alertType)
 	{
 		alert.setAlertType(alertType);
@@ -99,24 +100,40 @@ public class SceneHandler
 		return alert.getResult();
 	}
 
-
-	private void loadStyle()
+	private void loadFonts()
 	{
 		// load fonts
 		for (String font : List.of("fonts/Roboto/Roboto-Regular.ttf", "fonts/Roboto/Roboto-Bold.ttf"))
 			Font.loadFont(String.valueOf(getClass().getResource(font)), 10);
+	}
+
+	private void loadStyle()
+	{
+		scene.getStylesheets().clear();
+		alert.getDialogPane().getStylesheets().clear();
 
 		// load style
-		for (String style : List.of(defaultTheme, "fonts", "style"))
+		for (String style : List.of(currentTheme, "fonts", "style"))
 		{
 			URL url = getClass().getResource("css/" + style + ".css");
-			String resource = Objects.requireNonNull(url).toExternalForm();
+			String resource = String.valueOf(url);
 			scene.getStylesheets().add(resource);
 			alert.getDialogPane().getStylesheets().add(resource);
 		}
 	}
 
-	public static SceneHandler getInstance() { return instance; }
+	public void toggleLightDarkTheme()
+	{
+		currentTheme = currentTheme.equals("light") ? "dark" : "light";
+		loadStyle();
+	}
+
+	private void changeTheme(String newTheme)
+	{
+		// if the user can use custom themes then sanitize 'newTheme'
+		currentTheme = newTheme;
+		loadStyle();
+	}
 
 	public void setBaseBorderPane(BorderPane baseBorderPane)
 	{
