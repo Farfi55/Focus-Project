@@ -1,0 +1,38 @@
+.root {
+    -fx-background-color: primaryBackgroundColor;
+}
+
+/* BASE Styling */
+
+#navBar {
+    -fx-background-color: secondaryBackgroundColor;
+}
+
+#navBar .button {
+
+    -fx-background-radius: 0em;
+    -fx-background-color: inherit;
+    -fx-text-fill: navTextColor;
+    -fx-icon-color: navTextColor;
+    box-sizing: border-box;
+    -fx-padding: 0 5px 0 5px;
+    -fx-border-width: 0px;
+    -fx-border-color: primarySelectionColor;
+}
+
+#navBar .mfx-button:hover {
+    -fx-background-color: secondarySelectionColor;
+    -fx-text-fill: navTextColorSelected;
+    -fx-icon-color: primarySelectionColor;
+}
+#navBar .mfx-button:pressed, #navBar .mfx-button:selected {
+    -fx-background-color: secondarySelectionColor;
+    -fx-text-fill: navTextColorSelected;
+    -fx-icon-color: primarySelectionColor;
+    -fx-border-width: 0 0 0 5px;
+    -fx-padding: 0 5px 0 0;
+}
+
+#navBar .mfx-button * {
+    -fx-icon-color: inherit;
+}

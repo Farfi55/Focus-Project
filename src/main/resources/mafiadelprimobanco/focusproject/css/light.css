@@ -3,6 +3,13 @@
 */
 
 * {
-    --example-var-name: hsl(166, 37%, 62%);
-
+    primaryBackgroundColor: #def7ff;
+    secondaryBackgroundColor: #67c2fc;
+    primarySelectionColor: #1f78fd;
+    secondarySelectionColor: #a5d8ff;
+    tertiarySelectionColor: #0181d7;
+    textColor: black;
+    selectedTextColor: black;
+    navTextColor: #064254;
+    navTextColorSelected: #ffffff;
 }
