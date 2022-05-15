@@ -23,11 +23,11 @@
     -fx-effect: dropshadow(gaussian, rgba(52, 80, 52, 0.45), 10, 0.2, 2, 2);
 }
 
-#navBar .mfx-button:hover {
+#navBar .mfx-button:hover , #navBar .mfx-button:focused{
     -fx-icon-color: palette1-0;
 }
 
-#navBar .mfx-button:hover .ikonli-font-icon {
+#navBar .mfx-button:hover .ikonli-font-icon,  #navBar .mfx-button:focused .ikonli-font-icon{
     -fx-effect: dropshadow(gaussian, rgba(217, 255, 182, 0.45), 10, 0.3, 2, 2);
 }
 

@@ -21,7 +21,7 @@
                            <graphic>
                               <StackedFontIcon>
                                  <children>
-                                    <FontIcon focusTraversable="true" iconLiteral="mdi2h-home-outline" iconSize="50" text="󰚡" />
+                                    <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" text="󰚡" />
                                  </children>
                               </StackedFontIcon>
                            </graphic>
