@@ -29,7 +29,7 @@ public class SceneHandler
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLReferences.BASE));
 		this.scene = new Scene(fxmlLoader.load(), 900, 600);
 		stage.setTitle("Focus");
-		stage.setScene(scene);
+		stage.setScene(this.scene);
 		stage.show();
 	}
 
