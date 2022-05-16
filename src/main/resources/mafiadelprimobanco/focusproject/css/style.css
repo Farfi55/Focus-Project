@@ -42,3 +42,5 @@
 #navBar .mfx-button * {
     -fx-icon-color: inherit;
 }
+
+.progress-indicator .percentage { -fx-fill:null; }
