@@ -1,0 +1,8 @@
+/*
+    this css file should only include variables definitions
+*/
+
+* {
+    --example-var-name: hsl(207, 43%, 34%);
+
+}

@@ -35,6 +35,30 @@
                 <AND>
                   <FIELD>true</FIELD>
                   <FINAL>true</FINAL>
+                  <NAME>instance</NAME>
+                  <STATIC>true</STATIC>
+                </AND>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <AND>
+                  <METHOD>true</METHOD>
+                  <NAME>getInstance</NAME>
+                  <PUBLIC>true</PUBLIC>
+                  <STATIC>true</STATIC>
+                </AND>
+              </match>
+            </rule>
+          </section>
+          <section>
+            <rule>
+              <match>
+                <AND>
+                  <FIELD>true</FIELD>
+                  <FINAL>true</FINAL>
                   <PUBLIC>true</PUBLIC>
                   <STATIC>true</STATIC>
                 </AND>
