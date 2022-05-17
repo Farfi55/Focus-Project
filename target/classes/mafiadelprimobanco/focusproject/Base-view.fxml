@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,99 +10,76 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.BaseController">
    <children>
-      <BorderPane fx:id="borderPane" layoutX="1.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+      <BorderPane fx:id="borderPane" layoutX="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
-            <AnchorPane id="navBar" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" BorderPane.alignment="TOP_LEFT">
+            <AnchorPane id="navBar" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="80.0" BorderPane.alignment="TOP_LEFT">
                <children>
-                  <VBox maxWidth="70.0" minWidth="70.0" prefHeight="280.0" prefWidth="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <MFXRectangleToggleNode maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavHomeClick" prefHeight="70.0" prefWidth="70.0" selected="true" style="-fx-background-radius: 0px; -fx-border-width: 0px;">
-                           <graphic>
-                              <StackedFontIcon>
-                                 <children>
-                                    <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" text="󰚡" />
-                                 </children>
-                              </StackedFontIcon>
-                           </graphic>
+                        <MFXRectangleToggleNode maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavHomeClick" prefHeight="60.0" prefWidth="60.0" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="nav_toggle_group" />
                            </toggleGroup>
-                        </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavProgressClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
                            <graphic>
-                              <StackedFontIcon>
-                                 <children>
-                                    <FontIcon iconLiteral="mdi2t-tree-outline" iconSize="50" />
-                                 </children>
-                              </StackedFontIcon>
+                              <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" />
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Home" />
+                           </tooltip>
+                        </MFXRectangleToggleNode>
+                        <MFXRectangleToggleNode maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavProgressClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
+                           <graphic>
+                              <FontIcon iconLiteral="mdi2t-tree-outline" iconSize="50" />
                            </graphic>
                            <tooltip>
                               <Tooltip text="Progressi" />
                            </tooltip>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode layoutX="10.0" layoutY="469.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavStatisticsClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="469.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavStatisticsClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
-                              <StackedFontIcon>
-                                 <children>
-                                    <FontIcon iconLiteral="mdi2c-chart-line" iconSize="40" />
-                                 </children>
-                              </StackedFontIcon>
+                              <FontIcon iconLiteral="mdi2c-chart-line" iconSize="40" />
                            </graphic>
                            <tooltip>
                               <Tooltip text="Statistiche" />
                            </tooltip>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode layoutX="10.0" layoutY="573.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavTagClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="573.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavTagClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
-                              <StackedFontIcon>
-                                 <children>
-                                    <FontIcon iconLiteral="mdi2t-tag-text-outline" iconSize="45" />
-                                 </children>
-                              </StackedFontIcon>
+                              <FontIcon iconLiteral="mdi2t-tag-text-outline" iconSize="44" />
                            </graphic>
                            <tooltip>
                               <Tooltip text="Tags" />
                            </tooltip>
                         </MFXRectangleToggleNode>
                         <Region maxHeight="2000.0" minHeight="0.0" prefHeight="2000.0" prefWidth="0.0" />
-                        <MFXRectangleToggleNode layoutX="10.0" layoutY="644.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavInfoClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="644.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavInfoClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
-                              <StackedFontIcon>
-                                 <children>
-                                    <FontIcon iconLiteral="mdi2i-information-variant" iconSize="50" />
-                                 </children>
-                              </StackedFontIcon>
+                              <FontIcon iconLiteral="mdi2i-information-variant" iconSize="50" />
                            </graphic>
                            <tooltip>
                               <Tooltip text="Informazioni" />
                            </tooltip>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode layoutX="10.0" layoutY="714.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavUserClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="714.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavUserClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
-                              <StackedFontIcon>
-                                 <children>
-                                    <FontIcon iconLiteral="mdi2a-account-circle-outline" iconSize="50" />
-                                 </children>
-                              </StackedFontIcon>
+                              <FontIcon iconLiteral="mdi2a-account-circle-outline" iconSize="50" />
                            </graphic>
                            <tooltip>
                               <Tooltip text="Account" />
                            </tooltip>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavSettingsClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavSettingsClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
-                              <StackedFontIcon prefWidth="422.0">
-                                 <children>
-                                    <FontIcon iconLiteral="mdi2c-cog-outline" iconSize="50" />
-                                 </children>
-                              </StackedFontIcon>
+                              <FontIcon iconLiteral="mdi2c-cog-outline" iconSize="50" />
                            </graphic>
                         </MFXRectangleToggleNode>
                      </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
                   </VBox>
                </children>
             </AnchorPane>
