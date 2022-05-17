@@ -18,7 +18,7 @@
                <children>
                   <VBox maxWidth="-Infinity" minWidth="-Infinity" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <MFXRectangleToggleNode fx:id="homeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavHomeClick" prefHeight="60.0" prefWidth="60.0" selected="true">
+                        <MFXRectangleToggleNode fx:id="homeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onHomeClick" prefHeight="60.0" prefWidth="60.0" selected="true">
                            <toggleGroup>
                               <ToggleGroup fx:id="nav_toggle_group" />
                            </toggleGroup>
@@ -26,33 +26,33 @@
                               <FontIcon iconLiteral="mdi2h-home-outline" iconSize="50" />
                            </graphic>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode fx:id="progressButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavProgressClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode fx:id="progressButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onProgressClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <FontIcon iconLiteral="mdi2t-tree-outline" iconSize="50" />
                            </graphic>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode fx:id="statisticsButton" layoutX="10.0" layoutY="469.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavStatisticsClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode fx:id="statisticsButton" layoutX="10.0" layoutY="469.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onStatisticsClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <FontIcon iconLiteral="mdi2c-chart-line" iconSize="40" />
                            </graphic>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode fx:id="tagButton" layoutX="10.0" layoutY="573.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavTagClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode fx:id="tagButton" layoutX="10.0" layoutY="573.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onTagClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <FontIcon iconLiteral="mdi2t-tag-text-outline" iconSize="44" />
                            </graphic>
                         </MFXRectangleToggleNode>
                         <Region maxHeight="2000.0" minHeight="0.0" prefHeight="2000.0" prefWidth="0.0" />
-                        <MFXRectangleToggleNode fx:id="infoButton" layoutX="10.0" layoutY="644.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavInfoClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode fx:id="infoButton" layoutX="10.0" layoutY="644.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onInfoClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <FontIcon iconLiteral="mdi2i-information-variant" iconSize="50" />
                            </graphic>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode fx:id="userButton" layoutX="10.0" layoutY="714.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavUserClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode fx:id="accountButton" layoutX="10.0" layoutY="714.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onAccountClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <FontIcon iconLiteral="mdi2a-account-circle-outline" iconSize="50" />
                            </graphic>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onNavSettingsClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
+                        <MFXRectangleToggleNode fx:id="settingsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onSettingsClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <FontIcon iconLiteral="mdi2c-cog-outline" iconSize="50" />
                            </graphic>
