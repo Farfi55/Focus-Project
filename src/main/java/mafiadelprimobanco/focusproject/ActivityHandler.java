@@ -29,11 +29,11 @@ public class ActivityHandler
 		activityStarted = true;
 
 		//just for testing purpose
-		currActivityType = ActivityType.CRONOMETER;
+		currActivityType = ActivityType.CRONO;
 
 		switch (currActivityType)
 		{
-			case CRONOMETER -> startChronoActivity(progressBarTime, timeLabel);
+			case CRONO -> startChronoActivity(progressBarTime, timeLabel);
 			case TIMER -> startTimerActivity(progressBarTime, timeLabel);
 		}
 	}
