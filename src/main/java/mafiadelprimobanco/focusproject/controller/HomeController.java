@@ -8,15 +8,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.ActivityHandler;
-import mafiadelprimobanco.focusproject.TagHandler;
-import mafiadelprimobanco.focusproject.TagView;
-import mafiadelprimobanco.focusproject.model.ActivityObsever;
-import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 public class HomeController {
@@ -135,7 +130,7 @@ public class HomeController {
         /*TagHandler.getInstance().addTagView(new TagView( new Tag ("ciao", Color.RED)));
         tagChooserComboBox.setItems(TagHandler.getInstance().getTags());*/
 
-        ActivityHandler.getInstance().addListener(new ActivityObsever() {
+        ActivityHandler.getInstance().addListener(new ActivityObserver() {
             @Override
             public void onStart()
             {

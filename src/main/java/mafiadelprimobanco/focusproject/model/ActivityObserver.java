@@ -1,6 +1,6 @@
 package mafiadelprimobanco.focusproject.model;
 
-public interface ActivityObsever
+public interface ActivityObserver
 {
 	void onStart();
 	void onUpdate();

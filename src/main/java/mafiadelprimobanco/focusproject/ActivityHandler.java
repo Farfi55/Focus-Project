@@ -1,6 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
-import mafiadelprimobanco.focusproject.model.ActivityObsever;
+import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class ActivityHandler
 
 	private ActivityHandler() { }
 
-	private final List<ActivityObsever> listeners = new ArrayList<>();
+	private final List<ActivityObserver> listeners = new ArrayList<>();
 
 	private Timer activityTimer = null;
 	private boolean activityStarted = false;
@@ -118,25 +118,25 @@ public class ActivityHandler
 
 	public double getCurrentProgressBarTick() { return currentProgressBarTick; }
 
-	public void addListener(ActivityObsever startLst) { listeners.add(startLst); }
+	public void addListener(ActivityObserver startLst) { listeners.add(startLst); }
 
-	public void removeListener(ActivityObsever startLst) { listeners.remove(startLst); }
+	public void removeListener(ActivityObserver startLst) { listeners.remove(startLst); }
 
 	public void fireStartActivity()
 	{
-		for (ActivityObsever lt : listeners)
+		for (ActivityObserver lt : listeners)
 			lt.onStart();
 	}
 
 	public void fireUpdateActivity()
 	{
-		for (ActivityObsever lt : listeners)
+		for (ActivityObserver lt : listeners)
 			lt.onUpdate();
 	}
 
 	public void fireEndActivity()
 	{
-		for (ActivityObsever lt : listeners)
+		for (ActivityObserver lt : listeners)
 			lt.onEnd();
 	}
 
