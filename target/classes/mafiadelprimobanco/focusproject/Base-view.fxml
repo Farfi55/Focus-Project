@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import org.kordamp.ikonli.javafx.StackedFontIcon?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.BaseController">
    <children>
-      <BorderPane fx:id="baseBorderPane" layoutX="1.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+      <BorderPane fx:id="borderPane" layoutX="1.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
          <left>
             <AnchorPane id="navBar" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" BorderPane.alignment="TOP_LEFT">
                <children>
                   <VBox maxWidth="70.0" minWidth="70.0" prefHeight="280.0" prefWidth="70.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavHomeClick" prefHeight="70.0" prefWidth="70.0" text="Home" textAlignment="CENTER">
+                        <MFXRectangleToggleNode maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavHomeClick" prefHeight="70.0" prefWidth="70.0" selected="true" style="-fx-background-radius: 0px; -fx-border-width: 0px;">
                            <graphic>
                               <StackedFontIcon>
                                  <children>
@@ -25,11 +27,11 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
-                           <tooltip>
-                              <Tooltip text="Home" />
-                           </tooltip>
-                        </MFXButton>
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavProgressClick" prefHeight="70.0" prefWidth="70.0" text="Progress" textAlignment="CENTER">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="nav_toggle_group" />
+                           </toggleGroup>
+                        </MFXRectangleToggleNode>
+                        <MFXRectangleToggleNode maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavProgressClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <StackedFontIcon>
                                  <children>
@@ -40,8 +42,8 @@
                            <tooltip>
                               <Tooltip text="Progressi" />
                            </tooltip>
-                        </MFXButton>
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavStatisticsClick" prefHeight="70.0" prefWidth="70.0" text="Statistics" textAlignment="CENTER">
+                        </MFXRectangleToggleNode>
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="469.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavStatisticsClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <StackedFontIcon>
                                  <children>
@@ -52,8 +54,8 @@
                            <tooltip>
                               <Tooltip text="Statistiche" />
                            </tooltip>
-                        </MFXButton>
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavTagClick" prefHeight="70.0" prefWidth="70.0" text="Tags" textAlignment="CENTER">
+                        </MFXRectangleToggleNode>
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="573.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavTagClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <StackedFontIcon>
                                  <children>
@@ -64,9 +66,9 @@
                            <tooltip>
                               <Tooltip text="Tags" />
                            </tooltip>
-                        </MFXButton>
+                        </MFXRectangleToggleNode>
                         <Region maxHeight="2000.0" minHeight="0.0" prefHeight="2000.0" prefWidth="0.0" />
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavInfoClick" prefHeight="70.0" prefWidth="70.0" text="Info" textAlignment="CENTER">
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="644.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavInfoClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <StackedFontIcon>
                                  <children>
@@ -77,8 +79,8 @@
                            <tooltip>
                               <Tooltip text="Informazioni" />
                            </tooltip>
-                        </MFXButton>
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavUserClick" prefHeight="70.0" prefWidth="70.0" text="User" textAlignment="CENTER">
+                        </MFXRectangleToggleNode>
+                        <MFXRectangleToggleNode layoutX="10.0" layoutY="714.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavUserClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <StackedFontIcon>
                                  <children>
@@ -89,8 +91,8 @@
                            <tooltip>
                               <Tooltip text="Account" />
                            </tooltip>
-                        </MFXButton>
-                        <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavSettingsClick" prefHeight="70.0" prefWidth="70.0" text="Settings" textAlignment="CENTER">
+                        </MFXRectangleToggleNode>
+                        <MFXRectangleToggleNode maxHeight="70.0" maxWidth="70.0" minHeight="70.0" minWidth="70.0" onAction="#onNavSettingsClick" prefHeight="70.0" prefWidth="70.0" style="-fx-background-radius: 0px; -fx-border-width: 0px;" toggleGroup="$nav_toggle_group">
                            <graphic>
                               <StackedFontIcon prefWidth="422.0">
                                  <children>
@@ -98,15 +100,15 @@
                                  </children>
                               </StackedFontIcon>
                            </graphic>
-                           <tooltip>
-                              <Tooltip text="Impostazioni" />
-                           </tooltip>
-                        </MFXButton>
+                        </MFXRectangleToggleNode>
                      </children>
                   </VBox>
                </children>
             </AnchorPane>
          </left>
+         <center>
+            <StackPane fx:id="contentRoot" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>
