@@ -2,7 +2,6 @@ package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
@@ -58,92 +57,98 @@ public class BaseController
 		{
 			switch (keyEvent.getCode())
 			{
-				case DIGIT1, H -> onNavHomeClick(null);
-				case DIGIT2, P -> onNavProgressClick(null);
-				case DIGIT3, S -> onNavStatisticsClick(null);
-				case DIGIT4, T -> onNavTagClick(null);
-				case DIGIT5, I -> onNavInfoClick(null);
-				case DIGIT6, U -> onNavUserClick(null);
-				case DIGIT7, COMMA -> onNavSettingsClick(null);
+				case DIGIT1, H -> onNavHomeClick();
+				case DIGIT2, P -> onNavProgressClick();
+				case DIGIT3, S -> onNavStatisticsClick();
+				case DIGIT4, T -> onNavTagClick();
+				case DIGIT5, I -> onNavInfoClick();
+				case DIGIT6, U -> onNavUserClick();
+				case DIGIT7, COMMA -> onNavSettingsClick();
 			}
 		}
-		else if (keyEvent.getCode() == KeyCode.F1) onNavInfoClick(null);
-	}
-
-	void setNavigationEnabled(boolean value){
-		canNavigate = value;
-		for (var button: navButtons)
-			button.setDisable(value);
+		else if (keyEvent.getCode() == KeyCode.F1) onNavInfoClick();
 	}
 
 	@FXML
-	void onNavHomeClick(ActionEvent event)
+	void onNavHomeClick()
 	{
-		navTo(FXMLReferences.HOME, "Home");
-		homeButton.setSelected(true);
+		if (navTo(FXMLReferences.HOME, "Home")) homeButton.setSelected(true);
 	}
 
 	@FXML
-	void onNavProgressClick(ActionEvent event)
+	void onNavProgressClick()
 	{
-		navTo(FXMLReferences.PROGRESS, "Progressi");
-		progressButton.setSelected(true);
+		if (navTo(FXMLReferences.PROGRESS, "Progressi")) progressButton.setSelected(true);
 	}
 
 	@FXML
-	void onNavStatisticsClick(ActionEvent event)
+	void onNavStatisticsClick()
 	{
-		navTo(FXMLReferences.STATISTICS, "Statistiche");
-		statisticsButton.setSelected(true);
+		if (navTo(FXMLReferences.STATISTICS, "Statistiche")) statisticsButton.setSelected(true);
 	}
 
 	@FXML
-	void onNavTagClick(ActionEvent event)
+	void onNavTagClick()
 	{
-		navTo(FXMLReferences.TAGS, "Tag");
-		tagButton.setSelected(true);
+		if (navTo(FXMLReferences.TAGS, "Tag")) tagButton.setSelected(true);
 	}
 
 	@FXML
-	void onNavInfoClick(ActionEvent event)
+	void onNavInfoClick()
 	{
 		// todo: implement
 		infoButton.setSelected(true);
 	}
 
 	@FXML
-	void onNavUserClick(ActionEvent event)
+	void onNavUserClick()
 	{
 		// todo: implement
 		userButton.setSelected(true);
 	}
 
 	@FXML
-	void onNavSettingsClick(ActionEvent event)
+	void onNavSettingsClick()
 	{
 		// todo: implement
 		settingsButton.setSelected(true);
+		setNavigationEnabled(!canNavigate);
 	}
 
-	private void navTo(String pagePathRef, String pageName)
+	private boolean navTo(String pagePathRef, String pageName)
 	{
-		if(!canNavigate)
+		// A bit of a hack but whatever
+		// todo: to be added to the if once pages refs are defined:
+		// && !pagePathRef.equals(FXMLReferences.SETTINGS)
+		if (!canNavigate)
 		{
-			// todo: give feedback
-			return;
+			SceneHandler.getInstance().showInfoMessage("Navigation disabled",
+					"Navigation is disabled once the activity has started");
+			return false;
 		}
 		/* disabled for now
 		try
 		{
 			SceneHandler.getInstance().loadPage(pagePathRef);
+			return true;
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 			SceneHandler.getInstance().showErrorMessage("Errore Di caricamento",
 					"Impossibile caricare la pagina " + pageName);
+			return false;
 		}
 		*/
+		return true;
+	}
+
+	void setNavigationEnabled(boolean value)
+	{
+		canNavigate = value;
+		for (var button : navButtons)
+			button.setDisable(!value);
+		settingsButton.setDisable(false);
 	}
 
 

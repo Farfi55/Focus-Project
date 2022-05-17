@@ -7,4 +7,5 @@ public class FXMLReferences
 	public static final String PROGRESS = "";
 	public static final String STATISTICS = "";
 	public static final String TAGS = "";
+	public static final String SETTINGS = "";
 }
