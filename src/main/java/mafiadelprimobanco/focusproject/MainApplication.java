@@ -1,6 +1,7 @@
 package mafiadelprimobanco.focusproject;
 
 import javafx.application.Application;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class MainApplication extends Application
 		try
 		{
 			SceneHandler.getInstance().init(stage);
+
 		} catch (IOException e)
 		{
 			e.printStackTrace();
