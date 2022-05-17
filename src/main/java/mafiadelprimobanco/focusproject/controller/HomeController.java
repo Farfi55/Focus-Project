@@ -7,10 +7,12 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import mafiadelprimobanco.focusproject.ActivityHandler;
+import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -42,6 +44,7 @@ public class HomeController {
         Platform.runLater(() ->
         {
             actionBtn.setText("Avvia");
+            activityTimeTextField.editableProperty().setValue(true);
             activityTimeTextField.setText("00:00");
             progressBarTime.setProgress(0.0);
         });
@@ -76,13 +79,10 @@ public class HomeController {
     {
         if (!ActivityHandler.getInstance().isActivityStarted())
         {
-            actionBtn.setText("Ferma");
-            activityTimeTextField.editableProperty().setValue(false);
             ActivityHandler.getInstance().startActivity();
         }
         else
         {
-            activityTimeTextField.editableProperty().setValue(true);
             ActivityHandler.getInstance().stopCurrActivity();
         }
     }
@@ -98,29 +98,6 @@ public class HomeController {
     @FXML
     void setTime(KeyEvent event)
     {
-
-
-        /*if (event.getCode().equals(KeyCode.ENTER))
-        {
-            if (text.length() == 2) activityTimeTextField.setText(text + ":00");
-            ActivityHandler.getInstance().setExecutionTime();
-            return;
-        }
-
-        if (text.length() > 4)
-        {
-            activityTimeTextField.setText(text.substring(0,4));
-            return;
-        }
-
-        if (text.length() >= 2)
-        {
-            activityTimeTextField.setText(text + ":");
-        }
-        else
-        {
-            activityTimeTextField.setText(text.replace(":", ""));
-        }*/
     }
 
 
@@ -134,6 +111,9 @@ public class HomeController {
             @Override
             public void onStart()
             {
+                actionBtn.setText("Ferma");
+                activityTimeTextField.editableProperty().setValue(false);
+
                 switch (ActivityHandler.getInstance().getCurrActivityType())
                 {
                     case CRONO -> progressBarTime.setProgress(0.0);
@@ -160,9 +140,37 @@ public class HomeController {
             if (ActivityHandler.getInstance().isActivityStarted()) return;
 
             String text = activityTimeTextField.getText();
+            
+            int len = text.length();
 
-            ActivityHandler.getInstance().setExecutionTime(Integer.parseInt(text));
+            if (len == 0) return;
+
+            int minutes = 0;
+            int seconds = 0;
+
+            /*TODO fix focus shit to make that working again */
+            /*
+                if (len == 3)
+                    activityTimeTextField.setText(text.substring(0, len-2) + ":" + text.substring(len - 2, len));
+            */
+
+            if (len >= 4)
+            {
+                minutes = Integer.parseInt(text.split(":")[0]);
+                seconds = Integer.parseInt(text.split(":")[1]);
+            }else
+                seconds = Integer.parseInt(text);
+
+            if (seconds > 59)
+            {
+                SceneHandler.getInstance().showErrorMessage("Errore", "Errore nella formattazione dei secondi.\n" +
+                                                                                   "Prova ad inserire un valore inferiore a 59");
+                return;
+            }
+
+            ActivityHandler.getInstance().setExecutionTime(minutes * 60 + seconds);
         });
+
     }
 }
 
