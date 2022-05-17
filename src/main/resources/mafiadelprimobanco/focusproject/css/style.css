@@ -20,9 +20,11 @@
     -fx-padding: 0;
 }
 
-#navBar .mfx-rectangle-toggle-node .mfx-ripple-generator {
-    -mfx-background-opacity: 0;
+#navBar .mfx-ripple-generator {
+    /* since I cant get the size right, I just disabled it*/
+    -mfx-paused: true;
     -fx-background-size: 60px 60px;
+
 }
 
 #navBar .ikonli-font-icon {
