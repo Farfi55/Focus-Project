@@ -2,7 +2,7 @@ package mafiadelprimobanco.focusproject.model.utils;
 
 public class FXMLReferences
 {
-	public static final String BASE = "Base-view.fxml";
+	public static final String BASE = "/mafiadelprimobanco/focusproject/Base-view.fxml";
 	public static final String HOME = "";
 	public static final String PROGRESS = "";
 	public static final String STATISTICS = "";
