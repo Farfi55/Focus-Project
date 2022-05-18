@@ -5,7 +5,6 @@ import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -24,7 +23,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 
-public class HomeController implements TagsObserver
+public class HomeController implements TagsObserver, ActivityObserver
 {
 
 	@FXML private MFXTextField activityTimeTextField;
@@ -46,7 +45,6 @@ public class HomeController implements TagsObserver
 	@FXML
 	void initialize()
 	{
-
 		try
 		{
 			for (Tag tag : TagHandler.getInstance().getTags())
@@ -59,43 +57,13 @@ public class HomeController implements TagsObserver
 			e.printStackTrace();
 		}
 
+		TagHandler.getInstance().addListener(this);
 
 		activitySelectorComboBox.getItems().addAll("Chronometer", "Timer", "Tomato");
 
 		activitySelectorComboBox.selectFirst();
 
-		ActivityHandler.getInstance().addListener(new ActivityObserver()
-		{
-			@Override
-			public void onStart()
-			{
-				actionBtn.setText("Ferma");
-				activityTimeTextField.editableProperty().setValue(false);
-
-				splitPaneView.setDividerPositions(1.0);
-
-				//tagSidebar.setVisible(false);
-
-				switch (ActivityHandler.getInstance().getCurrActivityType())
-				{
-					case CRONO -> progressBarTime.setProgress(0.0);
-					case TIMER -> progressBarTime.setProgress(1.0);
-				}
-			}
-
-			@Override
-			public void onUpdate()
-			{
-				switch (ActivityHandler.getInstance().getCurrActivityType())
-				{
-					case CRONO -> onChronometerUpdateTick();
-					case TIMER -> onTimerUpdateTick();
-				}
-			}
-
-			@Override
-			public void onEnd() { onStopActivityEvent(); }
-		});
+		ActivityHandler.getInstance().addListener(this);
 
 		activityTimeTextField.textProperty().addListener((e) ->
 		{
@@ -151,19 +119,50 @@ public class HomeController implements TagsObserver
 	@Override
 	public void onTagRemoving(Tag tag)
 	{
-        for (Node child : tagSidebar.getChildren())
-        {
-            if (child instanceof TagController tagController)
-                if (tagController.getTag().getUuid().equals(tag.getUuid()))
-                {
-                    tagSidebar.getChildren().remove(tagController);
-                    return;
-                }
-        }
+		for (Node child : tagSidebar.getChildren())
+		{
+			// TODO: FIX, this is always false, child is instance of AnchorPane, not TagController
+			if (child instanceof TagController tagController)
+				if (tagController.getTag().getUuid().equals(tag.getUuid()))
+				{
+					tagSidebar.getChildren().remove(tagController);
+					return;
+				}
+		}
 	}
 
 	@Override
 	public void onTagChanged(Tag tag) { }
+
+	@Override
+	public void onStart()
+	{
+		actionBtn.setText("Ferma");
+		activityTimeTextField.editableProperty().setValue(false);
+
+		splitPaneView.setDividerPositions(1.0);
+
+		//tagSidebar.setVisible(false);
+
+		switch (ActivityHandler.getInstance().getCurrActivityType())
+		{
+			case CRONO -> progressBarTime.setProgress(0.0);
+			case TIMER -> progressBarTime.setProgress(1.0);
+		}
+	}
+
+	@Override
+	public void onUpdate()
+	{
+		switch (ActivityHandler.getInstance().getCurrActivityType())
+		{
+			case CRONO -> onChronometerUpdateTick();
+			case TIMER -> onTimerUpdateTick();
+		}
+	}
+
+	@Override
+	public void onEnd() { onStopActivityEvent(); }
 
 	public void onStopActivityEvent()
 	{

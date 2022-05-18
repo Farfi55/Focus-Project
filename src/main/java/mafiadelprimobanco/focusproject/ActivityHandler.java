@@ -13,20 +13,15 @@ public class ActivityHandler
 	private static final ActivityHandler instance = new ActivityHandler();
 
 	public static ActivityHandler getInstance() { return instance; }
-
-	private ActivityHandler() { }
-
 	private final List<ActivityObserver> listeners = new ArrayList<>();
-
 	private Timer activityTimer = null;
 	private boolean activityStarted = false;
 	private ActivityType currActivityType = ActivityType.TIMER;
-
 	//seconds -- used inside the timer function
 	private int executionTime = 0;
-
 	private String currentTimeTick = "00:00";
 	private double currentProgressBarTick = 0.0;
+	private ActivityHandler() { }
 
 	public void startActivity()
 	{
@@ -104,23 +99,15 @@ public class ActivityHandler
 		}, 0, 1000);
 	}
 
-	//SETTERS
-	public void setActivityType(ActivityType type) { currActivityType = type; }
+	public void addListener(ActivityObserver observer) {
+		assert !listeners.contains(observer);
+		listeners.add(observer);
+	}
 
-	public void setExecutionTime(int executionTime) { this.executionTime = executionTime; }
-
-	//GETTERS
-	public ActivityType getCurrActivityType() { return currActivityType; }
-
-	public boolean isActivityStarted() { return activityStarted; }
-
-	public String getCurrentTimeTick() { return currentTimeTick; }
-
-	public double getCurrentProgressBarTick() { return currentProgressBarTick; }
-
-	public void addListener(ActivityObserver startLst) { listeners.add(startLst); }
-
-	public void removeListener(ActivityObserver startLst) { listeners.remove(startLst); }
+	public void removeListener(ActivityObserver observer) {
+		assert listeners.contains(observer);
+		listeners.remove(observer);
+	}
 
 	public void fireStartActivity()
 	{
@@ -139,5 +126,19 @@ public class ActivityHandler
 		for (ActivityObserver lt : listeners)
 			lt.onEnd();
 	}
+
+	//GETTERS
+	public ActivityType getCurrActivityType() { return currActivityType; }
+
+	public boolean isActivityStarted() { return activityStarted; }
+
+	public String getCurrentTimeTick() { return currentTimeTick; }
+
+	public double getCurrentProgressBarTick() { return currentProgressBarTick; }
+
+	//SETTERS
+	public void setActivityType(ActivityType type) { currActivityType = type; }
+
+	public void setExecutionTime(int executionTime) { this.executionTime = executionTime; }
 
 }
