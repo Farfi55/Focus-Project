@@ -7,11 +7,11 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import org.kordamp.ikonli.javafx.StackedFontIcon?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.TagController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="450.0" styleClass="tagView" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.TagController">
    <children>
-      <MFXButton fx:id="colorButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="   " onAction="#onColorButtonClicked" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 6em; -fx-border-radius: 6em;" text="Color" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <MFXTextField fx:id="textField" minHeight="20.0" minWidth="200.0" prefHeight="30.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0" />
-      <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" layoutY="-91.0" onAction="#onRemoveButtonClicked" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 5em; -fx-background-color: rgba(0,0,0,0);" text="remove" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MFXButton fx:id="colorButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="   " onAction="#onColorButtonClicked" prefHeight="30.0" prefWidth="30.0" styleClass="tagViewColorButton" text="Color" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <MFXTextField fx:id="textField" minHeight="20.0" minWidth="200.0" prefHeight="30.0" prefWidth="230.0" styleClass="tagViewTextField" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0" />
+      <MFXButton alignment="BOTTOM_CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxWidth="-Infinity" onAction="#onRemoveButtonClicked" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 5em; -fx-background-color: rgba(0,0,0,0);" styleClass="tagViewRemoveButton" text="remove" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <graphic>
             <StackedFontIcon iconSize="25" prefHeight="12.0" prefWidth="30.0">
                <children>

@@ -76,6 +76,6 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <VBox id="homeTagList" fx:id="tagSidebar" alignment="TOP_CENTER" prefHeight="450.0" prefWidth="210.0" SplitPane.resizableWithParent="false" />
+      <VBox id="homeTagList" fx:id="tagSidebar" alignment="TOP_CENTER" prefHeight="450.0" prefWidth="210.0" spacing="10.0" SplitPane.resizableWithParent="false" />
    </items>
 </SplitPane>

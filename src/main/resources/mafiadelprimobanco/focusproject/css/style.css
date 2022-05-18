@@ -70,9 +70,9 @@
     -fx-background-color: transparent;
 }
 
-#homeProgressDisplay{
-
-}
+/*#homeProgressDisplay{*/
+/*    */
+/*}*/
 
 #homeProgressDisplay .mfx-progress-spinner{
     -mfx-color1: palette2-2;
@@ -82,7 +82,26 @@
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
 }
-#homeTagList {
+/*#homeTagList {*/
+
+/*}*/
+
+/* STYLE tagView */
+
+.tagView {
+    -fx-background-color: palette2-1;
+    -fx-background-radius: 10px;
+}
+
+.tagViewColorButton {
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+}
+
+.tagViewTextField{
 
 }
 
+.tagViewRemoveButton {
+
+}
