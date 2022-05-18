@@ -4,28 +4,53 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.model.TagsObserver;
 
-public class TagController
+public class TagController extends AnchorPane implements TagsObserver
 {
-
 	private Tag tag;
 
-	@FXML
-	private MFXButton colorButton;
+	@FXML private MFXButton colorButton;
 
-	@FXML
-	private MFXTextField textField;
+	@FXML private MFXTextField textField;
 
-	@FXML
-	void onColorButtonClicked(ActionEvent event) {
+	@Override
+	public void onTagAdded(Tag tag) { }
 
+	@Override
+	public void onTagRemoving(Tag tag) { }
+
+	@Override
+	public void onTagChanged(Tag tag)
+	{
+		if (this.tag.getUuid().equals(tag.getUuid())) updateGraphics();
 	}
 
-	@FXML
-	void onRemoveButtonClicked(ActionEvent event) {
 
+	@FXML
+	void onColorButtonClicked(ActionEvent event) { }
+
+	@FXML
+	void onRemoveButtonClicked(ActionEvent event) { }
+
+	private void updateGraphics()
+	{
+		setText(tag.getName());
+		setColor(tag.getColor());
+	}
+
+	public final Tag getTag()
+	{
+		return tag;
+	}
+
+	public void setTag(Tag tag)
+	{
+		this.tag = tag;
+		updateGraphics();
 	}
 
 	private void setColor(Color color)
@@ -36,18 +61,5 @@ public class TagController
 	private void setText(String name)
 	{
 		textField.setText(name);
-	}
-
-
-	public void setTag(Tag tag)
-	{
-		this.tag = tag;
-		updateGraphics();
-	}
-
-	private void updateGraphics()
-	{
-		setText(tag.getName());
-		setColor(tag.getColor());
 	}
 }

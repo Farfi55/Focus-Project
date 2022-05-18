@@ -12,11 +12,9 @@ public class TagHandler
 
 	public static TagHandler getInstance() { return instance; }
 
-	private Map<Integer, Tag> tags = new HashMap<>();
-	private Random rand = new Random();
-
-	private List<TagsObserver> observers = new ArrayList<>();
-
+	private final Map<Integer, Tag> tags = new HashMap<>();
+	private final List<TagsObserver> observers = new ArrayList<>();
+	private final Random rand = new Random();
 
 	private TagHandler()
 	{
@@ -55,9 +53,9 @@ public class TagHandler
 				//  give some feedback directly with SceneHandler
 				return false;
 			}
-
-		tags.put(uuid, new Tag(name, color, uuid));
-		// todo: call onTagsChanged event
+		var tag = new Tag(name, color, uuid);
+		tags.put(uuid, tag);
+		onTagAdded(tag);
 		return true;
 	}
 
@@ -69,12 +67,15 @@ public class TagHandler
 			return false;
 		}
 
+		Tag tag = tags.get(uuid);
+		onTagRemoving(tag);
+
 		tags.remove(uuid);
-		// todo: call onTagsChanged event
 		return true;
 	}
 
-	public boolean updateTag(String name, Color color, Integer uuid) {
+	public boolean updateTag(String name, Color color, Integer uuid)
+	{
 		if (!tags.containsKey(uuid))
 		{
 			// todo: give feedback
@@ -88,28 +89,50 @@ public class TagHandler
 				//  give some feedback directly with SceneHandler
 				return false;
 			}
+		var tag = tags.get(uuid);
 
-		tags.get(uuid).setName(name);
-		tags.get(uuid).setColor(color);
-		// todo: call onTagsChanged event
+		tag.setName(name);
+		tag.setColor(color);
+		onTagChanged(tag);
 		return true;
-
 	}
 
-
-	void addListener(TagsObserver tagsObserver)
+	public boolean addListener(TagsObserver tagsObserver)
 	{
-
+		return observers.add(tagsObserver);
 	}
 
-	void removeListener(TagsObserver tagsObserver)
+	public boolean removeListener(TagsObserver tagsObserver)
 	{
-
+		return observers.remove(tagsObserver);
 	}
 
-	void onTagsChanged()
+	private void onTagAdded(Tag tag)
 	{
+		for (TagsObserver tagsObserver : observers)
+			tagsObserver.onTagAdded(tag);
+	}
 
+	private void onTagRemoving(Tag tag)
+	{
+		for (TagsObserver tagsObserver : observers)
+			tagsObserver.onTagRemoving(tag);
+	}
+
+	private void onTagChanged(Tag tag)
+	{
+		for (TagsObserver tagsObserver : observers)
+			tagsObserver.onTagChanged(tag);
+	}
+
+	public final Tag getTag(Integer uuid)
+	{
+		return tags.get(uuid);
+	}
+
+	public Collection<Tag> getTags()
+	{
+		return Collections.unmodifiableCollection(tags.values());
 	}
 
 }

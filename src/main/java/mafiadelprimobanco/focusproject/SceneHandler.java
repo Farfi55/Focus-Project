@@ -5,10 +5,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.controller.TagController;
+import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class SceneHandler
 	private final Alert alert;
 	private Stage stage;
 	private Scene scene;
-	private StackPane contentRoot;
+//	private StackPane contentRoot;
 	private String currentTheme = "light";
 
 	private SceneHandler()
@@ -45,11 +46,25 @@ public class SceneHandler
 		stage.show();
 	}
 
-	public void loadPage(String pagePathRef) throws IOException
+	public Node loadPage(String pagePathRef) throws IOException
 	{
-		assert contentRoot != null;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(pagePathRef));
-		contentRoot.getChildren().setAll((Node)loader.load());
+		return loader.load();
+	}
+
+	public Node createTagView() throws IOException
+	{
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
+		return loader.load();
+	}
+
+	public Node createTagView(Tag tag) throws IOException
+	{
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
+		Node node = loader.load();
+		TagController tagController = loader.getController();
+		tagController.setTag(tag);
+		return node;
 	}
 
 	// alert methods
@@ -136,9 +151,9 @@ public class SceneHandler
 		loadStyle();
 	}
 
-	public void setContentRoot(StackPane contentRoot)
-	{
-		this.contentRoot = contentRoot;
-	}
+//	public void setContentRoot(StackPane contentRoot)
+//	{
+//		this.contentRoot = contentRoot;
+//	}
 
 }
