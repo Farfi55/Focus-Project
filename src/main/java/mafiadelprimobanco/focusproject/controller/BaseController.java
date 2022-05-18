@@ -9,14 +9,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.model.ActivityObserver;
+import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseController
+public class BaseController implements ActivityObserver
 {
 	List<MFXRectangleToggleNode> navButtons = new ArrayList<>();
 	@FXML private AnchorPane root;
@@ -34,7 +37,7 @@ public class BaseController
 	@FXML
 	void initialize()
 	{
-		SceneHandler.getInstance().setContentRoot(contentRoot);
+//		SceneHandler.getInstance().setContentRoot(contentRoot);
 		MFXTooltip.of(homeButton, "Home page (ctrl+H)").install();
 		MFXTooltip.of(progressButton, "Progress page (ctrl+P)").install();
 		MFXTooltip.of(statisticsButton, "Statistics page (ctrl+S)").install();
@@ -53,7 +56,7 @@ public class BaseController
 		navButtons.add(settingsButton);
 		root.setOnKeyPressed(this::handleKeyPress);
 		setNavigationEnabled(true);
-		// todo: add navigation lock on activity start using ActivityHandler events
+		ActivityHandler.getInstance().addListener(this);
 
 		onHomeClick();
 	}
@@ -146,6 +149,28 @@ public class BaseController
 					"Impossibile caricare la pagina " + pageName);
 			return false;
 		}
+	}
+
+	@Override
+	public void onStart()
+	{
+		System.out.println(ActivityHandler.getInstance().getCurrActivityType());
+		switch (ActivityHandler.getInstance().getCurrActivityType())
+		{
+			case TIMER, TOMAT -> setNavigationEnabled(false);
+		}
+	}
+
+	@Override
+	public void onUpdate()
+	{
+
+	}
+
+	@Override
+	public void onEnd()
+	{
+		setNavigationEnabled(true);
 	}
 
 	private void setNavigationEnabled(boolean value)
