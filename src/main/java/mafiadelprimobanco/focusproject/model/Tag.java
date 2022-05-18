@@ -4,23 +4,20 @@ import javafx.scene.paint.Color;
 
 public class Tag
 {
-	String tagName;
+	String name;
 	Color color;
+	Integer uuid;
 
-	public Tag(String tagName, Color color)
+	public Tag(String name, Color color, Integer uuid)
 	{
-		this.tagName = tagName;
+		this.name = name;
 		this.color = color;
+		this.uuid = uuid;
 	}
 
-	public String getTagName()
+	public String getName()
 	{
-		return tagName;
-	}
-
-	public void setTagName(String tagName)
-	{
-		this.tagName = tagName;
+		return name;
 	}
 
 	public Color getColor()
@@ -28,8 +25,20 @@ public class Tag
 		return color;
 	}
 
+	public Integer getUuid()
+	{
+		return uuid;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	public void setColor(Color color)
 	{
 		this.color = color;
 	}
+
+
 }

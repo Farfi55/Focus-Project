@@ -3,6 +3,7 @@ package mafiadelprimobanco.focusproject.controller;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -133,7 +134,8 @@ public class BaseController
 		}
 		try
 		{
-			SceneHandler.getInstance().loadPage(pagePathRef);
+			var page = SceneHandler.getInstance().loadPage(pagePathRef);
+			contentRoot.getChildren().setAll(page);
 			button.setSelected(true);
 			return true;
 		}

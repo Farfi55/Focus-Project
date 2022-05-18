@@ -10,4 +10,7 @@ public class FXMLReferences
 	public static final String INFO = "";
 	public static final String ACCOUNT = "";
 	public static final String SETTINGS = "";
+
+	public static final String TAG = "Tag-view.fxml";
+
 }
