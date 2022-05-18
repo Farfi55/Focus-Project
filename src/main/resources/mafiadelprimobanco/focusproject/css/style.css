@@ -44,3 +44,5 @@
 }
 
 .progress-indicator .percentage { -fx-fill:null; }
+
+.split-pane-divider { -fx-padding: 0; }

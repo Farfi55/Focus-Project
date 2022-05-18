@@ -28,8 +28,8 @@ public class TagController
 
 	public void setColorButton(Color color)
 	{
-		colorButton.setStyle("-fx-background-color: " + color.toString());
-		System.out.println(color.toString());
+		colorButton.setStyle("-fx-background-color: " + color.toString().substring(2));
+		System.out.println(color.toString().substring(2));
 	}
 
 	public void setTagText(String name)

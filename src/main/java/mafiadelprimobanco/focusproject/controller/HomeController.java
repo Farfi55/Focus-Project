@@ -8,12 +8,18 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.TagView;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
+import mafiadelprimobanco.focusproject.model.ActivityType;
+import mafiadelprimobanco.focusproject.model.Tag;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 public class HomeController {
@@ -25,16 +31,19 @@ public class HomeController {
     private MFXButton actionBtn;
 
     @FXML
-    private MFXComboBox<AnchorPane> activitySelectorComboBox;
+    private MFXComboBox<String> activitySelectorComboBox;
 
     @FXML
     private FontIcon fullScreenBtn;
 
     @FXML
+    private SplitPane splitPaneView;
+
+    @FXML
     private MFXProgressSpinner progressBarTime;
 
     @FXML
-    private MFXComboBox<AnchorPane> tagChooserComboBox;
+    private VBox tagSidebar;
 
     @FXML
     private ImageView treeImageViewer;
@@ -47,6 +56,7 @@ public class HomeController {
             activityTimeTextField.editableProperty().setValue(true);
             activityTimeTextField.setText("00:00");
             progressBarTime.setProgress(0.0);
+            tagSidebar.setVisible(true);
         });
     }
 
@@ -89,11 +99,16 @@ public class HomeController {
 
     @FXML
     void setActivityType(ActionEvent event)
-    { }
+    {
+        ActivityHandler.getInstance().setActivityType(ActivityType.values()[activitySelectorComboBox.getSelectedIndex()]);
+        System.out.println(ActivityHandler.getInstance().getCurrActivityType());
+    }
 
     @FXML
     void setTag(ActionEvent event)
-    { }
+    {
+        //System.out.println(tagChooserComboBox.getSelectedIndex());
+    }
 
     @FXML
     void setTime(KeyEvent event)
@@ -104,8 +119,15 @@ public class HomeController {
     @FXML
     void initialize()
     {
-        /*TagHandler.getInstance().addTagView(new TagView( new Tag ("ciao", Color.RED)));
-        tagChooserComboBox.setItems(TagHandler.getInstance().getTags());*/
+        AnchorPane t1 = new TagView(new Tag("ciao amoreee", Color.RED)).getView();
+        AnchorPane t2 = new TagView(new Tag("ciao amoreeeee", Color.BLUE)).getView();
+        AnchorPane t3 = new TagView(new Tag("ciao amore, ciao", Color.VIOLET)).getView();
+
+        tagSidebar.getChildren().addAll(t1, t2, t3);
+
+        activitySelectorComboBox.getItems().addAll("Chronometer", "Timer", "Tomato");
+
+        activitySelectorComboBox.selectFirst();
 
         ActivityHandler.getInstance().addListener(new ActivityObserver() {
             @Override
@@ -113,6 +135,10 @@ public class HomeController {
             {
                 actionBtn.setText("Ferma");
                 activityTimeTextField.editableProperty().setValue(false);
+
+                splitPaneView.setDividerPositions(1.0);
+
+                //tagSidebar.setVisible(false);
 
                 switch (ActivityHandler.getInstance().getCurrActivityType())
                 {
@@ -140,7 +166,7 @@ public class HomeController {
             if (ActivityHandler.getInstance().isActivityStarted()) return;
 
             String text = activityTimeTextField.getText();
-            
+
             int len = text.length();
 
             if (len == 0) return;

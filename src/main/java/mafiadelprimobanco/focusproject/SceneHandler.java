@@ -35,7 +35,7 @@ public class SceneHandler
 	{
 		this.stage = stage;
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLReferences.BASE));
-		this.scene = new Scene(fxmlLoader.load(), 900, 600);
+		this.scene = new Scene(fxmlLoader.load(), 1150, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);
 		loadFonts();
