@@ -59,3 +59,30 @@
 .progress-indicator .percentage { -fx-fill:null; }
 
 .split-pane-divider { -fx-padding: 0; }
+
+/* HOME STYLE */
+
+#homeRoot {
+    -fx-background-color: palette1-1;
+}
+
+#homeFullScreenButton {
+    -fx-background-color: transparent;
+}
+
+#homeProgressDisplay{
+
+}
+
+#homeProgressDisplay .mfx-progress-spinner{
+    -mfx-color1: palette2-2;
+}
+
+#homeTreeBackground {
+    -fx-background-color: palette1-3;
+    -fx-background-radius: 50%;
+}
+#homeTagList {
+
+}
+
