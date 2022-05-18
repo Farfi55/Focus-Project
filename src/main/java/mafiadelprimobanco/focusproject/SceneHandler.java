@@ -1,10 +1,12 @@
 package mafiadelprimobanco.focusproject;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -12,7 +14,6 @@ import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
 
 public class SceneHandler
 {
@@ -23,7 +24,7 @@ public class SceneHandler
 	private final Alert alert;
 	private Stage stage;
 	private Scene scene;
-	private BorderPane baseBorderPane;
+	private StackPane contentRoot;
 	private String currentTheme = "light";
 
 	private SceneHandler()
@@ -46,9 +47,9 @@ public class SceneHandler
 
 	public void loadPage(String pagePathRef) throws IOException
 	{
-		assert baseBorderPane != null;
+		assert contentRoot != null;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(pagePathRef));
-		baseBorderPane.setCenter(loader.load());
+		contentRoot.getChildren().setAll((Node)loader.load());
 	}
 
 	// alert methods
@@ -135,9 +136,9 @@ public class SceneHandler
 		loadStyle();
 	}
 
-	public void setBaseBorderPane(BorderPane baseBorderPane)
+	public void setContentRoot(StackPane contentRoot)
 	{
-		this.baseBorderPane = baseBorderPane;
+		this.contentRoot = contentRoot;
 	}
 
 }

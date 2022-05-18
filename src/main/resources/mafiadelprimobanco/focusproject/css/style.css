@@ -6,40 +6,53 @@
 
 #navBar {
     -fx-background-color: palette2-2;
+    -fx-background-radius: 0 10px 10px 0;
 }
 
-#navBar .button {
-
-
-    -fx-background-radius: 0em;
-    -fx-background-color: inherit;
-    -fx-text-fill: palette1-2;
-    -fx-icon-color: palette1-2;
-    box-sizing: border-box;
-    -fx-padding: 0 5px 0 5px;
+#navBar .mfx-rectangle-toggle-node {
     -fx-border-width: 0px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-color: inherit;
+    -fx-text-fill: palette1-1;
+    -fx-icon-color: palette1-1;
+    box-sizing: border-box;
+    -fx-padding: 0;
 }
+
+#navBar .mfx-ripple-generator {
+    /* since I cant get the size right, I just disabled it*/
+    -mfx-paused: true;
+    -fx-background-size: 60px 60px;
+
+}
+
 #navBar .ikonli-font-icon {
-    -fx-effect: dropshadow(gaussian, rgba(52, 80, 52, 0.45), 10, 0.2, 2, 2);
+    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 0, 0.2, 2, 2);
 }
 
-#navBar .mfx-button:hover , #navBar .mfx-button:focused{
-    -fx-icon-color: palette1-0;
+
+/*#navBar .mfx-rectangle-toggle-node:focused {*/
+/*    -fx-border-radius: 2px;*/
+/*    -fx-border-color: #ccFFcc;*/
+/*}*/
+
+#navBar .mfx-rectangle-toggle-node:hover {
+    -fx-background-color: palette2-3;
+    -fx-icon-color: palette1-1;
 }
 
-#navBar .mfx-button:hover .ikonli-font-icon,  #navBar .mfx-button:focused .ikonli-font-icon{
-    -fx-effect: dropshadow(gaussian, rgba(217, 255, 182, 0.45), 10, 0.3, 2, 2);
+#navBar .mfx-rectangle-toggle-node:selected {
+    -fx-background-color: palette1-1;
+    -fx-icon-color: palette2-2;
+    -fx-effect: innershadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 0, 3);
 }
 
-#navBar .mfx-button:pressed, #navBar .mfx-button:selected {
-    -fx-background-color: palette1-3;
-    -fx-border-color: palette2-3;
-    -fx-icon-color: palette1-0;
-    -fx-border-width: 0 0 0 5px;
-    -fx-padding: 0 5px 0 0;
+#navBar .mfx-rectangle-toggle-node:selected .ikonli-font-icon{
+    -fx-effect: none;
 }
 
-#navBar .mfx-button * {
+#navBar .mfx-rectangle-toggle-node * {
     -fx-icon-color: inherit;
 }
 
