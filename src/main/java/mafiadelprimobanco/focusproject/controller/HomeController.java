@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
@@ -59,7 +60,6 @@ public class HomeController implements TagsObserver
 			e.printStackTrace();
 		}
 
-
 		activitySelectorComboBox.getItems().addAll("Chronometer", "Timer", "Tomato");
 
 		activitySelectorComboBox.selectFirst();
@@ -74,7 +74,10 @@ public class HomeController implements TagsObserver
 
 				splitPaneView.setDividerPositions(1.0);
 
-				//tagSidebar.setVisible(false);
+				activitySelectorComboBox.setVisible(false);
+
+				tagSidebar.setMinWidth(0);
+				tagSidebar.setVisible(false);
 
 				switch (ActivityHandler.getInstance().getCurrActivityType())
 				{
@@ -173,7 +176,9 @@ public class HomeController implements TagsObserver
 			activityTimeTextField.editableProperty().setValue(true);
 			activityTimeTextField.setText("00:00");
 			progressBarTime.setProgress(0.0);
+			tagSidebar.setMinWidth(Region.USE_COMPUTED_SIZE);
 			tagSidebar.setVisible(true);
+			activitySelectorComboBox.setVisible(true);
 		});
 	}
 
