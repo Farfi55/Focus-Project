@@ -7,16 +7,14 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
-import mafiadelprimobanco.focusproject.TagView;
+import mafiadelprimobanco.focusproject.TagHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.Tag;
@@ -119,11 +117,14 @@ public class HomeController {
     @FXML
     void initialize()
     {
-        AnchorPane t1 = new TagView(new Tag("ciao amoreee", Color.RED)).getView();
-        AnchorPane t2 = new TagView(new Tag("ciao amoreeeee", Color.BLUE)).getView();
-        AnchorPane t3 = new TagView(new Tag("ciao amore, ciao", Color.VIOLET)).getView();
+        for (Tag tag : TagHandler.getInstance().tags)
+        {
+            // todo: load new view using sceneHandler or something
+            var tagController = new TagController();
+            tagController.setTag(tag);
+            tagSidebar.getChildren().add(tagController);
+        }
 
-        tagSidebar.getChildren().addAll(t1, t2, t3);
 
         activitySelectorComboBox.getItems().addAll("Chronometer", "Timer", "Tomato");
 
