@@ -63,7 +63,7 @@ public class TagHandler
 	{
 		if (!tags.containsKey(uuid))
 		{
-			SceneHandler.getInstance().showErrorMessage("Error",
+			Feedback.getInstance().showError("Error",
 					"Tried to remove a tag that doesn't exists");
 			return false;
 		}

@@ -13,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import mafiadelprimobanco.focusproject.ActivityHandler;
+import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.TagHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
@@ -83,7 +84,7 @@ public class HomePageController implements TagsObserver, ActivityObserver
 
 			if (seconds > 59)
 			{
-				SceneHandler.getInstance().showErrorMessage("Errore",
+				Feedback.getInstance().showErrorMessageLegacy("Errore",
 						"Errore nella formattazione dei secondi.\n" + "Prova ad inserire un valore inferiore a 59");
 				return;
 			}

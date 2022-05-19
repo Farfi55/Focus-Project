@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import mafiadelprimobanco.focusproject.ActivityHandler;
+import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -35,7 +36,7 @@ public class BaseController implements ActivityObserver
 	@FXML
 	void initialize()
 	{
-//		SceneHandler.getInstance().setContentRoot(contentRoot);
+		SceneHandler.getInstance().setRoot(root);
 		MFXTooltip.of(homeButton, "Home page (ctrl+H)").install();
 		MFXTooltip.of(progressButton, "Progress page (ctrl+P)").install();
 		MFXTooltip.of(statisticsButton, "Statistics page (ctrl+S)").install();
@@ -129,7 +130,7 @@ public class BaseController implements ActivityObserver
 		// && !pagePathRef.equals(FXMLReferences.SETTINGS)
 		if (!canNavigate)
 		{
-			SceneHandler.getInstance().showInfoMessage("Navigazione disabilitata",
+			Feedback.getInstance().showInfo("Navigazione disabilitata",
 					"La navigazione è disabilitata una volta iniziata l'attività");
 			return false;
 		}
@@ -143,7 +144,7 @@ public class BaseController implements ActivityObserver
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			SceneHandler.getInstance().showErrorMessage("Errore Di caricamento",
+			Feedback.getInstance().showError("Errore Di caricamento",
 					"Impossibile caricare la pagina " + pageName);
 			return false;
 		}
