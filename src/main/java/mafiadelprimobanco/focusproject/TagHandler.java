@@ -13,7 +13,7 @@ public class TagHandler
 	public static TagHandler getInstance() { return instance; }
 
 	private final Map<Integer, Tag> tags = new HashMap<>();
-	private final List<TagsObserver> observers = new ArrayList<>();
+	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
 
 	private TagHandler()
@@ -100,30 +100,30 @@ public class TagHandler
 
 	public boolean addListener(TagsObserver tagsObserver)
 	{
-		return observers.add(tagsObserver);
+		return listeners.add(tagsObserver);
 	}
 
 	public boolean removeListener(TagsObserver tagsObserver)
 	{
-		return observers.remove(tagsObserver);
+		return listeners.remove(tagsObserver);
 	}
 
 	private void invokeOnTagAdded(Tag tag)
 	{
-		for (TagsObserver tagsObserver : observers)
-			tagsObserver.onTagAdded(tag);
+		for (TagsObserver observer : listeners)
+			observer.onTagAdded(tag);
 	}
 
 	private void invokeOnTagRemoving(Tag tag)
 	{
-		for (TagsObserver tagsObserver : observers)
-			tagsObserver.onTagRemoving(tag);
+		for (TagsObserver observer : listeners)
+			observer.onTagRemoving(tag);
 	}
 
 	private void invokeOnTagChanged(Tag tag)
 	{
-		for (TagsObserver tagsObserver : observers)
-			tagsObserver.onTagChanged(tag);
+		for (TagsObserver observer : listeners)
+			observer.onTagChanged(tag);
 	}
 
 	public final Tag getTag(Integer uuid)

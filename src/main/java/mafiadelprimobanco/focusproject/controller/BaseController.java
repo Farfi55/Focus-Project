@@ -160,12 +160,6 @@ public class BaseController implements ActivityObserver
 	}
 
 	@Override
-	public void onActivityUpdate()
-	{
-
-	}
-
-	@Override
 	public void onActivityEnd()
 	{
 		setNavigationEnabled(true);

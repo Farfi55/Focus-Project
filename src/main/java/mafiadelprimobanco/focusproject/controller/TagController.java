@@ -19,12 +19,6 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML private MFXTextField textField;
 
 	@Override
-	public void onTagAdded(Tag tag) { }
-
-	@Override
-	public void onTagRemoving(Tag tag) { }
-
-	@Override
 	public void onTagChanged(Tag tag)
 	{
 		if (this.tag.getUuid().equals(tag.getUuid())) updateGraphics();

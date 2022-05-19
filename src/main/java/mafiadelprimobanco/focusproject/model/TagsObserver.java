@@ -2,9 +2,9 @@ package mafiadelprimobanco.focusproject.model;
 
 public interface TagsObserver
 {
-	void onTagAdded(Tag tag);
+	default void onTagAdded(Tag tag) { }
 
-	void onTagRemoving(Tag tag);
+	default void onTagRemoving(Tag tag) { }
 
-	void onTagChanged(Tag tag);
+	default void onTagChanged(Tag tag) { }
 }

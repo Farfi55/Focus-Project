@@ -93,19 +93,6 @@ public class HomePageController implements TagsObserver, ActivityObserver
 
 	}
 
-	private void populateTagsList()
-	{
-		try
-		{
-			for (Tag tag : TagHandler.getInstance().getTags())
-				tagsSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public void onTagAdded(Tag tag)
 	{
@@ -134,10 +121,6 @@ public class HomePageController implements TagsObserver, ActivityObserver
 	}
 
 	@Override
-	public void onTagChanged(Tag tag) { }
-
-
-	@Override
 	public void onActivityStart()
 	{
 		activityButton.setText("Interrompi");
@@ -158,7 +141,7 @@ public class HomePageController implements TagsObserver, ActivityObserver
 	}
 
 	@Override
-	public void onActivityUpdate()
+	public void onActivityUpdateSafe()
 	{
 		switch (ActivityHandler.getInstance().getCurrActivityType())
 		{
@@ -168,7 +151,20 @@ public class HomePageController implements TagsObserver, ActivityObserver
 	}
 
 	@Override
-	public void onActivityEnd() { onStopActivityEvent(); }
+	public void onActivityEndSafe() { onStopActivityEvent(); }
+
+	private void populateTagsList()
+	{
+		try
+		{
+			for (Tag tag : TagHandler.getInstance().getTags())
+				tagsSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	public void onStopActivityEvent()
 	{

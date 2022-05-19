@@ -115,29 +115,34 @@ public class ActivityHandler
 
 	private void invokeOnStartActivity()
 	{
-		// I (alessio) moved the runLater in here, but I don't think it's needed
-		Platform.runLater(() ->
-		{
-			for (ActivityObserver lt : listeners)
-				lt.onActivityStart();
+		for (ActivityObserver observer : listeners)
+			observer.onActivityStart();
+
+		Platform.runLater(() -> {
+			for (ActivityObserver observer : listeners)
+				observer.onActivityStartSafe();
 		});
 	}
 
 	private void invokeOnUpdateActivity()
 	{
-		Platform.runLater(() ->
-		{
-			for (ActivityObserver lt : listeners)
-				lt.onActivityUpdate();
+		for (ActivityObserver observer : listeners)
+			observer.onActivityUpdate();
+
+		Platform.runLater(() -> {
+			for (ActivityObserver observer : listeners)
+				observer.onActivityUpdateSafe();
 		});
 	}
 
 	private void invokeOnEndActivity()
 	{
-		Platform.runLater(() ->
-		{
-			for (ActivityObserver lt : listeners)
-				lt.onActivityEnd();
+		for (ActivityObserver observer : listeners)
+			observer.onActivityEnd();
+
+		Platform.runLater(() -> {
+			for (ActivityObserver observer : listeners)
+				observer.onActivityEndSafe();
 		});
 	}
 
