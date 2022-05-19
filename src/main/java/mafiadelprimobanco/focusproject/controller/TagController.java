@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.TagHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
@@ -29,8 +30,15 @@ public class TagController extends AnchorPane implements TagsObserver
 	void onColorButtonClicked(ActionEvent event) { }
 
 	@FXML
-	void onRemoveButtonClicked(ActionEvent event) {
-		TagHandler.getInstance().removeTag(tag.getUuid());
+	void onRemoveButtonClicked(ActionEvent event)
+	{
+		if (Feedback.getInstance().askYesNoConfirmation("Eliminazione tag",
+				"Sei sicuro di voler rimuovere questa tag?"))
+		{
+			TagHandler.getInstance().removeTag(tag.getUuid());
+
+		}
+
 	}
 
 	private void updateGraphics()

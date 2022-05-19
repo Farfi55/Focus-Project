@@ -43,13 +43,9 @@ public class SceneHandler
 
 		stage.setOnCloseRequest(windowEvent ->
 		{
-			Feedback.getInstance().addButton(ButtonBar.ButtonData.YES);
-			Feedback.getInstance().addButton(ButtonBar.ButtonData.NO);
-			ButtonBar.ButtonData confirmation = Feedback.getInstance().askConfirmation(
+			if(Feedback.getInstance().askYesNoConfirmation(
 					"Chiudi applicazione Focus ",
-					"Sei sicuro di voler chiudere l'applicazione?");
-			System.out.println(confirmation);
-			if(confirmation != ButtonBar.ButtonData.YES)
+					"Sei sicuro di voler chiudere l'applicazione?"))
 				windowEvent.consume();
 		});
 	}

@@ -207,6 +207,26 @@ public class Feedback
 		return confirmationDialogResult;
 	}
 
+	/**
+	 * shows a dialog with <i>Yes</i> and <i>No</i> as buttons
+	 * @param header title of the dialog
+	 * @param message main body of the dialog
+	 * @return true if user pressed Yes, else false
+	 */
+	public Boolean askYesNoConfirmation(String header, String message)
+	{
+		addButton(ButtonData.YES);
+		addButton(ButtonData.NO);
+
+		confirmationDialogResult = ButtonData.CANCEL_CLOSE;
+		confirmationDialogContent.setHeaderIcon(null);
+		confirmationDialogContent.setHeaderText(header);
+		confirmationDialogContent.setContentText(message);
+		confirmationDialog.showAndWait();
+		confirmationDialogContent.clearActions();
+		return confirmationDialogResult.equals(ButtonData.YES);
+	}
+
 	private void convertDialogTo(String styleClass)
 	{
 		dialogContent.getStyleClass()

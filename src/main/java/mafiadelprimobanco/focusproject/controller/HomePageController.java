@@ -112,12 +112,12 @@ public class HomePageController implements TagsObserver, ActivityObserver
 	{
 		for (Node child : tagsSidebar.getChildren())
 		{
-			if (child.getProperties().containsKey("tag-uuid"))
-				if (child.getProperties().get("tag-uuid").equals(tag.getUuid()))
-				{
-					tagsSidebar.getChildren().remove(child);
-					return;
-				}
+			if (child.getProperties().containsKey("tag-uuid")) if (child.getProperties().get("tag-uuid").equals(
+					tag.getUuid()))
+			{
+				tagsSidebar.getChildren().remove(child);
+				return;
+			}
 		}
 	}
 
@@ -199,13 +199,22 @@ public class HomePageController implements TagsObserver, ActivityObserver
 	@FXML
 	void toggleActivityState(ActionEvent event)
 	{
-		if (!ActivityHandler.getInstance().isActivityStarted())
+		if (ActivityHandler.getInstance().isActivityStarted())
 		{
-			ActivityHandler.getInstance().startActivity();
+			switch (ActivityHandler.getInstance().getCurrActivityType())
+			{
+				case TIMER, TOMATO_TIMER -> {
+					if (Feedback.getInstance().askYesNoConfirmation("Interrompere attività",
+							"Sei sicuro di voler interrompere l'attività?"))
+						ActivityHandler.getInstance().stopCurrActivity();
+
+				}
+				case CHRONOMETER -> ActivityHandler.getInstance().stopCurrActivity();
+			}
 		}
 		else
 		{
-			ActivityHandler.getInstance().stopCurrActivity();
+			ActivityHandler.getInstance().startActivity();
 		}
 	}
 
