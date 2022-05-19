@@ -55,7 +55,7 @@ public class TagHandler
 			}
 		var tag = new Tag(name, color, uuid);
 		tags.put(uuid, tag);
-		onTagAdded(tag);
+		invokeOnTagAdded(tag);
 		return true;
 	}
 
@@ -69,7 +69,7 @@ public class TagHandler
 		}
 
 		Tag tag = tags.get(uuid);
-		onTagRemoving(tag);
+		invokeOnTagRemoving(tag);
 
 		tags.remove(uuid);
 		return true;
@@ -94,7 +94,7 @@ public class TagHandler
 
 		tag.setName(name);
 		tag.setColor(color);
-		onTagChanged(tag);
+		invokeOnTagChanged(tag);
 		return true;
 	}
 
@@ -108,19 +108,19 @@ public class TagHandler
 		return observers.remove(tagsObserver);
 	}
 
-	private void onTagAdded(Tag tag)
+	private void invokeOnTagAdded(Tag tag)
 	{
 		for (TagsObserver tagsObserver : observers)
 			tagsObserver.onTagAdded(tag);
 	}
 
-	private void onTagRemoving(Tag tag)
+	private void invokeOnTagRemoving(Tag tag)
 	{
 		for (TagsObserver tagsObserver : observers)
 			tagsObserver.onTagRemoving(tag);
 	}
 
-	private void onTagChanged(Tag tag)
+	private void invokeOnTagChanged(Tag tag)
 	{
 		for (TagsObserver tagsObserver : observers)
 			tagsObserver.onTagChanged(tag);

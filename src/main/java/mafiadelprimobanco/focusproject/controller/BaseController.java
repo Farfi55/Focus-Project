@@ -3,7 +3,6 @@ package mafiadelprimobanco.focusproject.controller;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -12,7 +11,6 @@ import javafx.scene.layout.StackPane;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
-import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
@@ -152,23 +150,23 @@ public class BaseController implements ActivityObserver
 	}
 
 	@Override
-	public void onStart()
+	public void onActivityStart()
 	{
 		System.out.println(ActivityHandler.getInstance().getCurrActivityType());
 		switch (ActivityHandler.getInstance().getCurrActivityType())
 		{
-			case TIMER, TOMAT -> setNavigationEnabled(false);
+			case TIMER, TOMATO_TIMER -> setNavigationEnabled(false);
 		}
 	}
 
 	@Override
-	public void onUpdate()
+	public void onActivityUpdate()
 	{
 
 	}
 
 	@Override
-	public void onEnd()
+	public void onActivityEnd()
 	{
 		setNavigationEnabled(true);
 	}

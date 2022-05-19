@@ -36,7 +36,6 @@ public class TagController extends AnchorPane implements TagsObserver
 
 	@FXML
 	void onRemoveButtonClicked(ActionEvent event) {
-		System.out.println("yo");
 		TagHandler.getInstance().removeTag(tag.getUuid());
 	}
 

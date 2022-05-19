@@ -2,5 +2,5 @@ package mafiadelprimobanco.focusproject.model;
 
 public enum ActivityType
 {
-	CRONO, TIMER, TOMAT
+	CHRONOMETER, TIMER, TOMATO_TIMER
 }

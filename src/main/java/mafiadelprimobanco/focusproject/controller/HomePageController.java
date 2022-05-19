@@ -4,7 +4,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -24,50 +23,38 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 
-public class HomeController implements TagsObserver, ActivityObserver
+public class HomePageController implements TagsObserver, ActivityObserver
 {
+	@FXML private SplitPane splitPane;
+	@FXML private VBox tagsSidebar;
 
-	@FXML private MFXTextField activityTimeTextField;
-
-	@FXML private MFXButton actionBtn;
+	@FXML private MFXButton fullScreenButton;
+	@FXML private FontIcon fullScreenIcon;
 
 	@FXML private MFXComboBox<String> activitySelectorComboBox;
 
-	@FXML private FontIcon fullScreenBtn;
-
-	@FXML private SplitPane splitPaneView;
-
+	@FXML private MFXTextField activityTimeTextField;
 	@FXML private MFXProgressSpinner progressBarTime;
 
-	@FXML private VBox tagSidebar;
-
 	@FXML private ImageView treeImageViewer;
+
+	@FXML private MFXButton activityButton;
+
 
 	@FXML
 	void initialize()
 	{
-		try
-		{
-			for (Tag tag : TagHandler.getInstance().getTags())
-			{
-				tagSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-
+		populateTagsList();
 
 		TagHandler.getInstance().addListener(this);
+		ActivityHandler.getInstance().addListener(this);
 
-		activitySelectorComboBox.getItems().addAll("Chronometer", "Timer", "Tomato");
+		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
 
 		activitySelectorComboBox.selectFirst();
 
-		ActivityHandler.getInstance().addListener(this);
-
-
+		// todo refactor:  the definition shouldn't go inside the initialize
+		//  or change method completely
 		activityTimeTextField.textProperty().addListener((e) ->
 		{
 			if (ActivityHandler.getInstance().isActivityStarted()) return;
@@ -106,12 +93,25 @@ public class HomeController implements TagsObserver, ActivityObserver
 
 	}
 
+	private void populateTagsList()
+	{
+		try
+		{
+			for (Tag tag : TagHandler.getInstance().getTags())
+				tagsSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void onTagAdded(Tag tag)
 	{
 		try
 		{
-			tagSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
+			tagsSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
 		}
 		catch (IOException e)
 		{
@@ -122,12 +122,12 @@ public class HomeController implements TagsObserver, ActivityObserver
 	@Override
 	public void onTagRemoving(Tag tag)
 	{
-		for (Node child : tagSidebar.getChildren())
+		for (Node child : tagsSidebar.getChildren())
 		{
-			if(child.getProperties().containsKey("tag-uuid"))
+			if (child.getProperties().containsKey("tag-uuid"))
 				if (child.getProperties().get("tag-uuid").equals(tag.getUuid()))
 				{
-					tagSidebar.getChildren().remove(child);
+					tagsSidebar.getChildren().remove(child);
 					return;
 				}
 		}
@@ -138,79 +138,69 @@ public class HomeController implements TagsObserver, ActivityObserver
 
 
 	@Override
-	public void onStart()
+	public void onActivityStart()
 	{
-		actionBtn.setText("Ferma");
+		activityButton.setText("Interrompi");
 		activityTimeTextField.editableProperty().setValue(false);
 
-		splitPaneView.setDividerPositions(1.0);
+		splitPane.setDividerPositions(1.0);
 
 		activitySelectorComboBox.setVisible(false);
 
-		tagSidebar.setMinWidth(0);
-		tagSidebar.setVisible(false);
+		tagsSidebar.setMinWidth(0);
+		tagsSidebar.setVisible(false);
 
 		switch (ActivityHandler.getInstance().getCurrActivityType())
 		{
-			case CRONO -> progressBarTime.setProgress(0.0);
+			case CHRONOMETER -> progressBarTime.setProgress(0.0);
 			case TIMER -> progressBarTime.setProgress(1.0);
 		}
 	}
 
 	@Override
-	public void onUpdate()
+	public void onActivityUpdate()
 	{
 		switch (ActivityHandler.getInstance().getCurrActivityType())
 		{
-			case CRONO -> onChronometerUpdateTick();
+			case CHRONOMETER -> onChronometerUpdateTick();
 			case TIMER -> onTimerUpdateTick();
 		}
 	}
 
 	@Override
-	public void onEnd() { onStopActivityEvent(); }
+	public void onActivityEnd() { onStopActivityEvent(); }
 
 	public void onStopActivityEvent()
 	{
-		Platform.runLater(() ->
-		{
-			actionBtn.setText("Avvia");
-			activityTimeTextField.editableProperty().setValue(true);
-			activityTimeTextField.setText("00:00");
-			progressBarTime.setProgress(0.0);
-			tagSidebar.setMinWidth(Region.USE_COMPUTED_SIZE);
-			tagSidebar.setVisible(true);
-			activitySelectorComboBox.setVisible(true);
-		});
+		activityButton.setText("Avvia");
+		activityTimeTextField.editableProperty().setValue(true);
+		activityTimeTextField.setText("00:00");
+		progressBarTime.setProgress(0.0);
+		tagsSidebar.setMinWidth(Region.USE_COMPUTED_SIZE);
+		tagsSidebar.setVisible(true);
+		activitySelectorComboBox.setVisible(true);
 	}
 
 	public void onTimerUpdateTick()
 	{
-		Platform.runLater(() ->
-		{
-			progressBarTime.setProgress(
-					progressBarTime.getProgress() - ActivityHandler.getInstance().getCurrentProgressBarTick());
-			activityTimeTextField.setText(ActivityHandler.getInstance().getCurrentTimeTick());
-		});
+		progressBarTime.setProgress(
+				progressBarTime.getProgress() - ActivityHandler.getInstance().getCurrentProgressBarTick());
+		activityTimeTextField.setText(ActivityHandler.getInstance().getCurrentTimeTick());
 	}
 
 	public void onChronometerUpdateTick()
 	{
+		final double progressbarTick = ActivityHandler.getInstance().getCurrentProgressBarTick();
+		final double currProgressValue = progressBarTime.getProgress() + progressbarTick;
 
-		Platform.runLater(() ->
-		{
-			final double progressbarTick = ActivityHandler.getInstance().getCurrentProgressBarTick();
-			final double currProgressValue = progressBarTime.getProgress() + progressbarTick;
+		if (currProgressValue < 1.0) progressBarTime.setProgress(currProgressValue);
+		else progressBarTime.setProgress(0.0);
 
-			if (currProgressValue < 1.0) progressBarTime.setProgress(currProgressValue);
-			else progressBarTime.setProgress(0.0);
-
-			activityTimeTextField.setText(ActivityHandler.getInstance().getCurrentTimeTick());
-		});
+		activityTimeTextField.setText(ActivityHandler.getInstance().getCurrentTimeTick());
 	}
 
 	@FXML
-	void doAction(ActionEvent event)
+	void toggleActivityState(ActionEvent event)
 	{
 		if (!ActivityHandler.getInstance().isActivityStarted())
 		{
@@ -225,9 +215,10 @@ public class HomeController implements TagsObserver, ActivityObserver
 	@FXML
 	void setActivityType(ActionEvent event)
 	{
+		// todo refactor: this isn't safe, if you change order you dont get
 		ActivityHandler.getInstance().setActivityType(
 				ActivityType.values()[activitySelectorComboBox.getSelectedIndex()]);
-		System.out.println(ActivityHandler.getInstance().getCurrActivityType());
+		System.out.println("Activity type set to: " + ActivityHandler.getInstance().getCurrActivityType());
 	}
 
 	@FXML

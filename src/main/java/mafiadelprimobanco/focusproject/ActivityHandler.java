@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
+import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 
@@ -13,6 +14,7 @@ public class ActivityHandler
 	private static final ActivityHandler instance = new ActivityHandler();
 
 	public static ActivityHandler getInstance() { return instance; }
+
 	private final List<ActivityObserver> listeners = new ArrayList<>();
 	private Timer activityTimer = null;
 	private boolean activityStarted = false;
@@ -21,6 +23,7 @@ public class ActivityHandler
 	private int executionTime = 0;
 	private String currentTimeTick = "00:00";
 	private double currentProgressBarTick = 0.0;
+
 	private ActivityHandler() { }
 
 	public void startActivity()
@@ -29,11 +32,11 @@ public class ActivityHandler
 
 		activityStarted = true;
 
-		fireStartActivity();
+		invokeOnStartActivity();
 
 		switch (currActivityType)
 		{
-			case CRONO -> startChronoActivity();
+			case CHRONOMETER -> startChronometerActivity();
 			case TIMER -> startTimerActivity();
 		}
 	}
@@ -47,7 +50,7 @@ public class ActivityHandler
 			activityTimer = null;
 		}
 
-		fireEndActivity();
+		invokeOnEndActivity();
 
 		activityStarted = false;
 	}
@@ -55,7 +58,6 @@ public class ActivityHandler
 	private void startTimerActivity()
 	{
 		currentProgressBarTick = 1.0 / (executionTime + 1);
-
 		activityTimer.scheduleAtFixedRate(new TimerTask()
 		{
 			int ticksLeft = executionTime;
@@ -68,7 +70,7 @@ public class ActivityHandler
 
 				currentTimeTick = ((minutes < 10 ? ("0" + minutes) : minutes) + ":" + (seconds < 10 ? ("0" + seconds) : seconds));
 
-				fireUpdateActivity();
+				invokeOnUpdateActivity();
 
 				if (--ticksLeft < 0)
 				{
@@ -78,7 +80,7 @@ public class ActivityHandler
 		}, 0, 1000);
 	}
 
-	private void startChronoActivity()
+	private void startChronometerActivity()
 	{
 		currentProgressBarTick = 1.0 / 60;
 
@@ -94,37 +96,49 @@ public class ActivityHandler
 
 				currentTimeTick = ((minutes < 10 ? ("0" + minutes) : minutes) + ":" + (seconds < 10 ? ("0" + seconds) : seconds));
 
-				fireUpdateActivity();
+				invokeOnUpdateActivity();
 			}
 		}, 0, 1000);
 	}
 
-	public void addListener(ActivityObserver observer) {
+	public void addListener(ActivityObserver observer)
+	{
 		assert !listeners.contains(observer);
 		listeners.add(observer);
 	}
 
-	public void removeListener(ActivityObserver observer) {
+	public void removeListener(ActivityObserver observer)
+	{
 		assert listeners.contains(observer);
 		listeners.remove(observer);
 	}
 
-	public void fireStartActivity()
+	private void invokeOnStartActivity()
 	{
-		for (ActivityObserver lt : listeners)
-			lt.onStart();
+		// I (alessio) moved the runLater in here, but I don't think it's needed
+		Platform.runLater(() ->
+		{
+			for (ActivityObserver lt : listeners)
+				lt.onActivityStart();
+		});
 	}
 
-	public void fireUpdateActivity()
+	private void invokeOnUpdateActivity()
 	{
-		for (ActivityObserver lt : listeners)
-			lt.onUpdate();
+		Platform.runLater(() ->
+		{
+			for (ActivityObserver lt : listeners)
+				lt.onActivityUpdate();
+		});
 	}
 
-	public void fireEndActivity()
+	private void invokeOnEndActivity()
 	{
-		for (ActivityObserver lt : listeners)
-			lt.onEnd();
+		Platform.runLater(() ->
+		{
+			for (ActivityObserver lt : listeners)
+				lt.onActivityEnd();
+		});
 	}
 
 	//GETTERS
