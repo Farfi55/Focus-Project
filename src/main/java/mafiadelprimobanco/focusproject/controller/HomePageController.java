@@ -84,7 +84,7 @@ public class HomePageController implements TagsObserver, ActivityObserver
 
 			if (seconds > 59)
 			{
-				Feedback.getInstance().showErrorMessageLegacy("Errore",
+				Feedback.getInstance().showError("Errore",
 						"Errore nella formattazione dei secondi.\n" + "Prova ad inserire un valore inferiore a 59");
 				return;
 			}
