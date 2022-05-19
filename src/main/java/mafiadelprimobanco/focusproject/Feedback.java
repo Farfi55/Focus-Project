@@ -128,7 +128,7 @@ public class Feedback
 
 
 	// legacy
-	
+
 	public void showInfoMessageLegacy(String title, String header, String message)
 	{
 		showMessageLegacy(title, header, message, Alert.AlertType.INFORMATION);
