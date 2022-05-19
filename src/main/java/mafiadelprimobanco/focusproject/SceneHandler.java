@@ -52,16 +52,17 @@ public class SceneHandler
 		return loader.load();
 	}
 
-	public Node createTagView() throws IOException
+	/*public Node createTagView() throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
 		return loader.load();
-	}
+	}*/
 
 	public Node createTagView(Tag tag) throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
 		Node node = loader.load();
+		node.getProperties().put("tag-uuid", tag.getUuid());
 		TagController tagController = loader.getController();
 		tagController.setTag(tag);
 		return node;

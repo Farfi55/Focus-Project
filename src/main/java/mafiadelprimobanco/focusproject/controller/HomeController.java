@@ -124,11 +124,10 @@ public class HomeController implements TagsObserver, ActivityObserver
 	{
 		for (Node child : tagSidebar.getChildren())
 		{
-			// TODO: FIX, this is always false, child is instance of AnchorPane, not TagController
-			if (child instanceof TagController tagController)
-				if (tagController.getTag().getUuid().equals(tag.getUuid()))
+			if(child.getProperties().containsKey("tag-uuid"))
+				if (child.getProperties().get("tag-uuid").equals(tag.getUuid()))
 				{
-					tagSidebar.getChildren().remove(tagController);
+					tagSidebar.getChildren().remove(child);
 					return;
 				}
 		}
