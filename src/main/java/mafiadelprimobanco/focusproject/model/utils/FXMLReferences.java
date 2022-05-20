@@ -4,6 +4,7 @@ public class FXMLReferences
 {
 	public static final String BASE = "Base-view.fxml";
 	public static final String HOME = "Home-page-view.fxml";
+
 	public static final String PROGRESS = "";
 	public static final String STATISTICS = "";
 //	public static final String TAGS = "";
