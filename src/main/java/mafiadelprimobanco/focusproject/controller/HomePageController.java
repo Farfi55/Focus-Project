@@ -6,10 +6,11 @@ import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.Feedback;
@@ -23,9 +24,7 @@ import java.io.IOException;
 
 public class HomePageController implements ActivityObserver
 {
-	@FXML private AnchorPane tagsView;
-
-	@FXML private SplitPane splitPane;
+	@FXML private BorderPane homeRoot;
 
 	@FXML private MFXButton fullScreenButton;
 	@FXML private FontIcon fullScreenIcon;
@@ -39,6 +38,7 @@ public class HomePageController implements ActivityObserver
 
 	@FXML private MFXButton activityButton;
 
+	private Node tagsRoot;
 
 	@FXML
 	void initialize()
@@ -52,7 +52,8 @@ public class HomePageController implements ActivityObserver
 
 		try
 		{
-			tagsView.getChildren().add(SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS));
+			this.tagsRoot = SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS);
+			homeRoot.setRight(tagsRoot);
 		}
 		catch (IOException e)
 		{
@@ -107,12 +108,10 @@ public class HomePageController implements ActivityObserver
 		activityButton.setText("Interrompi");
 		activityTimeTextField.editableProperty().setValue(false);
 
-		splitPane.setDividerPositions(1.0);
 
+		homeRoot.setRight(null);
 		activitySelectorComboBox.setVisible(false);
 
-		tagsView.setMinWidth(0);
-		tagsView.setVisible(false);
 
 		switch (ActivityHandler.getInstance().getCurrActivityType())
 		{
@@ -142,8 +141,9 @@ public class HomePageController implements ActivityObserver
 		activityTimeTextField.editableProperty().setValue(true);
 		activityTimeTextField.setText("00:00");
 		progressBarTime.setProgress(0.0);
-		tagsView.setMinWidth(Region.USE_COMPUTED_SIZE);
-		tagsView.setVisible(true);
+
+		homeRoot.setRight(tagsRoot);
+
 		activitySelectorComboBox.setVisible(true);
 	}
 

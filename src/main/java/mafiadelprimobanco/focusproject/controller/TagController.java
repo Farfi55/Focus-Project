@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.Feedback;
@@ -59,7 +60,7 @@ public class TagController extends AnchorPane implements TagsObserver
 			TagHandler.getInstance().removeTag(tag.getUuid());
 
 		}
-
+	}
 
 	public void setTag(Tag tag)
 	{
@@ -77,8 +78,10 @@ public class TagController extends AnchorPane implements TagsObserver
 		textField.setText(name);
 	}
 
+	// todo refactor: this should not go in here
 	public static String toHexColor( Color color )
 	{
+		// return "#" + Integer.toHexString(your_color.getRGB()).substring(2);
 		return String.format( "#%02X%02X%02X",
 						      (int)( color.getRed() * 255 ),
 							  (int)( color.getGreen() * 255 ),

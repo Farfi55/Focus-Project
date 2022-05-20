@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject.controller;
 
+import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,7 +18,7 @@ public class HomePageTagsController implements TagsObserver
 
 	@FXML private VBox tagsList;
 
-	@FXML private AnchorPane tagsSidebar;
+	@FXML private MFXScrollPane tagsSidebar;
 
 
 	@FXML
@@ -33,7 +34,9 @@ public class HomePageTagsController implements TagsObserver
 	{
 		try
 		{
-			tagsList.getChildren().add(SceneHandler.getInstance().createTagView(tag));
+			// -1 because we want to keep the addTag button at the bottom
+			int index = tagsList.getChildren().size() - 1;
+			tagsList.getChildren().add(0, SceneHandler.getInstance().createTagView(tag));
 		}
 		catch (IOException e)
 		{
@@ -66,7 +69,12 @@ public class HomePageTagsController implements TagsObserver
 		try
 		{
 			for (Tag tag : TagHandler.getInstance().getTags())
-				tagsList.getChildren().add(SceneHandler.getInstance().createTagView(tag));
+			{
+				// -1 because we want to keep the addTag button at the bottom
+				int index = tagsList.getChildren().size() - 1;
+				tagsList.getChildren().add(index, SceneHandler.getInstance().createTagView(tag));
+
+			}
 		}
 		catch (IOException e)
 		{
