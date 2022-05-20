@@ -36,11 +36,11 @@
                               <FontIcon iconLiteral="mdi2c-chart-line" iconSize="40" />
                            </graphic>
                         </MFXRectangleToggleNode>
-                        <MFXRectangleToggleNode fx:id="tagButton" layoutX="10.0" layoutY="573.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onTagClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
-                           <graphic>
-                              <FontIcon iconLiteral="mdi2t-tag-text-outline" iconSize="44" />
-                           </graphic>
-                        </MFXRectangleToggleNode>
+<!--                        <MFXRectangleToggleNode fx:id="tagButton" layoutX="10.0" layoutY="573.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onTagClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">-->
+<!--                           <graphic>-->
+<!--                              <FontIcon iconLiteral="mdi2t-tag-text-outline" iconSize="44" />-->
+<!--                           </graphic>-->
+<!--                        </MFXRectangleToggleNode>-->
                         <Region maxHeight="2000.0" minHeight="0.0" prefHeight="2000.0" prefWidth="0.0" />
                         <MFXRectangleToggleNode fx:id="infoButton" layoutX="10.0" layoutY="644.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onInfoClick" prefHeight="60.0" prefWidth="60.0" toggleGroup="$nav_toggle_group">
                            <graphic>

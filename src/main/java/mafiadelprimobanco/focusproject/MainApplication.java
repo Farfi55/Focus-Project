@@ -17,12 +17,17 @@ public class MainApplication extends Application
 	{
 		try
 		{
+			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
+			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
+
+
+
 		} catch (IOException e)
 		{
 			e.printStackTrace();
 			//todo localization
-			SceneHandler.getInstance().showErrorMessage("Errore di caricamento",
+			Feedback.getInstance().showError("Errore di caricamento",
 					"Non è stato possibile caricare l'applicazione");
 		}
 	}
