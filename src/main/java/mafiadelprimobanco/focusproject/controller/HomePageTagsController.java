@@ -36,7 +36,8 @@ public class HomePageTagsController implements TagsObserver
 		{
 			// -1 because we want to keep the addTag button at the bottom
 			int index = tagsList.getChildren().size() - 1;
-			tagsList.getChildren().add(0, SceneHandler.getInstance().createTagView(tag));
+			Node tagView = SceneHandler.getInstance().createTagView(tag);
+			tagsList.getChildren().add(index, tagView);
 		}
 		catch (IOException e)
 		{

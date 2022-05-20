@@ -68,7 +68,7 @@ public class SceneHandler
 		Node node = loader.load();
 		node.getProperties().put("tag-uuid", tag.getUuid());
 		TagController tagController = loader.getController();
-		tagController.setTag(tag);
+		tagController.init(tag);
 		return node;
 	}
 

@@ -15,26 +15,70 @@ import mafiadelprimobanco.focusproject.model.TagsObserver;
 public class TagController extends AnchorPane implements TagsObserver
 {
 	private Tag tag;
-  	private ColorPicker colorPicker;
 
+	@FXML private ColorPicker colorPicker;
 	@FXML private MFXButton colorButton;
 	@FXML private MFXTextField textField;
-  	@FXML private MFXButton removeButton;	
-  
+//	@FXML private MFXButton removeButton;
+
+
+	public void init(Tag tag)
+	{
+		this.tag = tag;
+		updateGraphics();
+		TagHandler.getInstance().addListener(this);
+	}
+
+	// todo refactor: this should not go in here
+	public static String toHexColor(Color color)
+	{
+		// return "#" + Integer.toHexString(your_color.getRGB()).substring(2);
+		return String.format("#%02X%02X%02X", (int)(color.getRed() * 255), (int)(color.getGreen() * 255),
+				(int)(color.getBlue() * 255));
+	}
 
 	@Override
 	public void onTagChanged(Tag tag)
 	{
-		if (this.tag.getUuid().equals(tag.getUuid())) updateGraphics();
+		System.out.println("tag: " + tag.getName() + " changed, I am " + this
+				.tag.getName());
+		if (this.tag.equals(tag)) {
+			updateGraphics();
+		}
 	}
-	
-	
+
+	@Override
+	public void onTagRemoving(Tag tag)
+	{
+		if(this.tag.equals(tag)) TagHandler.getInstance().removeListener(this);
+	}
 
 	@FXML
 	void onColorPickerAction(ActionEvent event)
 	{
 		Color colorPicked = colorPicker.getValue();
-		colorButton.setStyle("-fx-background-color:" + toHexColor(colorPicked) + ";");
+		TagHandler.getInstance().updateTag(tag.getName(), colorPicked, tag.getUuid());
+	}
+
+	@FXML
+	void onRemoveAction(ActionEvent event)
+	{
+		if (Feedback.getInstance().askYesNoConfirmation("Eliminazione tag",
+				"Sei sicuro di voler rimuovere questa tag?"))
+		{
+			TagHandler.getInstance().removeTag(tag.getUuid());
+
+		}
+	}
+
+	@FXML
+	void onTextFieldAction(ActionEvent event) {
+		// if the update didn't go through, reset textField text
+		if(TagHandler.getInstance().updateTag(textField.getText(), tag.getColor(), tag.getUuid()))
+		{
+			setText(tag.getName());
+		}
+
 	}
 
 	private void updateGraphics()
@@ -48,25 +92,7 @@ public class TagController extends AnchorPane implements TagsObserver
 		return tag;
 	}
 
-  	@FXML
-	void onColorButtonClicked(ActionEvent event) { }
 
-	@FXML
-	void onRemoveButtonClicked(ActionEvent event)
-	{
-		if (Feedback.getInstance().askYesNoConfirmation("Eliminazione tag",
-				"Sei sicuro di voler rimuovere questa tag?"))
-		{
-			TagHandler.getInstance().removeTag(tag.getUuid());
-
-		}
-	}
-
-	public void setTag(Tag tag)
-	{
-		this.tag = tag;
-		updateGraphics();
-	}
 
 	private void setColor(Color color)
 	{
@@ -76,16 +102,6 @@ public class TagController extends AnchorPane implements TagsObserver
 	private void setText(String name)
 	{
 		textField.setText(name);
-	}
-
-	// todo refactor: this should not go in here
-	public static String toHexColor( Color color )
-	{
-		// return "#" + Integer.toHexString(your_color.getRGB()).substring(2);
-		return String.format( "#%02X%02X%02X",
-						      (int)( color.getRed() * 255 ),
-							  (int)( color.getGreen() * 255 ),
-							  (int)( color.getBlue() * 255 ) );
 	}
 
 

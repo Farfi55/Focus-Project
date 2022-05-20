@@ -2,6 +2,8 @@ package mafiadelprimobanco.focusproject.model;
 
 import javafx.scene.paint.Color;
 
+import java.util.Objects;
+
 public class Tag
 {
 	String name;
@@ -13,6 +15,21 @@ public class Tag
 		this.name = name;
 		this.color = color;
 		this.uuid = uuid;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Tag tag = (Tag)o;
+		return uuid.equals(tag.uuid);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(uuid);
 	}
 
 	public String getName()

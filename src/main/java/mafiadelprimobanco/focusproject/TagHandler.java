@@ -54,16 +54,6 @@ public class TagHandler
 		addTag(uniqueName, randomColor);
 	}
 
-	private String getUniqueName()
-	{
-		String uniqueName = "New tag #";
-		int i = 1;
-		for (;isNameUsed(uniqueName + i); i++);
-
-		uniqueName += Integer.toString(i);
-		return uniqueName;
-	}
-
 	private boolean addTag(String name, Color color, Integer uuid)
 	{
 		if (isNameUsed(name)) return false;
@@ -98,15 +88,21 @@ public class TagHandler
 	{
 		if (!tags.containsKey(uuid))
 		{
-			// todo: give feedback
+			System.err.println("no tag with (name: " + name + ", uuid " + uuid + ") found");
 			return false;
 		}
 
-		if (isNameUsed(name)) return false;
 		var tag = tags.get(uuid);
 
-		if(!name.equals(tag.getName()))
+		if (!name.equals(tag.getName()))
 		{
+			if (isNameUsed(name))
+			{
+				System.err.println("tag name '" + name + "' already in use");
+				Feedback.getInstance().showError("Nome già in uso",
+						"Esiste già una tag con nome '" + name + "'.");
+				return false;
+			}
 			names.remove(tag.getName());
 			tag.setName(name);
 			names.add(tag.getName());
@@ -149,6 +145,15 @@ public class TagHandler
 		return tags.get(uuid);
 	}
 
+	private String getUniqueName()
+	{
+		String uniqueName = "New tag #";
+		int i = 1;
+		while(isNameUsed(uniqueName + i))
+			i++;
+		return uniqueName + i;
+
+	}
 
 	public Collection<Tag> getTags()
 	{
