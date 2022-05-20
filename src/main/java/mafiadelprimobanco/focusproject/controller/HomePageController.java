@@ -6,28 +6,26 @@ import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.SceneHandler;
-import mafiadelprimobanco.focusproject.TagHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
-import mafiadelprimobanco.focusproject.model.Tag;
-import mafiadelprimobanco.focusproject.model.TagsObserver;
+import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 
-public class HomePageController implements TagsObserver, ActivityObserver
+public class HomePageController implements ActivityObserver
 {
+	@FXML private AnchorPane tagsView;
+
 	@FXML private SplitPane splitPane;
-	@FXML private VBox tagsSidebar;
 
 	@FXML private MFXButton fullScreenButton;
 	@FXML private FontIcon fullScreenIcon;
@@ -45,14 +43,21 @@ public class HomePageController implements TagsObserver, ActivityObserver
 	@FXML
 	void initialize()
 	{
-		populateTagsList();
 
-		TagHandler.getInstance().addListener(this);
+
 		ActivityHandler.getInstance().addListener(this);
 
 		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
-
 		activitySelectorComboBox.selectFirst();
+
+		try
+		{
+			tagsView.getChildren().add(SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 
 		// todo refactor:  the definition shouldn't go inside the initialize
 		//  or change method completely
@@ -94,32 +99,7 @@ public class HomePageController implements TagsObserver, ActivityObserver
 
 	}
 
-	@Override
-	public void onTagAdded(Tag tag)
-	{
-		try
-		{
-			tagsSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
 
-	@Override
-	public void onTagRemoving(Tag tag)
-	{
-		for (Node child : tagsSidebar.getChildren())
-		{
-			if (child.getProperties().containsKey("tag-uuid")) if (child.getProperties().get("tag-uuid").equals(
-					tag.getUuid()))
-			{
-				tagsSidebar.getChildren().remove(child);
-				return;
-			}
-		}
-	}
 
 	@Override
 	public void onActivityStart()
@@ -131,8 +111,8 @@ public class HomePageController implements TagsObserver, ActivityObserver
 
 		activitySelectorComboBox.setVisible(false);
 
-		tagsSidebar.setMinWidth(0);
-		tagsSidebar.setVisible(false);
+		tagsView.setMinWidth(0);
+		tagsView.setVisible(false);
 
 		switch (ActivityHandler.getInstance().getCurrActivityType())
 		{
@@ -154,18 +134,7 @@ public class HomePageController implements TagsObserver, ActivityObserver
 	@Override
 	public void onActivityEndSafe() { onStopActivityEvent(); }
 
-	private void populateTagsList()
-	{
-		try
-		{
-			for (Tag tag : TagHandler.getInstance().getTags())
-				tagsSidebar.getChildren().add(SceneHandler.getInstance().createTagView(tag));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
+
 
 	public void onStopActivityEvent()
 	{
@@ -173,8 +142,8 @@ public class HomePageController implements TagsObserver, ActivityObserver
 		activityTimeTextField.editableProperty().setValue(true);
 		activityTimeTextField.setText("00:00");
 		progressBarTime.setProgress(0.0);
-		tagsSidebar.setMinWidth(Region.USE_COMPUTED_SIZE);
-		tagsSidebar.setVisible(true);
+		tagsView.setMinWidth(Region.USE_COMPUTED_SIZE);
+		tagsView.setVisible(true);
 		activitySelectorComboBox.setVisible(true);
 	}
 

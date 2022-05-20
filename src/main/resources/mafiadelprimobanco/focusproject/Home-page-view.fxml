@@ -24,7 +24,7 @@
                <children>
                   <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <MFXButton fx:id="fullScreenButton" id="homeFullScreenButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="">
+                        <MFXButton id="homeFullScreenButton" fx:id="fullScreenButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="">
                            <graphic>
                               <FontIcon fx:id="fullScreenIcon" iconColor="#ffffff80" iconLiteral="mdi2f-fullscreen" iconSize="30" />
                            </graphic>
@@ -76,6 +76,6 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </AnchorPane>
-      <VBox id="homeTagList" fx:id="tagsSidebar" alignment="TOP_CENTER" prefHeight="450.0" prefWidth="210.0" spacing="10.0" SplitPane.resizableWithParent="false" />
+      <AnchorPane fx:id="tagsView" prefHeight="200.0" prefWidth="200.0" />
    </items>
 </SplitPane>

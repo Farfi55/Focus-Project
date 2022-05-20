@@ -3,7 +3,6 @@ package mafiadelprimobanco.focusproject;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -43,7 +42,7 @@ public class SceneHandler
 
 		stage.setOnCloseRequest(windowEvent ->
 		{
-			if(Feedback.getInstance().askYesNoConfirmation(
+			if(!Feedback.getInstance().askYesNoConfirmation(
 					"Chiudi applicazione Focus ",
 					"Sei sicuro di voler chiudere l'applicazione?"))
 				windowEvent.consume();
@@ -51,9 +50,9 @@ public class SceneHandler
 	}
 
 
-	public Node loadPage(String pagePathRef) throws IOException
+	public Node loadFXML(String fxmlPath) throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(pagePathRef));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 		return loader.load();
 	}
 

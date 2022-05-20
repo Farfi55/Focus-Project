@@ -151,7 +151,7 @@ public class BaseController implements ActivityObserver
 		{
 			if (!pagePathRef.equals(""))
 			{
-				Node page = SceneHandler.getInstance().loadPage(pagePathRef);
+				Node page = SceneHandler.getInstance().loadFXML(pagePathRef);
 				contentRoot.getChildren().setAll(page);
 			}
 			else System.out.println("navigation to empty page reference");

@@ -6,6 +6,8 @@ import mafiadelprimobanco.focusproject.model.TagsObserver;
 
 import java.util.*;
 
+import static io.github.palexdev.materialfx.utils.ColorUtils.getRandomColor;
+
 public class TagHandler
 {
 	private static final TagHandler instance = new TagHandler();
@@ -13,6 +15,7 @@ public class TagHandler
 	public static TagHandler getInstance() { return instance; }
 
 	private final Map<Integer, Tag> tags = new HashMap<>();
+	private final HashSet<String> names = new HashSet<>();
 	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
 
@@ -44,33 +47,49 @@ public class TagHandler
 		return addTag(name, color, uuid);
 	}
 
+	public void addTag()
+	{
+		String uniqueName = getUniqueName();
+		Color randomColor = getRandomColor();
+		addTag(uniqueName, randomColor);
+	}
+
+	private String getUniqueName()
+	{
+		String uniqueName = "New tag #";
+		int i = 1;
+		for (;isNameUsed(uniqueName + i); i++);
+
+		uniqueName += Integer.toString(i);
+		return uniqueName;
+	}
+
 	private boolean addTag(String name, Color color, Integer uuid)
 	{
-		for (Tag tag : tags.values())
-			if (tag.getName().equals(name))
-			{
-				// todo: handle with an exception or
-				//  give some feedback directly with SceneHandler
-				return false;
-			}
+		if (isNameUsed(name)) return false;
 		var tag = new Tag(name, color, uuid);
 		tags.put(uuid, tag);
+		names.add(name);
 		invokeOnTagAdded(tag);
 		return true;
+	}
+
+	private boolean isNameUsed(String name)
+	{
+		return names.contains(name);
 	}
 
 	public boolean removeTag(Integer uuid)
 	{
 		if (!tags.containsKey(uuid))
 		{
-			Feedback.getInstance().showError("Error",
-					"Tried to remove a tag that doesn't exists");
+			Feedback.getInstance().showError("Error", "Tried to remove a tag that doesn't exists");
 			return false;
 		}
 
 		Tag tag = tags.get(uuid);
 		invokeOnTagRemoving(tag);
-
+		names.remove(tag.getName());
 		tags.remove(uuid);
 		return true;
 	}
@@ -83,16 +102,15 @@ public class TagHandler
 			return false;
 		}
 
-		for (Tag tag : tags.values())
-			if (tag.getName().equals(name))
-			{
-				// todo: handle with an exception or
-				//  give some feedback directly with SceneHandler
-				return false;
-			}
+		if (isNameUsed(name)) return false;
 		var tag = tags.get(uuid);
 
-		tag.setName(name);
+		if(!name.equals(tag.getName()))
+		{
+			names.remove(tag.getName());
+			tag.setName(name);
+			names.add(tag.getName());
+		}
 		tag.setColor(color);
 		invokeOnTagChanged(tag);
 		return true;
@@ -130,6 +148,7 @@ public class TagHandler
 	{
 		return tags.get(uuid);
 	}
+
 
 	public Collection<Tag> getTags()
 	{
