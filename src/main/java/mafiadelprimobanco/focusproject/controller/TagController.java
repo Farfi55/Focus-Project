@@ -14,31 +14,26 @@ import mafiadelprimobanco.focusproject.model.TagsObserver;
 public class TagController extends AnchorPane implements TagsObserver
 {
 	private Tag tag;
+  	private ColorPicker colorPicker;
 
 	@FXML private MFXButton colorButton;
-
 	@FXML private MFXTextField textField;
+  	@FXML private MFXButton removeButton;	
+  
 
 	@Override
 	public void onTagChanged(Tag tag)
 	{
 		if (this.tag.getUuid().equals(tag.getUuid())) updateGraphics();
 	}
-
-
-	@FXML
-	void onColorButtonClicked(ActionEvent event) { }
+	
+	
 
 	@FXML
-	void onRemoveButtonClicked(ActionEvent event)
+	void onColorPickerAction(ActionEvent event)
 	{
-		if (Feedback.getInstance().askYesNoConfirmation("Eliminazione tag",
-				"Sei sicuro di voler rimuovere questa tag?"))
-		{
-			TagHandler.getInstance().removeTag(tag.getUuid());
-
-		}
-
+		Color colorPicked = colorPicker.getValue();
+		colorButton.setStyle("-fx-background-color:" + toHexColor(colorPicked) + ";");
 	}
 
 	private void updateGraphics()
@@ -51,6 +46,20 @@ public class TagController extends AnchorPane implements TagsObserver
 	{
 		return tag;
 	}
+
+  	@FXML
+	void onColorButtonClicked(ActionEvent event) { }
+
+	@FXML
+	void onRemoveButtonClicked(ActionEvent event)
+	{
+		if (Feedback.getInstance().askYesNoConfirmation("Eliminazione tag",
+				"Sei sicuro di voler rimuovere questa tag?"))
+		{
+			TagHandler.getInstance().removeTag(tag.getUuid());
+
+		}
+
 
 	public void setTag(Tag tag)
 	{
@@ -67,4 +76,16 @@ public class TagController extends AnchorPane implements TagsObserver
 	{
 		textField.setText(name);
 	}
+
+	public static String toHexColor( Color color )
+	{
+		return String.format( "#%02X%02X%02X",
+						      (int)( color.getRed() * 255 ),
+							  (int)( color.getGreen() * 255 ),
+							  (int)( color.getBlue() * 255 ) );
+	}
+
+
 }
+
+
