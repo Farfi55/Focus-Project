@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-
 <MFXRectangleToggleNode fx:id="selectionButton" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" onAction="#onSelectedAction" prefWidth="350.0" styleClass="homeTag" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.TagController">
    <graphic>
       <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="350.0" spacing="10.0">
@@ -19,7 +18,7 @@
                </graphic>
             </MFXButton>
             <MFXTextField fx:id="textField" minHeight="20.0" minWidth="200.0" onAction="#onTextFieldAction" prefHeight="30.0" prefWidth="1000.0" styleClass="tagViewTextField" />
-            <MFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onRemoveAction" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 5em; -fx-background-color: rgba(0,0,0,0);" styleClass="tagViewColorButton" text="remove">
+            <MFXButton fx:id="removeButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onRemoveAction" onMouseClicked="#onRemoveAction" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 5em; -fx-background-color: rgba(0,0,0,0);" styleClass="tagViewColorButton" text="remove">
                <graphic>
                   <FontIcon iconLiteral="mdi2c-close-circle-outline" iconSize="30" />
                </graphic>

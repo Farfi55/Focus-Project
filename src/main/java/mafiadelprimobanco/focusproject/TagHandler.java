@@ -20,25 +20,33 @@ public class TagHandler
 	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
 	private Tag selectedTag;
+	private Tag unsetTag;
 
 	private TagHandler()
 	{
 		loadTags();
 	}
 
-	void loadTags()
+	private void loadTags()
 	{
 		// todo: get saved tags from database
+		createUnsetTag();
 		debugLoad();
 
 	}
 
-	void debugLoad()
+	private void createUnsetTag() {
+		// todo: translate
+		addTag("Unset", Color.GRAY, 0);
+		this.unsetTag = tags.get(0);
+	}
+
+	private void debugLoad()
 	{
-		addTag("Studio Fisica", Color.BROWN, 0);
 		addTag("Studio Basi di Dati", Color.RED, 1);
 		addTag("Esercitazione Ukulele", Color.GREEN, 2);
 		addTag("Allenamento", Color.LIGHTCYAN, 3);
+		addTag("Studio Fisica", Color.BROWN, 4);
 	}
 
 	public boolean addTag(String name, Color color)
@@ -78,19 +86,31 @@ public class TagHandler
 			Feedback.getInstance().showError("Error", "Tried to remove a tag that doesn't exists");
 			return false;
 		}
+		else if(uuid == 0)
+		{
+			System.err.println("cant remove the 'unset' tag");
+			return false;
+		}
 
 		Tag tag = tags.get(uuid);
+		if(tag.equals(selectedTag))
+			setSelectedTag(unsetTag);
 		invokeOnTagRemoving(tag);
 		names.remove(tag.getName());
 		tags.remove(uuid);
 		return true;
 	}
 
-	public boolean updateTag(String name, Color color, Integer uuid)
+	public boolean changeTag(String name, Color color, Integer uuid)
 	{
 		if (!tags.containsKey(uuid))
 		{
 			System.err.println("no tag with (name: " + name + ", uuid " + uuid + ") found");
+			return false;
+		}
+		else if(uuid == 0)
+		{
+			System.err.println("cant change the 'unset' tag");
 			return false;
 		}
 
