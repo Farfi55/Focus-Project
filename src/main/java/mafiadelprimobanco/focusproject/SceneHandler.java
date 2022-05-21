@@ -3,6 +3,7 @@ package mafiadelprimobanco.focusproject;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -42,10 +43,8 @@ public class SceneHandler
 
 		stage.setOnCloseRequest(windowEvent ->
 		{
-			if(!Feedback.getInstance().askYesNoConfirmation(
-					"Chiudi applicazione Focus ",
-					"Sei sicuro di voler chiudere l'applicazione?"))
-				windowEvent.consume();
+			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
+					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
 		});
 	}
 
@@ -62,13 +61,16 @@ public class SceneHandler
 		return loader.load();
 	}*/
 
-	public Node createTagView(Tag tag) throws IOException
+	public Node createTagView(Tag tag) throws IOException { return createTagView(tag, null); }
+
+	public Node createTagView(Tag tag, ToggleGroup toggleGroup) throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
 		Node node = loader.load();
 		node.getProperties().put("tag-uuid", tag.getUuid());
 		TagController tagController = loader.getController();
 		tagController.init(tag);
+		tagController.setToggleGroup(toggleGroup);
 		return node;
 	}
 

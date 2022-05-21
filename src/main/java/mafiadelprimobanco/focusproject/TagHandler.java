@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
@@ -18,6 +19,7 @@ public class TagHandler
 	private final HashSet<String> names = new HashSet<>();
 	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
+	private Tag selectedTag;
 
 	private TagHandler()
 	{
@@ -99,8 +101,7 @@ public class TagHandler
 			if (isNameUsed(name))
 			{
 				System.err.println("tag name '" + name + "' already in use");
-				Feedback.getInstance().showError("Nome già in uso",
-						"Esiste già una tag con nome '" + name + "'.");
+				Feedback.getInstance().showError("Nome già in uso", "Esiste già una tag con nome '" + name + "'.");
 				return false;
 			}
 			names.remove(tag.getName());
@@ -140,17 +141,35 @@ public class TagHandler
 			observer.onTagChanged(tag);
 	}
 
+	private void invokeOnTagSelected(Tag tag)
+	{
+		for (TagsObserver observer : listeners)
+			observer.onTagSelected(tag);
+	}
+
 	public final Tag getTag(Integer uuid)
 	{
 		return tags.get(uuid);
+	}
+
+
+
+	public Tag getSelectedTag()
+	{
+		return selectedTag;
+	}
+
+	public void setSelectedTag(Tag tag)
+	{
+		this.selectedTag = tag;
+		invokeOnTagSelected(tag);
 	}
 
 	private String getUniqueName()
 	{
 		String uniqueName = "New tag #";
 		int i = 1;
-		while(isNameUsed(uniqueName + i))
-			i++;
+		while (isNameUsed(uniqueName + i)) i++;
 		return uniqueName + i;
 
 	}

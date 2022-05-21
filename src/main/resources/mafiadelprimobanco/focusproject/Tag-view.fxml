@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.layout.HBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="350.0" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.TagController">
-   <children>
-      <MFXButton fx:id="colorButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" ellipsisString="   " maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 6em; -fx-border-radius: 6em; -fx-background-color: GREY;" styleClass="tagViewColorButton" text="Color">
-         <graphic>
-            <ColorPicker fx:id="colorPicker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onColorPickerAction" opacity="1.0E-5" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 50%;" />
-         </graphic>
-      </MFXButton>
-      <MFXTextField fx:id="textField" minHeight="20.0" minWidth="200.0" onAction="#onTextFieldAction" prefHeight="30.0" prefWidth="1000.0" styleClass="tagViewTextField" />
-      <MFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onRemoveAction" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 5em; -fx-background-color: rgba(0,0,0,0);" styleClass="tagViewColorButton" text="remove">
-         <graphic>
-            <FontIcon iconLiteral="mdi2c-close-circle-outline" iconSize="30" />
-         </graphic>
-      </MFXButton>
-   </children>
-   <padding>
-      <Insets bottom="6.0" left="36.0" right="6.0" top="6.0" />
-   </padding>
-</HBox>
+
+<MFXRectangleToggleNode fx:id="selectionButton" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" onAction="#onSelectedAction" prefWidth="350.0" styleClass="homeTag" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.TagController">
+   <graphic>
+      <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="350.0" spacing="10.0">
+         <children>
+            <MFXButton fx:id="colorButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="   " maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 6em; -fx-border-radius: 6em; -fx-background-color: GREY;" styleClass="tagViewColorButton" text="Color">
+               <graphic>
+                  <ColorPicker fx:id="colorPicker" onAction="#onColorPickerAction" opacity="0.0" prefHeight="90.0" prefWidth="90.0" />
+               </graphic>
+            </MFXButton>
+            <MFXTextField fx:id="textField" minHeight="20.0" minWidth="200.0" onAction="#onTextFieldAction" prefHeight="30.0" prefWidth="1000.0" styleClass="tagViewTextField" />
+            <MFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onRemoveAction" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 5em; -fx-background-color: rgba(0,0,0,0);" styleClass="tagViewColorButton" text="remove">
+               <graphic>
+                  <FontIcon iconLiteral="mdi2c-close-circle-outline" iconSize="30" />
+               </graphic>
+            </MFXButton>
+         </children>
+         <padding>
+            <Insets bottom="6.0" left="36.0" right="6.0" top="6.0" />
+         </padding>
+      </HBox>
+   </graphic>
+</MFXRectangleToggleNode>

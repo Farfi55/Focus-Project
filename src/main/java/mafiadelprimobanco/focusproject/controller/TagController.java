@@ -1,11 +1,13 @@
 package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.Feedback;
@@ -20,15 +22,9 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML private ColorPicker colorPicker;
 	@FXML private MFXButton colorButton;
 	@FXML private MFXTextField textField;
+	@FXML private MFXRectangleToggleNode selectionButton;
+
 //	@FXML private MFXButton removeButton;
-
-
-	public void init(Tag tag)
-	{
-		this.tag = tag;
-		updateGraphics();
-		TagHandler.getInstance().addListener(this);
-	}
 
 	// todo refactor: this should not go in here
 	public static String toHexColor(Color color)
@@ -39,21 +35,35 @@ public class TagController extends AnchorPane implements TagsObserver
 	}
 
 	@Override
-	public void onTagChanged(Tag tag)
+	public void onTagRemoving(Tag tag)
 	{
-//		System.out.println("tag: " + tag.getName() + " changed, I am " + this
-//				.tag.getName());
-		if (this.tag.equals(tag)) {
-			updateGraphics();
+		if (this.tag.equals(tag))
+		{
+			Platform.runLater(() -> TagHandler.getInstance().removeListener(this));
 		}
 	}
 
 	@Override
-	public void onTagRemoving(Tag tag)
+	public void onTagChanged(Tag tag)
 	{
-		if(this.tag.equals(tag)) {
-			Platform.runLater(() -> TagHandler.getInstance().removeListener(this));
+//		System.out.println("tag: " + tag.getName() + " changed, I am " + this
+//				.tag.getName());
+		if (this.tag.equals(tag))
+		{
+			updateGraphics();
 		}
+	}
+
+	public void init(Tag tag)
+	{
+		this.tag = tag;
+		updateGraphics();
+		TagHandler.getInstance().addListener(this);
+	}
+
+	@FXML
+	void onSelectedAction(ActionEvent event) {
+		TagHandler.getInstance().setSelectedTag(this.tag);
 	}
 
 	@FXML
@@ -75,9 +85,10 @@ public class TagController extends AnchorPane implements TagsObserver
 	}
 
 	@FXML
-	void onTextFieldAction(ActionEvent event) {
+	void onTextFieldAction(ActionEvent event)
+	{
 		// if the update didn't go through, reset textField text
-		if(!TagHandler.getInstance().updateTag(textField.getText(), tag.getColor(), tag.getUuid()))
+		if (!TagHandler.getInstance().updateTag(textField.getText(), tag.getColor(), tag.getUuid()))
 		{
 			setText(tag.getName());
 		}
@@ -90,13 +101,16 @@ public class TagController extends AnchorPane implements TagsObserver
 		setColor(tag.getColor());
 	}
 
+	public void setToggleGroup(ToggleGroup toggleGroup)
+	{
+		selectionButton.setToggleGroup(toggleGroup);
+	}
+
 	public final Tag getTag()
 	{
 		return tag;
 	}
-
-
-
+	
 	private void setColor(Color color)
 	{
 		colorButton.setStyle("-fx-background-color: #" + color.toString().substring(2));

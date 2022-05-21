@@ -7,4 +7,6 @@ public interface TagsObserver
 	default void onTagRemoving(Tag tag) { }
 
 	default void onTagChanged(Tag tag) { }
+
+	default void onTagSelected(Tag tag) { }
 }
