@@ -18,6 +18,8 @@ import mafiadelprimobanco.focusproject.model.TagsObserver;
 
 public class TagController extends AnchorPane implements TagsObserver
 {
+	// we have a reference to the tag, but we never modify it directly
+	// only using the TagHandler class
 	private Tag tag;
 
 	@FXML private ColorPicker colorPicker;
@@ -46,22 +48,13 @@ public class TagController extends AnchorPane implements TagsObserver
 	@Override
 	public void onTagChanged(Tag tag)
 	{
-//		System.out.println("tag: " + tag.getName() + " changed, I am " + this
-//				.tag.getName());
-		if (this.tag.equals(tag))
-		{
-			updateGraphics();
-		}
+		if (this.tag.equals(tag)) updateGraphics();
 	}
 
 	@Override
 	public void onTagSelected(Tag tag)
 	{
-		System.out.println("selecting " + tag.getName());
-		if (this.tag.equals(tag))
-		{
-			selectionButton.setSelected(true);
-		}
+		if (this.tag.equals(tag)) selectionButton.setSelected(true);
 	}
 
 	public void init(Tag tag)
@@ -83,8 +76,8 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML
 	void onSelectedAction(ActionEvent event)
 	{
-		TagHandler.getInstance().setSelectedTag(this.tag);
-		selectionButton.setSelected(true);
+		if(TagHandler.getInstance().setSelectedTag(this.tag))
+			selectionButton.setSelected(true);
 		event.consume();
 	}
 

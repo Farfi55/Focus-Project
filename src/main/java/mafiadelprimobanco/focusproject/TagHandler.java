@@ -190,17 +190,23 @@ public class TagHandler
 		return tags.get(uuid);
 	}
 
+	public boolean setSelectedTag(Tag tag)
+	{
+		if (ActivityHandler.getInstance().isActivityStarted())
+		{
 
+			Feedback.getInstance().showError("Errore di Selezione",
+					"Non è possibile selezionare un tag durante un'attività");
+			return false;
+		}
+		this.selectedTag = tag;
+		invokeOnTagSelected(tag);
+		return false;
+	}
 
 	public Tag getSelectedTag()
 	{
 		return selectedTag;
-	}
-
-	public void setSelectedTag(Tag tag)
-	{
-		this.selectedTag = tag;
-		invokeOnTagSelected(tag);
 	}
 
 	private String getUniqueName()
