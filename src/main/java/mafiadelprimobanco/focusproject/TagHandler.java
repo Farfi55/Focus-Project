@@ -1,6 +1,5 @@
 package mafiadelprimobanco.focusproject;
 
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
@@ -35,10 +34,12 @@ public class TagHandler
 
 	}
 
-	private void createUnsetTag() {
+	private void createUnsetTag()
+	{
 		// todo: translate
 		addTag("Unset", Color.GRAY, 0);
 		this.unsetTag = tags.get(0);
+		setSelectedTag(this.unsetTag);
 	}
 
 	private void debugLoad()
@@ -83,18 +84,29 @@ public class TagHandler
 	{
 		if (!tags.containsKey(uuid))
 		{
-			Feedback.getInstance().showError("Error", "Tried to remove a tag that doesn't exists");
+//			Feedback.getInstance().showError("Error", "Tried to remove a tag that doesn't exists");
+			Feedback.getInstance().showError("Errore di rimozione", "Hai provato a rimuovere una tag che non esiste");
 			return false;
 		}
-		else if(uuid == 0)
+		else if (uuid == 0)
 		{
 			System.err.println("cant remove the 'unset' tag");
 			return false;
 		}
 
+
 		Tag tag = tags.get(uuid);
-		if(tag.equals(selectedTag))
-			setSelectedTag(unsetTag);
+		if (tag.equals(selectedTag))
+		{
+			// "Tag error", "Can't delete the tag that is being used in an activity"
+			if (ActivityHandler.getInstance().isActivityStarted())
+			{
+				Feedback.getInstance().showError("Errore di rimozione",
+						"Non è possibile rimuovere una tag mentre viene usata in una attività");
+				return false;
+			}
+			else setSelectedTag(unsetTag);
+		}
 		invokeOnTagRemoving(tag);
 		names.remove(tag.getName());
 		tags.remove(uuid);
@@ -108,9 +120,15 @@ public class TagHandler
 			System.err.println("no tag with (name: " + name + ", uuid " + uuid + ") found");
 			return false;
 		}
-		else if(uuid == 0)
+		else if (uuid == 0)
 		{
 			System.err.println("cant change the 'unset' tag");
+			return false;
+		}
+		else if (ActivityHandler.getInstance().isActivityStarted() && uuid.equals(selectedTag.getUuid()))
+		{
+			Feedback.getInstance().showError("Errore di modifica",
+					"Non è possibile modificare una tag mentre è usata in una attività");
 			return false;
 		}
 

@@ -76,7 +76,7 @@ public class TagController extends AnchorPane implements TagsObserver
 			colorPicker.setDisable(true);
 			removeButton.setDisable(true);
 			textField.setEditable(false);
-
+			selectionButton.setSelected(true);
 		}
 	}
 
