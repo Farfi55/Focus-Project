@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.TagHandler;
@@ -19,6 +19,8 @@ public class HomePageTagsController implements TagsObserver
 
 	@FXML private VBox tagsList;
 
+	private ToggleGroup toggleGroup;
+
 	@FXML private MFXScrollPane tagsSidebar;
 
 
@@ -26,7 +28,7 @@ public class HomePageTagsController implements TagsObserver
 	void initialize()
 	{
 		TagHandler.getInstance().addListener(this);
-
+		toggleGroup = new ToggleGroup();
 		populateTagsList();
 	}
 
@@ -37,10 +39,7 @@ public class HomePageTagsController implements TagsObserver
 		{
 			try
 			{
-				// -1 because we want to keep the addTag button at the bottom
-				int index = tagsList.getChildren().size() - 1;
-				Node tagView = SceneHandler.getInstance().createTagView(tag);
-				tagsList.getChildren().add(index, tagView);
+				createTagView(tag);
 			}
 			catch (IOException e)
 			{
@@ -63,6 +62,21 @@ public class HomePageTagsController implements TagsObserver
 		}
 	}
 
+	private void createTagView(Tag tag) throws IOException
+	{
+		// -1 because we want to keep the addTag button at the bottom
+		int index = tagsList.getChildren().size() - 1;
+		Node tagView = SceneHandler.getInstance().createTagView(tag, this.toggleGroup);
+		tagsList.getChildren().add(index, tagView);
+
+//		if(tagView instanceof Toggle toggle)
+//		{
+//			toggle.setToggleGroup(this.toggleGroup);
+//			System.out.println(toggle.getToggleGroup());
+//		}
+//		else System.err.println("Unable to inject toggle group to tag " + tag.getName());
+	}
+
 	@FXML
 	void onNewTagAction(ActionEvent event)
 	{
@@ -74,12 +88,7 @@ public class HomePageTagsController implements TagsObserver
 		try
 		{
 			for (Tag tag : TagHandler.getInstance().getTags())
-			{
-				// -1 because we want to keep the addTag button at the bottom
-				int index = tagsList.getChildren().size() - 1;
-				tagsList.getChildren().add(index, SceneHandler.getInstance().createTagView(tag));
-
-			}
+				createTagView(tag);
 		}
 		catch (IOException e)
 		{

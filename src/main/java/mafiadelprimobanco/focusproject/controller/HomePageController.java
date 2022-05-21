@@ -7,14 +7,15 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
+import javafx.scene.shape.Circle;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.TagHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -24,10 +25,17 @@ import java.io.IOException;
 
 public class HomePageController implements ActivityObserver
 {
+	//
 	@FXML private BorderPane homeRoot;
 
+	// fullscreen button controls
 	@FXML private MFXButton fullScreenButton;
 	@FXML private FontIcon fullScreenIcon;
+
+
+	// selected tag controls
+	@FXML private Circle selectedTagColorCircle;
+	@FXML private Label selectedTagText;
 
 	@FXML private MFXComboBox<String> activitySelectorComboBox;
 
@@ -37,8 +45,6 @@ public class HomePageController implements ActivityObserver
 	@FXML private ImageView treeImageViewer;
 
 	@FXML private MFXButton activityButton;
-
-	private Node tagsRoot;
 
 	@FXML
 	void initialize()
@@ -52,13 +58,15 @@ public class HomePageController implements ActivityObserver
 
 		try
 		{
-			this.tagsRoot = SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS);
-			homeRoot.setRight(tagsRoot);
+			homeRoot.setRight(SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS));
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+
+		// makes sure everything is looking normal at the beginning
+		onActivityStop();
 
 		// todo refactor:  the definition shouldn't go inside the initialize
 		//  or change method completely
@@ -106,11 +114,23 @@ public class HomePageController implements ActivityObserver
 	public void onActivityStart()
 	{
 		activityButton.setText("Interrompi");
-		activityTimeTextField.editableProperty().setValue(false);
+
+		activityTimeTextField.setEditable(false);
 
 
-		homeRoot.setRight(null);
+//		homeRoot.setRight(null);
+		homeRoot.getRight().setManaged(false);
+		homeRoot.getRight().setVisible(false);
 		activitySelectorComboBox.setVisible(false);
+		activitySelectorComboBox.setManaged(false);
+
+
+		selectedTagText.setText(TagHandler.getInstance().getSelectedTag().getName());
+		selectedTagText.setVisible(true);
+		selectedTagText.setManaged(true);
+		selectedTagColorCircle.setFill(TagHandler.getInstance().getSelectedTag().getColor());
+		selectedTagColorCircle.setVisible(true);
+		selectedTagColorCircle.setManaged(true);
 
 
 		switch (ActivityHandler.getInstance().getCurrActivityType())
@@ -131,18 +151,26 @@ public class HomePageController implements ActivityObserver
 	}
 
 	@Override
-	public void onActivityEndSafe() { onStopActivityEvent(); }
+	public void onActivityEndSafe() { onActivityStop(); }
 
 
 
-	public void onStopActivityEvent()
+	public void onActivityStop()
 	{
 		activityButton.setText("Avvia");
-		activityTimeTextField.editableProperty().setValue(true);
+		activityTimeTextField.setEditable(true);
 		activityTimeTextField.setText("00:00");
 		progressBarTime.setProgress(0.0);
 
-		homeRoot.setRight(tagsRoot);
+		selectedTagText.setVisible(false);
+		selectedTagText.setManaged(false);
+		selectedTagColorCircle.setVisible(false);
+		selectedTagColorCircle.setManaged(false);
+
+//		homeRoot.setRight(tagsRoot);
+
+		homeRoot.getRight().setVisible(true);
+		homeRoot.getRight().setManaged(true);
 
 		activitySelectorComboBox.setVisible(true);
 	}
