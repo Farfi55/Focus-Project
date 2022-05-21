@@ -2,6 +2,7 @@ package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
@@ -40,8 +41,8 @@ public class TagController extends AnchorPane implements TagsObserver
 	@Override
 	public void onTagChanged(Tag tag)
 	{
-		System.out.println("tag: " + tag.getName() + " changed, I am " + this
-				.tag.getName());
+//		System.out.println("tag: " + tag.getName() + " changed, I am " + this
+//				.tag.getName());
 		if (this.tag.equals(tag)) {
 			updateGraphics();
 		}
@@ -50,7 +51,9 @@ public class TagController extends AnchorPane implements TagsObserver
 	@Override
 	public void onTagRemoving(Tag tag)
 	{
-		if(this.tag.equals(tag)) TagHandler.getInstance().removeListener(this);
+		if(this.tag.equals(tag)) {
+			Platform.runLater(() -> TagHandler.getInstance().removeListener(this));
+		}
 	}
 
 	@FXML
@@ -74,7 +77,7 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML
 	void onTextFieldAction(ActionEvent event) {
 		// if the update didn't go through, reset textField text
-		if(TagHandler.getInstance().updateTag(textField.getText(), tag.getColor(), tag.getUuid()))
+		if(!TagHandler.getInstance().updateTag(textField.getText(), tag.getColor(), tag.getUuid()))
 		{
 			setText(tag.getName());
 		}

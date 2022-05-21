@@ -7,12 +7,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-
 <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="350.0" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.TagController">
    <children>
-      <MFXButton fx:id="colorButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="   " maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 6em; -fx-border-radius: 6em; -fx-background-color: GREY;" styleClass="tagViewColorButton" text="Color">
+      <MFXButton fx:id="colorButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" ellipsisString="   " maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 6em; -fx-border-radius: 6em; -fx-background-color: GREY;" styleClass="tagViewColorButton" text="Color">
          <graphic>
-            <ColorPicker fx:id="colorPicker" onAction="#onColorPickerAction" opacity="0.0" prefHeight="90.0" prefWidth="90.0" />
+            <ColorPicker fx:id="colorPicker" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onColorPickerAction" opacity="1.0E-5" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 50%;" />
          </graphic>
       </MFXButton>
       <MFXTextField fx:id="textField" minHeight="20.0" minWidth="200.0" onAction="#onTextFieldAction" prefHeight="30.0" prefWidth="1000.0" styleClass="tagViewTextField" />
