@@ -1,12 +1,27 @@
-.root {
+/* BASE STYLE
+
+- #baseRoot
+  - .border-pane
+    - #navBar
+      - .vbox
+        - .mfx-rectangle-toggle-node
+    - #pageRoot
+
+*/
+#baseRoot {
     -fx-background-color: palette1-1;
+
 }
 
-/* BASE Styling */
 
 #navBar {
     -fx-background-color: palette2-2;
     -fx-background-radius: 0 10px 10px 0;
+    /*
+        doesn't work properly
+    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.25), 20, 0.4, 0, 0);
+    */
+
 }
 
 #navBar .mfx-rectangle-toggle-node {
@@ -29,6 +44,10 @@
 
 #navBar .ikonli-font-icon {
     -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 0, 0.2, 2, 2);
+}
+
+#pageRoot{
+    -fx-background-color: transparent;
 }
 
 
@@ -56,11 +75,25 @@
     -fx-icon-color: inherit;
 }
 
-.progress-indicator .percentage { -fx-fill:null; }
 
-.split-pane-divider { -fx-padding: 0; }
+/* HOME PAGE STYLE
 
-/* HOME STYLE */
+- #homeRoot
+  - #homeMainContentRoot
+    - #homeFullScreenButton
+    - #homeSelectedTag
+      - .label
+      - .circle
+    - #homeActivitySelectorComboBox
+    - #homeProgressDisplay
+      - .mfx-progress-spinner
+      - #homeTreeBackground
+      - .image-view
+    - #homeActivityButton
+  - <home page tags>
+*/
+
+
 
 #homeRoot {
     -fx-background-color: palette1-1;
@@ -86,22 +119,118 @@
 
 /*}*/
 
-/* STYLE tagView */
+/* HOME PAGE TAGS STYLE
 
-.tagView {
-    -fx-background-color: palette2-1;
-    -fx-background-radius: 10px;
+- #homePageTagsRoot
+  - .vbox
+   - <tags>
+  - #newTagButton (.mfx-button)
+*/
+
+#homePageTagsRoot {
+    -fx-background-color: palette2-2;
+    -fx-background-radius: 10px 0 0 10px;
+    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.25), 20, 0.4, 0, 0);
+
 }
 
-.tagViewColorButton {
+#homePageTagsRoot .label {
+    -fx-background-color: palette1-1;
+    -fx-background-radius: 23px;
+    -fx-padding: 5px 25px 5px 25px;
+    -fx-text-fill: palette3-2;
+    -fx-font-weight: 800;
+    -fx-font-size: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.25), 20, 0.4, 0, 0);
+
+}
+
+/*
+todo: this should be a reusable class
+ */
+#homePageTagsRoot #newTagButton {
+    -fx-border-color: palette3-2;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-color: palette1-1;
+    -fx-background-radius: 10px;
+    -fx-text-fill: palette3-2;
+    -fx-font-weight: 800;
+    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 3, 3);
+}
+
+
+
+/* TAG STYLE
+
+- .homeTag (mfx-rectangle-toggle-group)
+  - hbox
+    - .tagColorButton
+      - color-picker
+    - .tagTextField
+    - .tagRemoveButton
+      - ikonli-font-icon
+
+
+*/
+
+
+/*-fx-color-label-visible*/
+
+.homeTag {
+    -fx-background-color: palette1-1;
+    -fx-border-color: palette1-3;
+    -fx-border-radius: 21px;
+    -fx-background-radius: 21px;
+    -fx-text-fill: inherit;
+
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 3, 3);
+
+}
+
+.homeTag:selected {
+    -fx-background-color: palette3-1;
+    -fx-border-color: palette3-3;
+    -fx-border-width: 3px;
+
+    -fx-effect: innershadow(gaussian, rgba(75, 65, 26, 0.5), 10, 0.2, 3, 3);
+
+}
+
+.tagColorButton {
     -fx-background-radius: 50%;
     -fx-border-radius: 50%;
-}
+    /*-fx-effect: innershadow(gaussian, rgba(75, 65, 26, 0.5), 10, 0.2, 3, 3);*/
 
-.tagViewTextField{
-
-}
-
-.tagViewRemoveButton {
+    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 2, 2);
+    -fx-border-width: 1px;
+    -fx-border-color: black;
 
 }
+
+
+.tagTextField {
+    -fx-font-weight: 800;
+    -fx-text-fill: palette3-3;
+    -fx-border-width: 0px;
+    -fx-background-color: transparent;
+}
+
+.homeTag:selected .tagTextField {
+    -fx-text-fill: palette1-1;
+}
+
+.tagTextField * {
+    -fx-text-fill: inherit;
+}
+
+.tagRemoveButton {
+    -fx-background-color: transparent;
+    -fx-icon-color: palette3-3;
+}
+
+.tagRemoveButton *{
+    -fx-icon-color: inherit;
+}
+
