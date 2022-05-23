@@ -44,11 +44,10 @@ public class HomePageController implements ActivityObserver
 	@FXML private MFXTextField activityTimeTextField;
 	@FXML private MFXProgressSpinner progressBarTime;
 
-	@FXML
-	private MFXSpinner<Integer> minutesSpinnerSelector;
+	@FXML private MFXSpinner<Integer> hoursSpinnerSelector;
+	@FXML private MFXSpinner<Integer> minutesSpinnerSelector;
+	@FXML private MFXSpinner<Integer> secondsSpinnerSelector;
 
-	@FXML
-	private MFXSpinner<Integer> secondsSpinnerSelector;
 
 	@FXML private ImageView treeImageViewer;
 
@@ -71,23 +70,47 @@ public class HomePageController implements ActivityObserver
 			e.printStackTrace();
 		}
 
+		var hourSpinnerModel   = new IntegerSpinnerModel(0);
 		var minuteSpinnerModel = new IntegerSpinnerModel(0);
 		var secondSpinnerModel = new IntegerSpinnerModel(0);
 
 		secondSpinnerModel.setMax(60);
+		minuteSpinnerModel.setMax(60);
 
 		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
 		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
+		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
 
 		// TODO BUG #001: if we set 3000 seconds for some unknown reason
 		// the seconds text field doesn't show 0 and it keeps 3000...
 		// However if we set 3001 it works fine (3001 -> 50 minutes and 1 second)
 
+		minutesSpinnerSelector.valueProperty().addListener(e -> {
+			if (minutesSpinnerSelector.getValue() > 59) minutesSpinnerSelector.setValue(0);
+		});
+
 		secondsSpinnerSelector.valueProperty().addListener(e -> {
 			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
 		});
 
-		minutesSpinnerSelector.setOnCommit(e -> minuteSpinnerModel.setValue(filterInput(e)));
+		minutesSpinnerSelector.setOnCommit(e -> hourSpinnerModel.setValue(filterInput(e)));
+
+		minutesSpinnerSelector.setOnCommit(e -> {
+			int currVal = filterInput(e);
+
+			if (currVal > 59)
+			{
+				int minutesOverflow = currVal / 60;
+				currVal -= minutesOverflow * 60;
+
+				hourSpinnerModel.setValue(minutesOverflow);
+			}
+
+			// Very ugly fix for the TODO BUG #001 described above.
+			// Seems like if we set 0 the compiler does something to skip that..
+
+			minuteSpinnerModel.setValue(currVal == 0 ? 60 : currVal);
+		});
 
 		secondsSpinnerSelector.setOnCommit(e ->
 		{
@@ -96,9 +119,19 @@ public class HomePageController implements ActivityObserver
 			if (currVal > 59)
 			{
 				int secondsOverflow = currVal / 60;
+				int minutesOverflow = secondsOverflow / 60;
+
 				currVal	-= secondsOverflow * 60;
 
-				minuteSpinnerModel.setValue(secondsOverflow);
+				if (minutesOverflow == 0)
+				{
+					minuteSpinnerModel.setValue(secondsOverflow);
+				}
+				else
+				{
+					minuteSpinnerModel.setValue(secondsOverflow - minutesOverflow * 60);
+					hourSpinnerModel.setValue(minutesOverflow);
+				}
 			}
 
 			// Very ugly fix for the TODO BUG #001 described above.
@@ -123,7 +156,10 @@ public class HomePageController implements ActivityObserver
 
 		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER)
 		{
-			ActivityHandler.getInstance().setExecutionTime(minutesSpinnerSelector.getValue() * 60 + secondsSpinnerSelector.getValue());
+			ActivityHandler.getInstance().setExecutionTime(
+					  				  hoursSpinnerSelector.getValue() * 60 * 60
+					                + minutesSpinnerSelector.getValue() * 60
+									+ secondsSpinnerSelector.getValue());
 			hideSpinner();
 		}
 
@@ -248,12 +284,17 @@ public class HomePageController implements ActivityObserver
 	}
 
 	@FXML
-	void setTime(KeyEvent event)
+	void toggleFullScreen()
 	{
+		SceneHandler.getInstance().setFullScreen();
 	}
 
 	void hideSpinner()
 	{
+		hoursSpinnerSelector.setPrefWidth(0);
+		hoursSpinnerSelector.setMinWidth(0);
+		hoursSpinnerSelector.setVisible(false);
+
 		minutesSpinnerSelector.setPrefWidth(0);
 		minutesSpinnerSelector.setMinWidth(0);
 		minutesSpinnerSelector.setVisible(false);
@@ -265,6 +306,11 @@ public class HomePageController implements ActivityObserver
 
 	void showSpinner()
 	{
+		hoursSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		hoursSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
+		hoursSpinnerSelector.setVisible(true);
+		hoursSpinnerSelector.setValue(0);
+
 		minutesSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
 		minutesSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
 		minutesSpinnerSelector.setVisible(true);

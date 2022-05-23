@@ -27,7 +27,7 @@
                <children>
                   <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <MFXButton id="homeFullScreenButton" fx:id="fullScreenButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="">
+                        <MFXButton id="homeFullScreenButton" fx:id="fullScreenButton" contentDisplay="GRAPHIC_ONLY" ellipsisString="" onAction="#toggleFullScreen">
                            <graphic>
                               <FontIcon fx:id="fullScreenIcon" iconColor="#ffffff80" iconLiteral="mdi2f-fullscreen" iconSize="30" />
                            </graphic>
@@ -53,14 +53,15 @@
                   </HBox>
                   <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="50.0" prefWidth="200.0" spacing="150.0">
                      <children>
-                        <MFXComboBox id="homeActivitySelectorComboBox" fx:id="activitySelectorComboBox" alignment="CENTER" floatingText="Modalità" onAction="#setActivityType" prefHeight="40.0" prefWidth="200.0" scrollOnOpen="true" selectable="true" />
+                        <MFXComboBox id="homeActivitySelectorComboBox" fx:id="activitySelectorComboBox" alignment="CENTER" floatMode="BORDER" floatingText="Modalità" onAction="#setActivityType" prefHeight="40.0" prefWidth="200.0" scrollOnOpen="true" selectable="true" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                  <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                      <children>
-                        <MFXSpinner fx:id="minutesSpinnerSelector" editable="true" graphicTextGap="0.0" orientation="VERTICAL" HBox.hgrow="NEVER" />
+                        <MFXSpinner fx:id="hoursSpinnerSelector" editable="true" graphicTextGap="0.0" nodeOrientation="LEFT_TO_RIGHT" orientation="VERTICAL" />
+                        <MFXSpinner fx:id="minutesSpinnerSelector" editable="true" graphicTextGap="0.0" nodeOrientation="LEFT_TO_RIGHT" orientation="VERTICAL" HBox.hgrow="NEVER" />
                         <MFXSpinner fx:id="secondsSpinnerSelector" editable="true" graphicTextGap="0.0" orientation="VERTICAL" HBox.hgrow="NEVER" />
-                        <MFXTextField fx:id="activityTimeTextField" alignment="TOP_CENTER" allowEdit="false" floatMode="ABOVE" minWidth="0.0" onKeyTyped="#setTime" prefWidth="0.0" selectable="false" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 40px; -fx-text-fill: #FFF;" text="00:00">
+                        <MFXTextField fx:id="activityTimeTextField" alignment="TOP_CENTER" allowEdit="false" floatMode="ABOVE" minWidth="0.0" prefWidth="0.0" selectable="false" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 40px; -fx-text-fill: #FFF;" text="00:00" HBox.hgrow="NEVER">
                            <font>
                               <Font size="40.0" />
                            </font>

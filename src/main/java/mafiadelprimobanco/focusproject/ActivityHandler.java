@@ -65,10 +65,15 @@ public class ActivityHandler
 			@Override
 			public void run()
 			{
-				int minutes = ticksLeft / 60;
-				int seconds = ticksLeft - (minutes * 60);
+				int hours 	= ticksLeft / 60 / 60;
+				int minutes = ticksLeft / 60 - (hours * 60);
+				int seconds = ticksLeft - (minutes * 60) - (hours * 60 * 60);
 
-				currentTimeTick = ((minutes < 10 ? ("0" + minutes) : minutes) + ":" + (seconds < 10 ? ("0" + seconds) : seconds));
+				currentTimeTick = (
+						(hours < 10 ? ("0" + hours) : hours) + ":" +
+						(minutes < 10 ? ("0" + minutes) : minutes) + ":" +
+						(seconds < 10 ? ("0" + seconds) : seconds)
+				);
 
 				invokeOnUpdateActivity();
 
@@ -91,10 +96,15 @@ public class ActivityHandler
 			@Override
 			public void run()
 			{
-				int minutes = ++ticks / 60;
-				int seconds = ticks - (minutes * 60);
+				int hours 	= ++ticks / 60 / 60;
+				int minutes = ticks / 60 - (hours * 60);
+				int seconds = ticks - (minutes * 60) - (hours * 60 * 60);
 
-				currentTimeTick = ((minutes < 10 ? ("0" + minutes) : minutes) + ":" + (seconds < 10 ? ("0" + seconds) : seconds));
+				currentTimeTick = (
+						(hours < 10 ? ("0" + hours) : hours) + ":" +
+						(minutes < 10 ? ("0" + minutes) : minutes) + ":" +
+						(seconds < 10 ? ("0" + seconds) : seconds)
+				);
 
 				invokeOnUpdateActivity();
 			}

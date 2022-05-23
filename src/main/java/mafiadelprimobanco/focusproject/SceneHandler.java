@@ -28,6 +28,8 @@ public class SceneHandler
 	private String currentTheme = "light";
 	private AnchorPane root;
 
+	private boolean isFullScreen = false;
+
 	private SceneHandler() { }
 
 	public void init(Stage stage) throws IOException
@@ -117,4 +119,9 @@ public class SceneHandler
 	public AnchorPane getRoot() { return this.root; }
 
 	public void setRoot(AnchorPane root) { this.root = root; }
+
+	public void setFullScreen() {
+		isFullScreen = !isFullScreen;
+		stage.setFullScreen(isFullScreen);
+	}
 }
