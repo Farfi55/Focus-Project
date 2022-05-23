@@ -79,8 +79,10 @@ public class HomePageController implements ActivityObserver
 		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
 		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
 
-		//TODO BUG: if we set 3000 seconds for some unknown reason the second text field doesn't show 0 and it keeps 3000...
-		//However if we set 3001 it works fine (3001 -> 50 minutes and 1 second)
+		// TODO BUG #001: if we set 3000 seconds for some unknown reason
+		// the seconds text field doesn't show 0 and it keeps 3000...
+		// However if we set 3001 it works fine (3001 -> 50 minutes and 1 second)
+
 		secondsSpinnerSelector.valueProperty().addListener(e -> {
 			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
 		});
@@ -99,8 +101,9 @@ public class HomePageController implements ActivityObserver
 				minuteSpinnerModel.setValue(secondsOverflow);
 			}
 
-			//Very ugly fix for the TODO BUG described above.
+			// Very ugly fix for the TODO BUG #001 described above.
 			// Seems like if we set 0 the compiler does something to skip that..
+
 			secondSpinnerModel.setValue(currVal == 0 ? 60 : currVal);
 
 		});
@@ -118,15 +121,11 @@ public class HomePageController implements ActivityObserver
 
 		activityTimeTextField.setPrefWidth(Region.USE_COMPUTED_SIZE);
 
-		minutesSpinnerSelector.setPrefWidth(0);
-		minutesSpinnerSelector.setMinWidth(0);
-		minutesSpinnerSelector.setVisible(false);
-
-		secondsSpinnerSelector.setPrefWidth(0);
-		secondsSpinnerSelector.setMinWidth(0);
-		secondsSpinnerSelector.setVisible(false);
-
-		ActivityHandler.getInstance().setExecutionTime(minutesSpinnerSelector.getValue() * 60 + secondsSpinnerSelector.getValue());
+		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER)
+		{
+			ActivityHandler.getInstance().setExecutionTime(minutesSpinnerSelector.getValue() * 60 + secondsSpinnerSelector.getValue());
+			hideSpinner();
+		}
 
 //		homeRoot.setRight(null);
 		homeRoot.getRight().setManaged(false);
@@ -178,15 +177,8 @@ public class HomePageController implements ActivityObserver
 
 		activityTimeTextField.setPrefWidth(0);
 
-		minutesSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
-		minutesSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
-		minutesSpinnerSelector.setVisible(true);
-		minutesSpinnerSelector.setValue(0);
-
-		secondsSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
-		secondsSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
-		secondsSpinnerSelector.setVisible(true);
-		secondsSpinnerSelector.setValue(0);
+		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER)
+			showSpinner();
 
 //		homeRoot.setRight(tagsRoot);
 
@@ -240,8 +232,18 @@ public class HomePageController implements ActivityObserver
 	void setActivityType(ActionEvent event)
 	{
 		// todo refactor: this isn't safe, if you change order you dont get
-		ActivityHandler.getInstance().setActivityType(
-				ActivityType.values()[activitySelectorComboBox.getSelectedIndex()]);
+
+		final int activityIndex = activitySelectorComboBox.getSelectedIndex();
+
+		var activityTypeSelected = ActivityType.values()[activityIndex];
+
+		ActivityHandler.getInstance().setActivityType(activityTypeSelected);
+
+		if (activityTypeSelected == ActivityType.CHRONOMETER)
+			hideSpinner();
+		else
+			showSpinner();
+
 		System.out.println("Activity type set to: " + ActivityHandler.getInstance().getCurrActivityType());
 	}
 
@@ -250,7 +252,31 @@ public class HomePageController implements ActivityObserver
 	{
 	}
 
-	Integer filterInput(String num)
+	void hideSpinner()
+	{
+		minutesSpinnerSelector.setPrefWidth(0);
+		minutesSpinnerSelector.setMinWidth(0);
+		minutesSpinnerSelector.setVisible(false);
+
+		secondsSpinnerSelector.setPrefWidth(0);
+		secondsSpinnerSelector.setMinWidth(0);
+		secondsSpinnerSelector.setVisible(false);
+	}
+
+	void showSpinner()
+	{
+		minutesSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		minutesSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
+		minutesSpinnerSelector.setVisible(true);
+		minutesSpinnerSelector.setValue(0);
+
+		secondsSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		secondsSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
+		secondsSpinnerSelector.setVisible(true);
+		secondsSpinnerSelector.setValue(0);
+	}
+
+	int filterInput(String num)
 	{
 		int currVal = 0;
 
