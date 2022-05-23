@@ -3,12 +3,15 @@ package mafiadelprimobanco.focusproject.controller;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
@@ -77,68 +80,35 @@ public class HomePageController implements ActivityObserver
 		secondSpinnerModel.setMax(60);
 		minuteSpinnerModel.setMax(60);
 
+		secondSpinnerModel.setMin(-1);
+		minuteSpinnerModel.setMin(-1);
+
 		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
 		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
 		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
 
-		// TODO BUG #001: if we set 3000 seconds for some unknown reason
-		// the seconds text field doesn't show 0 and it keeps 3000...
-		// However if we set 3001 it works fine (3001 -> 50 minutes and 1 second)
-
 		minutesSpinnerSelector.valueProperty().addListener(e -> {
 			if (minutesSpinnerSelector.getValue() > 59) minutesSpinnerSelector.setValue(0);
+			else if (minutesSpinnerSelector.getValue() <  0) minutesSpinnerSelector.setValue(59);
+
 		});
 
 		secondsSpinnerSelector.valueProperty().addListener(e -> {
 			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
+			else if (secondsSpinnerSelector.getValue() <  0) secondsSpinnerSelector.setValue(59);
 		});
 
-		hoursSpinnerSelector.setOnCommit(e -> hourSpinnerModel.setValue(filterInput(e)));
-
+		hoursSpinnerSelector.setOnCommit(e -> {
+			hourSpinnerModel.setValue(filterInput(e));
+			secondsSpinnerSelector.requestFocus();
+		});
 		minutesSpinnerSelector.setOnCommit(e -> {
-			int currVal = filterInput(e);
-
-			if (currVal > 59)
-			{
-				int minutesOverflow = currVal / 60;
-				currVal -= minutesOverflow * 60;
-
-				hourSpinnerModel.setValue(minutesOverflow);
-			}
-
-			// Very ugly fix for the TODO BUG #001 described above.
-			// Seems like if we set 0 the compiler does something to skip that..
-
-			minuteSpinnerModel.setValue(currVal == 0 ? 60 : currVal);
+			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
+			secondsSpinnerSelector.requestFocus();
 		});
-
-		secondsSpinnerSelector.setOnCommit(e ->
-		{
-			int currVal = filterInput(e);
-
-			if (currVal > 59)
-			{
-				int secondsOverflow = currVal / 60;
-				int minutesOverflow = secondsOverflow / 60;
-
-				currVal	-= secondsOverflow * 60;
-
-				if (minutesOverflow == 0)
-				{
-					minuteSpinnerModel.setValue(secondsOverflow);
-				}
-				else
-				{
-					minuteSpinnerModel.setValue(secondsOverflow - minutesOverflow * 60);
-					hourSpinnerModel.setValue(minutesOverflow);
-				}
-			}
-
-			// Very ugly fix for the TODO BUG #001 described above.
-			// Seems like if we set 0 the compiler does something to skip that..
-
-			secondSpinnerModel.setValue(currVal == 0 ? 60 : currVal);
-
+		secondsSpinnerSelector.setOnCommit(e -> {
+			secondSpinnerModel.setValue(Math.min(filterInput(e), 59));
+			hoursSpinnerSelector.requestFocus();
 		});
 
 		// makes sure everything is looking normal at the beginning

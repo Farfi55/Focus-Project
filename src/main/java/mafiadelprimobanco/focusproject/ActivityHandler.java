@@ -87,7 +87,7 @@ public class ActivityHandler
 
 	private void startChronometerActivity()
 	{
-		currentProgressBarTick = 1.0 / 60;
+		currentProgressBarTick = -1;
 
 		activityTimer.scheduleAtFixedRate(new TimerTask()
 		{

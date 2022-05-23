@@ -159,6 +159,12 @@ todo: this should be a reusable class
     -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 3, 3);
 }
 
+.progress-indicator .percentage
+{
+    -fx-fill: null;
+}
+
+
 /*.mfx-minus
 {
     -fx-alignment: center;
