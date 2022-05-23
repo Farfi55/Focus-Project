@@ -93,7 +93,7 @@ public class HomePageController implements ActivityObserver
 			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
 		});
 
-		minutesSpinnerSelector.setOnCommit(e -> hourSpinnerModel.setValue(filterInput(e)));
+		hoursSpinnerSelector.setOnCommit(e -> hourSpinnerModel.setValue(filterInput(e)));
 
 		minutesSpinnerSelector.setOnCommit(e -> {
 			int currVal = filterInput(e);
