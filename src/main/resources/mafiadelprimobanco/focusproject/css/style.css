@@ -240,3 +240,17 @@ todo: this should be a reusable class
     -fx-icon-color: inherit;
 }
 
+
+
+/*
+FEEDBACK STYLE
+
+- .notification
+  - HBox
+    - label
+*/
+
+.notification {
+    -fx-background-color: palette1-1;
+
+}

@@ -1,5 +1,7 @@
 package mafiadelprimobanco.focusproject;
 
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -12,7 +14,6 @@ import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 public class SceneHandler
@@ -23,11 +24,12 @@ public class SceneHandler
 	public static SceneHandler getInstance() { return instance; }
 
 
+
 	private Stage stage;
 	private Scene scene;
 	private String currentTheme = "light";
 	private AnchorPane root;
-
+	private final List<String> styles = List.of(currentTheme, "fonts", "style");
 	private boolean isFullScreen = false;
 
 	private SceneHandler() { }
@@ -50,20 +52,19 @@ public class SceneHandler
 		});
 	}
 
-
 	public Node loadFXML(String fxmlPath) throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 		return loader.load();
 	}
 
+	public Node createTagView(Tag tag) throws IOException { return createTagView(tag, null); }
+
 	/*public Node createTagView() throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
 		return loader.load();
 	}*/
-
-	public Node createTagView(Tag tag) throws IOException { return createTagView(tag, null); }
 
 	public Node createTagView(Tag tag, ToggleGroup toggleGroup) throws IOException
 	{
@@ -76,13 +77,6 @@ public class SceneHandler
 		return node;
 	}
 
-	// dialog methods
-
-
-	// Style & Font methods
-
-
-
 	private void loadFonts()
 	{
 		// load fonts
@@ -90,15 +84,17 @@ public class SceneHandler
 			Font.loadFont(String.valueOf(getClass().getResource(font)), 10);
 	}
 
+	// dialog methods
+
+
+	// Style & Font methods
+
 	private void loadStyle()
 	{
 		scene.getStylesheets().clear();
-
-		// load style
-		for (String style : List.of(currentTheme, "fonts", "style"))
+		for (String style : styles)
 		{
-			URL url = getClass().getResource("css/" + style + ".css");
-			String resource = String.valueOf(url);
+			String resource = ResourcesLoader.load("css/" + style + ".css");
 			scene.getStylesheets().add(resource);
 		}
 	}
@@ -116,12 +112,18 @@ public class SceneHandler
 		loadStyle();
 	}
 
-	public AnchorPane getRoot() { return this.root; }
-
-	public void setRoot(AnchorPane root) { this.root = root; }
-
-	public void setFullScreen() {
+	public void setFullScreen()
+	{
 		isFullScreen = !isFullScreen;
 		stage.setFullScreen(isFullScreen);
 	}
+
+	public List<String> getStyles()
+	{
+		return styles;
+	}
+
+	public AnchorPane getRoot() { return this.root; }
+
+	public void setRoot(AnchorPane root) { this.root = root; }
 }

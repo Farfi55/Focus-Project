@@ -1,15 +1,27 @@
 package mafiadelprimobanco.focusproject;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXIconWrapper;
+import io.github.palexdev.materialfx.controls.MFXSimpleNotification;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
+import io.github.palexdev.materialfx.enums.NotificationPos;
 import io.github.palexdev.materialfx.enums.ScrimPriority;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
+import io.github.palexdev.materialfx.notifications.base.INotification;
+import io.github.palexdev.materialfx.utils.RandomUtils;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.geometry.Pos;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.model.DefaultNotification;
 
 import java.util.Map;
 
@@ -31,6 +43,8 @@ public class Feedback
 	private MFXGenericDialog confirmationDialogContent;
 	private MFXStageDialog confirmationDialog;
 
+	private DefaultNotification notification;
+
 	public Feedback() { }
 
 
@@ -48,6 +62,25 @@ public class Feedback
 
 		dialogContent.setMaxSize(400, 230);
 
+		MFXNotificationSystem.instance().initOwner(stage);
+		initNotification();
+
+		loadStyle();
+	}
+
+
+	private void loadStyle()
+	{
+		dialogContent.getStylesheets().clear();
+		confirmationDialogContent.getStylesheets().clear();
+		notification.getStylesheets().clear();
+		for (String style : SceneHandler.getInstance().getStyles())
+		{
+			String resource = ResourcesLoader.load("css/" + style + ".css");
+			dialogContent.getStylesheets().add(resource);
+			confirmationDialogContent.getStylesheets().add(resource);
+			notification.getStylesheets().add(resource);
+		}
 	}
 
 	private MFXGenericDialog initDialogContent()
@@ -60,6 +93,15 @@ public class Feedback
 		return MFXGenericDialogBuilder.build(dialogContent).toStageDialogBuilder().initOwner(this.stage).initModality(
 				Modality.APPLICATION_MODAL).setDraggable(true).setOwnerNode(this.root).setScrimPriority(
 				ScrimPriority.WINDOW).setScrimOwner(true).get();
+	}
+
+
+	private void initNotification()
+	{
+		notification = new DefaultNotification();
+		notification.setHeaderText("unset header");
+		notification.setContentText("unset content");
+
 	}
 
 
@@ -239,6 +281,19 @@ public class Feedback
 
 		if (styleClass != null) dialogContent.getStyleClass().add(styleClass);
 	}
+
+
+
+	public void showNotification(String header, String message)
+	{
+		notification.setHeaderText(header);
+		notification.setContentText(message);
+
+		MFXNotificationSystem.instance().setPosition(NotificationPos.TOP_LEFT).publish(notification);
+
+	}
+
+
 
 	/*
 	* legacy showMessages
