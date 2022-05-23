@@ -1,17 +1,18 @@
 package mafiadelprimobanco.focusproject.controller;
 
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
-import io.github.palexdev.materialfx.controls.MFXTextField;
+import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
+import javafx.util.converter.IntegerStringConverter;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.SceneHandler;
@@ -22,6 +23,7 @@ import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.util.function.BiFunction;
 
 public class HomePageController implements ActivityObserver
 {
@@ -42,6 +44,12 @@ public class HomePageController implements ActivityObserver
 	@FXML private MFXTextField activityTimeTextField;
 	@FXML private MFXProgressSpinner progressBarTime;
 
+	@FXML
+	private MFXSpinner<Integer> minutesSpinnerSelector;
+
+	@FXML
+	private MFXSpinner<Integer> secondsSpinnerSelector;
+
 	@FXML private ImageView treeImageViewer;
 
 	@FXML private MFXButton activityButton;
@@ -49,8 +57,6 @@ public class HomePageController implements ActivityObserver
 	@FXML
 	void initialize()
 	{
-
-
 		ActivityHandler.getInstance().addListener(this);
 
 		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
@@ -65,47 +71,42 @@ public class HomePageController implements ActivityObserver
 			e.printStackTrace();
 		}
 
-		// makes sure everything is looking normal at the beginning
-		onActivityStop();
+		var minuteSpinnerModel = new IntegerSpinnerModel(0);
+		var secondSpinnerModel = new IntegerSpinnerModel(0);
 
-		// todo refactor:  the definition shouldn't go inside the initialize
-		//  or change method completely
-		activityTimeTextField.textProperty().addListener((e) ->
-		{
-			if (ActivityHandler.getInstance().isActivityStarted()) return;
+		secondSpinnerModel.setMax(60);
 
-			String text = activityTimeTextField.getText();
+		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
+		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
 
-			int len = text.length();
-
-			if (len == 0) return;
-
-			int minutes = 0;
-			int seconds = 0;
-
-			/*TODO fix focus shit to make that working again */
-            /*
-                if (len == 3)
-                    activityTimeTextField.setText(text.substring(0, len-2) + ":" + text.substring(len - 2, len));
-            */
-
-			if (len >= 4)
-			{
-				minutes = Integer.parseInt(text.split(":")[0]);
-				seconds = Integer.parseInt(text.split(":")[1]);
-			}
-			else seconds = Integer.parseInt(text);
-
-			if (seconds > 59)
-			{
-				Feedback.getInstance().showError("Errore",
-						"Errore nella formattazione dei secondi.\n" + "Prova ad inserire un valore inferiore a 59");
-				return;
-			}
-
-			ActivityHandler.getInstance().setExecutionTime(minutes * 60 + seconds);
+		//TODO BUG: if we set 3000 seconds for some unknown reason the second text field doesn't show 0 and it keeps 3000...
+		//However if we set 3001 it works fine (3001 -> 50 minutes and 1 second)
+		secondsSpinnerSelector.valueProperty().addListener(e -> {
+			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
 		});
 
+		minutesSpinnerSelector.setOnCommit(e -> minuteSpinnerModel.setValue(filterInput(e)));
+
+		secondsSpinnerSelector.setOnCommit(e ->
+		{
+			int currVal = filterInput(e);
+
+			if (currVal > 59)
+			{
+				int secondsOverflow = currVal / 60;
+				currVal	-= secondsOverflow * 60;
+
+				minuteSpinnerModel.setValue(secondsOverflow);
+			}
+
+			//Very ugly fix for the TODO BUG described above.
+			// Seems like if we set 0 the compiler does something to skip that..
+			secondSpinnerModel.setValue(currVal == 0 ? 60 : currVal);
+
+		});
+
+		// makes sure everything is looking normal at the beginning
+		onActivityStop();
 	}
 
 
@@ -115,8 +116,17 @@ public class HomePageController implements ActivityObserver
 	{
 		activityButton.setText("Interrompi");
 
-		activityTimeTextField.setEditable(false);
+		activityTimeTextField.setPrefWidth(Region.USE_COMPUTED_SIZE);
 
+		minutesSpinnerSelector.setPrefWidth(0);
+		minutesSpinnerSelector.setMinWidth(0);
+		minutesSpinnerSelector.setVisible(false);
+
+		secondsSpinnerSelector.setPrefWidth(0);
+		secondsSpinnerSelector.setMinWidth(0);
+		secondsSpinnerSelector.setVisible(false);
+
+		ActivityHandler.getInstance().setExecutionTime(minutesSpinnerSelector.getValue() * 60 + secondsSpinnerSelector.getValue());
 
 //		homeRoot.setRight(null);
 		homeRoot.getRight().setManaged(false);
@@ -158,7 +168,6 @@ public class HomePageController implements ActivityObserver
 	public void onActivityStop()
 	{
 		activityButton.setText("Avvia");
-		activityTimeTextField.setEditable(true);
 		activityTimeTextField.setText("00:00");
 		progressBarTime.setProgress(0.0);
 
@@ -166,6 +175,18 @@ public class HomePageController implements ActivityObserver
 		selectedTagText.setManaged(false);
 		selectedTagColorCircle.setVisible(false);
 		selectedTagColorCircle.setManaged(false);
+
+		activityTimeTextField.setPrefWidth(0);
+
+		minutesSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		minutesSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
+		minutesSpinnerSelector.setVisible(true);
+		minutesSpinnerSelector.setValue(0);
+
+		secondsSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		secondsSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
+		secondsSpinnerSelector.setVisible(true);
+		secondsSpinnerSelector.setValue(0);
 
 //		homeRoot.setRight(tagsRoot);
 
@@ -227,6 +248,22 @@ public class HomePageController implements ActivityObserver
 	@FXML
 	void setTime(KeyEvent event)
 	{
+	}
+
+	Integer filterInput(String num)
+	{
+		int currVal = 0;
+
+		try
+		{
+			currVal = Integer.parseInt(num);
+		}
+		catch (Exception ignore)
+		{
+			Feedback.getInstance().showError("Errore", "Impossibile determinare il valore inserito");
+		}
+
+		return currVal;
 	}
 
 
