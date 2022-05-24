@@ -22,16 +22,18 @@ public class DefaultNotification extends MFXSimpleNotification
 //		MFXIconWrapper icon = new MFXIconWrapper(RandomUtils.randFromArray(Model.notificationsIcons).getDescription(), 16, 32);
 		Label headerLabel = new Label();
 		headerLabel.textProperty().bind(headerText);
+		headerLabel.setPadding(InsetsFactory.of(5,15, 5,15));
+		headerLabel.getStyleClass().add("header");
 //		MFXIconWrapper readIcon = new MFXIconWrapper("mfx-eye", 16, 32);
 //		((MFXFontIcon) readIcon.getIcon()).descriptionProperty().bind(Bindings.createStringBinding(
 //				() -> (getState() == NotificationState.READ) ? "mfx-eye" : "mfx-eye-slash",
 //				notificationStateProperty()
 //		));
 //		StackPane.setAlignment(readIcon, Pos.CENTER_RIGHT);
-		HBox header = new HBox(headerLabel);
-		header.setAlignment(Pos.CENTER_LEFT);
-		header.setPadding(InsetsFactory.of(5, 0, 5, 0));
-		header.setMaxWidth(Double.MAX_VALUE);
+//		HBox header = new HBox(headerLabel);
+//		header.setAlignment(Pos.CENTER_LEFT);
+//		header.setPadding(InsetsFactory.of(5, 0, 5, 0));
+//		header.setMaxWidth(Double.MAX_VALUE);
 
 
 		Label contentLabel = new Label();
@@ -40,6 +42,8 @@ public class DefaultNotification extends MFXSimpleNotification
 		contentLabel.setWrapText(true);
 		contentLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		contentLabel.setAlignment(Pos.TOP_LEFT);
+		contentLabel.setPadding(InsetsFactory.of(3,10, 3,10));
+		contentLabel.getStyleClass().add("content");
 
 //		MFXButton action1 = new MFXButton("Action 1");
 //		MFXButton action2 = new MFXButton("Action 2");
@@ -50,12 +54,12 @@ public class DefaultNotification extends MFXSimpleNotification
 
 		container = new BorderPane();
 		container.getStyleClass().add("notification");
-		container.setTop(header);
+		container.setTop(headerLabel);
 		container.setCenter(contentLabel);
 //		container.setBottom(actionsBar);
 //		container.getStylesheets().add(MFXDemoResourcesLoader.load("css/ExampleNotification.css"));
-		container.setMinHeight(200);
-		container.setMaxWidth(400);
+		container.setMinSize(150, 80);
+		container.setMaxSize(400, 200);
 
 		setContent(container);
 	}

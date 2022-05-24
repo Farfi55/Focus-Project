@@ -45,7 +45,7 @@ public class Feedback
 
 	private DefaultNotification notification;
 
-	public Feedback() { }
+	private Feedback() { }
 
 
 
@@ -53,19 +53,22 @@ public class Feedback
 	{
 		this.stage = stage;
 		dialogContent = initDialogContent();
-		dialog = initDialog(dialogContent);
-		addButton(dialogContent, dialog, ButtonData.OK_DONE);
 		dialogContent.setMaxSize(400, 230);
+		dialog = initDialog(dialogContent);
+		dialog.setOverlayClose(true);
+		addButton(dialogContent, dialog, ButtonData.OK_DONE);
 
 		confirmationDialogContent = initDialogContent();
+		confirmationDialogContent.setMaxSize(400, 230);
 		confirmationDialog = initDialog(confirmationDialogContent);
+		confirmationDialog.setOverlayClose(true);
 
-		dialogContent.setMaxSize(400, 230);
 
 		MFXNotificationSystem.instance().initOwner(stage);
 		initNotification();
 
 		loadStyle();
+
 	}
 
 
@@ -199,6 +202,7 @@ public class Feedback
 		dialogContent.setContentText(message);
 		convertDialogTo("mfx-info-dialog");
 		dialog.showDialog();
+
 	}
 
 
@@ -221,6 +225,7 @@ public class Feedback
 		dialogContent.setContentText(message);
 		convertDialogTo("mfx-error-dialog");
 		dialog.showDialog();
+
 	}
 
 
