@@ -1,6 +1,8 @@
 package mafiadelprimobanco.focusproject;
 
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
@@ -14,51 +16,54 @@ public class StyleHandler
 	{
 		return instance;
 	}
-	private final ObservableList<String> loadedStyles = new SimpleListProperty<>();
-	private String currentTheme = "light";
-	private final List<String> styles = List.of(currentTheme, "fonts", "style");
+	private final List<String> loadedStyles = new ArrayList<>();
+	private final ObservableList<String> observableStyles = FXCollections.observableList(loadedStyles);
 
-	private StyleHandler() { }
+	private final StringProperty currentTheme = new SimpleStringProperty("light");
+	private final List<String> baseStyles = List.of("fonts", "style");
+
+
+	private StyleHandler() {
+		reloadStyles();
+	}
 
 	private void reloadStyles()
 	{
-		List<String> tmpStyles = new ArrayList<>(styles.size());
-		for (String style : styles)
+		List<String> tmpStyles = new ArrayList<>();
+		for (String style : baseStyles)
 		{
 			String resource = ResourcesLoader.load("css/" + style + ".css");
 			tmpStyles.add(resource);
 		}
+		String themeStylesheet = ResourcesLoader.load("css/" + currentTheme.get() + ".css");
+		tmpStyles.add(themeStylesheet);
+
 		// to only trigger changes in loadedStyle once
-		loadedStyles.setAll(tmpStyles);
+		observableStyles.setAll(tmpStyles);
+
 	}
 
 	public void toggleLightDarkTheme()
 	{
-		currentTheme = currentTheme.equals("light") ? "dark" : "light";
+		currentTheme.setValue(currentTheme.getValue().equals("light") ? "dark" : "light");
 		reloadStyles();
 	}
 
 	private void changeTheme(String newTheme)
 	{
 		// if the user can use custom themes then sanitize 'newTheme'
-		currentTheme = newTheme;
+		currentTheme.setValue(newTheme);
 		reloadStyles();
 	}
 
-	public String getCurrentTheme()
+	public StringProperty getCurrentTheme()
 	{
 		return currentTheme;
 	}
 
-	public ObservableList<String> getLoadedStyles()
+	public ObservableList<String> getObservableStyles()
 	{
-		return loadedStyles;
+		return observableStyles;
 	}
-
-//	public List<String> getStyles()
-//	{
-//		return styles;
-//	}
-
 
 }

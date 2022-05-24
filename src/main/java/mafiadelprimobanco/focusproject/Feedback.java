@@ -6,9 +6,10 @@ import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.enums.NotificationPos;
 import io.github.palexdev.materialfx.enums.ScrimPriority;
-import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -61,23 +62,23 @@ public class Feedback
 		MFXNotificationSystem.instance().initOwner(stage);
 		initNotification();
 
-		loadStyle();
-
+		subscribeToStyleChanges();
+		setStylesheets();
 	}
 
 
-	private void loadStyle()
+	private void subscribeToStyleChanges()
 	{
-		dialogContent.getStylesheets().clear();
-		confirmationDialogContent.getStylesheets().clear();
-		notification.getStylesheets().clear();
-		for (String style : SceneHandler.getInstance().getStyles())
-		{
-			String resource = ResourcesLoader.load("css/" + style + ".css");
-			dialogContent.getStylesheets().add(resource);
-			confirmationDialogContent.getStylesheets().add(resource);
-			notification.getStylesheets().add(resource);
-		}
+		StyleHandler.getInstance().getObservableStyles().addListener(
+				(ListChangeListener<String>)change -> setStylesheets());
+	}
+
+	private void setStylesheets()
+	{
+		ObservableList<String> loadedStyles = StyleHandler.getInstance().getObservableStyles();
+		dialogContent.getStylesheets().setAll(loadedStyles);
+		confirmationDialogContent.getStylesheets().setAll(loadedStyles);
+		notification.getStylesheets().setAll(loadedStyles);
 	}
 
 	private MFXGenericDialog initDialogContent()

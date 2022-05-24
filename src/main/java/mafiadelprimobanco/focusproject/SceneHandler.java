@@ -40,12 +40,10 @@ public class SceneHandler
 		stage.setTitle("Focus");
 		stage.setScene(scene);
 		loadFonts();
-
-
-		subscribeToStyleChanges();
-
+		setStyleSheets();
 		stage.show();
 
+		subscribeToStyleChanges();
 		stage.setOnCloseRequest(windowEvent ->
 		{
 			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
@@ -55,8 +53,8 @@ public class SceneHandler
 
 	private void subscribeToStyleChanges()
 	{
-		ObservableList<String> loadedStyles = StyleHandler.getInstance().getLoadedStyles();
-		loadedStyles.addListener((ListChangeListener<String>)change -> scene.getStylesheets().setAll(loadedStyles));
+		StyleHandler.getInstance().getObservableStyles().addListener(
+				(ListChangeListener<String>)change -> setStyleSheets());
 	}
 
 	public Node loadFXML(String fxmlPath) throws IOException
@@ -91,11 +89,11 @@ public class SceneHandler
 			Font.loadFont(String.valueOf(getClass().getResource(font)), 10);
 	}
 
-	// dialog methods
+	public void toggleFullScreen()
 
-
+	private void setStyleSheets()
 	// Style & Font methods
-
+		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
 
 
 	public void setFullScreen()
