@@ -2,6 +2,7 @@ package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleGroup;
@@ -9,9 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import mafiadelprimobanco.focusproject.ActivityHandler;
-import mafiadelprimobanco.focusproject.Feedback;
-import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
@@ -19,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseController implements ActivityObserver
+public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 {
 	List<MFXRectangleToggleNode> navButtons = new ArrayList<>();
 	@FXML private AnchorPane root;
@@ -54,9 +53,9 @@ public class BaseController implements ActivityObserver
 		navButtons.add(infoButton);
 		navButtons.add(accountButton);
 		navButtons.add(settingsButton);
-		root.setOnKeyPressed(this::handleKeyPress);
 		setNavigationEnabled(true);
 		ActivityHandler.getInstance().addListener(this);
+		KeyPressManager.getInstance().addHandler(this);
 
 		onHomeClick();
 	}
@@ -76,7 +75,8 @@ public class BaseController implements ActivityObserver
 		setNavigationEnabled(true);
 	}
 
-	private void handleKeyPress(KeyEvent keyEvent)
+	@Override
+	public void handle(KeyEvent keyEvent)
 	{
 		System.out.println("key pressed: " + keyEvent.getCode());
 		if (keyEvent.isControlDown() || keyEvent.isShortcutDown())
@@ -86,11 +86,9 @@ public class BaseController implements ActivityObserver
 				case DIGIT1, H -> onHomeClick();
 				case DIGIT2, P -> onProgressClick();
 				case DIGIT3, S -> onStatisticsClick();
-//				case DIGIT4, T -> onTagClick();
 				case DIGIT4, I -> onInfoClick();
 				case DIGIT5, U -> onAccountClick();
 				case DIGIT6, COMMA -> onSettingsClick();
-				case DIGIT0 -> setNavigationEnabled(!canNavigate); // todo remove: for debug only
 			}
 		}
 		else if (keyEvent.getCode() == KeyCode.F1) onInfoClick();

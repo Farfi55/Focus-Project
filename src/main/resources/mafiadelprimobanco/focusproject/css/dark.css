@@ -3,6 +3,21 @@
 */
 
 * {
-    --example-var-name: hsl(207, 43%, 34%);
+    /* NOT ACTUAL COLOR, TESTING ONLY */
+
+    palette1-0: #625f5c;
+    palette1-1: #3a2f02;
+    palette1-2: #7d802d;
+    palette1-3: #a26565;
+    palette2-1: #3549cb;
+    palette2-2: #c01d1d;
+    palette2-3: #b6e833;
+    palette2-4: #a45050;
+    palette2-5: #b7b48f;
+    palette3-1: #A98467;
+    palette3-2: #95755E;
+    palette3-3: #ecb995;
+    palette3-4: #cbab99;
+    palette4-1: #ffffff;
 
 }

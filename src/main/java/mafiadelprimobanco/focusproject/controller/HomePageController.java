@@ -4,31 +4,27 @@ import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
-import javafx.util.converter.IntegerStringConverter;
-import mafiadelprimobanco.focusproject.ActivityHandler;
-import mafiadelprimobanco.focusproject.Feedback;
-import mafiadelprimobanco.focusproject.SceneHandler;
-import mafiadelprimobanco.focusproject.TagHandler;
+import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
-import java.util.function.BiFunction;
 
-public class HomePageController implements ActivityObserver
+public class HomePageController implements ActivityObserver, EventHandler<KeyEvent>
 {
 	//
 	@FXML private BorderPane homeRoot;
@@ -60,20 +56,14 @@ public class HomePageController implements ActivityObserver
 	void initialize()
 	{
 		ActivityHandler.getInstance().addListener(this);
+		KeyPressManager.getInstance().addHandler(this);
 
 		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
 		activitySelectorComboBox.selectFirst();
 
-		try
-		{
-			homeRoot.setRight(SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		loadTagsView();
 
-		var hourSpinnerModel   = new IntegerSpinnerModel(0);
+		var hourSpinnerModel = new IntegerSpinnerModel(0);
 		var minuteSpinnerModel = new IntegerSpinnerModel(0);
 		var secondSpinnerModel = new IntegerSpinnerModel(0);
 
@@ -93,7 +83,8 @@ public class HomePageController implements ActivityObserver
 
 		});
 
-		secondsSpinnerSelector.valueProperty().addListener(e -> {
+		secondsSpinnerSelector.valueProperty().addListener(e ->
+		{
 			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
 			else if (secondsSpinnerSelector.getValue() <  0) secondsSpinnerSelector.setValue(59);
 		});
@@ -111,11 +102,10 @@ public class HomePageController implements ActivityObserver
 			hoursSpinnerSelector.requestFocus();
 		});
 
+
 		// makes sure everything is looking normal at the beginning
 		onActivityStop();
 	}
-
-
 
 	@Override
 	public void onActivityStart()
@@ -127,25 +117,20 @@ public class HomePageController implements ActivityObserver
 		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER)
 		{
 			ActivityHandler.getInstance().setExecutionTime(
-					  				  hoursSpinnerSelector.getValue() * 60 * 60
-					                + minutesSpinnerSelector.getValue() * 60
-									+ secondsSpinnerSelector.getValue());
-			hideSpinner();
+					hoursSpinnerSelector.getValue() * 60 * 60 + minutesSpinnerSelector.getValue() * 60
+							+ secondsSpinnerSelector.getValue());
+			hideSpinners();
 		}
 
 //		homeRoot.setRight(null);
-		homeRoot.getRight().setManaged(false);
-		homeRoot.getRight().setVisible(false);
-		activitySelectorComboBox.setVisible(false);
-		activitySelectorComboBox.setManaged(false);
 
+		hideNode(homeRoot.getRight());
+		hideNode(activitySelectorComboBox);
 
 		selectedTagText.setText(TagHandler.getInstance().getSelectedTag().getName());
-		selectedTagText.setVisible(true);
-		selectedTagText.setManaged(true);
 		selectedTagColorCircle.setFill(TagHandler.getInstance().getSelectedTag().getColor());
-		selectedTagColorCircle.setVisible(true);
-		selectedTagColorCircle.setManaged(true);
+		showNode(selectedTagText);
+		showNode(selectedTagColorCircle);
 
 
 		switch (ActivityHandler.getInstance().getCurrActivityType())
@@ -168,7 +153,27 @@ public class HomePageController implements ActivityObserver
 	@Override
 	public void onActivityEndSafe() { onActivityStop(); }
 
+	@Override
+	public void handle(KeyEvent event)
+	{
+		if (event.isControlDown())
+		{
+			if (event.getCode().equals(KeyCode.ENTER) && !ActivityHandler.getInstance().isActivityStarted())
+				startActivity();
+		}
+	}
 
+	private void loadTagsView()
+	{
+		try
+		{
+			homeRoot.setRight(SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	public void onActivityStop()
 	{
@@ -176,23 +181,17 @@ public class HomePageController implements ActivityObserver
 		activityTimeTextField.setText("00:00");
 		progressBarTime.setProgress(0.0);
 
-		selectedTagText.setVisible(false);
-		selectedTagText.setManaged(false);
-		selectedTagColorCircle.setVisible(false);
-		selectedTagColorCircle.setManaged(false);
+		hideNode(selectedTagText);
+		hideNode(selectedTagColorCircle);
 
 		activityTimeTextField.setPrefWidth(0);
 
-		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER)
-			showSpinner();
+		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER) showSpinners();
 
-//		homeRoot.setRight(tagsRoot);
-
-		homeRoot.getRight().setVisible(true);
-		homeRoot.getRight().setManaged(true);
-
-		activitySelectorComboBox.setVisible(true);
+		showNode(homeRoot.getRight());
+		showNode(activitySelectorComboBox);
 	}
+
 
 	public void onTimerUpdateTick()
 	{
@@ -213,84 +212,44 @@ public class HomePageController implements ActivityObserver
 	}
 
 	@FXML
-	void toggleActivityState(ActionEvent event)
+	void toggleActivityState()
 	{
 		if (ActivityHandler.getInstance().isActivityStarted())
 		{
-			switch (ActivityHandler.getInstance().getCurrActivityType())
-			{
-				case TIMER, TOMATO_TIMER -> {
-					if (Feedback.getInstance().askYesNoConfirmation("Interrompere attività",
-							"Sei sicuro di voler interrompere l'attività?"))
-						ActivityHandler.getInstance().stopCurrActivity();
-
-				}
-				case CHRONOMETER -> ActivityHandler.getInstance().stopCurrActivity();
-			}
+			stopActivity();
 		}
 		else
 		{
-			ActivityHandler.getInstance().startActivity();
+			startActivity();
 		}
 	}
 
-	@FXML
-	void setActivityType(ActionEvent event)
+	private void stopActivity()
 	{
-		// todo refactor: this isn't safe, if you change order you dont get
+		switch (ActivityHandler.getInstance().getCurrActivityType())
+		{
+			case TIMER, TOMATO_TIMER -> {
+				if (Feedback.getInstance().askYesNoConfirmation("Interrompere attività",
+						"Sei sicuro di voler interrompere l'attività?"))
+					ActivityHandler.getInstance().stopCurrActivity();
 
-		final int activityIndex = activitySelectorComboBox.getSelectedIndex();
+			}
+			case CHRONOMETER -> ActivityHandler.getInstance().stopCurrActivity();
+		}
+	}
 
-		var activityTypeSelected = ActivityType.values()[activityIndex];
-
-		ActivityHandler.getInstance().setActivityType(activityTypeSelected);
-
-		if (activityTypeSelected == ActivityType.CHRONOMETER)
-			hideSpinner();
-		else
-			showSpinner();
-
-		System.out.println("Activity type set to: " + ActivityHandler.getInstance().getCurrActivityType());
+	private void startActivity()
+	{
+		ActivityHandler.getInstance().startActivity();
 	}
 
 	@FXML
 	void toggleFullScreen()
 	{
-		SceneHandler.getInstance().setFullScreen();
+		SceneHandler.getInstance().toggleFullScreen();
 	}
 
-	void hideSpinner()
-	{
-		hoursSpinnerSelector.setPrefWidth(0);
-		hoursSpinnerSelector.setMinWidth(0);
-		hoursSpinnerSelector.setVisible(false);
 
-		minutesSpinnerSelector.setPrefWidth(0);
-		minutesSpinnerSelector.setMinWidth(0);
-		minutesSpinnerSelector.setVisible(false);
-
-		secondsSpinnerSelector.setPrefWidth(0);
-		secondsSpinnerSelector.setMinWidth(0);
-		secondsSpinnerSelector.setVisible(false);
-	}
-
-	void showSpinner()
-	{
-		hoursSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
-		hoursSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
-		hoursSpinnerSelector.setVisible(true);
-		hoursSpinnerSelector.setValue(0);
-
-		minutesSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
-		minutesSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
-		minutesSpinnerSelector.setVisible(true);
-		minutesSpinnerSelector.setValue(0);
-
-		secondsSpinnerSelector.setPrefWidth(Region.USE_COMPUTED_SIZE);
-		secondsSpinnerSelector.setMinWidth(Region.USE_COMPUTED_SIZE);
-		secondsSpinnerSelector.setVisible(true);
-		secondsSpinnerSelector.setValue(0);
-	}
 
 	int filterInput(String num)
 	{
@@ -306,6 +265,45 @@ public class HomePageController implements ActivityObserver
 		}
 
 		return currVal;
+	}
+
+
+	private void showSpinners() { setSpinnersVisible(true); }
+
+	private void hideSpinners() { setSpinnersVisible(false); }
+
+	void showNode(Node node) { setNodeVisible(node, true); }
+
+	void hideNode(Node node) { setNodeVisible(node, false); }
+
+	void setNodeVisible(Node node, boolean visible)
+	{
+		node.setVisible(visible);
+		node.setManaged(visible);
+	}
+
+	private void setSpinnersVisible(boolean value)
+	{
+		setNodeVisible(hoursSpinnerSelector, value);
+		setNodeVisible(minutesSpinnerSelector, value);
+		setNodeVisible(secondsSpinnerSelector, value);
+	}
+
+	@FXML
+	void setActivityType(ActionEvent event)
+	{
+		// todo refactor: this isn't safe, if you change order you dont get
+
+		final int activityIndex = activitySelectorComboBox.getSelectedIndex();
+
+		var activityTypeSelected = ActivityType.values()[activityIndex];
+
+		ActivityHandler.getInstance().setActivityType(activityTypeSelected);
+
+		if (activityTypeSelected == ActivityType.CHRONOMETER) hideSpinners();
+		else showSpinners();
+
+		System.out.println("Activity type set to: " + ActivityHandler.getInstance().getCurrActivityType());
 	}
 
 

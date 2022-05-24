@@ -1,9 +1,12 @@
 package mafiadelprimobanco.focusproject;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -12,7 +15,6 @@ import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 public class SceneHandler
@@ -22,13 +24,10 @@ public class SceneHandler
 
 	public static SceneHandler getInstance() { return instance; }
 
-
 	private Stage stage;
 	private Scene scene;
-	private String currentTheme = "light";
 	private AnchorPane root;
-
-	private boolean isFullScreen = false;
+	private ReadOnlyBooleanProperty isFullScreen;
 
 	private SceneHandler() { }
 
@@ -39,9 +38,17 @@ public class SceneHandler
 		this.scene = new Scene(fxmlLoader.load(), 1150, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);
+		isFullScreen = stage.fullScreenProperty();
 		loadFonts();
-		loadStyle();
+		setStyleSheets();
 		stage.show();
+
+		subscribeToStyleChanges();
+
+		KeyPressManager.getInstance().addHandler(event ->
+		{
+			if (event.getCode().equals(KeyCode.F11)) toggleFullScreen();
+		});
 
 		stage.setOnCloseRequest(windowEvent ->
 		{
@@ -50,18 +57,17 @@ public class SceneHandler
 		});
 	}
 
+	private void subscribeToStyleChanges()
+	{
+		StyleHandler.getInstance().getObservableStyles().addListener(
+				(ListChangeListener<String>)change -> setStyleSheets());
+	}
 
 	public Node loadFXML(String fxmlPath) throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 		return loader.load();
 	}
-
-	/*public Node createTagView() throws IOException
-	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
-		return loader.load();
-	}*/
 
 	public Node createTagView(Tag tag) throws IOException { return createTagView(tag, null); }
 
@@ -76,13 +82,6 @@ public class SceneHandler
 		return node;
 	}
 
-	// dialog methods
-
-
-	// Style & Font methods
-
-
-
 	private void loadFonts()
 	{
 		// load fonts
@@ -90,38 +89,27 @@ public class SceneHandler
 			Font.loadFont(String.valueOf(getClass().getResource(font)), 10);
 	}
 
-	private void loadStyle()
+	public void toggleFullScreen()
 	{
-		scene.getStylesheets().clear();
-
-		// load style
-		for (String style : List.of(currentTheme, "fonts", "style"))
-		{
-			URL url = getClass().getResource("css/" + style + ".css");
-			String resource = String.valueOf(url);
-			scene.getStylesheets().add(resource);
-		}
+		stage.setFullScreen(!isFullScreen());
 	}
 
-	public void toggleLightDarkTheme()
+	private void setStyleSheets()
 	{
-		currentTheme = currentTheme.equals("light") ? "dark" : "light";
-		loadStyle();
+		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
 	}
 
-	private void changeTheme(String newTheme)
+	public ReadOnlyBooleanProperty getIsFullScreen()
 	{
-		// if the user can use custom themes then sanitize 'newTheme'
-		currentTheme = newTheme;
-		loadStyle();
+		return isFullScreen;
+	}
+
+	public boolean isFullScreen()
+	{
+		return isFullScreen.get();
 	}
 
 	public AnchorPane getRoot() { return this.root; }
 
 	public void setRoot(AnchorPane root) { this.root = root; }
-
-	public void setFullScreen() {
-		isFullScreen = !isFullScreen;
-		stage.setFullScreen(isFullScreen);
-	}
 }

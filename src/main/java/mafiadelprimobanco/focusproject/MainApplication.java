@@ -20,6 +20,7 @@ public class MainApplication extends Application
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
+			KeyPressManager.getInstance().init(SceneHandler.getInstance().getRoot());
 
 
 
