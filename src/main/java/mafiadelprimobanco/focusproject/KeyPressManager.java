@@ -16,7 +16,6 @@ public class KeyPressManager implements EventHandler<KeyEvent>
 		return instance;
 	}
 
-	private Parent root;
 	List<EventHandler<KeyEvent>> handlers = new ArrayList<>();
 
 	private KeyPressManager() { }
@@ -24,10 +23,10 @@ public class KeyPressManager implements EventHandler<KeyEvent>
 	@Override
 	public void handle(KeyEvent event)
 	{
-		dispatchEvent(event);
+		invokeHandlersEvent(event);
 	}
 
-	private void dispatchEvent(KeyEvent event)
+	private void invokeHandlersEvent(KeyEvent event)
 	{
 		for (var handler : handlers)
 		{
@@ -38,7 +37,6 @@ public class KeyPressManager implements EventHandler<KeyEvent>
 
 	public void init(Parent root)
 	{
-		this.root = root;
 		root.setOnKeyPressed(this);
 	}
 

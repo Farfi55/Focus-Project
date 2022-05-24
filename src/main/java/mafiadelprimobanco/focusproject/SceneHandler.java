@@ -1,13 +1,12 @@
 package mafiadelprimobanco.focusproject;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -45,6 +44,12 @@ public class SceneHandler
 		stage.show();
 
 		subscribeToStyleChanges();
+
+		KeyPressManager.getInstance().addHandler(event ->
+		{
+			if (event.getCode().equals(KeyCode.F11)) toggleFullScreen();
+		});
+
 		stage.setOnCloseRequest(windowEvent ->
 		{
 			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
