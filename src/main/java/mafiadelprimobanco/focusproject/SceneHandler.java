@@ -1,6 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
-import javafx.beans.property.SimpleListProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,9 +27,7 @@ public class SceneHandler
 
 	private Stage stage;
 	private Scene scene;
-	private String currentTheme = "light";
 	private AnchorPane root;
-	private final List<String> styles = List.of(currentTheme, "fonts", "style");
 	private boolean isFullScreen = false;
 
 	private SceneHandler() { }
@@ -42,7 +40,10 @@ public class SceneHandler
 		stage.setTitle("Focus");
 		stage.setScene(scene);
 		loadFonts();
-		loadStyle();
+
+
+		subscribeToStyleChanges();
+
 		stage.show();
 
 		stage.setOnCloseRequest(windowEvent ->
@@ -50,6 +51,12 @@ public class SceneHandler
 			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
 					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
 		});
+	}
+
+	private void subscribeToStyleChanges()
+	{
+		ObservableList<String> loadedStyles = StyleHandler.getInstance().getLoadedStyles();
+		loadedStyles.addListener((ListChangeListener<String>)change -> scene.getStylesheets().setAll(loadedStyles));
 	}
 
 	public Node loadFXML(String fxmlPath) throws IOException
@@ -89,28 +96,7 @@ public class SceneHandler
 
 	// Style & Font methods
 
-	private void loadStyle()
-	{
-		scene.getStylesheets().clear();
-		for (String style : styles)
-		{
-			String resource = ResourcesLoader.load("css/" + style + ".css");
-			scene.getStylesheets().add(resource);
-		}
-	}
 
-	public void toggleLightDarkTheme()
-	{
-		currentTheme = currentTheme.equals("light") ? "dark" : "light";
-		loadStyle();
-	}
-
-	private void changeTheme(String newTheme)
-	{
-		// if the user can use custom themes then sanitize 'newTheme'
-		currentTheme = newTheme;
-		loadStyle();
-	}
 
 	public void setFullScreen()
 	{
@@ -118,10 +104,7 @@ public class SceneHandler
 		stage.setFullScreen(isFullScreen);
 	}
 
-	public List<String> getStyles()
-	{
-		return styles;
-	}
+
 
 	public AnchorPane getRoot() { return this.root; }
 
