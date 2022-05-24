@@ -1,7 +1,8 @@
 package mafiadelprimobanco.focusproject;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -23,12 +24,10 @@ public class SceneHandler
 
 	public static SceneHandler getInstance() { return instance; }
 
-
-
 	private Stage stage;
 	private Scene scene;
 	private AnchorPane root;
-	private boolean isFullScreen = false;
+	private final BooleanProperty isFullScreen = new SimpleBooleanProperty(false);
 
 	private SceneHandler() { }
 
@@ -65,12 +64,6 @@ public class SceneHandler
 
 	public Node createTagView(Tag tag) throws IOException { return createTagView(tag, null); }
 
-	/*public Node createTagView() throws IOException
-	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
-		return loader.load();
-	}*/
-
 	public Node createTagView(Tag tag, ToggleGroup toggleGroup) throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
@@ -90,19 +83,25 @@ public class SceneHandler
 	}
 
 	public void toggleFullScreen()
-
-	private void setStyleSheets()
-	// Style & Font methods
-		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
-
-
-	public void setFullScreen()
 	{
-		isFullScreen = !isFullScreen;
-		stage.setFullScreen(isFullScreen);
+		isFullScreen.setValue(!isFullScreen());
+		stage.setFullScreen(isFullScreen());
 	}
 
+	private void setStyleSheets()
+	{
+		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
+	}
 
+	public BooleanProperty getIsFullScreen()
+	{
+		return isFullScreen;
+	}
+
+	public boolean isFullScreen()
+	{
+		return isFullScreen.get();
+	}
 
 	public AnchorPane getRoot() { return this.root; }
 
