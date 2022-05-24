@@ -4,12 +4,16 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
+import io.github.palexdev.materialfx.enums.NotificationPos;
 import io.github.palexdev.materialfx.enums.ScrimPriority;
+import io.github.palexdev.materialfx.font.FontResources;
 import io.github.palexdev.materialfx.font.MFXFontIcon;
+import io.github.palexdev.materialfx.notifications.MFXNotificationSystem;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.model.DefaultNotification;
 
 import java.util.Map;
 
@@ -31,24 +35,49 @@ public class Feedback
 	private MFXGenericDialog confirmationDialogContent;
 	private MFXStageDialog confirmationDialog;
 
-	public Feedback() { }
+	private DefaultNotification notification;
+
+	private Feedback() { }
 
 
 
 	public void init(Stage stage)
 	{
 		this.stage = stage;
+
+		// general dialog init
 		dialogContent = initDialogContent();
+		dialogContent.setMaxSize(400, 230);
 		dialog = initDialog(dialogContent);
+		dialog.setOverlayClose(true); // I wish this would work
 		addButton(dialogContent, dialog, ButtonData.OK_DONE);
-		dialogContent.setMaxSize(400, 230);
 
-
+		// confirmation dialog init
 		confirmationDialogContent = initDialogContent();
+		confirmationDialogContent.setMaxSize(400, 230);
 		confirmationDialog = initDialog(confirmationDialogContent);
+		confirmationDialog.setOverlayClose(true);
 
-		dialogContent.setMaxSize(400, 230);
+		MFXNotificationSystem.instance().initOwner(stage);
+		initNotification();
 
+		loadStyle();
+
+	}
+
+
+	private void loadStyle()
+	{
+		dialogContent.getStylesheets().clear();
+		confirmationDialogContent.getStylesheets().clear();
+		notification.getStylesheets().clear();
+		for (String style : SceneHandler.getInstance().getStyles())
+		{
+			String resource = ResourcesLoader.load("css/" + style + ".css");
+			dialogContent.getStylesheets().add(resource);
+			confirmationDialogContent.getStylesheets().add(resource);
+			notification.getStylesheets().add(resource);
+		}
 	}
 
 	private MFXGenericDialog initDialogContent()
@@ -58,17 +87,19 @@ public class Feedback
 
 	private MFXStageDialog initDialog(MFXGenericDialog dialogContent)
 	{
-		return MFXGenericDialogBuilder.build(dialogContent)
-				.toStageDialogBuilder()
-				.initOwner(this.stage)
-				.initModality(Modality.APPLICATION_MODAL)
-				.setDraggable(true)
-				.setOwnerNode(this.root)
-				.setScrimPriority(ScrimPriority.WINDOW)
-				.setScrimOwner(true)
-				.get();
+		return MFXGenericDialogBuilder.build(dialogContent).toStageDialogBuilder().initOwner(this.stage).initModality(
+				Modality.APPLICATION_MODAL).setDraggable(true).setOwnerNode(this.root).setScrimPriority(
+				ScrimPriority.WINDOW).setScrimOwner(true).get();
 	}
 
+
+	private void initNotification()
+	{
+		notification = new DefaultNotification();
+		notification.setHeaderText("unset header");
+		notification.setContentText("unset content");
+
+	}
 
 
 	// public confirmation button interface
@@ -81,10 +112,13 @@ public class Feedback
 
 	/**
 	 * <p>creates a button with text correlated to the chosen buttonType</p>
-	 * @param buttonType button type, used for confirmationDialog result
 	 *
+	 * @param buttonType button type, used for confirmationDialog result
 	 */
-	public void addButton(ButtonData buttonType) { addButton(confirmationDialogContent, confirmationDialog, buttonType); }
+	public void addButton(ButtonData buttonType)
+	{
+		addButton(confirmationDialogContent, confirmationDialog, buttonType);
+	}
 
 	/**
 	 * <p>creates a button with {@link ButtonData}.{@code OTHER}</p>
@@ -95,6 +129,7 @@ public class Feedback
 
 	/**
 	 * <p>creates a button with {@code buttonText} that returns {@code buttonType}</p>
+	 *
 	 * @param buttonType button type, used for confirmationDialog result
 	 * @param buttonText text displayed to the user
 	 */
@@ -107,22 +142,7 @@ public class Feedback
 
 	private void addButton(MFXGenericDialog dialogContent, MFXStageDialog dialog, ButtonData buttonType)
 	{
-		switch (buttonType)
-		{
-			case CANCEL_CLOSE -> addButton(dialogContent, dialog, buttonType, "Annulla");
-			case OK_DONE -> addButton(dialogContent, dialog, buttonType, "OK");
-			case YES -> addButton(dialogContent, dialog, buttonType, "Si");
-			case NO -> addButton(dialogContent, dialog, buttonType, "No");
-			case APPLY -> addButton(dialogContent, dialog, buttonType, "Applica");
-			case FINISH -> addButton(dialogContent, dialog, buttonType, "Finisci");
-			case NEXT_FORWARD -> addButton(dialogContent, dialog, buttonType, "Prossimo");
-			case BACK_PREVIOUS -> addButton(dialogContent, dialog, buttonType, "Precedente");
-			case HELP -> addButton(dialogContent, dialog, buttonType, "Aiuto");
-			case LEFT -> addButton(dialogContent, dialog, buttonType, "Sinistra");
-			case RIGHT -> addButton(dialogContent, dialog, buttonType, "Destra");
-			case OTHER -> addButton(dialogContent, dialog, buttonType, "Altro");
-			default -> System.err.println("unrecognized button type" + buttonType);
-		}
+		addButton(dialogContent, dialog, buttonType, getButtonTextFromType(buttonType));
 	}
 
 	private void addButton(MFXGenericDialog dialogContent, MFXStageDialog dialog, String buttonText)
@@ -135,8 +155,8 @@ public class Feedback
 	}
 
 
-
-	private void addButton(MFXGenericDialog dialogContent, MFXStageDialog dialog, ButtonData buttonType, String buttonText)
+	private void addButton(MFXGenericDialog dialogContent, MFXStageDialog dialog, ButtonData buttonType,
+			String buttonText)
 	{
 		dialogContent.addActions(Map.entry(new MFXButton(buttonText), event ->
 		{
@@ -144,6 +164,28 @@ public class Feedback
 			dialog.close();
 		}));
 	}
+
+
+	private String getButtonTextFromType(ButtonData buttonType)
+	{
+		return switch (buttonType)
+				{
+					case CANCEL_CLOSE -> "Annulla";
+					case OK_DONE -> "OK";
+					case YES -> "Si";
+					case NO -> "No";
+					case APPLY -> "Applica";
+					case FINISH -> "Finisci";
+					case NEXT_FORWARD -> "Prossimo";
+					case BACK_PREVIOUS -> "Precedente";
+					case HELP -> "Aiuto";
+					case LEFT -> "Sinistra";
+					case RIGHT -> "Destra";
+					case OTHER -> "Altro";
+					default -> throw new IllegalArgumentException("Usupported buttonType" + buttonType);
+				};
+	}
+
 
 
 	public void showInfo(String header, String message)
@@ -154,6 +196,7 @@ public class Feedback
 		dialogContent.setContentText(message);
 		convertDialogTo("mfx-info-dialog");
 		dialog.showDialog();
+
 	}
 
 
@@ -176,6 +219,7 @@ public class Feedback
 		dialogContent.setContentText(message);
 		convertDialogTo("mfx-error-dialog");
 		dialog.showDialog();
+
 	}
 
 
@@ -191,7 +235,8 @@ public class Feedback
 
 	/**
 	 * shows a dialog with
-	 * @param header title of the dialog
+	 *
+	 * @param header  title of the dialog
 	 * @param message main body of the dialog
 	 * @return ButtonData specified by the Button clicked or {@code ButtonData.CANCEL_CLOSE} if none were clicked
 	 */
@@ -209,7 +254,8 @@ public class Feedback
 
 	/**
 	 * shows a dialog with <i>Yes</i> and <i>No</i> as buttons
-	 * @param header title of the dialog
+	 *
+	 * @param header  title of the dialog
 	 * @param message main body of the dialog
 	 * @return true if user pressed Yes, else false
 	 */
@@ -229,12 +275,27 @@ public class Feedback
 
 	private void convertDialogTo(String styleClass)
 	{
-		dialogContent.getStyleClass()
-				.removeIf(s -> s.equals("mfx-info-dialog") || s.equals("mfx-warn-dialog") || s.equals(
-						"mfx-error-dialog"));
+		dialogContent.getStyleClass().removeIf(
+				s -> s.equals("mfx-info-dialog") || s.equals("mfx-warn-dialog") || s.equals("mfx-error-dialog"));
 
 		if (styleClass != null) dialogContent.getStyleClass().add(styleClass);
 	}
+
+
+
+	public void showNotification(String header, String message)
+	{
+		showNotification(header, message, NotificationPos.TOP_LEFT);
+	}
+
+	public void showNotification(String header, String message, NotificationPos position)
+	{
+		notification.setHeaderText(header);
+		notification.setContentText(message);
+		MFXNotificationSystem.instance().setPosition(position).publish(notification);
+	}
+
+
 
 	/*
 	* legacy showMessages

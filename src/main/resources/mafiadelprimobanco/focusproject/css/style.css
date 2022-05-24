@@ -46,7 +46,7 @@
     -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 0, 0.2, 2, 2);
 }
 
-#pageRoot{
+#pageRoot {
     -fx-background-color: transparent;
 }
 
@@ -67,7 +67,7 @@
     -fx-effect: innershadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 0, 3);
 }
 
-#navBar .mfx-rectangle-toggle-node:selected .ikonli-font-icon{
+#navBar .mfx-rectangle-toggle-node:selected .ikonli-font-icon {
     -fx-effect: none;
 }
 
@@ -94,7 +94,6 @@
 */
 
 
-
 #homeRoot {
     -fx-background-color: palette1-1;
 }
@@ -107,7 +106,7 @@
 /*    */
 /*}*/
 
-#homeProgressDisplay .mfx-progress-spinner{
+#homeProgressDisplay .mfx-progress-spinner {
     -mfx-color1: palette2-2;
 }
 
@@ -115,6 +114,7 @@
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
 }
+
 /*#homeTagList {*/
 
 /*}*/
@@ -236,7 +236,34 @@ todo: this should be a reusable class
     -fx-icon-color: palette3-3;
 }
 
-.tagRemoveButton *{
+.tagRemoveButton * {
     -fx-icon-color: inherit;
 }
 
+
+/*
+FEEDBACK STYLE
+
+- .notification
+  - HBox
+    - label
+*/
+
+.notification {
+    -fx-background-color: palette1-1;
+    -fx-background-radius: 4px;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-border-color: palette2-1;
+}
+
+.notification .header {
+    -fx-text-fill: palette3-3;
+    -fx-effect: dropshadow(gaussian, rgba(89, 69, 38, 0.3), 4, 0.2, 2, 2);
+    -fx-font-weight: 800;
+}
+
+.notification .content{
+    -fx-text-fill: palette4-1;
+    -fx-font-weight: 400;
+}
