@@ -1,7 +1,9 @@
 package mafiadelprimobanco.focusproject;
 
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.ObservableList;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -23,14 +25,10 @@ public class SceneHandler
 
 	public static SceneHandler getInstance() { return instance; }
 
-
-
 	private Stage stage;
 	private Scene scene;
-	private String currentTheme = "light";
 	private AnchorPane root;
-	private final List<String> styles = List.of(currentTheme, "fonts", "style");
-	private boolean isFullScreen = false;
+	private ReadOnlyBooleanProperty isFullScreen;
 
 	private SceneHandler() { }
 
@@ -41,15 +39,23 @@ public class SceneHandler
 		this.scene = new Scene(fxmlLoader.load(), 1150, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);
+		isFullScreen = stage.fullScreenProperty();
 		loadFonts();
-		loadStyle();
+		setStyleSheets();
 		stage.show();
 
+		subscribeToStyleChanges();
 		stage.setOnCloseRequest(windowEvent ->
 		{
 			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
 					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
 		});
+	}
+
+	private void subscribeToStyleChanges()
+	{
+		StyleHandler.getInstance().getObservableStyles().addListener(
+				(ListChangeListener<String>)change -> setStyleSheets());
 	}
 
 	public Node loadFXML(String fxmlPath) throws IOException
@@ -59,12 +65,6 @@ public class SceneHandler
 	}
 
 	public Node createTagView(Tag tag) throws IOException { return createTagView(tag, null); }
-
-	/*public Node createTagView() throws IOException
-	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
-		return loader.load();
-	}*/
 
 	public Node createTagView(Tag tag, ToggleGroup toggleGroup) throws IOException
 	{
@@ -84,43 +84,24 @@ public class SceneHandler
 			Font.loadFont(String.valueOf(getClass().getResource(font)), 10);
 	}
 
-	// dialog methods
-
-
-	// Style & Font methods
-
-	private void loadStyle()
+	public void toggleFullScreen()
 	{
-		scene.getStylesheets().clear();
-		for (String style : styles)
-		{
-			String resource = ResourcesLoader.load("css/" + style + ".css");
-			scene.getStylesheets().add(resource);
-		}
+		stage.setFullScreen(!isFullScreen());
 	}
 
-	public void toggleLightDarkTheme()
+	private void setStyleSheets()
 	{
-		currentTheme = currentTheme.equals("light") ? "dark" : "light";
-		loadStyle();
+		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
 	}
 
-	private void changeTheme(String newTheme)
+	public ReadOnlyBooleanProperty getIsFullScreen()
 	{
-		// if the user can use custom themes then sanitize 'newTheme'
-		currentTheme = newTheme;
-		loadStyle();
+		return isFullScreen;
 	}
 
-	public void setFullScreen()
+	public boolean isFullScreen()
 	{
-		isFullScreen = !isFullScreen;
-		stage.setFullScreen(isFullScreen);
-	}
-
-	public List<String> getStyles()
-	{
-		return styles;
+		return isFullScreen.get();
 	}
 
 	public AnchorPane getRoot() { return this.root; }

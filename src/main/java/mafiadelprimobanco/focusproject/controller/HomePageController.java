@@ -4,15 +4,11 @@ import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
-import javafx.util.converter.IntegerStringConverter;
 import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.SceneHandler;
@@ -23,7 +19,6 @@ import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
-import java.util.function.BiFunction;
 
 public class HomePageController implements ActivityObserver
 {
@@ -286,7 +281,7 @@ public class HomePageController implements ActivityObserver
 	@FXML
 	void toggleFullScreen()
 	{
-		SceneHandler.getInstance().setFullScreen();
+		SceneHandler.getInstance().toggleFullScreen();
 	}
 
 	void hideSpinner()
