@@ -1,6 +1,7 @@
 package mafiadelprimobanco.focusproject;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +28,7 @@ public class SceneHandler
 	private Stage stage;
 	private Scene scene;
 	private AnchorPane root;
-	private final BooleanProperty isFullScreen = new SimpleBooleanProperty(false);
+	private ReadOnlyBooleanProperty isFullScreen;
 
 	private SceneHandler() { }
 
@@ -38,6 +39,7 @@ public class SceneHandler
 		this.scene = new Scene(fxmlLoader.load(), 1150, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);
+		isFullScreen = stage.fullScreenProperty();
 		loadFonts();
 		setStyleSheets();
 		stage.show();
@@ -84,8 +86,7 @@ public class SceneHandler
 
 	public void toggleFullScreen()
 	{
-		isFullScreen.setValue(!isFullScreen());
-		stage.setFullScreen(isFullScreen());
+		stage.setFullScreen(!isFullScreen());
 	}
 
 	private void setStyleSheets()
@@ -93,7 +94,7 @@ public class SceneHandler
 		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
 	}
 
-	public BooleanProperty getIsFullScreen()
+	public ReadOnlyBooleanProperty getIsFullScreen()
 	{
 		return isFullScreen;
 	}
