@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.dialogs.MFXGenericDialog?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+
+<MFXGenericDialog maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onClose="#closeLoginPopUp" prefHeight="276.0" prefWidth="402.0" showAlwaysOnTop="false" showMinimize="false" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.LoginPopUpController">
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="40.0" BorderPane.alignment="CENTER">
+         <children>
+            <MFXTextField fx:id="usernameField" floatMode="BORDER" floatingText="Username" minWidth="300.0" promptText="Username" />
+            <MFXPasswordField fx:id="passwordField" floatMode="BORDER" floatingText="Password" minWidth="300.0" promptText="Password" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <MFXButton depthLevel="LEVEL3" minWidth="100.0" onAction="#doRegisterUser" text="Registrati" />
+                  <MFXButton depthLevel="LEVEL3" minWidth="100.0" onAction="#doLogin" text="Accedi" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </VBox>
+   </center>
+</MFXGenericDialog>

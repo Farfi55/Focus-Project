@@ -22,8 +22,6 @@ public class MainApplication extends Application
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
 			KeyPressManager.getInstance().init(SceneHandler.getInstance().getRoot());
 
-
-
 		} catch (IOException e)
 		{
 			e.printStackTrace();

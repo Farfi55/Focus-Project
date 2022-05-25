@@ -4,12 +4,15 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import mafiadelprimobanco.focusproject.controller.TagController;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -25,8 +28,10 @@ public class SceneHandler
 	public static SceneHandler getInstance() { return instance; }
 
 	private Stage stage;
+	private Stage loginStage;
 	private Scene scene;
 	private AnchorPane root;
+	private StackPane  contentPane;
 	private ReadOnlyBooleanProperty isFullScreen;
 
 	private SceneHandler() { }
@@ -43,6 +48,14 @@ public class SceneHandler
 		setStyleSheets();
 		stage.show();
 
+		loginStage = new Stage();
+		loginStage.setTitle("");
+		loginStage.initStyle(StageStyle.UNDECORATED);
+
+		loginStage.focusedProperty().addListener(e -> {
+			if (!((ReadOnlyBooleanProperty)e).getValue()) closeLoginPopup();
+		});
+
 		subscribeToStyleChanges();
 
 		KeyPressManager.getInstance().addHandler(event ->
@@ -56,6 +69,17 @@ public class SceneHandler
 					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
 		});
 	}
+
+	public void showLoginPopup() throws IOException
+	{
+		Parent root = FXMLLoader.load(getClass().getResource("Login-popup-view.fxml"));
+		loginStage.setScene(new Scene(root, 400, 300));
+		loginStage.setX(stage.getX() + 100);
+		loginStage.setY(stage.getHeight() - 250);
+		loginStage.show();
+	}
+
+	public void closeLoginPopup() { loginStage.close(); }
 
 	private void subscribeToStyleChanges()
 	{
@@ -108,6 +132,14 @@ public class SceneHandler
 	{
 		return isFullScreen.get();
 	}
+
+	public void navTo(String path) throws IOException
+	{
+		Node page = SceneHandler.getInstance().loadFXML(path);
+		contentPane.getChildren().setAll(page);
+	}
+
+	public void setContentPane(StackPane pane) {this.contentPane = pane; }
 
 	public AnchorPane getRoot() { return this.root; }
 

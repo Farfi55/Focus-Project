@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -67,38 +68,26 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		var minuteSpinnerModel = new IntegerSpinnerModel(0);
 		var secondSpinnerModel = new IntegerSpinnerModel(0);
 
-		secondSpinnerModel.setMax(60);
-		minuteSpinnerModel.setMax(60);
-
-		secondSpinnerModel.setMin(-1);
-		minuteSpinnerModel.setMin(-1);
+		secondSpinnerModel.setMax(59);
+		minuteSpinnerModel.setMax(59);
 
 		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
 		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
 		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
 
-		minutesSpinnerSelector.valueProperty().addListener(e -> {
-			if (minutesSpinnerSelector.getValue() > 59) minutesSpinnerSelector.setValue(0);
-			else if (minutesSpinnerSelector.getValue() <  0) minutesSpinnerSelector.setValue(59);
-
-		});
-
-		secondsSpinnerSelector.valueProperty().addListener(e ->
-		{
-			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
-			else if (secondsSpinnerSelector.getValue() <  0) secondsSpinnerSelector.setValue(59);
-		});
+		minuteSpinnerModel.setWrapAround(true);
+		secondSpinnerModel.setWrapAround(true);
 
 		hoursSpinnerSelector.setOnCommit(e -> {
-			hourSpinnerModel.setValue(filterInput(e));
+			hourSpinnerModel.setValue(hourSpinnerModel.getConverter().fromString(e));
 			secondsSpinnerSelector.requestFocus();
 		});
 		minutesSpinnerSelector.setOnCommit(e -> {
-			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
+			minuteSpinnerModel.setValue(Math.min(minuteSpinnerModel.getConverter().fromString(e), 59));
 			secondsSpinnerSelector.requestFocus();
 		});
 		secondsSpinnerSelector.setOnCommit(e -> {
-			secondSpinnerModel.setValue(Math.min(filterInput(e), 59));
+			secondSpinnerModel.setValue(Math.min(secondSpinnerModel.getConverter().fromString(e), 59));
 			hoursSpinnerSelector.requestFocus();
 		});
 
@@ -202,12 +191,6 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	public void onChronometerUpdateTick()
 	{
-		final double progressbarTick = ActivityHandler.getInstance().getCurrentProgressBarTick();
-		final double currProgressValue = progressBarTime.getProgress() + progressbarTick;
-
-		if (currProgressValue < 1.0) progressBarTime.setProgress(currProgressValue);
-		else progressBarTime.setProgress(0.0);
-
 		activityTimeTextField.setText(ActivityHandler.getInstance().getCurrentTimeTick());
 	}
 
@@ -249,22 +232,23 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		SceneHandler.getInstance().toggleFullScreen();
 	}
 
+	@FXML
+	void updateHourValue(KeyEvent event) {
+		//System.out.println(secondsSpinnerSelector);
 
+		//secondSpinnerModel.setValue(
+	}
 
-	int filterInput(String num)
-	{
-		int currVal = 0;
+	@FXML
+	void updateMinuteValue(KeyEvent event) {
 
-		try
-		{
-			currVal = Integer.parseInt(num);
-		}
-		catch (Exception ignore)
-		{
-			Feedback.getInstance().showError("Errore", "Impossibile determinare il valore inserito");
-		}
+		//System.out.println(secondsSpinnerSelector.getValue().intValue());
+		//secondSpinnerModel.setValue(
+	}
 
-		return currVal;
+	@FXML
+	void updateSecondValue(KeyEvent event) {
+		//secondSpinnerModel.setValue(
 	}
 
 

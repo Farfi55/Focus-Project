@@ -56,6 +56,7 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 		setNavigationEnabled(true);
 		ActivityHandler.getInstance().addListener(this);
 		KeyPressManager.getInstance().addHandler(this);
+		SceneHandler.getInstance().setContentPane(contentRoot);
 
 		onHomeClick();
 	}
@@ -125,9 +126,15 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	}
 
 	@FXML
-	void onAccountClick()
-	{
-		navigateTo(FXMLReferences.ACCOUNT, accountButton, "Account");
+	void onAccountClick() {
+		try
+		{
+			SceneHandler.getInstance().showLoginPopup();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -149,8 +156,7 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 		{
 			if (!pagePathRef.equals(""))
 			{
-				Node page = SceneHandler.getInstance().loadFXML(pagePathRef);
-				contentRoot.getChildren().setAll(page);
+				SceneHandler.getInstance().navTo(pagePathRef);
 			}
 			else System.out.println("navigation to empty page reference");
 			button.setSelected(true);
