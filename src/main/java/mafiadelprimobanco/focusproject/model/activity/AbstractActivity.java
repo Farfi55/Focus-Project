@@ -3,19 +3,19 @@ package mafiadelprimobanco.focusproject.model.activity;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-public abstract class AbstracyActivity
+public abstract class AbstractActivity
 {
 	protected Integer tagUuid;
 	protected LocalDateTime startTime;
 	protected LocalDateTime endTime;
 
-	public AbstracyActivity(Integer tagUuid)
+	public AbstractActivity(Integer tagUuid)
 	{ this(tagUuid, LocalDateTime.now(), null); }
 
-	public AbstracyActivity(Integer tagUuid, LocalDateTime startTime)
+	public AbstractActivity(Integer tagUuid, LocalDateTime startTime)
 	{ this(tagUuid, startTime, null); }
 
-	public AbstracyActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime)
+	public AbstractActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime)
 	{
 		assert !endTime.isBefore(startTime);
 		this.tagUuid = tagUuid;
