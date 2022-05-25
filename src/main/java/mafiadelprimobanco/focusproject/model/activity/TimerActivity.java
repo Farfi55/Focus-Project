@@ -7,21 +7,21 @@ public class TimerActivity extends AbstractActivity
 	/**
 	 * seconds the user originally decided to spend on this activity
 	 */
-	private final Long chosenDuration;
+	private final Integer chosenDuration;
 
-	public TimerActivity(Integer tagUuid, Long chosenDuration)
+	public TimerActivity(Integer tagUuid, Integer chosenDuration)
 	{
 		super(tagUuid);
 		this.chosenDuration = chosenDuration;
 	}
 
-	public TimerActivity(Integer tagUuid, LocalDateTime startTime, Long chosenDuration)
+	public TimerActivity(Integer tagUuid, LocalDateTime startTime, Integer chosenDuration)
 	{
 		super(tagUuid, startTime);
 		this.chosenDuration = chosenDuration;
 	}
 
-	public TimerActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime, Long chosenDuration)
+	public TimerActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime, Integer chosenDuration)
 	{
 		super(tagUuid, startTime, endTime);
 		this.chosenDuration = chosenDuration;
@@ -29,17 +29,18 @@ public class TimerActivity extends AbstractActivity
 
 	public boolean wasInterrupted()
 	{
-		if (isRunning()) return false;
+		if (!hasStarted() || isRunning()) return false;
 
 		return getExpectedEndTime().isBefore(endTime);
 	}
 
 	public LocalDateTime getExpectedEndTime()
 	{
-		return startTime.plusSeconds(chosenDuration);
+		if (!hasStarted()) return null;
+		else return startTime.plusSeconds(chosenDuration);
 	}
 
-	public Long getChosenDuration()
+	public Integer getChosenDuration()
 	{
 		return chosenDuration;
 	}

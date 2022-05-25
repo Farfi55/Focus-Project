@@ -7,21 +7,31 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 public abstract class AbstractActivity
 {
 	protected final Integer tagUuid;
-	protected final LocalDateTime startTime;
+	protected LocalDateTime startTime;
 	protected LocalDateTime endTime;
 
 	public AbstractActivity(Integer tagUuid)
-	{ this(tagUuid, LocalDateTime.now(), null); }
+	{
+		this.tagUuid = tagUuid;
+	}
 
 	public AbstractActivity(Integer tagUuid, LocalDateTime startTime)
-	{ this(tagUuid, startTime, null); }
+	{
+		this.tagUuid = tagUuid;
+		this.startTime = startTime;
+	}
 
 	public AbstractActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime)
 	{
-		assert (endTime == null) || (!endTime.isBefore(startTime));
+		assert (!endTime.isBefore(startTime));
 		this.tagUuid = tagUuid;
 		this.startTime = startTime;
 		this.endTime = endTime;
+	}
+
+	public void startActity()
+	{
+		if (!isRunning()) this.startTime = LocalDateTime.now();
 	}
 
 	public void endActity()
@@ -29,14 +39,19 @@ public abstract class AbstractActivity
 		if (isRunning()) this.endTime = LocalDateTime.now();
 	}
 
-	public boolean isRunning()
+	public boolean hasStarted()
 	{
-		return endTime == null;
+		return startTime != null;
 	}
 
 	public boolean hasEnded()
 	{
 		return endTime != null;
+	}
+
+	public boolean isRunning()
+	{
+		return startTime != null && endTime == null;
 	}
 
 	public Integer getTagUuid()
@@ -56,7 +71,8 @@ public abstract class AbstractActivity
 
 	public Long getSecondsSinceStart()
 	{
-		return SECONDS.between(LocalDateTime.now(), startTime);
+		if (hasStarted()) return SECONDS.between(LocalDateTime.now(), startTime);
+		else return 0L;
 	}
 
 	public Long getDuration()
