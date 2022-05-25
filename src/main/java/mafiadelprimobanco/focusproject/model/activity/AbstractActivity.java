@@ -1,12 +1,13 @@
 package mafiadelprimobanco.focusproject.model.activity;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public abstract class AbstractActivity
 {
-	protected Integer tagUuid;
-	protected LocalDateTime startTime;
+	protected final Integer tagUuid;
+	protected final LocalDateTime startTime;
 	protected LocalDateTime endTime;
 
 	public AbstractActivity(Integer tagUuid)
@@ -17,7 +18,7 @@ public abstract class AbstractActivity
 
 	public AbstractActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime)
 	{
-		assert !endTime.isBefore(startTime);
+		assert (endTime == null) || (!endTime.isBefore(startTime));
 		this.tagUuid = tagUuid;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -25,7 +26,12 @@ public abstract class AbstractActivity
 
 	public void endActity()
 	{
-		this.endTime = LocalDateTime.now();
+		if (isRunning()) this.endTime = LocalDateTime.now();
+	}
+
+	public boolean isRunning()
+	{
+		return endTime == null;
 	}
 
 	public boolean hasEnded()
@@ -48,8 +54,14 @@ public abstract class AbstractActivity
 		return endTime;
 	}
 
-	public long getSecondsSinceStart()
+	public Long getSecondsSinceStart()
 	{
-		return ChronoUnit.SECONDS.between(LocalDateTime.now(), startTime);
+		return SECONDS.between(LocalDateTime.now(), startTime);
+	}
+
+	public Long getDuration()
+	{
+		if (isRunning()) return 0L;
+		else return SECONDS.between(endTime, startTime);
 	}
 }
