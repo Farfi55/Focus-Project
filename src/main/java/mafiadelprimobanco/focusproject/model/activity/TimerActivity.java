@@ -11,7 +11,12 @@ public class TimerActivity extends AbstractActivity
 
 	public TimerActivity() { }
 
-
+	@Override
+	public void startActivity()
+	{
+		assert chosenDuration != null && chosenDuration > 0;
+		super.startActivity();
+	}
 
 	public TimerActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime, Integer chosenDuration)
 	{
@@ -28,7 +33,8 @@ public class TimerActivity extends AbstractActivity
 
 	public double getProgress()
 	{
-		return Math.min(1.0d, (double)getSecondsSinceStart() / chosenDuration);
+		if (chosenDuration == null || chosenDuration == 0) return 1.0;
+		else return Math.min(1.0d, (double)getSecondsSinceStart() / chosenDuration);
 	}
 
 	public int getRemainingDuration()

@@ -11,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
@@ -39,7 +38,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	@FXML private MFXComboBox<String> activitySelectorComboBox;
 
 	@FXML private MFXTextField activityTimeTextField;
-	@FXML private MFXProgressSpinner progressBarTime;
+	@FXML private MFXProgressSpinner activityProgressSpinner;
 
 	@FXML private MFXSpinner<Integer> hoursSpinnerSelector;
 	@FXML private MFXSpinner<Integer> minutesSpinnerSelector;
@@ -90,7 +89,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		hoursSpinnerSelector.setOnCommit(e -> {
 			hourSpinnerModel.setValue(filterInput(e));
-			secondsSpinnerSelector.requestFocus();
+			minutesSpinnerSelector.requestFocus();
 		});
 		minutesSpinnerSelector.setOnCommit(e -> {
 			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
@@ -111,15 +110,13 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		activityButton.setText("Interrompi");
 
-		activityTimeTextField.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		showNode(activityTimeTextField);
 
 		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER)
 		{
 			ActivityHandler.getInstance().setChosenTimerDuration(getInputTimerDuration());
 			hideSpinners();
 		}
-
-//		homeRoot.setRight(null);
 
 		hideNode(homeRoot.getRight());
 		hideNode(activitySelectorComboBox);
@@ -132,8 +129,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
-			case CHRONOMETER -> progressBarTime.setProgress(0.0);
-			case TIMER -> progressBarTime.setProgress(1.0);
+			case CHRONOMETER -> activityProgressSpinner.setProgress(-1);
+			case TIMER -> activityProgressSpinner.setProgress(1.0);
 		}
 	}
 
@@ -184,24 +181,25 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	public void onActivityStop()
 	{
 		activityButton.setText("Avvia");
-		activityTimeTextField.setText("00:00");
-		progressBarTime.setProgress(0.0);
 
+		hideNode(activityTimeTextField);
 		hideNode(selectedTagText);
 		hideNode(selectedTagColorCircle);
 
-		activityTimeTextField.setPrefWidth(0);
+		showNode(homeRoot.getRight());
+		showNode(activitySelectorComboBox);
+
+		activityTimeTextField.setText("00:00:00");
+		activityProgressSpinner.setProgress(0.0);
 
 		if (ActivityHandler.getInstance().getCurrentActivityType() != ActivityType.CHRONOMETER) showSpinners();
 
-		showNode(homeRoot.getRight());
-		showNode(activitySelectorComboBox);
 	}
 
 
 	public void onTimerUpdate()
 	{
-		progressBarTime.setProgress(1.0 - ActivityHandler.getInstance().getTimerActivityProgress());
+		activityProgressSpinner.setProgress(1.0 - ActivityHandler.getInstance().getTimerActivityProgress());
 
 		int remainingSeconds = ActivityHandler.getInstance().getRemainingTimerDuration();
 		activityTimeTextField.setText(TimeUtils.formatTime(remainingSeconds));

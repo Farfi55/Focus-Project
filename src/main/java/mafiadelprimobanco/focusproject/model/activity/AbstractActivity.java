@@ -79,13 +79,13 @@ public abstract class AbstractActivity
 
 	public int getSecondsSinceStart()
 	{
-		if (hasStarted()) return (int)SECONDS.between(startTime, LocalDateTime.now());
-		else return 0;
+		assert hasStarted();
+		return (int)SECONDS.between(startTime, LocalDateTime.now());
 	}
 
 	public int getFinalDuration()
 	{
-		if (isRunning()) return 0;
-		else return (int)SECONDS.between(endTime, startTime);
+		assert (!isRunning());
+		return (int)SECONDS.between(endTime, startTime);
 	}
 }

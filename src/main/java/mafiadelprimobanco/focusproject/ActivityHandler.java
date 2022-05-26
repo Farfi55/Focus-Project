@@ -70,7 +70,7 @@ public class ActivityHandler
 
 		invokeOnEndActivity();
 
-		currentActivity = createActivity();
+		Platform.runLater(() -> currentActivity = createActivity());
 	}
 
 	private void startTimerActivity()
@@ -82,16 +82,12 @@ public class ActivityHandler
 
 		activityTimer.scheduleAtFixedRate(new TimerTask()
 		{
-			long secondsRemaining = chosenTimerDuration;
-
 			@Override
 			public void run()
 			{
 				invokeOnUpdateActivity();
 
-				if (secondsRemaining <= 0) stopCurrentActivity();
-
-				secondsRemaining--;
+				if (timerActivity.getRemainingDuration() == 0) stopCurrentActivity();
 			}
 		}, 0, 1000);
 	}
@@ -169,11 +165,11 @@ public class ActivityHandler
 
 	public int getRemainingTimerDuration()
 	{
-		if (currentActivity instanceof TimerActivity timerActivity)
-		{
-			return timerActivity.getRemainingDuration();
-		}
-		else return -1;
+		assert currentActivity instanceof TimerActivity;
+
+		return ((TimerActivity)currentActivity).getRemainingDuration();
+
+
 	}
 
 	//GETTERS
