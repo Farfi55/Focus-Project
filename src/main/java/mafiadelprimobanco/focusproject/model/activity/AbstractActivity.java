@@ -6,9 +6,11 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 
 public abstract class AbstractActivity
 {
-	protected final Integer tagUuid;
+	protected Integer tagUuid;
 	protected LocalDateTime startTime;
 	protected LocalDateTime endTime;
+
+	public AbstractActivity() { }
 
 	public AbstractActivity(Integer tagUuid)
 	{
@@ -29,12 +31,12 @@ public abstract class AbstractActivity
 		this.endTime = endTime;
 	}
 
-	public void startActity()
+	public void startActivity()
 	{
 		if (!isRunning()) this.startTime = LocalDateTime.now();
 	}
 
-	public void endActity()
+	public void endActivity()
 	{
 		if (isRunning()) this.endTime = LocalDateTime.now();
 	}
@@ -59,6 +61,12 @@ public abstract class AbstractActivity
 		return tagUuid;
 	}
 
+	public void setTagUuid(Integer tagUuid)
+	{
+		assert (this.tagUuid == null);
+		this.tagUuid = tagUuid;
+	}
+
 	public LocalDateTime getStartTime()
 	{
 		return startTime;
@@ -69,15 +77,15 @@ public abstract class AbstractActivity
 		return endTime;
 	}
 
-	public Long getSecondsSinceStart()
+	public int getSecondsSinceStart()
 	{
-		if (hasStarted()) return SECONDS.between(LocalDateTime.now(), startTime);
-		else return 0L;
+		if (hasStarted()) return (int)SECONDS.between(startTime, LocalDateTime.now());
+		else return 0;
 	}
 
-	public Long getDuration()
+	public int getFinalDuration()
 	{
-		if (isRunning()) return 0L;
-		else return SECONDS.between(endTime, startTime);
+		if (isRunning()) return 0;
+		else return (int)SECONDS.between(endTime, startTime);
 	}
 }

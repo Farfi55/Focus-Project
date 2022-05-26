@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 public class ChronometerActivity extends AbstractActivity
 {
+	public ChronometerActivity() { super(); }
+
 	public ChronometerActivity(Integer tagUuid)
 	{
 		super(tagUuid);
