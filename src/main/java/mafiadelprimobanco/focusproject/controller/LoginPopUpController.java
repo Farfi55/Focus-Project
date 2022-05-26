@@ -4,8 +4,9 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import mafiadelprimobanco.focusproject.ActivityHandler;
+import mafiadelprimobanco.focusproject.AutentificationHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
-import mafiadelprimobanco.focusproject.model.AutentificationHandler;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;

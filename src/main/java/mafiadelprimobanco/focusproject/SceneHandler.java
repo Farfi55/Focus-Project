@@ -28,7 +28,7 @@ public class SceneHandler
 	public static SceneHandler getInstance() { return instance; }
 
 	private Stage stage;
-	private Stage loginStage;
+	private Parent loginPopup;
 	private Scene scene;
 	private AnchorPane root;
 	private StackPane  contentPane;
@@ -48,11 +48,9 @@ public class SceneHandler
 		setStyleSheets();
 		stage.show();
 
-		loginStage = new Stage();
-		loginStage.setTitle("");
-		loginStage.initStyle(StageStyle.UNDECORATED);
+		loginPopup = FXMLLoader.load(getClass().getResource("Login-popup-view.fxml"));
 
-		loginStage.focusedProperty().addListener(e -> {
+		loginPopup.focusedProperty().addListener(e -> {
 			if (!((ReadOnlyBooleanProperty)e).getValue()) closeLoginPopup();
 		});
 
@@ -72,14 +70,12 @@ public class SceneHandler
 
 	public void showLoginPopup() throws IOException
 	{
-		Parent root = FXMLLoader.load(getClass().getResource("Login-popup-view.fxml"));
-		loginStage.setScene(new Scene(root, 400, 300));
-		loginStage.setX(stage.getX() + 100);
-		loginStage.setY(stage.getHeight() - 250);
-		loginStage.show();
+		contentPane.getChildren().addAll(loginPopup);
+
+		loginPopup.setLayoutY(scene.getHeight() - 200);
 	}
 
-	public void closeLoginPopup() { loginStage.close(); }
+	public void closeLoginPopup() { contentPane.getChildren().removeAll(loginPopup); }
 
 	private void subscribeToStyleChanges()
 	{
