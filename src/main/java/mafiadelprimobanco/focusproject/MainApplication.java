@@ -25,7 +25,6 @@ public class MainApplication extends Application
 			if (!AutentificationHandler.getInstance().doLoginFromDatabase())
 			{
 				System.out.println("Utente defaut non esistente");
-				AutentificationHandler.getInstance().registerUser("Lollo", "knlksnflksnaklfa");
 			}else
 			{
 				System.out.println("Benvenuto " + AutentificationHandler.getInstance().getUser());

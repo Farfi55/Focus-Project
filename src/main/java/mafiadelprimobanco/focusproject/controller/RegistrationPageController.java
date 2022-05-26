@@ -16,6 +16,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import mafiadelprimobanco.focusproject.AutentificationHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
@@ -155,6 +156,7 @@ public class RegistrationPageController
 		stepper.setOnLastNext(event -> {
 			try
 			{
+				AutentificationHandler.getInstance().registerUser(loginField.getText(), passwordField.getText());
 				SceneHandler.getInstance().navTo(FXMLReferences.HOME);
 			}
 			catch (IOException e)
