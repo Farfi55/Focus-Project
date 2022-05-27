@@ -3,6 +3,9 @@ package mafiadelprimobanco.focusproject;
 import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
+import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +19,15 @@ public class ActivityHandler
 	public static ActivityHandler getInstance() { return instance; }
 
 	private final List<ActivityObserver> listeners = new ArrayList<>();
+
+	private ActivityType currentActivityType = ActivityType.CHRONOMETER;
+	private AbstractActivity currentActivity = new ChronometerActivity();
+
 	private Timer activityTimer = null;
-	private boolean activityStarted = false;
-	private ActivityType currActivityType = ActivityType.TIMER;
+
 	//seconds -- used inside the timer function
-	private int executionTime = 0;
-	private String currentTimeTick = "00:00";
-	private double currentProgressBarTick = 0.0;
+	private int chosenTimerDuration = 0;
+
 
 	private ActivityHandler() { }
 
@@ -30,19 +35,32 @@ public class ActivityHandler
 	{
 		activityTimer = new Timer();
 
-		activityStarted = true;
-
+		currentActivity.setTagUuid(TagHandler.getInstance().getSelectedTag().getUuid());
+		currentActivity.startActivity();
 		invokeOnStartActivity();
 
-		switch (currActivityType)
+		switch (currentActivityType)
 		{
 			case CHRONOMETER -> startChronometerActivity();
 			case TIMER -> startTimerActivity();
 		}
 	}
 
-	public void stopCurrActivity()
+	private AbstractActivity createActivity()
 	{
+		return switch (currentActivityType)
+				{
+					case CHRONOMETER -> new ChronometerActivity();
+					case TIMER -> new TimerActivity();
+					default -> throw new IllegalStateException("Unexpected value: " + currentActivityType);
+				};
+	}
+
+	public void stopCurrentActivity()
+	{
+		System.out.println("stop");
+		currentActivity.endActivity();
+
 		if (activityTimer != null)
 		{
 			activityTimer.cancel();
@@ -52,60 +70,36 @@ public class ActivityHandler
 
 		invokeOnEndActivity();
 
-		activityStarted = false;
+		Platform.runLater(() -> currentActivity = createActivity());
 	}
 
 	private void startTimerActivity()
 	{
-		currentProgressBarTick = 1.0 / (executionTime + 1);
+		assert (currentActivity instanceof TimerActivity);
+		var timerActivity = (TimerActivity)currentActivity;
+
+		timerActivity.setChosenDuration(chosenTimerDuration);
+
 		activityTimer.scheduleAtFixedRate(new TimerTask()
 		{
-			int ticksLeft = executionTime;
-
 			@Override
 			public void run()
 			{
-				int hours 	= ticksLeft / 60 / 60;
-				int minutes = ticksLeft / 60 - (hours * 60);
-				int seconds = ticksLeft - (minutes * 60) - (hours * 60 * 60);
-
-				currentTimeTick = (
-						(hours < 10 ? ("0" + hours) : hours) + ":" +
-						(minutes < 10 ? ("0" + minutes) : minutes) + ":" +
-						(seconds < 10 ? ("0" + seconds) : seconds)
-				);
-
 				invokeOnUpdateActivity();
 
-				if (--ticksLeft < 0)
-				{
-					stopCurrActivity();
-				}
+				if (timerActivity.getRemainingDuration() == 0) stopCurrentActivity();
 			}
 		}, 0, 1000);
 	}
 
 	private void startChronometerActivity()
 	{
-		currentProgressBarTick = -1;
 
 		activityTimer.scheduleAtFixedRate(new TimerTask()
 		{
-			int ticks = 0;
-
 			@Override
 			public void run()
 			{
-				int hours 	= ++ticks / 60 / 60;
-				int minutes = ticks / 60 - (hours * 60);
-				int seconds = ticks - (minutes * 60) - (hours * 60 * 60);
-
-				currentTimeTick = (
-						(hours < 10 ? ("0" + hours) : hours) + ":" +
-						(minutes < 10 ? ("0" + minutes) : minutes) + ":" +
-						(seconds < 10 ? ("0" + seconds) : seconds)
-				);
-
 				invokeOnUpdateActivity();
 			}
 		}, 0, 1000);
@@ -126,11 +120,12 @@ public class ActivityHandler
 	private void invokeOnStartActivity()
 	{
 		for (ActivityObserver observer : listeners)
-			observer.onActivityStart();
+			observer.onActivityStarting();
 
-		Platform.runLater(() -> {
+		Platform.runLater(() ->
+		{
 			for (ActivityObserver observer : listeners)
-				observer.onActivityStartSafe();
+				observer.onActivityStartingSafe();
 		});
 	}
 
@@ -139,7 +134,8 @@ public class ActivityHandler
 		for (ActivityObserver observer : listeners)
 			observer.onActivityUpdate();
 
-		Platform.runLater(() -> {
+		Platform.runLater(() ->
+		{
 			for (ActivityObserver observer : listeners)
 				observer.onActivityUpdateSafe();
 		});
@@ -150,24 +146,55 @@ public class ActivityHandler
 		for (ActivityObserver observer : listeners)
 			observer.onActivityEnd();
 
-		Platform.runLater(() -> {
+		Platform.runLater(() ->
+		{
 			for (ActivityObserver observer : listeners)
 				observer.onActivityEndSafe();
 		});
 	}
 
+	public boolean isActivityRunning()
+	{
+		return currentActivity.isRunning();
+	}
+
+	public AbstractActivity getCurrentActivity()
+	{
+		return currentActivity;
+	}
+
+	public int getRemainingTimerDuration()
+	{
+		assert currentActivity instanceof TimerActivity;
+
+		return ((TimerActivity)currentActivity).getRemainingDuration();
+
+
+	}
+
 	//GETTERS
-	public ActivityType getCurrActivityType() { return currActivityType; }
+	public ActivityType getCurrentActivityType() { return currentActivityType; }
 
-	public boolean isActivityStarted() { return activityStarted; }
 
-	public String getCurrentTimeTick() { return currentTimeTick; }
-
-	public double getCurrentProgressBarTick() { return currentProgressBarTick; }
+	/**
+	 * @return 0.0 just started ... 1.0 completed
+	 */
+	public double getTimerActivityProgress()
+	{
+		if (currentActivity instanceof TimerActivity timerActivity)
+		{
+			return timerActivity.getProgress();
+		}
+		return -1;
+	}
 
 	//SETTERS
-	public void setActivityType(ActivityType type) { currActivityType = type; }
+	public void setActivityType(ActivityType type)
+	{
+		currentActivityType = type;
+		currentActivity = createActivity();
+	}
 
-	public void setExecutionTime(int executionTime) { this.executionTime = executionTime; }
+	public void setChosenTimerDuration(int chosenTimerDuration) { this.chosenTimerDuration = chosenTimerDuration; }
 
 }

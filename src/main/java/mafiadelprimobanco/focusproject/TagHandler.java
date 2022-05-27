@@ -99,7 +99,7 @@ public class TagHandler
 		if (tag.equals(selectedTag))
 		{
 			// "Tag error", "Can't delete the tag that is being used in an activity"
-			if (ActivityHandler.getInstance().isActivityStarted())
+			if (ActivityHandler.getInstance().isActivityRunning())
 			{
 				Feedback.getInstance().showError("Errore di rimozione",
 						"Non è possibile rimuovere una tag mentre viene usata in una attività");
@@ -125,7 +125,7 @@ public class TagHandler
 			System.err.println("cant change the 'unset' tag");
 			return false;
 		}
-		else if (ActivityHandler.getInstance().isActivityStarted() && uuid.equals(selectedTag.getUuid()))
+		else if (ActivityHandler.getInstance().isActivityRunning() && uuid.equals(selectedTag.getUuid()))
 		{
 			Feedback.getInstance().showError("Errore di modifica",
 					"Non è possibile modificare una tag mentre è usata in una attività");
@@ -192,7 +192,7 @@ public class TagHandler
 
 	public boolean setSelectedTag(Tag tag)
 	{
-		if (ActivityHandler.getInstance().isActivityStarted())
+		if (ActivityHandler.getInstance().isActivityRunning())
 		{
 
 			Feedback.getInstance().showError("Errore di Selezione",
