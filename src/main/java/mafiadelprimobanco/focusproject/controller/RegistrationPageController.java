@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.AutentificationHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.model.User;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
@@ -29,7 +30,6 @@ public class RegistrationPageController
 	private final MFXPasswordField passwordField;
 	private final MFXTextField firstNameField;
 	private final MFXTextField lastNameField;
-	private final MFXComboBox<String> genderCombo;
 	private final MFXCheckbox checkbox;
 
 	@FXML
@@ -40,7 +40,6 @@ public class RegistrationPageController
 		passwordField = new MFXPasswordField();
 		firstNameField = new MFXTextField();
 		lastNameField = new MFXTextField();
-		genderCombo = new MFXComboBox<>();
 		checkbox = new MFXCheckbox("Vuoi confermare i dati?");
 	}
 
@@ -55,7 +54,6 @@ public class RegistrationPageController
 
 		firstNameField.setPromptText("Nome");
 		lastNameField.setPromptText("Cognome");
-		genderCombo.setItems(FXCollections.observableArrayList("Maschio", "Femmina", "Altro"));
 
 		List<MFXStepperToggle> stepperToggles = createSteps();
 		stepper.getStepperToggles().addAll(stepperToggles);
@@ -69,7 +67,7 @@ public class RegistrationPageController
 		step1.getValidator().dependsOn(loginField.getValidator()).dependsOn(passwordField.getValidator());
 
 		MFXStepperToggle step2 = new MFXStepperToggle("Step 2", new MFXFontIcon("mfx-user", 16, Color.web("#49a6d7")));
-		VBox step2Box = new VBox(20, firstNameField, lastNameField, genderCombo);
+		VBox step2Box = new VBox(20, firstNameField, lastNameField);
 		step2Box.setAlignment(Pos.CENTER);
 		step2.setContent(step2Box);
 
@@ -127,36 +125,30 @@ public class RegistrationPageController
 		MFXTextField lastNameLabel2 = createLabel("");
 		lastNameLabel2.textProperty().bind(lastNameField.textProperty());
 
-		MFXTextField genderLabel1 = createLabel("Sesso: ");
-		MFXTextField genderLabel2 = createLabel("");
-		genderLabel2.textProperty().bind(Bindings.createStringBinding(
-				() -> genderCombo.getValue() != null ? genderCombo.getValue() : "",
-				genderCombo.valueProperty()
-		));
+
 
 		usernameLabel1.getStyleClass().add("header-label");
 		firstNameLabel1.getStyleClass().add("header-label");
 		lastNameLabel1.getStyleClass().add("header-label");
-		genderLabel1.getStyleClass().add("header-label");
 
 		HBox b1 = new HBox(usernameLabel1, usernameLabel2);
 		HBox b2 = new HBox(firstNameLabel1, firstNameLabel2);
 		HBox b3 = new HBox(lastNameLabel1, lastNameLabel2);
-		HBox b4 = new HBox(genderLabel1, genderLabel2);
 
 		b1.setMaxWidth(Region.USE_PREF_SIZE);
 		b2.setMaxWidth(Region.USE_PREF_SIZE);
 		b3.setMaxWidth(Region.USE_PREF_SIZE);
-		b4.setMaxWidth(Region.USE_PREF_SIZE);
 
-		VBox box = new VBox(10, b1, b2, b3, b4, checkbox);
+		VBox box = new VBox(10, b1, b2, b3, checkbox);
 		box.setAlignment(Pos.CENTER);
 		StackPane.setAlignment(box, Pos.CENTER);
 
 		stepper.setOnLastNext(event -> {
 			try
 			{
-				AutentificationHandler.getInstance().registerUser(loginField.getText(), passwordField.getText());
+				User user = new User(loginField.getText(), passwordField.getText(), firstNameField.getText(),
+						lastNameField.getText());
+				AutentificationHandler.getInstance().registerUser(user);
 				SceneHandler.getInstance().navTo(FXMLReferences.HOME);
 			}
 			catch (IOException e)
@@ -167,7 +159,7 @@ public class RegistrationPageController
 		stepper.setOnBeforePrevious(event -> {
 			if (stepper.isLastToggle()) {
 				checkbox.setSelected(false);
-				box.getChildren().setAll(b1, b2, b3, b4, checkbox);
+				box.getChildren().setAll(b1, b2, b3, checkbox);
 			}
 		});
 

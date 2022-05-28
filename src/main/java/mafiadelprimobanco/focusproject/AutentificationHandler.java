@@ -10,7 +10,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Collection;
 
+import mafiadelprimobanco.focusproject.model.User;
 import org.json.*;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -20,27 +22,9 @@ public class AutentificationHandler
 {
 	private static AutentificationHandler instance = new AutentificationHandler();
 
-	private Path databaseFile;
+	private User user;
 
-	private SecureRandom random = new SecureRandom();
-	private JSONObject databaseData;
-
-	private String user = "";
-
-	private AutentificationHandler() {
-
-		databaseFile = Path.of("database.db");
-
-		try
-		{
-			if (databaseFile.toFile().exists())
-			{
-				String data = new String(Files.readAllBytes(databaseFile));
-				databaseData = new JSONObject(data);
-			}
-		}
-		catch (IOException ignored) { }
-	}
+	private AutentificationHandler() { }
 
 	private boolean isLogged = false;
 
@@ -49,74 +33,35 @@ public class AutentificationHandler
 		return instance;
 	}
 
-	private boolean checkLoginData()
-	{
-		if (databaseData == null || databaseData.isEmpty()) return false;
-
-		return !((JSONObject)databaseData.get("default_user")).isEmpty();
-	}
-
 	public String getUser()
 	{
-		return user;
+		return user.username();
 	}
 
 	public boolean doLoginFromDatabase()
 	{
-		if (!checkLoginData()) return false;
+		User user = DatabaseHandler.getInstance().loadUser();
 
-		user = (String)((JSONObject)databaseData.get("default_user")).get("username");
+		if (user == null) return false;
+
+		this.user = user;
 
 		isLogged = true;
 
 		return true;
 	}
 
-	public boolean registerUser(String username, String password)
+	public boolean registerUser(User user)
 	{
-		JSONObject jsonDataArray;
 
-		if (databaseData == null)
-		{
-			JSONObject default_user = new JSONObject();
-
-			databaseData = new JSONObject();
-
-			default_user.put("password", "");
-			default_user.put("username", "");
-
-			databaseData.put("default_user", default_user);
-		}
-
-		jsonDataArray = (JSONObject)databaseData.get("default_user");
-
-		if (jsonDataArray.get("username").equals(username))
+		if (DatabaseHandler.getInstance().userAlreadyExist(user))
 		{
 			Feedback.getInstance().showError("Errore", "Utente già esistente");
 			return false;
 		}
 
-		try
-		{
-			byte[] salt = new byte[16];
-
-			random.nextBytes(salt);
-			KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-			jsonDataArray.put("username", username);
-			jsonDataArray.put("password", new String(factory.generateSecret(spec).getEncoded()));
-
-			if (!databaseFile.toFile().exists())
-				Files.createFile(databaseFile);
-
-			Files.writeString(databaseFile, databaseData.toString());
-		}
-		catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException e)
-		{
-			e.printStackTrace();
-		}
-
+		String encryptedPassword = BCrypt.hashpw(user.password(), BCrypt.gensalt(12));
+		DatabaseHandler.getInstance().insertUser(user, encryptedPassword);
 
 		return true;
 	}
