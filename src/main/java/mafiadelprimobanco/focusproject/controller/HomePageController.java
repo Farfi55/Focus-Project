@@ -3,7 +3,6 @@ package mafiadelprimobanco.focusproject.controller;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -11,15 +10,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
+import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
@@ -41,7 +38,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	@FXML private MFXComboBox<String> activitySelectorComboBox;
 
 	@FXML private MFXTextField activityTimeTextField;
-	@FXML private MFXProgressSpinner progressBarTime;
+	@FXML private MFXProgressSpinner activityProgressSpinner;
 
 	@FXML private MFXSpinner<Integer> hoursSpinnerSelector;
 	@FXML private MFXSpinner<Integer> minutesSpinnerSelector;
@@ -58,7 +55,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		ActivityHandler.getInstance().addListener(this);
 		KeyPressManager.getInstance().addHandler(this);
 
-		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
+		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer");
+//		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
 		activitySelectorComboBox.selectFirst();
 
 		loadTagsView();
@@ -91,7 +89,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		hoursSpinnerSelector.setOnCommit(e -> {
 			hourSpinnerModel.setValue(filterInput(e));
-			secondsSpinnerSelector.requestFocus();
+			minutesSpinnerSelector.requestFocus();
 		});
 		minutesSpinnerSelector.setOnCommit(e -> {
 			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
@@ -108,21 +106,17 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	}
 
 	@Override
-	public void onActivityStart()
+	public void onActivityStarting()
 	{
 		activityButton.setText("Interrompi");
 
-		activityTimeTextField.setPrefWidth(Region.USE_COMPUTED_SIZE);
+		showNode(activityTimeTextField);
 
-		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER)
+		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER)
 		{
-			ActivityHandler.getInstance().setExecutionTime(
-					hoursSpinnerSelector.getValue() * 60 * 60 + minutesSpinnerSelector.getValue() * 60
-							+ secondsSpinnerSelector.getValue());
+			ActivityHandler.getInstance().setChosenTimerDuration(getInputTimerDuration());
 			hideSpinners();
 		}
-
-//		homeRoot.setRight(null);
 
 		hideNode(homeRoot.getRight());
 		hideNode(activitySelectorComboBox);
@@ -133,20 +127,29 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		showNode(selectedTagColorCircle);
 
 
-		switch (ActivityHandler.getInstance().getCurrActivityType())
+		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
-			case CHRONOMETER -> progressBarTime.setProgress(0.0);
-			case TIMER -> progressBarTime.setProgress(1.0);
+			case CHRONOMETER -> activityProgressSpinner.setProgress(-1);
+			case TIMER -> activityProgressSpinner.setProgress(1.0);
 		}
+	}
+
+	private int getInputTimerDuration()
+	{
+		int secondsFromHoursSelector = hoursSpinnerSelector.getValue() * 60 * 60;
+		int secondsFromMinutesSelector = minutesSpinnerSelector.getValue() * 60;
+		int secondsFromSecondsSelector = secondsSpinnerSelector.getValue();
+
+		return secondsFromHoursSelector + secondsFromMinutesSelector + secondsFromSecondsSelector;
 	}
 
 	@Override
 	public void onActivityUpdateSafe()
 	{
-		switch (ActivityHandler.getInstance().getCurrActivityType())
+		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
-			case CHRONOMETER -> onChronometerUpdateTick();
-			case TIMER -> onTimerUpdateTick();
+			case CHRONOMETER -> onChronometerUpdate();
+			case TIMER -> onTimerUpdate();
 		}
 	}
 
@@ -158,7 +161,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		if (event.isControlDown())
 		{
-			if (event.getCode().equals(KeyCode.ENTER) && !ActivityHandler.getInstance().isActivityStarted())
+			if (event.getCode().equals(KeyCode.ENTER) && !ActivityHandler.getInstance().isActivityRunning())
 				startActivity();
 		}
 	}
@@ -178,43 +181,41 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	public void onActivityStop()
 	{
 		activityButton.setText("Avvia");
-		activityTimeTextField.setText("00:00");
-		progressBarTime.setProgress(0.0);
 
+		hideNode(activityTimeTextField);
 		hideNode(selectedTagText);
 		hideNode(selectedTagColorCircle);
 
-		activityTimeTextField.setPrefWidth(0);
-
-		if (ActivityHandler.getInstance().getCurrActivityType() != ActivityType.CHRONOMETER) showSpinners();
-
 		showNode(homeRoot.getRight());
 		showNode(activitySelectorComboBox);
+
+		activityTimeTextField.setText("00:00:00");
+		activityProgressSpinner.setProgress(0.0);
+
+		if (ActivityHandler.getInstance().getCurrentActivityType() != ActivityType.CHRONOMETER) showSpinners();
+
 	}
 
 
-	public void onTimerUpdateTick()
+	public void onTimerUpdate()
 	{
-		progressBarTime.setProgress(
-				progressBarTime.getProgress() - ActivityHandler.getInstance().getCurrentProgressBarTick());
-		activityTimeTextField.setText(ActivityHandler.getInstance().getCurrentTimeTick());
+		activityProgressSpinner.setProgress(1.0 - ActivityHandler.getInstance().getTimerActivityProgress());
+
+		int remainingSeconds = ActivityHandler.getInstance().getRemainingTimerDuration();
+		activityTimeTextField.setText(TimeUtils.formatTime(remainingSeconds));
 	}
 
-	public void onChronometerUpdateTick()
-	{
-		final double progressbarTick = ActivityHandler.getInstance().getCurrentProgressBarTick();
-		final double currProgressValue = progressBarTime.getProgress() + progressbarTick;
 
-		if (currProgressValue < 1.0) progressBarTime.setProgress(currProgressValue);
-		else progressBarTime.setProgress(0.0);
 
-		activityTimeTextField.setText(ActivityHandler.getInstance().getCurrentTimeTick());
+	public void onChronometerUpdate() {
+		int secondsElapsed = ActivityHandler.getInstance().getCurrentActivity().getSecondsSinceStart();
+		activityTimeTextField.setText(TimeUtils.formatTime(secondsElapsed));
 	}
 
 	@FXML
 	void toggleActivityState()
 	{
-		if (ActivityHandler.getInstance().isActivityStarted())
+		if (ActivityHandler.getInstance().isActivityRunning())
 		{
 			stopActivity();
 		}
@@ -226,15 +227,15 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	private void stopActivity()
 	{
-		switch (ActivityHandler.getInstance().getCurrActivityType())
+		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> {
 				if (Feedback.getInstance().askYesNoConfirmation("Interrompere attività",
 						"Sei sicuro di voler interrompere l'attività?"))
-					ActivityHandler.getInstance().stopCurrActivity();
+					ActivityHandler.getInstance().stopCurrentActivity();
 
 			}
-			case CHRONOMETER -> ActivityHandler.getInstance().stopCurrActivity();
+			case CHRONOMETER -> ActivityHandler.getInstance().stopCurrentActivity();
 		}
 	}
 
@@ -300,10 +301,10 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		ActivityHandler.getInstance().setActivityType(activityTypeSelected);
 
-		if (activityTypeSelected == ActivityType.CHRONOMETER) hideSpinners();
-		else showSpinners();
+		if (activityTypeSelected == ActivityType.TIMER) showSpinners();
+		else hideSpinners();
 
-		System.out.println("Activity type set to: " + ActivityHandler.getInstance().getCurrActivityType());
+		System.out.println("Activity type set to: " + ActivityHandler.getInstance().getCurrentActivityType());
 	}
 
 

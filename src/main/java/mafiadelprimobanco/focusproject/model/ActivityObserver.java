@@ -6,7 +6,7 @@ public interface ActivityObserver
 	/**
 	 * make sure to use Platform.runLater if you need to change a view
 	 */
-	default void onActivityStart() { }
+	default void onActivityStarting() { }
 
 	/**
 	 * make sure to use Platform.runLater if you need to change a view
@@ -21,7 +21,7 @@ public interface ActivityObserver
 	/**
 	 * Thread-safe version of onActivityStart()
 	 */
-	default void onActivityStartSafe() { }
+	default void onActivityStartingSafe() { }
 
 	/**
 	 * Thread-safe version of onActivityUpdate()
