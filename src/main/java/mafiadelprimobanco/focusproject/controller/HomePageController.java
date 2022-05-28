@@ -15,6 +15,7 @@ import javafx.scene.shape.Circle;
 import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -75,27 +76,31 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
 		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
 
-		minutesSpinnerSelector.valueProperty().addListener(e -> {
+		minutesSpinnerSelector.valueProperty().addListener(e ->
+		{
 			if (minutesSpinnerSelector.getValue() > 59) minutesSpinnerSelector.setValue(0);
-			else if (minutesSpinnerSelector.getValue() <  0) minutesSpinnerSelector.setValue(59);
+			else if (minutesSpinnerSelector.getValue() < 0) minutesSpinnerSelector.setValue(59);
 
 		});
 
 		secondsSpinnerSelector.valueProperty().addListener(e ->
 		{
 			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
-			else if (secondsSpinnerSelector.getValue() <  0) secondsSpinnerSelector.setValue(59);
+			else if (secondsSpinnerSelector.getValue() < 0) secondsSpinnerSelector.setValue(59);
 		});
 
-		hoursSpinnerSelector.setOnCommit(e -> {
+		hoursSpinnerSelector.setOnCommit(e ->
+		{
 			hourSpinnerModel.setValue(filterInput(e));
 			minutesSpinnerSelector.requestFocus();
 		});
-		minutesSpinnerSelector.setOnCommit(e -> {
+		minutesSpinnerSelector.setOnCommit(e ->
+		{
 			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
 			secondsSpinnerSelector.requestFocus();
 		});
-		secondsSpinnerSelector.setOnCommit(e -> {
+		secondsSpinnerSelector.setOnCommit(e ->
+		{
 			secondSpinnerModel.setValue(Math.min(filterInput(e), 59));
 			hoursSpinnerSelector.requestFocus();
 		});
@@ -134,15 +139,6 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		}
 	}
 
-	private int getInputTimerDuration()
-	{
-		int secondsFromHoursSelector = hoursSpinnerSelector.getValue() * 60 * 60;
-		int secondsFromMinutesSelector = minutesSpinnerSelector.getValue() * 60;
-		int secondsFromSecondsSelector = secondsSpinnerSelector.getValue();
-
-		return secondsFromHoursSelector + secondsFromMinutesSelector + secondsFromSecondsSelector;
-	}
-
 	@Override
 	public void onActivityUpdateSafe()
 	{
@@ -163,6 +159,19 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		{
 			if (event.getCode().equals(KeyCode.ENTER) && !ActivityHandler.getInstance().isActivityRunning())
 				startActivity();
+		}
+	}
+
+	@FXML
+	void toggleActivityState()
+	{
+		if (!ActivityHandler.getInstance().isActivityRunning())
+		{
+			if (canStartActivity()) startActivity();
+		}
+		else
+		{
+			stopActivity();
 		}
 	}
 
@@ -192,10 +201,11 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		activityTimeTextField.setText("00:00:00");
 		activityProgressSpinner.setProgress(0.0);
 
-		if (ActivityHandler.getInstance().getCurrentActivityType() != ActivityType.CHRONOMETER) showSpinners();
+		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
+
+		 Feedback.getInstance().showActivityRecap(ActivityHandler.getInstance().getCurrentActivity());
 
 	}
-
 
 	public void onTimerUpdate()
 	{
@@ -205,46 +215,33 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		activityTimeTextField.setText(TimeUtils.formatTime(remainingSeconds));
 	}
 
-
-
-	public void onChronometerUpdate() {
+	public void onChronometerUpdate()
+	{
 		int secondsElapsed = ActivityHandler.getInstance().getCurrentActivity().getSecondsSinceStart();
 		activityTimeTextField.setText(TimeUtils.formatTime(secondsElapsed));
 	}
 
-	@FXML
-	void toggleActivityState()
-	{
-		if (ActivityHandler.getInstance().isActivityRunning())
-		{
-			stopActivity();
-		}
-		else
-		{
-			if(canStartActivity())
-			startActivity();
-		}
-	}
 
 	private boolean canStartActivity()
 	{
-		return switch (ActivityHandler.getInstance().getCurrentActivityType()){
-			case CHRONOMETER -> true;
-			case TIMER -> canStartTimerActivity();
-			default -> throw new IllegalStateException(
-					"Unexpected value: " + ActivityHandler.getInstance().getCurrentActivityType());
-		};
+		return switch (ActivityHandler.getInstance().getCurrentActivityType())
+				{
+					case CHRONOMETER -> true;
+					case TIMER -> canStartTimerActivity();
+					default -> throw new IllegalStateException(
+							"Unexpected value: " + ActivityHandler.getInstance().getCurrentActivityType());
+				};
 	}
 
 	private boolean canStartTimerActivity()
 	{
 		// todo: move this into settings
-		int minTimerDuration = 600; // 10 min
-		if(getInputTimerDuration() < minTimerDuration)
+		int minTimerDuration = 10; // 10 secondi
+		if (getInputTimerDuration() < minTimerDuration)
 		{
 			Feedback.getInstance().showNotification("Durata attività invalida",
-					"Inserire una durata di attività di almeno " + TimeUtils.formatTime(minTimerDuration)+
-					"\nOppure cambiare la durata minima dalle impostazioni");
+					"Inserire una durata di attività di almeno " + TimeUtils.formatTime(minTimerDuration)
+							+ "\nOppure cambiare la durata minima dalle impostazioni");
 			return false;
 		}
 
@@ -276,8 +273,6 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		SceneHandler.getInstance().toggleFullScreen();
 	}
 
-
-
 	int filterInput(String num)
 	{
 		int currVal = 0;
@@ -294,7 +289,6 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		return currVal;
 	}
 
-
 	private void showSpinners() { setSpinnersVisible(true); }
 
 	private void hideSpinners() { setSpinnersVisible(false); }
@@ -307,6 +301,15 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		node.setVisible(visible);
 		node.setManaged(visible);
+	}
+
+	private int getInputTimerDuration()
+	{
+		int secondsFromHoursSelector = hoursSpinnerSelector.getValue() * 60 * 60;
+		int secondsFromMinutesSelector = minutesSpinnerSelector.getValue() * 60;
+		int secondsFromSecondsSelector = secondsSpinnerSelector.getValue();
+
+		return secondsFromHoursSelector + secondsFromMinutesSelector + secondsFromSecondsSelector;
 	}
 
 	private void setSpinnersVisible(boolean value)

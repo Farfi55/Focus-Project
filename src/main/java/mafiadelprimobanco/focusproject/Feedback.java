@@ -15,7 +15,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mafiadelprimobanco.focusproject.model.DefaultNotification;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
+import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
+import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 public class Feedback
@@ -294,6 +299,36 @@ public class Feedback
 		notification.setHeaderText(header);
 		notification.setContentText(message);
 		MFXNotificationSystem.instance().setPosition(position).publish(notification);
+	}
+
+	public void showActivityRecap(AbstractActivity activity)
+	{
+		if (activity == null || !activity.hasEnded()) return;
+
+		if (activity instanceof ChronometerActivity chronometerActivity) showChronometerActivityRecap(
+				chronometerActivity);
+		else if (activity instanceof TimerActivity timerActivity) showTimerActivityRecap(timerActivity);
+
+	}
+
+	private void showChronometerActivityRecap(ChronometerActivity chronometerActivity)
+	{
+		showInfo("Recap attività cronometro",
+				"iniziato a: " + chronometerActivity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
+						+ "\nfinito a: " + chronometerActivity.getEndTime()
+						.toLocalTime()
+						.truncatedTo(ChronoUnit.SECONDS) + "\ndurata totale: " + TimeUtils.formatTime(
+						chronometerActivity.getFinalDuration()));
+	}
+
+	private void showTimerActivityRecap(TimerActivity timerActivity)
+	{
+		showInfo("Recap attività timer",
+				"iniziato a: " + timerActivity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
+						+ "\nfinito a: " + timerActivity.getEndTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
+						+ "\ndurata totale: " + TimeUtils.formatTime(timerActivity.getFinalDuration())
+						+ "\ndurata scelta: " + TimeUtils.formatTime(timerActivity.getChosenDuration())
+						+ "\ncompletamento: " + (int)(timerActivity.getProgress() * 100) + "%");
 	}
 
 

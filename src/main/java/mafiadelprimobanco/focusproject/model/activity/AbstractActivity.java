@@ -86,6 +86,6 @@ public abstract class AbstractActivity
 	public int getFinalDuration()
 	{
 		assert (!isRunning());
-		return (int)SECONDS.between(endTime, startTime);
+		return (int)SECONDS.between(startTime, endTime);
 	}
 }
