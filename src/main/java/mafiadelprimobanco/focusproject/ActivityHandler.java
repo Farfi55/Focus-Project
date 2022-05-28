@@ -37,7 +37,7 @@ public class ActivityHandler
 
 		currentActivity.setTagUuid(TagHandler.getInstance().getSelectedTag().getUuid());
 		currentActivity.startActivity();
-		invokeOnStartActivity();
+		invokeOnActivityStarting();
 
 		switch (currentActivityType)
 		{
@@ -68,7 +68,7 @@ public class ActivityHandler
 			activityTimer = null;
 		}
 
-		invokeOnEndActivity();
+		invokeOnActivityEnd();
 
 		Platform.runLater(() -> currentActivity = createActivity());
 	}
@@ -85,7 +85,7 @@ public class ActivityHandler
 			@Override
 			public void run()
 			{
-				invokeOnUpdateActivity();
+				invokeOnActivityUpdate();
 
 				if (timerActivity.getRemainingDuration() == 0) stopCurrentActivity();
 			}
@@ -100,7 +100,7 @@ public class ActivityHandler
 			@Override
 			public void run()
 			{
-				invokeOnUpdateActivity();
+				invokeOnActivityUpdate();
 			}
 		}, 0, 1000);
 	}
@@ -117,7 +117,7 @@ public class ActivityHandler
 		listeners.remove(observer);
 	}
 
-	private void invokeOnStartActivity()
+	private void invokeOnActivityStarting()
 	{
 		for (ActivityObserver observer : listeners)
 			observer.onActivityStarting();
@@ -129,7 +129,7 @@ public class ActivityHandler
 		});
 	}
 
-	private void invokeOnUpdateActivity()
+	private void invokeOnActivityUpdate()
 	{
 		for (ActivityObserver observer : listeners)
 			observer.onActivityUpdate();
@@ -141,7 +141,7 @@ public class ActivityHandler
 		});
 	}
 
-	private void invokeOnEndActivity()
+	private void invokeOnActivityEnd()
 	{
 		for (ActivityObserver observer : listeners)
 			observer.onActivityEnd();

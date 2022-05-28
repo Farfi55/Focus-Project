@@ -221,8 +221,34 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		}
 		else
 		{
+			if(canStartActivity())
 			startActivity();
 		}
+	}
+
+	private boolean canStartActivity()
+	{
+		return switch (ActivityHandler.getInstance().getCurrentActivityType()){
+			case CHRONOMETER -> true;
+			case TIMER -> canStartTimerActivity();
+			default -> throw new IllegalStateException(
+					"Unexpected value: " + ActivityHandler.getInstance().getCurrentActivityType());
+		};
+	}
+
+	private boolean canStartTimerActivity()
+	{
+		// todo: move this into settings
+		int minTimerDuration = 600; // 10 min
+		if(getInputTimerDuration() < minTimerDuration)
+		{
+			Feedback.getInstance().showNotification("Durata attività invalida",
+					"Inserire una durata di attività di almeno " + TimeUtils.formatTime(minTimerDuration)+
+					"\nOppure cambiare la durata minima dalle impostazioni");
+			return false;
+		}
+
+		return true;
 	}
 
 	private void stopActivity()
