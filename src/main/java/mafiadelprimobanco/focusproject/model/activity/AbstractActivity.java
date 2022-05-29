@@ -7,26 +7,18 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 public abstract class AbstractActivity
 {
 	protected Integer tagUuid;
+	protected Integer treeUuid;
 	protected LocalDateTime startTime;
 	protected LocalDateTime endTime;
 
 	public AbstractActivity() { }
 
-	public AbstractActivity(Integer tagUuid)
-	{
-		this.tagUuid = tagUuid;
-	}
 
-	public AbstractActivity(Integer tagUuid, LocalDateTime startTime)
-	{
-		this.tagUuid = tagUuid;
-		this.startTime = startTime;
-	}
-
-	public AbstractActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime)
+	public AbstractActivity(Integer tagUuid, Integer treeUuid, LocalDateTime startTime, LocalDateTime endTime)
 	{
 		assert (!endTime.isBefore(startTime));
 		this.tagUuid = tagUuid;
+		this.treeUuid = treeUuid;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
@@ -49,6 +41,11 @@ public abstract class AbstractActivity
 	public boolean hasEnded()
 	{
 		return endTime != null;
+	}
+
+	public Integer getTreeUuid()
+	{
+		return treeUuid;
 	}
 
 	public boolean isRunning()
@@ -87,5 +84,10 @@ public abstract class AbstractActivity
 	{
 		assert (!isRunning());
 		return (int)SECONDS.between(startTime, endTime);
+	}
+
+	public void setTreeUuid(Integer treeUuid)
+	{
+		this.treeUuid = treeUuid;
 	}
 }
