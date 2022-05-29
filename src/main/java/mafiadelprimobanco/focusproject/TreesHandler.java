@@ -18,10 +18,10 @@ public class TreesHandler
 
 	public TreesHandler()
 	{
-		createTrees();
+		loadTrees();
 	}
 
-	private void createTrees()
+	private void loadTrees()
 	{
 		// TESTING ONLY
 		String deadTree = "trees/testingDeadTree.png";

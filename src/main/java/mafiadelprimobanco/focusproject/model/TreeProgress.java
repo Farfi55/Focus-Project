@@ -1,9 +1,12 @@
 package mafiadelprimobanco.focusproject.model;
 
+import mafiadelprimobanco.focusproject.TreesHandler;
+
 public class TreeProgress
 {
 
-	private final TreeTemplate tree;
+	private final Integer treeUuid;
+
 	/**
 	 * time in seconds required to unlock this tree
 	 */
@@ -13,16 +16,16 @@ public class TreeProgress
 	 */
 	private Integer progressTime;
 
-	public TreeProgress(TreeTemplate tree, Integer totalRequiredTime, Integer progressTime)
+	public TreeProgress(Integer treeUuid, Integer totalRequiredTime, Integer progressTime)
 	{
-		this.tree = tree;
+		this.treeUuid = treeUuid;
 		this.totalRequiredTime = totalRequiredTime;
 		this.progressTime = progressTime;
 	}
 
-	public TreeProgress(TreeTemplate tree, Integer totalRequiredTime)
+	public TreeProgress(Integer treeUuid, Integer totalRequiredTime)
 	{
-		this.tree = tree;
+		this.treeUuid = treeUuid;
 		this.totalRequiredTime = totalRequiredTime;
 		this.progressTime = 0;
 	}
@@ -48,7 +51,16 @@ public class TreeProgress
 
 	public TreeTemplate getTree()
 	{
-		return tree;
+		return TreesHandler.getInstance().getTree(treeUuid);
+	}
+	public String getTreeName()
+	{
+		return TreesHandler.getInstance().getTree(treeUuid).name();
+	}
+
+	public Integer getTreeUuid()
+	{
+		return treeUuid;
 	}
 
 	public Integer getTotalRequiredTime()
