@@ -1,6 +1,6 @@
 package mafiadelprimobanco.focusproject.model;
 
-import mafiadelprimobanco.focusproject.TreesHandler;
+import mafiadelprimobanco.focusproject.TreeHandler;
 
 public class TreeProgress
 {
@@ -51,11 +51,11 @@ public class TreeProgress
 
 	public TreeTemplate getTree()
 	{
-		return TreesHandler.getInstance().getTree(treeUuid);
+		return TreeHandler.getInstance().getTree(treeUuid);
 	}
 	public String getTreeName()
 	{
-		return TreesHandler.getInstance().getTree(treeUuid).name();
+		return TreeHandler.getInstance().getTree(treeUuid).name();
 	}
 
 	public Integer getTreeUuid()

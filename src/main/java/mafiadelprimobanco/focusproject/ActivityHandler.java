@@ -3,6 +3,7 @@ package mafiadelprimobanco.focusproject;
 import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
+import mafiadelprimobanco.focusproject.model.TreeTemplate;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -70,7 +71,9 @@ public class ActivityHandler
 
 		invokeOnActivityEnd();
 
+		// todo: make this safer
 		Platform.runLater(() -> currentActivity = createActivity());
+
 	}
 
 	private void startTimerActivity()
@@ -94,7 +97,6 @@ public class ActivityHandler
 
 	private void startChronometerActivity()
 	{
-
 		activityTimer.scheduleAtFixedRate(new TimerTask()
 		{
 			@Override
@@ -151,6 +153,13 @@ public class ActivityHandler
 			for (ActivityObserver observer : listeners)
 				observer.onActivityEndSafe();
 		});
+	}
+
+	public void setActivityTree(TreeTemplate chosenTree) { setActivityTree(chosenTree.uuid());}
+
+	public void setActivityTree(Integer chosenTreeUuid)
+	{
+		currentActivity.setTreeUuid(chosenTreeUuid);
 	}
 
 	public boolean isActivityRunning()

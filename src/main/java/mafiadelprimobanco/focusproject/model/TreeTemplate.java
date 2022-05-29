@@ -15,4 +15,9 @@ public record TreeTemplate(Integer uuid, String name, String matureTreeSprite, S
 		return new Image(deadTreeSprite);
 	}
 
+	@Override
+	public String toString()
+	{
+		return name;
+	}
 }

@@ -5,18 +5,18 @@ import mafiadelprimobanco.focusproject.model.TreeTemplate;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class TreesHandler
+public class TreeHandler
 {
-	private static final TreesHandler instance = new TreesHandler();
+	private static final TreeHandler instance = new TreeHandler();
 
-	public static TreesHandler getInstance()
+	public static TreeHandler getInstance()
 	{
 		return instance;
 	}
 
-	private HashMap<Integer, TreeTemplate> trees = new HashMap<>();
+	private final HashMap<Integer, TreeTemplate> trees = new HashMap<>();
 
-	public TreesHandler()
+	public TreeHandler()
 	{
 		loadTrees();
 	}
