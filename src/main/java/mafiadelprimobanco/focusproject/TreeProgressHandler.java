@@ -25,6 +25,7 @@ public class TreeProgressHandler implements ActivityObserver
 	private TreeProgressHandler()
 	{
 		loadTrees();
+		setSelectedTreeToUnlock(getFirstTreeToUnlock());
 		ActivityHandler.getInstance().addListener(this);
 	}
 
@@ -105,6 +106,7 @@ public class TreeProgressHandler implements ActivityObserver
 		}
 		else
 		{
+
 			Feedback.getInstance().showNotification("Report progressi albero",
 					"Aggiunti " + seconds + " secondi all'albero '" + selectedTreeToUnlock.get().getTree() + "'"
 							+ "\nMancano solo altri " + selectedTreeToUnlock.get().getRemainingRequiredTime()
@@ -144,7 +146,7 @@ public class TreeProgressHandler implements ActivityObserver
 
 	public void setSelectedTreeToUnlock(Integer uuid)
 	{
-		if (treesToUnlock.contains(uuid) || !trees.containsKey(uuid))
+		if (!treesToUnlock.contains(uuid) || !trees.containsKey(uuid))
 		{
 			System.out.println("there is no tree with uuid " + uuid + " to unlock");
 			return;
