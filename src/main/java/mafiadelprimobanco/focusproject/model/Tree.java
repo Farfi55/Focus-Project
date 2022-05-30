@@ -31,7 +31,7 @@ public class Tree
 	}
 
 
-	public int addTime(Integer seconds)
+	public int addProgressTime(Integer seconds)
 	{
 		assert seconds >= 0;
 
@@ -81,6 +81,12 @@ public class Tree
 	public boolean isUnlocked()
 	{
 		return progressTime.equals(totalRequiredTime);
+	}
+
+	public float getUnlockProgress()
+	{
+		if (totalRequiredTime == 0) return 1.0f;
+		else return (float)getProgressTime() / getTotalRequiredTime();
 	}
 
 }

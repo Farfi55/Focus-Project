@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Tree;
@@ -17,9 +18,12 @@ public class TreeHandler implements ActivityObserver
 	}
 
 	private final SimpleObjectProperty<Tree> selectedTreeToUnlock = new SimpleObjectProperty<>();
+	private final SimpleIntegerProperty unusedProgressTime = new SimpleIntegerProperty();
 	HashMap<Integer, Tree> trees = new HashMap<>();
 	HashSet<Integer> treesToUnlock = new HashSet<>();
 	HashSet<Integer> unlockedTrees = new HashSet<>();
+
+
 
 	private TreeHandler()
 	{
@@ -28,11 +32,12 @@ public class TreeHandler implements ActivityObserver
 		ActivityHandler.getInstance().addListener(this);
 	}
 
+
 	@Override
-	public void onActivityEndSafe()
+	public void onActivityEnd()
 	{
 		int duration = ActivityHandler.getInstance().getCurrentActivity().getFinalDuration();
-		addProgress(duration);
+		addProgressTime(duration);
 	}
 
 	private void loadTrees()
@@ -53,57 +58,41 @@ public class TreeHandler implements ActivityObserver
 		}
 	}
 
-	private void addProgress(int seconds)
+
+	private void addProgressTime(int seconds)
 	{
 		assert seconds >= 0;
-		if (treesToUnlock.isEmpty())
+		if (selectedTreeToUnlock.get().isUnlocked()) selectedTreeToUnlock.set(null);
+
+		if (selectedTreeToUnlock.get() != null)
 		{
-			Feedback.getInstance().showNotification("Nessun albero da sbloccare",
-					"Non è rimasto nessun albero da sbloccare.");
-			return;
-		}
-		else if (selectedTreeToUnlock.get() == null)
-		{
-			selectedTreeToUnlock.set(getFirstTreeToUnlock());
-			Feedback.getInstance().showNotification("Nessun albero da sbloccare selezionato",
-					"Non è stato selezionato un albero al quale aggiungere il tempo impiegato nell'attività"
-							+ "\nIl tempo verrà impiegato per l'albero " + selectedTreeToUnlock.get().getName());
-
-		}
-
-		int overflow = selectedTreeToUnlock.get().addTime(seconds);
-
-		if (selectedTreeToUnlock.get().isUnlocked())
-		{
-			treesToUnlock.remove(selectedTreeToUnlock.get().getUuid());
-			Tree newSelectedTree = getFirstTreeToUnlock();
-
-			String feedbackMessage =
-					"Complimenti!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'";
-			if (newSelectedTree != null)
+			int overflow = selectedTreeToUnlock.get().addProgressTime(seconds);
+			if (selectedTreeToUnlock.get().isUnlocked())
 			{
-				feedbackMessage += "\nè stato automaticamente selezionato l'albero '" + newSelectedTree.getName()
-						+ "'.\nPuoi sceglierne uno nuovo in qualsiasi momento dalla pagina progressi.";
+				Feedback.getInstance().showNotification("Albero Sbloccato!",
+						"Evviva!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'");
+
+				treesToUnlock.remove(selectedTreeToUnlock.get().getUuid());
 			}
-
-			Feedback.getInstance().showNotification("Albero Sbloccato!", feedbackMessage);
-			selectedTreeToUnlock.set(newSelectedTree);
-			if (overflow > 0 && newSelectedTree != null) addProgress(overflow);
+			unusedProgressTime.add(overflow);
 		}
-		else
-		{
-
-			Feedback.getInstance().showNotification("Report progressi albero",
-					"Aggiunti " + seconds + " secondi all'albero '" + selectedTreeToUnlock.get().getName() + "'"
-							+ "\nMancano solo altri " + selectedTreeToUnlock.get().getRemainingRequiredTime()
-							+ " secondi per sbloccarlo!");
-		}
-
+		else unusedProgressTime.add(seconds);
 	}
+
 
 	public Tree getTree(int uuid)
 	{
 		return trees.get(uuid);
+	}
+
+	public SimpleIntegerProperty getUnusedProgressTimeProperty()
+	{
+		return unusedProgressTime;
+	}
+
+	public int getUnusedProgressTime()
+	{
+		return unusedProgressTime.get();
 	}
 
 	public HashMap<Integer, Tree> getTrees()

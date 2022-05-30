@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mafiadelprimobanco.focusproject.model.DefaultNotification;
+import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -305,33 +306,67 @@ public class Feedback
 	{
 		if (activity == null || !activity.hasEnded()) return;
 
-		if (activity instanceof ChronometerActivity chronometerActivity) showChronometerActivityRecap(
-				chronometerActivity);
-		else if (activity instanceof TimerActivity timerActivity) showTimerActivityRecap(timerActivity);
+		String header = "";
+		StringBuilder message = new StringBuilder(baseActivityRecap(activity));
 
+		if (activity instanceof ChronometerActivity chronometerActivity)
+		{
+			header = "Recap attività cronometro";
+			message.append(chronometerActivityRecap(chronometerActivity));
+		}
+		else if (activity instanceof TimerActivity timerActivity)
+		{
+			header = "Recap attività timer";
+			message.append(timerActivityRecap(timerActivity));
+		}
+		else throw new IllegalArgumentException();
+
+		message.append(tagActivityRecap());
+		message.append(treeProgressActivityRecap());
+
+		showInfo(header, message.toString());
 	}
 
-	private void showChronometerActivityRecap(ChronometerActivity chronometerActivity)
+	private String baseActivityRecap(AbstractActivity activity)
 	{
-		showInfo("Recap attività cronometro",
-				"iniziato a: " + chronometerActivity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
-						+ "\nfinito a: " + chronometerActivity.getEndTime()
-						.toLocalTime()
-						.truncatedTo(ChronoUnit.SECONDS) + "\ndurata totale: " + TimeUtils.formatTime(
-						chronometerActivity.getFinalDuration()));
+		return "iniziato a: " + activity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS) + "\nfinito a: "
+				+ activity.getEndTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS) + "\ndurata totale: "
+				+ TimeUtils.formatTime(activity.getFinalDuration());
 	}
 
-	private void showTimerActivityRecap(TimerActivity timerActivity)
+	private String chronometerActivityRecap(ChronometerActivity chronometerActivity)
 	{
-		showInfo("Recap attività timer",
-				"iniziato a: " + timerActivity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
-						+ "\nfinito a: " + timerActivity.getEndTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS)
-						+ "\ndurata totale: " + TimeUtils.formatTime(timerActivity.getFinalDuration())
-						+ "\ndurata scelta: " + TimeUtils.formatTime(timerActivity.getChosenDuration())
-						+ "\ncompletamento: " + (int)(timerActivity.getProgress() * 100) + "%");
+		return "";
 	}
 
+	private String timerActivityRecap(TimerActivity timerActivity)
+	{
 
+		return ("\ndurata scelta: " + TimeUtils.formatTime(timerActivity.getChosenDuration())
+				+ "\ncompletamento attività: " + (int)(timerActivity.getProgress() * 100) + "%");
+	}
+
+	private String tagActivityRecap()
+	{
+		return "";
+	}
+
+	private String treeProgressActivityRecap()
+	{
+		String message = "\nRecap progressi sugli alberi";
+		Tree selectedTreeToUnlock = TreeHandler.getInstance().getSelectedTreeToUnlock();
+		if (selectedTreeToUnlock != null)
+		{
+			// todo: ingaggiare qualcuno che sappia scrivere italiano
+			message += "\nAlbero selezionato da sbloccare: '" + selectedTreeToUnlock.getName() + "'"
+					+ "\ntempo impiegato: " + TimeUtils.formatTime(selectedTreeToUnlock.getProgressTime()) + " su "
+					+ TimeUtils.formatTime(selectedTreeToUnlock.getTotalRequiredTime());
+			message += "\n% completamento: " + (int)(selectedTreeToUnlock.getUnlockProgress() * 100) + "%";
+			message += "\ntempo rimanente: " + TimeUtils.formatTime(selectedTreeToUnlock.getRemainingRequiredTime());
+		}
+		message += "\ntempo non utilizzato: " + TimeUtils.formatTime(TreeHandler.getInstance().getUnusedProgressTime());
+		return message;
+	}
 
 	/*
 	* legacy showMessages

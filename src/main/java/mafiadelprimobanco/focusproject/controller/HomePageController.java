@@ -2,6 +2,7 @@ package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -203,14 +204,16 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		showNode(homeRoot.getRight());
 		showNode(activitySelectorComboBox);
 
-		activityTimeTextField.setText("00:00:00");
+		activityTimeTextField.setText(TimeUtils.formatTime(0));
 		activityProgressSpinner.setProgress(0.0);
 
 		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
 
-		 Feedback.getInstance().showActivityRecap(ActivityHandler.getInstance().getCurrentActivity());
+		Feedback.getInstance().showActivityRecap(ActivityHandler.getInstance().getCurrentActivity());
 
 	}
+
+
 
 	public void onTimerUpdate()
 	{
@@ -229,13 +232,13 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	private boolean canStartActivity()
 	{
-		if(chosenActivityTree == null)
+		if (chosenActivityTree == null)
 		{
 			Feedback.getInstance().showNotification("Nessun Albero selezionato",
 					"Devi scegliere un albero per l'attività");
 			return false;
 		}
-		else if(!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
+		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
 			Feedback.getInstance().showNotification("Albero selezionato non sbloccato",
 					"Devi scegliere un albero già sbloccato per l'attività");

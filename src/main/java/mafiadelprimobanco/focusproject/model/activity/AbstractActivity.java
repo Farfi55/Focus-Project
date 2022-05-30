@@ -1,5 +1,10 @@
 package mafiadelprimobanco.focusproject.model.activity;
 
+import mafiadelprimobanco.focusproject.TagHandler;
+import mafiadelprimobanco.focusproject.TreeHandler;
+import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.model.Tree;
+
 import java.time.LocalDateTime;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
@@ -48,6 +53,16 @@ public abstract class AbstractActivity
 		return treeUuid;
 	}
 
+	public void setTreeUuid(Integer treeUuid)
+	{
+		this.treeUuid = treeUuid;
+	}
+
+	public Tree getTree()
+	{
+		return TreeHandler.getInstance().getTree(treeUuid);
+	}
+
 	public boolean isRunning()
 	{
 		return startTime != null && endTime == null;
@@ -62,6 +77,11 @@ public abstract class AbstractActivity
 	{
 		assert (this.tagUuid == null);
 		this.tagUuid = tagUuid;
+	}
+
+	public Tag getTag()
+	{
+		return TagHandler.getInstance().getTag(tagUuid);
 	}
 
 	public LocalDateTime getStartTime()
@@ -84,10 +104,5 @@ public abstract class AbstractActivity
 	{
 		assert (!isRunning());
 		return (int)SECONDS.between(startTime, endTime);
-	}
-
-	public void setTreeUuid(Integer treeUuid)
-	{
-		this.treeUuid = treeUuid;
 	}
 }
