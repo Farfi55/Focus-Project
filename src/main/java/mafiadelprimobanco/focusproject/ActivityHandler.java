@@ -3,7 +3,7 @@ package mafiadelprimobanco.focusproject;
 import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
-import mafiadelprimobanco.focusproject.model.TreeTemplate;
+import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -155,12 +155,13 @@ public class ActivityHandler
 		});
 	}
 
-	public void setActivityTree(TreeTemplate chosenTree) { setActivityTree(chosenTree.uuid());}
+	public void setActivityTree(Tree chosenTree) { setActivityTree(chosenTree.getUuid());}
 
 	public void setActivityTree(Integer chosenTreeUuid)
 	{
 		currentActivity.setTreeUuid(chosenTreeUuid);
 	}
+
 
 	public boolean isActivityRunning()
 	{
@@ -171,6 +172,7 @@ public class ActivityHandler
 	{
 		return currentActivity;
 	}
+
 
 	public int getRemainingTimerDuration()
 	{

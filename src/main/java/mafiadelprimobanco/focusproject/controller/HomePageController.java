@@ -15,8 +15,7 @@ import javafx.scene.shape.Circle;
 import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
-import mafiadelprimobanco.focusproject.model.TreeTemplate;
-import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -51,7 +50,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	@FXML private MFXButton activityButton;
 
-	private TreeTemplate chosenTree;
+	private Tree chosenActivityTree;
 
 	@FXML
 	void initialize()
@@ -65,7 +64,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		loadTagsView();
 
-		chosenTree = TreeProgressHandler.getInstance().getFirstUnlockedTree().getTree();
+		chosenActivityTree = TreeHandler.getInstance().getFirstUnlockedTree();
 
 		var hourSpinnerModel = new IntegerSpinnerModel(0);
 		var minuteSpinnerModel = new IntegerSpinnerModel(0);
@@ -122,7 +121,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		showNode(activityTimeTextField);
 
-		ActivityHandler.getInstance().setActivityTree(chosenTree);
+		ActivityHandler.getInstance().setActivityTree(chosenActivityTree);
 		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER)
 		{
 			ActivityHandler.getInstance().setChosenTimerDuration(getInputTimerDuration());
@@ -230,13 +229,13 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	private boolean canStartActivity()
 	{
-		if(chosenTree == null)
+		if(chosenActivityTree == null)
 		{
 			Feedback.getInstance().showNotification("Nessun Albero selezionato",
 					"Devi scegliere un albero per l'attività");
 			return false;
 		}
-		else if(!TreeProgressHandler.getInstance().getUnlockedTrees().contains(chosenTree.uuid()))
+		else if(!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
 			Feedback.getInstance().showNotification("Albero selezionato non sbloccato",
 					"Devi scegliere un albero già sbloccato per l'attività");
