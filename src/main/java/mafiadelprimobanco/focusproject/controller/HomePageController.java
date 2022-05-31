@@ -37,6 +37,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	// selected tag controls
 	@FXML private Circle selectedTagColorCircle;
 	@FXML private Label selectedTagText;
+	@FXML private Node selectedTagRoot;
 
 	@FXML private MFXComboBox<String> activitySelectorComboBox;
 
@@ -137,8 +138,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		selectedTagText.setText(TagHandler.getInstance().getSelectedTag().getName());
 		selectedTagColorCircle.setFill(TagHandler.getInstance().getSelectedTag().getColor());
-		showNode(selectedTagText);
-		showNode(selectedTagColorCircle);
+		showNode(selectedTagRoot);
 
 		treePhase = 0;
 		treeImageViewer.setImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
@@ -235,8 +235,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		activityButton.setText("Avvia");
 
 		hideNode(activityTimeLabel);
-		hideNode(selectedTagText);
-		hideNode(selectedTagColorCircle);
+
+		hideNode(selectedTagRoot);
 
 		showNode(homeRoot.getRight());
 		showNode(activitySelectorComboBox);

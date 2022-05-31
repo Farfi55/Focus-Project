@@ -130,6 +130,10 @@
 
 #homeFullScreenButton {
     -fx-background-color: transparent;
+    -fx-fill: palette2-2;
+}
+#homeFullScreenButton * {
+    -fx-fill: palette2-2;
 }
 
 /*#homeProgressDisplay{*/
@@ -137,25 +141,76 @@
 /*}*/
 
 #homeRoot .mfx-spinner {
+    -fx-background-color: palette1-3;
+    -fx-background-radius: 30px;
+    -fx-border-color: palette2-2;
+    -fx-padding: 5px 5px 5px 5px;
+    -fx-border-radius: 30px;
+    /*-fx-effect: innershadow(gaussian, palette1-3, 15, 0.4, 0, 0);*/
+}
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper{
+    -fx-translate-x: 15px;
+    -fx-background-color: palette1-1;
+    -fx-border-color: palette2-3;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50%;
+}
+#homeRoot .mfx-spinner .mfx-icon-wrapper:hover{
     -fx-background-color: palette1-0;
-    -fx-border-color: palette2-1;
-    -fx-padding: 5px 10px 5px 10px;
+}
+
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper .mfx-font-icon{
+    -mfx-color: palette2-3;
 }
 
 
 #homeRoot .mfx-spinner .mfx-text-field{
-    -fx-pref-width: 80px;
-    -fx-min-width: 80px;
+    -fx-pref-width: 50px;
+    -fx-min-width: 50px;
     -fx-background-color: palette1-0;
-    -fx-border-color: palette2-1;
+    -fx-border-color: palette2-2;
     -fx-text-alignment: center;
 }
 
+#homeSelectedTagRoot {
+    -fx-background-color: palette1-3;
+    -fx-background-radius: 25px;
+    -fx-padding: 10px 20px 10px 20px;
+    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 3);
+}
+
+#homeSelectedTagRoot * {
+    -fx-text-fill: palette4-1;
+    -fx-font-size: 20px;
+    -fx-font-family: "Roboto";
+
+}
+
+#homeActivityTimeLabel {
+    -fx-background-color: palette2-1;
+    -fx-background-radius: 40px;
+    -fx-padding: 0 20px 0 20px;
+    -fx-text-fill: palette1-1;
+    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 3);
+}
+
+#homeActivityTimeLabel .text{
+    -fx-font-size: 48px;
+    -fx-font-family: "Roboto";
+}
+
+
 #homeProgressDisplay .mfx-progress-spinner {
-    -mfx-color1: palette2-2;
+    /*-mfx-color1: palette2-1;*/
+    /*-mfx-color2: palette2-3;*/
+    /*-mfx-color3: palette2-4;*/
+    /*-mfx-color4: palette2-2;*/
 }
 
 #homeTreeBackground {
+    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 0);
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
 }
@@ -182,7 +237,7 @@
 }
 
 #homePageTagsRoot .label {
-    -fx-background-color: palette1-1;
+    -fx-background-color: palette1-3;
     -fx-background-radius: 23px;
     -fx-padding: 5px 25px 5px 25px;
     -fx-text-fill: palette3-2;
