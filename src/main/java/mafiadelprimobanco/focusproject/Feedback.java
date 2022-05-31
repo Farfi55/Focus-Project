@@ -374,11 +374,11 @@ public class Feedback
 
 	private void baseActivityRecap(TextFlow textContent, AbstractActivity activity)
 	{
-		addText(textContent, "iniziato a: ");
+		addText(textContent, "iniziato a: \t");
 		addBoldText(textContent, activity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
-		addText(textContent, "\nfinito a: ");
+		addText(textContent, "\nfinito a:   \t");
 		addBoldText(textContent, activity.getEndTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
-		addText(textContent, "\ndurata totale: ");
+		addText(textContent, "\ndurata totale: \t");
 		addBoldText(textContent, TimeUtils.formatTime(activity.getFinalDuration()));
 	}
 
@@ -389,9 +389,9 @@ public class Feedback
 	private void timerActivityRecap(TextFlow textContent, TimerActivity timerActivity)
 	{
 
-		addText(textContent, "\ndurata scelta: ");
+		addText(textContent, "\ndurata scelta: \t");
 		addBoldText(textContent, TimeUtils.formatTime(timerActivity.getChosenDuration()));
-		addText(textContent, "\ncompletamento attività: ");
+		addText(textContent, "\ncompletamento attività: \t");
 		textContent.getChildren().add(new MFXProgressBar(timerActivity.getProgress()));
 		addText(textContent, " " + (int)(timerActivity.getProgress() * 100) + "%");
 	}
@@ -402,28 +402,28 @@ public class Feedback
 
 	private void treeProgressActivityRecap(TextFlow textContent)
 	{
-		addText(textContent, "\nRecap progressi sugli alberi", FontWeight.BLACK);
+		addText(textContent, "\n\nRecap progressi sugli alberi", FontWeight.BLACK);
 		Tree selectedTreeToUnlock = TreeHandler.getInstance().getSelectedTreeToUnlock();
-		addText(textContent, "\nAlbero selezionato da sbloccare: ");
+		addText(textContent, "\nAlbero selezionato da sbloccare: \t");
 		if (selectedTreeToUnlock != null)
 		{
 			addText(textContent, "'" + selectedTreeToUnlock.getName() + "'", FontWeight.MEDIUM);
 			// todo: ingaggiare qualcuno che sappia scrivere italiano
-			addText(textContent, "\ntempo impiegato: ");
+			addText(textContent, "\ntempo impiegato: \t");
 			addBoldText(textContent,
 					TimeUtils.formatTime(selectedTreeToUnlock.getProgressTime()) + " su " + TimeUtils.formatTime(
 							selectedTreeToUnlock.getTotalRequiredTime()));
-			addText(textContent, "\n% completamento: ");
+			addText(textContent, "\n% completamento: \t");
 			textContent.getChildren().add(new MFXProgressBar(selectedTreeToUnlock.getUnlockProgress()));
 			addText(textContent, " " + (int)(selectedTreeToUnlock.getUnlockProgress() * 100) + "%");
-			addText(textContent, "\ntempo rimanente: ");
+			addText(textContent, "\ntempo rimanente: \t");
 			addBoldText(textContent, TimeUtils.formatTime(selectedTreeToUnlock.getRemainingRequiredTime()));
 		}
 		else
 		{
 			addText(textContent, "NESSUNO", FontWeight.MEDIUM);
 		}
-		addText(textContent, "\ntempo non utilizzato: ");
+		addText(textContent, "\ntempo non utilizzato: \t");
 		addBoldText(textContent, TimeUtils.formatTime(TreeHandler.getInstance().getUnusedProgressTime()));
 	}
 

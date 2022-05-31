@@ -20,7 +20,7 @@ public class StyleHandler
 	private final ObservableList<String> observableStyles = FXCollections.observableList(loadedStyles);
 
 	private final StringProperty currentTheme = new SimpleStringProperty("light");
-	private final List<String> baseStyles = List.of("fonts", "style");
+	private final List<String> baseStyles = List.of("style");
 
 
 	private StyleHandler() {

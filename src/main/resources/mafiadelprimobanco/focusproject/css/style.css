@@ -1,3 +1,20 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto/Roboto-Medium.ttf');
+}
+
+
+/*@font-face {*/
+/*    font-family: 'Roboto-Bold';*/
+/*    src: url('../fonts/Roboto/Roboto-Bold.ttf');*/
+/*}*/
+
+.text {
+    /*just to make it obvious where it's missing*/
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 14px;
+}
+
 /* BASE STYLE
 
 - #baseRoot
@@ -267,9 +284,11 @@ FEEDBACK STYLE
     -fx-text-fill: palette3-3;
     -fx-effect: dropshadow(gaussian, rgba(89, 69, 38, 0.3), 4, 0.2, 2, 2);
     -fx-font-weight: 800;
+    -fx-font-size: 18px;
 }
 
-.notification .content{
+.notification .content {
     -fx-text-fill: palette4-1;
     -fx-font-weight: 400;
+    -fx-font-size: 16px;
 }
