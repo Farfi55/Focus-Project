@@ -363,7 +363,7 @@ public class Feedback
 	private void addText(TextFlow textFlow, String text, FontWeight weight, double size)
 	{
 		Text boldText = new Text(text);
-		boldText.setFont(Font.font("Roboto-Regular", weight, size));
+		boldText.setFont(Font.font("Roboto", weight, size));
 		textFlow.getChildren().add(boldText);
 	}
 

@@ -4,16 +4,29 @@
 }
 
 
-/*@font-face {*/
-/*    font-family: 'Roboto-Bold';*/
-/*    src: url('../fonts/Roboto/Roboto-Bold.ttf');*/
-/*}*/
-
-.text {
-    /*just to make it obvious where it's missing*/
-    -fx-font-family: "Comic Sans MS";
-    -fx-font-size: 14px;
+@font-face {
+    font-family: 'Roboto-Bold';
+    src: url('../fonts/Roboto/Roboto-Bold.ttf');
 }
+
+.text, .mfx-text-field {
+    /*just to make it obvious where it's missing*/
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette2-1;
+}
+
+.mfx-text-field:focused {
+    -fx-border-color: palette3-1;
+}
+
+.mfx-text-field .floating-text {
+    -fx-background-color: inherit;
+}
+
+
+
 
 /* BASE STYLE
 
@@ -123,6 +136,21 @@
 /*    */
 /*}*/
 
+#homeRoot .mfx-spinner {
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette2-1;
+    -fx-padding: 5px 10px 5px 10px;
+}
+
+
+#homeRoot .mfx-spinner .mfx-text-field{
+    -fx-pref-width: 80px;
+    -fx-min-width: 80px;
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette2-1;
+    -fx-text-alignment: center;
+}
+
 #homeProgressDisplay .mfx-progress-spinner {
     -mfx-color1: palette2-2;
 }
@@ -131,6 +159,8 @@
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
 }
+
+
 
 /*#homeTagList {*/
 
@@ -272,6 +302,13 @@ FEEDBACK STYLE
     - label
 */
 
+
+.header {
+    -fx-font-weight: 800;
+    -fx-font-size: 18px;
+}
+
+
 .notification {
     -fx-background-color: palette1-1;
     -fx-background-radius: 4px;
@@ -283,8 +320,6 @@ FEEDBACK STYLE
 .notification .header {
     -fx-text-fill: palette3-3;
     -fx-effect: dropshadow(gaussian, rgba(89, 69, 38, 0.3), 4, 0.2, 2, 2);
-    -fx-font-weight: 800;
-    -fx-font-size: 18px;
 }
 
 .notification .content {
