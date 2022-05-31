@@ -45,16 +45,6 @@ public class Tree
 		return 0;
 	}
 
-	public Image createMatureTreeImage()
-	{
-		return new Image(matureTreeSprite);
-	}
-
-	public Image createDeadTreeImage()
-	{
-		return new Image(deadTreeSprite);
-	}
-
 	public Integer getUuid() { return uuid; }
 
 	public String getName() { return name; }

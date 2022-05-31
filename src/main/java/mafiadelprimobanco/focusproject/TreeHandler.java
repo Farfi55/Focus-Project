@@ -2,11 +2,14 @@ package mafiadelprimobanco.focusproject;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.image.Image;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Tree;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class TreeHandler implements ActivityObserver
 {
@@ -19,25 +22,38 @@ public class TreeHandler implements ActivityObserver
 
 	private final SimpleObjectProperty<Tree> selectedTreeToUnlock = new SimpleObjectProperty<>();
 	private final SimpleIntegerProperty unusedProgressTime = new SimpleIntegerProperty();
+	private final List<Image> treePhasesImages = new ArrayList<>(5);
 	HashMap<Integer, Tree> trees = new HashMap<>();
 	HashSet<Integer> treesToUnlock = new HashSet<>();
 	HashSet<Integer> unlockedTrees = new HashSet<>();
-
-
 
 	private TreeHandler()
 	{
 		loadTrees();
 		setSelectedTreeToUnlock(getFirstTreeToUnlock());
+		loadTreePhasesImages();
 		ActivityHandler.getInstance().addListener(this);
 	}
-
 
 	@Override
 	public void onActivityEnd()
 	{
 		int duration = ActivityHandler.getInstance().getCurrentActivity().getFinalDuration();
 		addProgressTime(duration);
+	}
+
+	public Image getTreePhaseImage(int index)
+	{
+		if (index < treePhasesImages.size()) return treePhasesImages.get(index);
+		else return null;
+	}
+
+	private void loadTreePhasesImages()
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			treePhasesImages.add(ResourcesLoader.loadImage("trees/treePhase" + i + ".png"));
+		}
 	}
 
 	private void loadTrees()
