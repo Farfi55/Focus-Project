@@ -20,7 +20,7 @@ public class StyleHandler
 	private final ObservableList<String> observableStyles = FXCollections.observableList(loadedStyles);
 
 	private final StringProperty currentTheme = new SimpleStringProperty("light");
-	private final List<String> baseStyles = List.of("style");
+	private final List<String> baseStyles = List.of("fonts", "style");
 
 
 	private StyleHandler() {
@@ -35,7 +35,7 @@ public class StyleHandler
 			String resource = ResourcesLoader.load("css/" + style + ".css");
 			tmpStyles.add(resource);
 		}
-		String themeStylesheet = ResourcesLoader.load("css/" + currentTheme.get() + ".css");
+		String themeStylesheet = ResourcesLoader.load("css/themes/" + currentTheme.get() + ".css");
 		tmpStyles.add(themeStylesheet);
 
 		// to only trigger changes in loadedStyle once

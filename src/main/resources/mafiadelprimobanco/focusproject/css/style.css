@@ -1,14 +1,3 @@
-@font-face {
-    font-family: 'Roboto';
-    src: url('../fonts/Roboto/Roboto-Medium.ttf');
-}
-
-
-@font-face {
-    font-family: 'Roboto-Bold';
-    src: url('../fonts/Roboto/Roboto-Bold.ttf');
-}
-
 .text, .mfx-text-field {
     /*just to make it obvious where it's missing*/
     -fx-font-family: "Roboto";
@@ -40,7 +29,6 @@
 */
 #baseRoot {
     -fx-background-color: palette1-1;
-
 }
 
 
@@ -149,6 +137,15 @@
     /*-fx-effect: innershadow(gaussian, palette1-3, 15, 0.4, 0, 0);*/
 }
 
+#homeRoot .mfx-spinner:focused,
+#homeRoot .mfx-spinner:focus-within {
+    -fx-border-color: palette2-3;
+}
+
+#homeRoot .mfx-spinner:hover {
+    -fx-border-color: palette2-3;
+}
+
 #homeRoot .mfx-spinner .mfx-icon-wrapper{
     -fx-translate-x: 15px;
     -fx-background-color: palette1-1;
@@ -172,6 +169,7 @@
     -fx-background-color: palette1-0;
     -fx-border-color: palette2-2;
     -fx-text-alignment: center;
+    -fx-alignment: CENTER;
 }
 
 #homeSelectedTagRoot {
@@ -215,6 +213,28 @@
     -fx-background-radius: 50%;
 }
 
+#homeActivityButton{
+    -fx-border-color: palette3-2;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-color: palette3-1;
+    -fx-background-radius: 10px;
+    -fx-text-fill: palette1-0;
+    -fx-font-size: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(91, 71, 42, 0.3), 10, 0.2, 3, 3);
+}
+#homeActivityButton *{
+    -fx-font-size: 20px;
+    -fx-font-family: "Roboto Bold";
+}
+
+#homeActivityButton:hover{
+    /*-fx-background-color: palette1-0;*/
+    /*-fx-text-fill: palette3-2;*/
+    -fx-border-color: palette3-3;
+    -fx-background-color: palette3-2;
+}
+
 
 
 /*#homeTagList {*/
@@ -250,16 +270,23 @@
 /*
 todo: this should be a reusable class
  */
-#homePageTagsRoot #newTagButton {
+#newTagButton {
     -fx-border-color: palette3-2;
     -fx-border-width: 2px;
     -fx-border-radius: 8px;
-    -fx-background-color: palette1-1;
+    -fx-background-color: palette3-1;
     -fx-background-radius: 10px;
-    -fx-text-fill: palette3-2;
+    -fx-text-fill: palette1-0;
     -fx-font-weight: 800;
     -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 3, 3);
 }
+
+
+#newTagButton:hover {
+    -fx-border-color: palette3-3;
+    -fx-background-color: palette3-2;
+}
+
 
 .progress-indicator .percentage
 {
