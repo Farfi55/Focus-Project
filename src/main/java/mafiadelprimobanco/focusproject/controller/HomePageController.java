@@ -2,7 +2,6 @@ package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -47,11 +46,13 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	@FXML private MFXSpinner<Integer> secondsSpinnerSelector;
 
 
+	private int treePhase = 0;
 	@FXML private ImageView treeImageViewer;
 
 	@FXML private MFXButton activityButton;
 
 	private Tree chosenActivityTree;
+
 
 	@FXML
 	void initialize()
@@ -65,7 +66,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		loadTagsView();
 
-		chosenActivityTree = TreeHandler.getInstance().getFirstUnlockedTree();
+		setChosenActivityTree(TreeHandler.getInstance().getFirstUnlockedTree());
+
 
 		var hourSpinnerModel = new IntegerSpinnerModel(0);
 		var minuteSpinnerModel = new IntegerSpinnerModel(0);
@@ -137,6 +139,9 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		showNode(selectedTagText);
 		showNode(selectedTagColorCircle);
 
+		treePhase = 0;
+		treeImageViewer.setImage(ResourcesLoader.loadImage(chosenActivityTree.getDeadTreeSprite()));
+
 
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
@@ -207,6 +212,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		activityTimeTextField.setText(TimeUtils.formatTime(0));
 		activityProgressSpinner.setProgress(0.0);
 
+//		treeImageViewer.setImage(ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
+
 		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
 
 		Feedback.getInstance().showActivityRecap(ActivityHandler.getInstance().getCurrentActivity());
@@ -227,6 +234,15 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		int secondsElapsed = ActivityHandler.getInstance().getCurrentActivity().getSecondsSinceStart();
 		activityTimeTextField.setText(TimeUtils.formatTime(secondsElapsed));
+
+		// todo: move this into settings
+		int minSuccessChronometerDuration = 10; // 10 seconds
+		if (treePhase == 0 && secondsElapsed >= minSuccessChronometerDuration)
+		{
+			treeImageViewer.setImage(ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
+			treePhase++;
+		}
+
 	}
 
 
@@ -358,5 +374,12 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	}
 
 
+	public void setChosenActivityTree(Tree chosenActivityTree)
+	{
+		this.chosenActivityTree = chosenActivityTree;
+		if (chosenActivityTree != null) treeImageViewer.setImage(
+				ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
+		else treeImageViewer.setImage(null);
+	}
 }
 
