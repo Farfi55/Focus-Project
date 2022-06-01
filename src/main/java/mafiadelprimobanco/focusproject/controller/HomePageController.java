@@ -335,6 +335,14 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 		//System.out.println(secondsSpinnerSelector.getValue().intValue());
 		//secondSpinnerModel.setValue(
+		try
+		{
+			return Integer.parseInt(num);
+		}catch (Exception e)
+		{
+		}
+
+		return 0;
 	}
 
 	@FXML

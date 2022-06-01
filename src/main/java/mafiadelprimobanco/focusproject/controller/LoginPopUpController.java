@@ -13,26 +13,23 @@ import java.io.IOException;
 
 public class LoginPopUpController {
 
-	@FXML
-	private MFXPasswordField passwordField;
+	@FXML private MFXPasswordField passwordField;
 
-	@FXML
-	private MFXTextField emailField;
+	@FXML private MFXTextField emailField;
 
-	@FXML
-	void closeLoginPopUp() {
+	@FXML void closeLoginPopUp() {
 		SceneHandler.getInstance().closeLoginPopup();
 	}
 
-	@FXML
-	void doLogin(ActionEvent event) {
+	@FXML void doLogin(ActionEvent event)
+	{
 		AutentificationHandler.getInstance().doLogin(
 				new User(emailField.getText(), emailField.getText(), passwordField.getText())
 		);
 	}
 
-	@FXML
-	void doRegisterUser(ActionEvent event) {
+	@FXML void doRegisterUser(ActionEvent event)
+	{
 		SceneHandler.getInstance().closeLoginPopup();
 		try
 		{
@@ -42,6 +39,11 @@ public class LoginPopUpController {
 		{
 			e.printStackTrace();
 		}
+	}
+
+	@FXML void initialize()
+	{
+
 	}
 
 }

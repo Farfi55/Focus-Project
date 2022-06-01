@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -34,6 +35,9 @@ public class SceneHandler
 	private StackPane  contentPane;
 	private ReadOnlyBooleanProperty isFullScreen;
 
+	//TODO: Make that less ugly
+	Pane popupPane = new Pane();
+
 	private SceneHandler() { }
 
 	public void init(Stage stage) throws IOException
@@ -50,9 +54,7 @@ public class SceneHandler
 
 		loginPopup = FXMLLoader.load(getClass().getResource("Login-popup-view.fxml"));
 
-		loginPopup.focusedProperty().addListener(e -> {
-			if (!((ReadOnlyBooleanProperty)e).getValue()) closeLoginPopup();
-		});
+		popupPane.getChildren().add(loginPopup);
 
 		subscribeToStyleChanges();
 
@@ -67,16 +69,20 @@ public class SceneHandler
 					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
 			else AutentificationHandler.getInstance().doLogout();
 		});
+
+		stage.widthProperty().addListener(e -> closeLoginPopup());
+		stage.heightProperty().addListener(e -> closeLoginPopup());
 	}
 
 	public void showLoginPopup() throws IOException
 	{
-		contentPane.getChildren().addAll(loginPopup);
+		loginPopup.setLayoutX(0);
+		loginPopup.setLayoutY(contentPane.getHeight() - 275);
 
-		loginPopup.setLayoutY(scene.getHeight() - 200);
+		contentPane.getChildren().add(popupPane);
 	}
 
-	public void closeLoginPopup() { contentPane.getChildren().removeAll(loginPopup); }
+	public void closeLoginPopup() { contentPane.getChildren().remove(popupPane); }
 
 	private void subscribeToStyleChanges()
 	{
