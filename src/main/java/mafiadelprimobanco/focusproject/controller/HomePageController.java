@@ -1,6 +1,9 @@
 package mafiadelprimobanco.focusproject.controller;
 
-import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
+import io.github.palexdev.materialfx.controls.MFXSpinner;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +19,7 @@ import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.Tree;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -120,49 +124,65 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	}
 
 	@Override
-	public void onActivityStarting()
+	public void onActivityStarting(AbstractActivity currentActivity)
 	{
 		activityButton.setText("Interrompi");
 
 		showNode(activityTimeLabel);
 
 		ActivityHandler.getInstance().setActivityTree(chosenActivityTree);
-		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER)
+		if (currentActivity instanceof TimerActivity)
 		{
 			ActivityHandler.getInstance().setChosenTimerDuration(getInputTimerDuration());
 			hideSpinners();
+			activityProgressSpinner.setProgress(1.0);
+		}
+		else if (currentActivity instanceof ChronometerActivity)
+		{
+			activityProgressSpinner.setProgress(-1);
 		}
 
 		hideNode(homeRoot.getRight());
 		hideNode(activitySelectorComboBox);
 
-		selectedTagText.setText(TagHandler.getInstance().getSelectedTag().getName());
-		selectedTagColorCircle.setFill(TagHandler.getInstance().getSelectedTag().getColor());
+		selectedTagText.setText(currentActivity.getTag().getName());
+		selectedTagColorCircle.setFill(currentActivity.getTag().getColor());
 		showNode(selectedTagRoot);
 
 		treePhase = 0;
 		treeImageViewer.setImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
 
 
-		switch (ActivityHandler.getInstance().getCurrentActivityType())
-		{
-			case CHRONOMETER -> activityProgressSpinner.setProgress(-1);
-			case TIMER -> activityProgressSpinner.setProgress(1.0);
-		}
 	}
 
 	@Override
-	public void onActivityUpdateSafe()
+	public void onActivityUpdateSafe(AbstractActivity currentActivity)
 	{
-		switch (ActivityHandler.getInstance().getCurrentActivityType())
-		{
-			case CHRONOMETER -> onChronometerUpdate();
-			case TIMER -> onTimerUpdate();
-		}
+		if (currentActivity instanceof ChronometerActivity chronometerActivity) onChronometerUpdate(
+				chronometerActivity);
+		else if (currentActivity instanceof TimerActivity timerActivity) onTimerUpdate(timerActivity);
 	}
 
 	@Override
-	public void onActivityEndSafe() { onActivityStop(); }
+	public void onActivityEndSafe(AbstractActivity currentActivity) {
+		resetInterface();
+
+		if (currentActivity instanceof TimerActivity timerActivity)
+		{
+			if (timerActivity.wasInterrupted()) treeImageViewer.setImage(
+					ResourcesLoader.loadImage(currentActivity.getTree().getDeadTreeSprite()));
+			else treeImageViewer.setImage(ResourcesLoader.loadImage(currentActivity.getTree().getMatureTreeSprite()));
+		}
+		else if (currentActivity instanceof ChronometerActivity)
+		{
+			if (treePhase < 5) treeImageViewer.setImage(
+					ResourcesLoader.loadImage(currentActivity.getTree().getDeadTreeSprite()));
+			else treeImageViewer.setImage(
+					ResourcesLoader.loadImage(currentActivity.getTree().getMatureTreeSprite()));
+		}
+
+		Feedback.getInstance().showActivityRecap(currentActivity);
+	}
 
 	@Override
 	public void handle(KeyEvent event)
@@ -199,37 +219,6 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		}
 	}
 
-	public void onActivityStop()
-	{
-		resetInterface();
-
-		if (ActivityHandler.getInstance().getCurrentActivity() instanceof TimerActivity timerActivity)
-		{
-			if (!timerActivity.wasInterrupted())
-			{
-				treeImageViewer.setImage(ResourcesLoader.loadImage(timerActivity.getTree().getMatureTreeSprite()));
-			}
-			else
-			{
-				treeImageViewer.setImage(ResourcesLoader.loadImage(timerActivity.getTree().getDeadTreeSprite()));
-			}
-		}
-		else if (ActivityHandler.getInstance().getCurrentActivity() instanceof ChronometerActivity chronometerActivity)
-		{
-			if (treePhase < 5)
-			{
-				treeImageViewer.setImage(ResourcesLoader.loadImage(chronometerActivity.getTree().getDeadTreeSprite()));
-			}
-			else
-			{
-				treeImageViewer.setImage(ResourcesLoader.loadImage(chronometerActivity.getTree().getMatureTreeSprite()));
-			}
-		}
-
-		Feedback.getInstance().showActivityRecap(ActivityHandler.getInstance().getCurrentActivity());
-
-	}
-
 	private void resetInterface()
 	{
 		activityButton.setText("Avvia");
@@ -246,23 +235,33 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 //		treeImageViewer.setImage(ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
 
-		if(ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER)
-			showSpinners();
+		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
+		else hideSpinners();
 	}
 
 
 
-	public void onTimerUpdate()
+	public void onTimerUpdate(TimerActivity timerActivity)
 	{
-		activityProgressSpinner.setProgress(1.0 - ActivityHandler.getInstance().getTimerActivityProgress());
+		double progress = timerActivity.getProgress();
+		activityProgressSpinner.setProgress(1.0 - progress);
 
-		int remainingSeconds = ActivityHandler.getInstance().getRemainingTimerDuration();
+		int remainingSeconds = timerActivity.getRemainingDuration();
 		activityTimeLabel.setText(TimeUtils.formatTime(remainingSeconds));
+
+
+		if (treePhase < 5 && progress >= (treePhase + 1) / 5f)
+		{
+			treePhase++;
+			if (treePhase < 5) treeImageViewer.setImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
+			else treeImageViewer.setImage(ResourcesLoader.loadImage(timerActivity.getTree().getMatureTreeSprite()));
+		}
+
 	}
 
-	public void onChronometerUpdate()
+	public void onChronometerUpdate(ChronometerActivity chronometerActivity)
 	{
-		int secondsElapsed = ActivityHandler.getInstance().getCurrentActivity().getSecondsSinceStart();
+		int secondsElapsed = chronometerActivity.getSecondsSinceStart();
 		activityTimeLabel.setText(TimeUtils.formatTime(secondsElapsed));
 
 		// todo: move this into settings
@@ -272,7 +271,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		{
 			treePhase++;
 			if (treePhase < 5) treeImageViewer.setImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
-			else treeImageViewer.setImage(ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
+			else treeImageViewer.setImage(ResourcesLoader.loadImage(chronometerActivity.getTree().getMatureTreeSprite()));
 		}
 
 	}

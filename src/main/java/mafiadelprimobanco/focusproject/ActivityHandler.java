@@ -122,36 +122,36 @@ public class ActivityHandler
 	private void invokeOnActivityStarting()
 	{
 		for (ActivityObserver observer : listeners)
-			observer.onActivityStarting();
+			observer.onActivityStarting(currentActivity);
 
 		Platform.runLater(() ->
 		{
 			for (ActivityObserver observer : listeners)
-				observer.onActivityStartingSafe();
+				observer.onActivityStartingSafe(currentActivity);
 		});
 	}
 
 	private void invokeOnActivityUpdate()
 	{
 		for (ActivityObserver observer : listeners)
-			observer.onActivityUpdate();
+			observer.onActivityUpdate(currentActivity);
 
 		Platform.runLater(() ->
 		{
 			for (ActivityObserver observer : listeners)
-				observer.onActivityUpdateSafe();
+				observer.onActivityUpdateSafe(currentActivity);
 		});
 	}
 
 	private void invokeOnActivityEnd()
 	{
 		for (ActivityObserver observer : listeners)
-			observer.onActivityEnd();
+			observer.onActivityEnd(currentActivity);
 
 		Platform.runLater(() ->
 		{
 			for (ActivityObserver observer : listeners)
-				observer.onActivityEndSafe();
+				observer.onActivityEndSafe(currentActivity);
 		});
 	}
 

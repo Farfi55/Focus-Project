@@ -30,10 +30,16 @@ public class TimerActivity extends AbstractActivity
 
 		return getExpectedEndTime().isBefore(endTime);
 	}
+	public boolean wasCompleted()
+	{
+		if (!hasStarted() || isRunning()) return false;
+
+		return getExpectedEndTime().isEqual(endTime);
+	}
 
 	public double getProgress()
 	{
-		if (chosenDuration == null || chosenDuration == 0) return 1.0;
+		if (chosenDuration == null || chosenDuration == 0) return 1.0d;
 		else return Math.min(1.0d, (double)getSecondsSinceStart() / chosenDuration);
 	}
 

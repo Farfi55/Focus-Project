@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Tree;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,10 +37,9 @@ public class TreeHandler implements ActivityObserver
 	}
 
 	@Override
-	public void onActivityEnd()
+	public void onActivityEnd(AbstractActivity currentActivity)
 	{
-		int duration = ActivityHandler.getInstance().getCurrentActivity().getFinalDuration();
-		addProgressTime(duration);
+		addProgressTime(currentActivity.getFinalDuration());
 	}
 
 	public Image getTreePhaseImage(int index)
