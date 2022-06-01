@@ -62,9 +62,9 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	}
 
 	@Override
-	public void onActivityStartSafe()
+	public void onActivityStartingSafe()
 	{
-		switch (ActivityHandler.getInstance().getCurrActivityType())
+		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> setNavigationEnabled(false);
 		}
@@ -143,14 +143,14 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 		navigateTo(FXMLReferences.SETTINGS, settingsButton, "Impostazioni");
 	}
 
-	private boolean navigateTo(String pagePathRef, MFXRectangleToggleNode button, String pageName)
+	private void navigateTo(String pagePathRef, MFXRectangleToggleNode button, String pageName)
 	{
 		if (!canNavigate && !pagePathRef.equals(FXMLReferences.SETTINGS))
 		{
 			Feedback.getInstance()
-					.showInfo("Navigazione disabilitata",
+					.showNotification("Navigazione disabilitata",
 							"La navigazione è disabilitata una volta iniziata l'attività");
-			return false;
+			return;
 		}
 		try
 		{
@@ -160,13 +160,11 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 			}
 			else System.out.println("navigation to empty page reference");
 			button.setSelected(true);
-			return true;
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 			Feedback.getInstance().showError("Errore Di caricamento", "Impossibile caricare la pagina " + pageName);
-			return false;
 		}
 	}
 
