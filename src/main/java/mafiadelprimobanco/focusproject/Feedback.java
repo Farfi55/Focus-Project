@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
+import com.sun.javafx.scene.shape.ArcToHelper;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
@@ -13,6 +14,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -21,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mafiadelprimobanco.focusproject.model.ActivityRecapDialog;
 import mafiadelprimobanco.focusproject.model.DefaultNotification;
+import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
@@ -398,6 +401,24 @@ public class Feedback
 
 	private void tagActivityRecap(TextFlow textContent)
 	{
+		addText(textContent, "\n\nRecap progressi tag", FontWeight.BLACK);
+		Tag tag = ActivityHandler.getInstance().getCurrentActivity().getTag();
+		addText(textContent, "\nTempo impiegato per il tag: \t"+ tag.getName() + " ");
+		textContent.getChildren().add(new Circle(6,tag.getColor()));
+
+		ActivityStatsHandler.ActivityTime tagActivityTime = ActivityStatsHandler.getInstance().getTagActivityTime(tag);
+
+		addText(textContent, "\nQuesto giorno: \t\t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.dayTime));
+		addText(textContent, "\nQuesta settimana: \t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.weekTime));
+		addText(textContent, "\nQuesto mese: \t\t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.monthTime));
+		addText(textContent, "\nQuesto anno: \t\t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.yearTime));
+
+
+
 	}
 
 	private void treeProgressActivityRecap(TextFlow textContent)
