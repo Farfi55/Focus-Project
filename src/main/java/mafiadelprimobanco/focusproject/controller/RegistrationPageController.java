@@ -5,8 +5,6 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import io.github.palexdev.materialfx.validation.Validated;
-import javafx.beans.binding.Bindings;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -28,8 +26,7 @@ public class RegistrationPageController
 {
 	private final MFXTextField loginField;
 	private final MFXPasswordField passwordField;
-	private final MFXTextField firstNameField;
-	private final MFXTextField lastNameField;
+	private final MFXTextField usernameField;
 	private final MFXCheckbox checkbox;
 
 	@FXML
@@ -38,22 +35,20 @@ public class RegistrationPageController
 	public RegistrationPageController() {
 		loginField = new MFXTextField();
 		passwordField = new MFXPasswordField();
-		firstNameField = new MFXTextField();
-		lastNameField = new MFXTextField();
+		usernameField = new MFXTextField();
 		checkbox = new MFXCheckbox("Vuoi confermare i dati?");
 	}
 
 
 	@FXML
 	void initialize() {
-		loginField.setPromptText("Username");
-		loginField.getValidator().constraint("L'username deve essere lungo almeno 6 caratteri", loginField.textProperty().length().greaterThanOrEqualTo(6));
+		loginField.setPromptText("Email");
+		loginField.getValidator().constraint("L'email non può essere nulla", loginField.textProperty().isNotEmpty());
 		loginField.setLeadingIcon(new MFXIconWrapper("mfx-user", 16, Color.web("#4D4D4D"), 24));
 		passwordField.getValidator().constraint("La password deve essere lunga almeno 8 caratteri", passwordField.textProperty().length().greaterThanOrEqualTo(8));
 		passwordField.setPromptText("Password");
 
-		firstNameField.setPromptText("Nome");
-		lastNameField.setPromptText("Cognome");
+		usernameField.setPromptText("Username");
 
 		List<MFXStepperToggle> stepperToggles = createSteps();
 		stepper.getStepperToggles().addAll(stepperToggles);
@@ -61,22 +56,17 @@ public class RegistrationPageController
 
 	private List<MFXStepperToggle> createSteps() {
 		MFXStepperToggle step1 = new MFXStepperToggle("Step 1", new MFXFontIcon("mfx-lock", 16, Color.web("#f1c40f")));
-		VBox step1Box = new VBox(20, wrapNodeForValidation(loginField), wrapNodeForValidation(passwordField));
+		VBox step1Box = new VBox(20, wrapNodeForValidation(usernameField), wrapNodeForValidation(loginField), wrapNodeForValidation(passwordField));
 		step1Box.setAlignment(Pos.CENTER);
 		step1.setContent(step1Box);
 		step1.getValidator().dependsOn(loginField.getValidator()).dependsOn(passwordField.getValidator());
 
-		MFXStepperToggle step2 = new MFXStepperToggle("Step 2", new MFXFontIcon("mfx-user", 16, Color.web("#49a6d7")));
-		VBox step2Box = new VBox(20, firstNameField, lastNameField);
-		step2Box.setAlignment(Pos.CENTER);
-		step2.setContent(step2Box);
-
-		MFXStepperToggle step3 = new MFXStepperToggle("Step 3", new MFXFontIcon("mfx-variant7-mark", 16, Color.web("#85CB33")));
+		MFXStepperToggle step2 = new MFXStepperToggle("Step 2", new MFXFontIcon("mfx-variant7-mark", 16, Color.web("#85CB33")));
 		Node step3Grid = createGrid();
-		step3.setContent(step3Grid);
-		step3.getValidator().constraint("Devi confermare i dati", checkbox.selectedProperty());
+		step2.setContent(step3Grid);
+		step2.getValidator().constraint("Devi confermare i dati", checkbox.selectedProperty());
 
-		return List.of(step1, step2, step3);
+		return List.of(step1, step2);
 	}
 
 	private <T extends Node & Validated> Node wrapNodeForValidation(T node) {
@@ -113,41 +103,33 @@ public class RegistrationPageController
 	}
 
 	private Node createGrid() {
-		MFXTextField usernameLabel1 = createLabel("Username: ");
+		MFXTextField usernameLabel1 = createLabel("Email: ");
 		MFXTextField usernameLabel2 = createLabel("");
 		usernameLabel2.textProperty().bind(loginField.textProperty());
 
-		MFXTextField firstNameLabel1 = createLabel("Nome: ");
+		MFXTextField firstNameLabel1 = createLabel("Username: ");
 		MFXTextField firstNameLabel2 = createLabel("");
-		firstNameLabel2.textProperty().bind(firstNameField.textProperty());
-
-		MFXTextField lastNameLabel1 = createLabel("Cognome: ");
-		MFXTextField lastNameLabel2 = createLabel("");
-		lastNameLabel2.textProperty().bind(lastNameField.textProperty());
+		firstNameLabel2.textProperty().bind(usernameField.textProperty());
 
 
 
 		usernameLabel1.getStyleClass().add("header-label");
 		firstNameLabel1.getStyleClass().add("header-label");
-		lastNameLabel1.getStyleClass().add("header-label");
 
 		HBox b1 = new HBox(usernameLabel1, usernameLabel2);
 		HBox b2 = new HBox(firstNameLabel1, firstNameLabel2);
-		HBox b3 = new HBox(lastNameLabel1, lastNameLabel2);
 
 		b1.setMaxWidth(Region.USE_PREF_SIZE);
 		b2.setMaxWidth(Region.USE_PREF_SIZE);
-		b3.setMaxWidth(Region.USE_PREF_SIZE);
 
-		VBox box = new VBox(10, b1, b2, b3, checkbox);
+		VBox box = new VBox(10, b1, b2, checkbox);
 		box.setAlignment(Pos.CENTER);
 		StackPane.setAlignment(box, Pos.CENTER);
 
 		stepper.setOnLastNext(event -> {
 			try
 			{
-				User user = new User(loginField.getText(), passwordField.getText(), firstNameField.getText(),
-						lastNameField.getText());
+				User user = new User(loginField.getText(), usernameField.getText(), passwordField.getText());
 				AutentificationHandler.getInstance().registerUser(user);
 				SceneHandler.getInstance().navTo(FXMLReferences.HOME);
 			}
@@ -159,7 +141,7 @@ public class RegistrationPageController
 		stepper.setOnBeforePrevious(event -> {
 			if (stepper.isLastToggle()) {
 				checkbox.setSelected(false);
-				box.getChildren().setAll(b1, b2, b3, checkbox);
+				box.getChildren().setAll(b1, b2, checkbox);
 			}
 		});
 

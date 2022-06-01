@@ -1,77 +1,145 @@
 package mafiadelprimobanco.focusproject;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Collection;
-
+import mafiadelprimobanco.focusproject.client.Client;
+import mafiadelprimobanco.focusproject.client.ConnectionException;
 import mafiadelprimobanco.focusproject.model.User;
-import org.json.*;
+import org.json.JSONObject;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 
 public class AutentificationHandler
 {
 	private static AutentificationHandler instance = new AutentificationHandler();
 
-	private User user;
 
 	private AutentificationHandler() { }
 
 	private boolean isLogged = false;
+
+	private User user;
+
+	private Path localDatabaseFile = Path.of("user.db");
 
 	public static AutentificationHandler getInstance()
 	{
 		return instance;
 	}
 
-	public String getUser()
-	{
-		return user.username();
-	}
-
 	public boolean doLoginFromDatabase()
 	{
-		User user = DatabaseHandler.getInstance().loadUser();
+		try
+		{
+			if (localDatabaseFile.toFile().exists())
+			{
+				JSONObject obj = new JSONObject(new String(Files.readAllBytes(localDatabaseFile)));
 
-		if (user == null) return false;
+				String email = obj.getString("email");
+				String username = obj.getString("username");
+				String password = obj.getString("password");
 
-		this.user = user;
+				boolean res = doLogin(new User(email, username, password));
 
-		isLogged = true;
+				if (res) {
+					isLogged = true;
+					return true;
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 
-		return true;
+		isLogged = false;
+		return false;
 	}
 
 	public boolean registerUser(User user)
 	{
-
-		if (DatabaseHandler.getInstance().userAlreadyExist(user))
+		try
 		{
-			Feedback.getInstance().showError("Errore", "Utente già esistente");
-			return false;
+			String id = Client.getInstance().register(user.email(), user.password());
+
+			if (id == null) {
+				Feedback.getInstance().showError("Errore", "Utente già esistente");
+				return false;
+			}
+
+			if (Client.getInstance().sendEmailVerification())
+			{
+				Feedback.getInstance().showInfo("Info", "Controlla la tua mail per confermare la registrazione");
+				return true;
+			}
+		}
+		catch (IOException | ConnectionException e)
+		{
+			e.printStackTrace();
 		}
 
-		String encryptedPassword = BCrypt.hashpw(user.password(), BCrypt.gensalt(12));
-		DatabaseHandler.getInstance().insertUser(user, encryptedPassword);
-
-		return true;
+		return false;
 	}
 
-	public boolean doLogin(String username, String password)
+	public boolean doLogin(User user)
 	{
-		//TODO: firebase online check
-		isLogged = true;
-		return true;
+		try
+		{
+			String id = Client.getInstance().login(user.email(), user.password());
+
+			if (id == null)
+			{
+				Feedback.getInstance().showError("Errore", "Username o password errata");
+				return false;
+			}
+
+			if (!Client.getInstance().isEmailVerified())
+			{
+				Feedback.getInstance().showError("Errore", "Email non verificata");
+				return false;
+			}
+
+			/*if (localDatabaseFile.toFile().exists())
+				Files.delete(localDatabaseFile);
+
+
+			JSONObject jsonUser = new JSONObject();
+
+			jsonUser.put("email", user.email());
+			jsonUser.put("username", user.username());
+			jsonUser.put("password", user.password());
+
+			Files.writeString(localDatabaseFile, jsonUser.toString(), StandardOpenOption.CREATE_NEW);*/
+
+			this.user = user;
+
+			isLogged = true;
+			return true;
+		}
+		catch (IOException | ConnectionException e)
+		{
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+	public void doLogout()
+	{
+		try
+		{
+			Client.getInstance().logout();
+		}
+		catch (IOException | ConnectionException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public boolean isUserLogged() { return isLogged; }
+	public String getUser() { return user.username(); }
 }

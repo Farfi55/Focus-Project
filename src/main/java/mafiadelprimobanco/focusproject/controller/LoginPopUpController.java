@@ -4,9 +4,9 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import mafiadelprimobanco.focusproject.ActivityHandler;
 import mafiadelprimobanco.focusproject.AutentificationHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.model.User;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class LoginPopUpController {
 	private MFXPasswordField passwordField;
 
 	@FXML
-	private MFXTextField usernameField;
+	private MFXTextField emailField;
 
 	@FXML
 	void closeLoginPopUp() {
@@ -26,7 +26,9 @@ public class LoginPopUpController {
 
 	@FXML
 	void doLogin(ActionEvent event) {
-		AutentificationHandler.getInstance().doLogin(usernameField.getText(), passwordField.getText());
+		AutentificationHandler.getInstance().doLogin(
+				new User(emailField.getText(), emailField.getText(), passwordField.getText())
+		);
 	}
 
 	@FXML

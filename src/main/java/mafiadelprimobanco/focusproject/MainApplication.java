@@ -22,13 +22,13 @@ public class MainApplication extends Application
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
 			KeyPressManager.getInstance().init(SceneHandler.getInstance().getRoot());
 
-			if (!AutentificationHandler.getInstance().doLoginFromDatabase())
+			/*if (!AutentificationHandler.getInstance().doLoginFromDatabase())
 			{
 				System.out.println("Utente defaut non esistente");
 			}else
 			{
 				System.out.println("Benvenuto " + AutentificationHandler.getInstance().getUser());
-			}
+			}*/
 
 		} catch (IOException e)
 		{

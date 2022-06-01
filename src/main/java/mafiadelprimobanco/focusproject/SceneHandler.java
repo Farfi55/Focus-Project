@@ -65,7 +65,7 @@ public class SceneHandler
 		{
 			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
 					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
-			else DatabaseHandler.getInstance().closeConnection();
+			else AutentificationHandler.getInstance().doLogout();
 		});
 	}
 
