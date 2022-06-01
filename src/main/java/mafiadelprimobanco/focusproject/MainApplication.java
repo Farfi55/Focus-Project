@@ -21,7 +21,8 @@ public class MainApplication extends Application
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
 			KeyPressManager.getInstance().init(SceneHandler.getInstance().getRoot());
-
+			// just to call the constructor
+			ActivityStatsHandler.getInstance().init();
 
 
 		} catch (IOException e)

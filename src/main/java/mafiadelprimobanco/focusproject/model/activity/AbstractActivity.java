@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-public abstract class AbstractActivity
+public abstract class AbstractActivity implements Comparable<AbstractActivity>
 {
 	protected Integer tagUuid;
 	protected Integer treeUuid;
@@ -18,7 +18,6 @@ public abstract class AbstractActivity
 
 	public AbstractActivity() { }
 
-
 	public AbstractActivity(Integer tagUuid, Integer treeUuid, LocalDateTime startTime, LocalDateTime endTime)
 	{
 		assert (!endTime.isBefore(startTime));
@@ -26,6 +25,12 @@ public abstract class AbstractActivity
 		this.treeUuid = treeUuid;
 		this.startTime = startTime;
 		this.endTime = endTime;
+	}
+
+	@Override
+	public int compareTo(AbstractActivity o)
+	{
+		return startTime.compareTo(o.startTime);
 	}
 
 	public void startActivity()
