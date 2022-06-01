@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	}
 
 	@Override
-	public void onActivityStartingSafe()
+	public void onActivityStartingSafe(AbstractActivity currentActivity)
 	{
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
@@ -71,7 +72,7 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	}
 
 	@Override
-	public void onActivityEndSafe()
+	public void onActivityEndSafe(AbstractActivity currentActivity)
 	{
 		setNavigationEnabled(true);
 	}

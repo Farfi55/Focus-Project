@@ -1,3 +1,22 @@
+.text, .mfx-text-field {
+    /*just to make it obvious where it's missing*/
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14px;
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette2-1;
+}
+
+.mfx-text-field:focused {
+    -fx-border-color: palette3-1;
+}
+
+.mfx-text-field .floating-text {
+    -fx-background-color: inherit;
+}
+
+
+
+
 /* BASE STYLE
 
 - #baseRoot
@@ -10,7 +29,6 @@
 */
 #baseRoot {
     -fx-background-color: palette1-1;
-
 }
 
 
@@ -100,20 +118,124 @@
 
 #homeFullScreenButton {
     -fx-background-color: transparent;
+    -fx-fill: palette2-2;
+}
+#homeFullScreenButton * {
+    -fx-fill: palette2-2;
 }
 
 /*#homeProgressDisplay{*/
 /*    */
 /*}*/
 
+#homeRoot .mfx-spinner {
+    -fx-background-color: palette1-3;
+    -fx-background-radius: 30px;
+    -fx-border-color: palette2-2;
+    -fx-padding: 5px 5px 5px 5px;
+    -fx-border-radius: 30px;
+    /*-fx-effect: innershadow(gaussian, palette1-3, 15, 0.4, 0, 0);*/
+}
+
+#homeRoot .mfx-spinner:focused,
+#homeRoot .mfx-spinner:focus-within {
+    -fx-border-color: palette2-3;
+}
+
+#homeRoot .mfx-spinner:hover {
+    -fx-border-color: palette2-3;
+}
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper{
+    -fx-translate-x: 15px;
+    -fx-background-color: palette1-1;
+    -fx-border-color: palette2-3;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50%;
+}
+#homeRoot .mfx-spinner .mfx-icon-wrapper:hover{
+    -fx-background-color: palette1-0;
+}
+
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper .mfx-font-icon{
+    -mfx-color: palette2-3;
+}
+
+
+#homeRoot .mfx-spinner .mfx-text-field{
+    -fx-pref-width: 50px;
+    -fx-min-width: 50px;
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette2-2;
+    -fx-text-alignment: center;
+    -fx-alignment: CENTER;
+}
+
+#homeSelectedTagRoot {
+    -fx-background-color: palette1-3;
+    -fx-background-radius: 25px;
+    -fx-padding: 10px 20px 10px 20px;
+    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 3);
+}
+
+#homeSelectedTagRoot * {
+    -fx-text-fill: palette4-1;
+    -fx-font-size: 20px;
+    -fx-font-family: "Roboto";
+
+}
+
+#homeActivityTimeLabel {
+    -fx-background-color: palette2-1;
+    -fx-background-radius: 40px;
+    -fx-padding: 0 20px 0 20px;
+    -fx-text-fill: palette1-1;
+    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 3);
+}
+
+#homeActivityTimeLabel .text{
+    -fx-font-size: 48px;
+    -fx-font-family: "Roboto";
+}
+
+
 #homeProgressDisplay .mfx-progress-spinner {
-    -mfx-color1: palette2-2;
+    /*-mfx-color1: palette2-1;*/
+    /*-mfx-color2: palette2-3;*/
+    /*-mfx-color3: palette2-4;*/
+    /*-mfx-color4: palette2-2;*/
 }
 
 #homeTreeBackground {
+    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 0);
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
 }
+
+#homeActivityButton{
+    -fx-border-color: palette3-2;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-color: palette3-1;
+    -fx-background-radius: 10px;
+    -fx-text-fill: palette1-0;
+    -fx-font-size: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(91, 71, 42, 0.3), 10, 0.2, 3, 3);
+}
+#homeActivityButton *{
+    -fx-font-size: 20px;
+    -fx-font-family: "Roboto Bold";
+}
+
+#homeActivityButton:hover{
+    /*-fx-background-color: palette1-0;*/
+    /*-fx-text-fill: palette3-2;*/
+    -fx-border-color: palette3-3;
+    -fx-background-color: palette3-2;
+}
+
+
 
 /*#homeTagList {*/
 
@@ -135,7 +257,7 @@
 }
 
 #homePageTagsRoot .label {
-    -fx-background-color: palette1-1;
+    -fx-background-color: palette1-3;
     -fx-background-radius: 23px;
     -fx-padding: 5px 25px 5px 25px;
     -fx-text-fill: palette3-2;
@@ -148,16 +270,23 @@
 /*
 todo: this should be a reusable class
  */
-#homePageTagsRoot #newTagButton {
+#newTagButton {
     -fx-border-color: palette3-2;
     -fx-border-width: 2px;
     -fx-border-radius: 8px;
-    -fx-background-color: palette1-1;
+    -fx-background-color: palette3-1;
     -fx-background-radius: 10px;
-    -fx-text-fill: palette3-2;
+    -fx-text-fill: palette1-0;
     -fx-font-weight: 800;
     -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 3, 3);
 }
+
+
+#newTagButton:hover {
+    -fx-border-color: palette3-3;
+    -fx-background-color: palette3-2;
+}
+
 
 .progress-indicator .percentage
 {
@@ -259,6 +388,13 @@ FEEDBACK STYLE
     - label
 */
 
+
+.header {
+    -fx-font-weight: 800;
+    -fx-font-size: 18px;
+}
+
+
 .notification {
     -fx-background-color: palette1-1;
     -fx-background-radius: 4px;
@@ -270,12 +406,12 @@ FEEDBACK STYLE
 .notification .header {
     -fx-text-fill: palette3-3;
     -fx-effect: dropshadow(gaussian, rgba(89, 69, 38, 0.3), 4, 0.2, 2, 2);
-    -fx-font-weight: 800;
 }
 
-.notification .content{
+.notification .content {
     -fx-text-fill: palette4-1;
     -fx-font-weight: 400;
+    -fx-font-size: 16px;
 }
 
 

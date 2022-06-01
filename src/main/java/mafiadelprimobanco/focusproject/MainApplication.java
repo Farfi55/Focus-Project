@@ -21,14 +21,9 @@ public class MainApplication extends Application
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
 			KeyPressManager.getInstance().init(SceneHandler.getInstance().getRoot());
+			// just to call the constructor
+			ActivityStatsHandler.getInstance().init();
 
-			/*if (!AutentificationHandler.getInstance().doLoginFromDatabase())
-			{
-				System.out.println("Utente defaut non esistente");
-			}else
-			{
-				System.out.println("Benvenuto " + AutentificationHandler.getInstance().getUser());
-			}*/
 
 		} catch (IOException e)
 		{

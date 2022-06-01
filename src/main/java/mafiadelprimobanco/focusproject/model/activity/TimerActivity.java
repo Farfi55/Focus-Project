@@ -18,9 +18,9 @@ public class TimerActivity extends AbstractActivity
 		super.startActivity();
 	}
 
-	public TimerActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime, Integer chosenDuration)
+	public TimerActivity(Integer tagUuid, Integer treeUuid, LocalDateTime startTime, LocalDateTime endTime, Integer chosenDuration)
 	{
-		super(tagUuid, startTime, endTime);
+		super(tagUuid, treeUuid, startTime, endTime);
 		this.chosenDuration = chosenDuration;
 	}
 
@@ -30,10 +30,16 @@ public class TimerActivity extends AbstractActivity
 
 		return getExpectedEndTime().isBefore(endTime);
 	}
+	public boolean wasCompleted()
+	{
+		if (!hasStarted() || isRunning()) return false;
+
+		return getExpectedEndTime().isEqual(endTime);
+	}
 
 	public double getProgress()
 	{
-		if (chosenDuration == null || chosenDuration == 0) return 1.0;
+		if (chosenDuration == null || chosenDuration == 0) return 1.0d;
 		else return Math.min(1.0d, (double)getSecondsSinceStart() / chosenDuration);
 	}
 

@@ -3,6 +3,7 @@ package mafiadelprimobanco.focusproject;
 import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
+import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -37,7 +38,7 @@ public class ActivityHandler
 
 		currentActivity.setTagUuid(TagHandler.getInstance().getSelectedTag().getUuid());
 		currentActivity.startActivity();
-		invokeOnStartActivity();
+		invokeOnActivityStarting();
 
 		switch (currentActivityType)
 		{
@@ -68,9 +69,11 @@ public class ActivityHandler
 			activityTimer = null;
 		}
 
-		invokeOnEndActivity();
+		invokeOnActivityEnd();
 
+		// todo: make this safer
 		Platform.runLater(() -> currentActivity = createActivity());
+
 	}
 
 	private void startTimerActivity()
@@ -85,7 +88,7 @@ public class ActivityHandler
 			@Override
 			public void run()
 			{
-				invokeOnUpdateActivity();
+				invokeOnActivityUpdate();
 
 				if (timerActivity.getRemainingDuration() == 0) stopCurrentActivity();
 			}
@@ -94,13 +97,12 @@ public class ActivityHandler
 
 	private void startChronometerActivity()
 	{
-
 		activityTimer.scheduleAtFixedRate(new TimerTask()
 		{
 			@Override
 			public void run()
 			{
-				invokeOnUpdateActivity();
+				invokeOnActivityUpdate();
 			}
 		}, 0, 1000);
 	}
@@ -117,41 +119,49 @@ public class ActivityHandler
 		listeners.remove(observer);
 	}
 
-	private void invokeOnStartActivity()
+	private void invokeOnActivityStarting()
 	{
 		for (ActivityObserver observer : listeners)
-			observer.onActivityStarting();
+			observer.onActivityStarting(currentActivity);
 
 		Platform.runLater(() ->
 		{
 			for (ActivityObserver observer : listeners)
-				observer.onActivityStartingSafe();
+				observer.onActivityStartingSafe(currentActivity);
 		});
 	}
 
-	private void invokeOnUpdateActivity()
+	private void invokeOnActivityUpdate()
 	{
 		for (ActivityObserver observer : listeners)
-			observer.onActivityUpdate();
+			observer.onActivityUpdate(currentActivity);
 
 		Platform.runLater(() ->
 		{
 			for (ActivityObserver observer : listeners)
-				observer.onActivityUpdateSafe();
+				observer.onActivityUpdateSafe(currentActivity);
 		});
 	}
 
-	private void invokeOnEndActivity()
+	private void invokeOnActivityEnd()
 	{
 		for (ActivityObserver observer : listeners)
-			observer.onActivityEnd();
+			observer.onActivityEnd(currentActivity);
 
 		Platform.runLater(() ->
 		{
 			for (ActivityObserver observer : listeners)
-				observer.onActivityEndSafe();
+				observer.onActivityEndSafe(currentActivity);
 		});
 	}
+
+	public void setActivityTree(Tree chosenTree) { setActivityTree(chosenTree.getUuid());}
+
+	public void setActivityTree(Integer chosenTreeUuid)
+	{
+		currentActivity.setTreeUuid(chosenTreeUuid);
+	}
+
 
 	public boolean isActivityRunning()
 	{
@@ -162,6 +172,7 @@ public class ActivityHandler
 	{
 		return currentActivity;
 	}
+
 
 	public int getRemainingTimerDuration()
 	{
