@@ -30,13 +30,11 @@ import java.io.IOException;
 
 public class HomePageController implements ActivityObserver, EventHandler<KeyEvent>
 {
-	//
 	@FXML private BorderPane homeRoot;
 
 	// fullscreen button controls
 	@FXML private MFXButton fullScreenButton;
 	@FXML private FontIcon fullScreenIcon;
-
 
 	// selected tag controls
 	@FXML private Circle selectedTagColorCircle;
@@ -53,11 +51,11 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	@FXML private MFXSpinner<Integer> secondsSpinnerSelector;
 
 
-	private int treePhase = 0;
 	@FXML private ImageView treeImageViewer;
 
 	@FXML private MFXButton activityButton;
 
+	private int treePhase = 0;
 	private Tree chosenActivityTree;
 
 
