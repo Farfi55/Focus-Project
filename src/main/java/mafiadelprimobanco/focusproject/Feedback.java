@@ -337,12 +337,12 @@ public class Feedback
 
 		if (activity instanceof ChronometerActivity chronometerActivity)
 		{
-			header = "Recap attività cronometro";
+			header = Localization.get("feedback.EoAR.header.chronometer");
 			chronometerActivityRecap(textContent, chronometerActivity);
 		}
 		else if (activity instanceof TimerActivity timerActivity)
 		{
-			header = "Recap attività timer";
+			header = Localization.get("feedback.EoAR.header.timer");
 			timerActivityRecap(textContent, timerActivity);
 		}
 		else throw new IllegalArgumentException();
@@ -378,11 +378,11 @@ public class Feedback
 
 	private void baseActivityRecap(TextFlow textContent, AbstractActivity activity)
 	{
-		addText(textContent, "iniziato a: \t");
+		addText(textContent, Localization.get("feedback.EoAR.base.start"));
 		addBoldText(textContent, activity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
-		addText(textContent, "\nfinito a:   \t");
+		addText(textContent, Localization.get("feedback.EoAR.base.end"));
 		addBoldText(textContent, activity.getEndTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
-		addText(textContent, "\ndurata totale: \t");
+		addText(textContent, Localization.get("feedback.EoAR.base.duration"));
 		addBoldText(textContent, TimeUtils.formatTime(activity.getFinalDuration()));
 	}
 
@@ -393,29 +393,29 @@ public class Feedback
 	private void timerActivityRecap(TextFlow textContent, TimerActivity timerActivity)
 	{
 
-		addText(textContent, "\ndurata scelta: \t");
+		addText(textContent, Localization.get("feedback.EoAR.timer.chosenDuration"));
 		addBoldText(textContent, TimeUtils.formatTime(timerActivity.getChosenDuration()));
-		addText(textContent, "\ncompletamento attività: \t");
+		addText(textContent, Localization.get("feedback.EoAR.timer.progress"));
 		textContent.getChildren().add(new MFXProgressBar(timerActivity.getProgress()));
 		addText(textContent, " " + (int)(timerActivity.getProgress() * 100) + "%");
 	}
 
 	private void tagActivityRecap(TextFlow textContent)
 	{
-		addText(textContent, "\n\nRecap progressi tag", FontWeight.BLACK);
+		addText(textContent, Localization.get("feedback.EoAR.tag.header"), FontWeight.BLACK);
 		Tag tag = ActivityHandler.getInstance().getCurrentActivity().getTag();
-		addText(textContent, "\nTempo impiegato per il tag: \t" + tag.getName() + " ");
+		addText(textContent, Localization.get("feedback.EoAR.tag.timeSpentTag") + tag.getName() + " ");
 		textContent.getChildren().add(new Circle(6, tag.getColor()));
 
 		ActivityStatsHandler.ActivityTime tagActivityTime = ActivityStatsHandler.getInstance().getTagActivityTime(tag);
 
-		addText(textContent, "\nQuesto giorno: \t\t");
+		addText(textContent, Localization.get("feedback.EoAR.tag.day"));
 		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.dayTime));
-		addText(textContent, "\nQuesta settimana: \t");
+		addText(textContent, Localization.get("feedback.EoAR.tag.week"));
 		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.weekTime));
-		addText(textContent, "\nQuesto mese: \t\t");
+		addText(textContent, Localization.get("feedback.EoAR.tag.month"));
 		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.monthTime));
-		addText(textContent, "\nQuesto anno: \t\t");
+		addText(textContent, Localization.get("feedback.EoAR.tag.year"));
 		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.yearTime));
 
 
@@ -423,28 +423,26 @@ public class Feedback
 
 	private void treeProgressActivityRecap(TextFlow textContent)
 	{
-		addText(textContent, "\n\nRecap progressi sugli alberi", FontWeight.BLACK);
+		addText(textContent, Localization.get("feedback.EoAR.tree.header"), FontWeight.BLACK);
 		Tree selectedTreeToUnlock = TreeHandler.getInstance().getSelectedTreeToUnlock();
-		addText(textContent, "\nAlbero selezionato da sbloccare: \t");
+		addText(textContent, Localization.get("feedback.EoAR.tree.selectedTree"));
 		if (selectedTreeToUnlock != null)
 		{
 			addText(textContent, "'" + selectedTreeToUnlock.getName() + "'", FontWeight.MEDIUM);
-			// todo: ingaggiare qualcuno che sappia scrivere italiano
-			addText(textContent, "\ntempo impiegato: \t");
-			addBoldText(textContent,
-					TimeUtils.formatTime(selectedTreeToUnlock.getProgressTime()) + " su " + TimeUtils.formatTime(
-							selectedTreeToUnlock.getTotalRequiredTime()));
-			addText(textContent, "\n% completamento: \t");
+			addText(textContent, Localization.get("feedback.EoAR.tree.totalTimeSpent",
+					TimeUtils.formatTime(selectedTreeToUnlock.getProgressTime()),
+					TimeUtils.formatTime(selectedTreeToUnlock.getTotalRequiredTime())));
+			addText(textContent, Localization.get("feedback.EoAR.tree.progress"));
 			textContent.getChildren().add(new MFXProgressBar(selectedTreeToUnlock.getUnlockProgress()));
 			addText(textContent, " " + (int)(selectedTreeToUnlock.getUnlockProgress() * 100) + "%");
-			addText(textContent, "\ntempo rimanente: \t");
+			addText(textContent, Localization.get("feedback.EoAR.tree.remainingTime"));
 			addBoldText(textContent, TimeUtils.formatTime(selectedTreeToUnlock.getRemainingRequiredTime()));
 		}
 		else
 		{
-			addText(textContent, "NESSUNO", FontWeight.MEDIUM);
+			addText(textContent, Localization.get("feedback.EoAR.tree.none"), FontWeight.MEDIUM);
 		}
-		addText(textContent, "\ntempo non utilizzato: \t");
+		addText(textContent, Localization.get("feedback.EoAR.tree.unusedTime"));
 		addBoldText(textContent, TimeUtils.formatTime(TreeHandler.getInstance().getUnusedProgressTime()));
 	}
 
