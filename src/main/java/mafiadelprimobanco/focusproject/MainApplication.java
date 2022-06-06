@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class MainApplication extends Application
 {
@@ -17,13 +18,14 @@ public class MainApplication extends Application
 	{
 		try
 		{
+			LocationHandler.setLocale(Locale.ITALIAN);
+			
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
 			KeyPressManager.getInstance().init(SceneHandler.getInstance().getRoot());
 			// just to call the constructor
 			ActivityStatsHandler.getInstance().init();
-
 
 		} catch (IOException e)
 		{

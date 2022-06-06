@@ -95,8 +95,8 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML
 	void onRemoveAction(Event event)
 	{
-		if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.getInstance().get("msg.deletetagHeader"),
-				LocationHandler.getInstance().get("msg.deletetagMsg")))
+		if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.get("msg.deletetagHeader"),
+				LocationHandler.get("msg.deletetagMsg")))
 		{
 			TagHandler.getInstance().removeTag(tag.getUuid());
 		}

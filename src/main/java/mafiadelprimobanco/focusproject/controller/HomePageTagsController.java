@@ -38,8 +38,8 @@ public class HomePageTagsController implements TagsObserver
 		toggleGroup = new ToggleGroup();
 		populateTagsList();
 
-		LocationHandler.getInstance().setLabel(tagLabel, "tag.tags");
-		LocationHandler.getInstance().setButton(newTagButton, "tag.new");
+		LocationHandler.setLabel(tagLabel, "tag.tags");
+		LocationHandler.setButton(newTagButton, "tag.new");
 	}
 
 	@Override

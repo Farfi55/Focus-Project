@@ -49,8 +49,8 @@ public class LoginPopUpController {
 
 	@FXML void initialize()
 	{
-		LocationHandler.getInstance().setButton(loginButton, "login.login");
-		LocationHandler.getInstance().setButton(registrationButton, "login.registration");
+		LocationHandler.setButton(loginButton, "login.login");
+		LocationHandler.setButton(registrationButton, "login.registration");
 	}
 
 }

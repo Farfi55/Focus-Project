@@ -16,33 +16,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class LocationHandler
+public final class LocationHandler
 {
-
-	private static LocationHandler instance = new LocationHandler();
-
-	private LocationHandler()
-	{
-		locale = new SimpleObjectProperty<>(getDefaultLocale());
-		locale.addListener((observable, oldValue, newValue) -> Locale.setDefault(newValue));
-	}
-
 	/**
 	 * the current selected Locale.
 	 */
 	private static ObjectProperty<Locale> locale;
 
-	public static LocationHandler getInstance()
+	static
 	{
-		return instance;
+		locale = new SimpleObjectProperty<>(getDefaultLocale());
+		locale.addListener((observable, oldValue, newValue) -> Locale.setDefault(newValue));
 	}
+
 
 	/**
 	 * get the supported Locales.
 	 *
 	 * @return List of Locale objects.
 	 */
-	public List<Locale> getSupportedLocales()
+	public static List<Locale> getSupportedLocales()
 	{
 		return new ArrayList<>(Arrays.asList(Locale.ITALIAN, Locale.ENGLISH));
 	}
@@ -52,24 +45,24 @@ public class LocationHandler
 	 *
 	 * @return
 	 */
-	public Locale getDefaultLocale()
+	public static Locale getDefaultLocale()
 	{
 		Locale sysDefault = Locale.getDefault();
 		return getSupportedLocales().contains(sysDefault) ? sysDefault : Locale.ENGLISH;
 	}
 
-	public Locale getLocale()
+	public static Locale getLocale()
 	{
 		return locale.get();
 	}
 
-	public void setLocale(Locale locale)
+	public static void setLocale(Locale locale)
 	{
 		localeProperty().set(locale);
 		Locale.setDefault(locale);
 	}
 
-	public ObjectProperty<Locale> localeProperty()
+	public static ObjectProperty<Locale> localeProperty()
 	{
 		return locale;
 	}
@@ -82,7 +75,7 @@ public class LocationHandler
 	 * @param args optional arguments for the message
 	 * @return localized formatted string
 	 */
-	public String get(final String key, final Object... args)
+	public static String get(final String key, final Object... args)
 	{
 		ResourceBundle bundle = ResourceBundle.getBundle("lang", getLocale());
 		return MessageFormat.format(bundle.getString(key), args);
@@ -94,22 +87,22 @@ public class LocationHandler
 	 * @param key key
 	 * @return String binding
 	 */
-	public StringBinding createStringBinding(final String key, Object... args)
+	public static StringBinding createStringBinding(final String key, Object... args)
 	{
 		return Bindings.createStringBinding(() -> get(key, args), locale);
 	}
 
 
-	public void setLabel(final Label label, final String key, final Object... args)
+	public static void setLabel(final Label label, final String key, final Object... args)
 	{
 		label.textProperty().bind(createStringBinding(key, args));
 	}
 
-	public void setButton(final Button button, final String key, final Object... args)
+	public static void setButton(final Button button, final String key, final Object... args)
 	{
 		button.textProperty().bind(createStringBinding(key, args));
 	}
-	public void setMFXComboboxFloatingText(final MFXComboBox<String> comboBox, final String key, final Object... args)
+	public static void setMFXComboboxFloatingText(final MFXComboBox<String> comboBox, final String key, final Object... args)
 	{
 		comboBox.floatingTextProperty().bind(createStringBinding(key, args));
 	}
