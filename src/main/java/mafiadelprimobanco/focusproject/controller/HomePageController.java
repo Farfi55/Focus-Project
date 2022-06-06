@@ -67,7 +67,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		ActivityHandler.getInstance().addListener(this);
 		KeyPressManager.getInstance().addHandler(this);
 
-		activitySelectorComboBox.getItems().addAll(LocationHandler.get("activity.chrono"),
+		activitySelectorComboBox.getItems().addAll(LocationHandler.get("activity.chronometer"),
 				LocationHandler.get("activity.timer"));
 		LocationHandler.setMFXComboboxFloatingText(activitySelectorComboBox, "activity.mode");
 		activitySelectorComboBox.selectFirst();
@@ -269,14 +269,14 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		if (chosenActivityTree == null)
 		{
-			Feedback.getInstance().showNotification(LocationHandler.get("msg.notreeselectedHeader"),
-					LocationHandler.get("msg.notreeselectedMsg"));
+			Feedback.getInstance().showNotification(LocationHandler.get("msg.trees.noTreeSelectedHeader"),
+					LocationHandler.get("msg.trees.noTreeSelectedMsg"));
 			return false;
 		}
 		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
-			Feedback.getInstance().showNotification(LocationHandler.get("msg.treenotavailableHeader"),
-					LocationHandler.get("msg.treenotavailableMsg"));
+			Feedback.getInstance().showNotification(LocationHandler.get("msg.trees.treeNotAvailableHeade"),
+					LocationHandler.get("msg.trees.treeNotAvailableMsg"));
 			return false;
 		}
 
@@ -295,8 +295,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		int minTimerDuration = 10; // 10 secondi
 		if (getInputTimerDuration() < minTimerDuration)
 		{
-			Feedback.getInstance().showNotification(LocationHandler.get("msg.invalidtimeHeader"),
-					LocationHandler.get("msg.invalidtimeMsg", TimeUtils.formatTime(minTimerDuration)));
+			Feedback.getInstance().showNotification(LocationHandler.get("feedback.time.invalidTimeHeader"),
+					LocationHandler.get("feedback.time.invalidTimeMsg", TimeUtils.formatTime(minTimerDuration)));
 			return false;
 		}
 
@@ -308,8 +308,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> {
-				if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.get("msg.stopactivityHeader"),
-						LocationHandler.get("msg.stopactivityMsg")))
+				if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.get("feedback.activity.stopActivityHeader"),
+						LocationHandler.get("feedback.activity.stopActivityMsg")))
 					ActivityHandler.getInstance().stopCurrentActivity();
 
 			}

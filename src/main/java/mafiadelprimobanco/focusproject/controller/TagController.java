@@ -88,15 +88,14 @@ public class TagController extends AnchorPane implements TagsObserver
 		Color colorPicked = colorPicker.getValue();
 		TagHandler.getInstance().changeTag(tag.getName(), colorPicked, tag.getUuid());
 		event.consume();
-
 	}
 
 
 	@FXML
 	void onRemoveAction(Event event)
 	{
-		if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.get("msg.deletetagHeader"),
-				LocationHandler.get("msg.deletetagMsg")))
+		if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.get("feedback.tag.deleteTagHeader"),
+				LocationHandler.get("feedback.tag.deleteTagMsg")))
 		{
 			TagHandler.getInstance().removeTag(tag.getUuid());
 		}

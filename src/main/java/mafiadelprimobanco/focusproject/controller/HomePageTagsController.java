@@ -39,7 +39,7 @@ public class HomePageTagsController implements TagsObserver
 		populateTagsList();
 
 		LocationHandler.setLabel(tagLabel, "tag.tags");
-		LocationHandler.setButton(newTagButton, "tag.new");
+		LocationHandler.setButton(newTagButton, "tag.newTag");
 	}
 
 	@Override

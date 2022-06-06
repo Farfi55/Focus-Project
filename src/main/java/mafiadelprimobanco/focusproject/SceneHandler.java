@@ -80,7 +80,7 @@ public class SceneHandler
 		});
 	}
 
-	public void showLoginPopup() throws IOException
+	public void showLoginPopup()
 	{
 		loginPopup.setLayoutX(0);
 		loginPopup.setLayoutY(contentPane.getHeight() - 275);
@@ -130,6 +130,13 @@ public class SceneHandler
 	private void setStyleSheets()
 	{
 		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
+	}
+
+	public void toggleLoginPopup()
+	{
+		if(popupPane.getParent() == null)
+			showLoginPopup();
+		else closeLoginPopup();
 	}
 
 	public ReadOnlyBooleanProperty getIsFullScreen()
