@@ -6,18 +6,8 @@ public class ChronometerActivity extends AbstractActivity
 {
 	public ChronometerActivity() { super(); }
 
-	public ChronometerActivity(Integer tagUuid)
+	public ChronometerActivity(Integer tagUuid, Integer treeUuid, LocalDateTime startTime, LocalDateTime endTime)
 	{
-		super(tagUuid);
-	}
-
-	public ChronometerActivity(Integer tagUuid, LocalDateTime startTime)
-	{
-		super(tagUuid, startTime);
-	}
-
-	public ChronometerActivity(Integer tagUuid, LocalDateTime startTime, LocalDateTime endTime)
-	{
-		super(tagUuid, startTime, endTime);
+		super(tagUuid, treeUuid, startTime, endTime);
 	}
 }

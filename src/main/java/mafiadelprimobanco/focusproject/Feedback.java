@@ -1,6 +1,8 @@
 package mafiadelprimobanco.focusproject;
 
+import com.sun.javafx.scene.shape.ArcToHelper;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
@@ -12,10 +14,23 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.model.ActivityRecapDialog;
 import mafiadelprimobanco.focusproject.model.DefaultNotification;
+import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.model.Tree;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
+import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
+import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 public class Feedback
@@ -29,12 +44,19 @@ public class Feedback
 	private AnchorPane root;
 	private Stage stage;
 
+
 	private MFXGenericDialog dialogContent;
 	private MFXStageDialog dialog;
+
 
 	private ButtonData confirmationDialogResult;
 	private MFXGenericDialog confirmationDialogContent;
 	private MFXStageDialog confirmationDialog;
+
+
+	private ActivityRecapDialog activityRecapDialogContent;
+	private MFXStageDialog activityRecapDialog;
+
 
 	private DefaultNotification notification;
 
@@ -50,15 +72,20 @@ public class Feedback
 		dialogContent = initDialogContent();
 		dialogContent.setMaxSize(400, 230);
 		dialog = initDialog(dialogContent);
-		dialog.setOverlayClose(true); // I wish this would work
 		addButton(dialogContent, dialog, ButtonData.OK_DONE);
 
 		// confirmation dialog init
 		confirmationDialogContent = initDialogContent();
 		confirmationDialogContent.setMaxSize(400, 230);
 		confirmationDialog = initDialog(confirmationDialogContent);
-		confirmationDialog.setOverlayClose(true);
 
+		// activityRecap dialog init
+		activityRecapDialogContent = new ActivityRecapDialog();
+		activityRecapDialogContent.setMaxSize(500, 500);
+		activityRecapDialog = initDialog(activityRecapDialogContent);
+		addButton(activityRecapDialogContent, activityRecapDialog, ButtonData.OK_DONE);
+
+		// notifications init
 		MFXNotificationSystem.instance().initOwner(stage);
 		initNotification();
 
@@ -78,6 +105,7 @@ public class Feedback
 		ObservableList<String> loadedStyles = StyleHandler.getInstance().getObservableStyles();
 		dialogContent.getStylesheets().setAll(loadedStyles);
 		confirmationDialogContent.getStylesheets().setAll(loadedStyles);
+		activityRecapDialogContent.getStylesheets().setAll(loadedStyles);
 		notification.getStylesheets().setAll(loadedStyles);
 	}
 
@@ -90,7 +118,7 @@ public class Feedback
 	{
 		return MFXGenericDialogBuilder.build(dialogContent).toStageDialogBuilder().initOwner(this.stage).initModality(
 				Modality.APPLICATION_MODAL).setDraggable(true).setOwnerNode(this.root).setScrimPriority(
-				ScrimPriority.WINDOW).setScrimOwner(true).get();
+				ScrimPriority.WINDOW).setOverlayClose(true).setScrimOwner(true).get();
 	}
 
 
@@ -296,7 +324,129 @@ public class Feedback
 		MFXNotificationSystem.instance().setPosition(position).publish(notification);
 	}
 
+	public void showActivityRecap(AbstractActivity activity)
+	{
+		if (activity == null || !activity.hasEnded()) return;
 
+		String header;
+		activityRecapDialogContent.clearTextContent();
+		TextFlow textContent = activityRecapDialogContent.getTextContent();
+
+		baseActivityRecap(textContent, activity);
+
+		if (activity instanceof ChronometerActivity chronometerActivity)
+		{
+			header = "Recap attività cronometro";
+			chronometerActivityRecap(textContent, chronometerActivity);
+		}
+		else if (activity instanceof TimerActivity timerActivity)
+		{
+			header = "Recap attività timer";
+			timerActivityRecap(textContent, timerActivity);
+		}
+		else throw new IllegalArgumentException();
+
+		tagActivityRecap(textContent);
+		treeProgressActivityRecap(textContent);
+
+		activityRecapDialogContent.setHeaderText(header);
+
+		activityRecapDialog.showDialog();
+	}
+
+	private void addBoldText(TextFlow textFlow, String text) { addText(textFlow, text, FontWeight.BOLD); }
+
+
+	private void addText(TextFlow textFlow, String text)
+	{ addText(textFlow, text, FontWeight.NORMAL, 14); }
+
+	private void addText(TextFlow textFlow, String text, FontWeight weight)
+	{ addText(textFlow, text, weight, 14); }
+
+	private void addText(TextFlow textFlow, String text, FontWeight weight, double size)
+	{
+		Text boldText = new Text(text);
+		boldText.setFont(Font.font("Roboto", weight, size));
+		textFlow.getChildren().add(boldText);
+	}
+
+	private void addText(TextFlow textFlow, Text text)
+	{
+		textFlow.getChildren().add(text);
+	}
+
+	private void baseActivityRecap(TextFlow textContent, AbstractActivity activity)
+	{
+		addText(textContent, "iniziato a: \t");
+		addBoldText(textContent, activity.getStartTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
+		addText(textContent, "\nfinito a:   \t");
+		addBoldText(textContent, activity.getEndTime().toLocalTime().truncatedTo(ChronoUnit.SECONDS).toString());
+		addText(textContent, "\ndurata totale: \t");
+		addBoldText(textContent, TimeUtils.formatTime(activity.getFinalDuration()));
+	}
+
+	private void chronometerActivityRecap(TextFlow textContent, ChronometerActivity chronometerActivity)
+	{
+	}
+
+	private void timerActivityRecap(TextFlow textContent, TimerActivity timerActivity)
+	{
+
+		addText(textContent, "\ndurata scelta: \t");
+		addBoldText(textContent, TimeUtils.formatTime(timerActivity.getChosenDuration()));
+		addText(textContent, "\ncompletamento attività: \t");
+		textContent.getChildren().add(new MFXProgressBar(timerActivity.getProgress()));
+		addText(textContent, " " + (int)(timerActivity.getProgress() * 100) + "%");
+	}
+
+	private void tagActivityRecap(TextFlow textContent)
+	{
+		addText(textContent, "\n\nRecap progressi tag", FontWeight.BLACK);
+		Tag tag = ActivityHandler.getInstance().getCurrentActivity().getTag();
+		addText(textContent, "\nTempo impiegato per il tag: \t"+ tag.getName() + " ");
+		textContent.getChildren().add(new Circle(6,tag.getColor()));
+
+		ActivityStatsHandler.ActivityTime tagActivityTime = ActivityStatsHandler.getInstance().getTagActivityTime(tag);
+
+		addText(textContent, "\nQuesto giorno: \t\t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.dayTime));
+		addText(textContent, "\nQuesta settimana: \t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.weekTime));
+		addText(textContent, "\nQuesto mese: \t\t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.monthTime));
+		addText(textContent, "\nQuesto anno: \t\t");
+		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.yearTime));
+
+
+
+	}
+
+	private void treeProgressActivityRecap(TextFlow textContent)
+	{
+		addText(textContent, "\n\nRecap progressi sugli alberi", FontWeight.BLACK);
+		Tree selectedTreeToUnlock = TreeHandler.getInstance().getSelectedTreeToUnlock();
+		addText(textContent, "\nAlbero selezionato da sbloccare: \t");
+		if (selectedTreeToUnlock != null)
+		{
+			addText(textContent, "'" + selectedTreeToUnlock.getName() + "'", FontWeight.MEDIUM);
+			// todo: ingaggiare qualcuno che sappia scrivere italiano
+			addText(textContent, "\ntempo impiegato: \t");
+			addBoldText(textContent,
+					TimeUtils.formatTime(selectedTreeToUnlock.getProgressTime()) + " su " + TimeUtils.formatTime(
+							selectedTreeToUnlock.getTotalRequiredTime()));
+			addText(textContent, "\n% completamento: \t");
+			textContent.getChildren().add(new MFXProgressBar(selectedTreeToUnlock.getUnlockProgress()));
+			addText(textContent, " " + (int)(selectedTreeToUnlock.getUnlockProgress() * 100) + "%");
+			addText(textContent, "\ntempo rimanente: \t");
+			addBoldText(textContent, TimeUtils.formatTime(selectedTreeToUnlock.getRemainingRequiredTime()));
+		}
+		else
+		{
+			addText(textContent, "NESSUNO", FontWeight.MEDIUM);
+		}
+		addText(textContent, "\ntempo non utilizzato: \t");
+		addBoldText(textContent, TimeUtils.formatTime(TreeHandler.getInstance().getUnusedProgressTime()));
+	}
 
 	/*
 	* legacy showMessages

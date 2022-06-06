@@ -35,7 +35,7 @@ public class StyleHandler
 			String resource = ResourcesLoader.load("css/" + style + ".css");
 			tmpStyles.add(resource);
 		}
-		String themeStylesheet = ResourcesLoader.load("css/" + currentTheme.get() + ".css");
+		String themeStylesheet = ResourcesLoader.load("css/themes/" + currentTheme.get() + ".css");
 		tmpStyles.add(themeStylesheet);
 
 		// to only trigger changes in loadedStyle once
