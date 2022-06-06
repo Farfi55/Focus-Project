@@ -10,7 +10,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -68,8 +67,9 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		ActivityHandler.getInstance().addListener(this);
 		KeyPressManager.getInstance().addHandler(this);
 
-		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer");
-//		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
+		activitySelectorComboBox.getItems().addAll(LocationHandler.getInstance().get("activity.chrono"),
+				LocationHandler.getInstance().get("activity.timer"));
+		LocationHandler.getInstance().setMFXComboboxFloatingText(activitySelectorComboBox, "activity.mode");
 		activitySelectorComboBox.selectFirst();
 
 		loadTagsView();
@@ -114,7 +114,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	@Override
 	public void onActivityStarting(AbstractActivity currentActivity)
 	{
-		activityButton.setText("Interrompi");
+		LocationHandler.getInstance().setButton(activityButton, "activity.stop");
 
 		showNode(activityTimeLabel);
 
@@ -209,7 +209,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	private void resetInterface()
 	{
-		activityButton.setText("Avvia");
+		LocationHandler.getInstance().setButton(activityButton, "activity.start");
 
 		hideNode(activityTimeLabel);
 
@@ -269,14 +269,14 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		if (chosenActivityTree == null)
 		{
-			Feedback.getInstance().showNotification("Nessun Albero selezionato",
-					"Devi scegliere un albero per l'attività");
+			Feedback.getInstance().showNotification(LocationHandler.getInstance().get("msg.notreeselectedHeader"),
+					LocationHandler.getInstance().get("msg.notreeselectedMsg"));
 			return false;
 		}
 		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
-			Feedback.getInstance().showNotification("Albero selezionato non sbloccato",
-					"Devi scegliere un albero già sbloccato per l'attività");
+			Feedback.getInstance().showNotification(LocationHandler.getInstance().get("msg.treenotavailableHeader"),
+					LocationHandler.getInstance().get("msg.treenotavailableMsg"));
 			return false;
 		}
 
@@ -295,9 +295,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		int minTimerDuration = 10; // 10 secondi
 		if (getInputTimerDuration() < minTimerDuration)
 		{
-			Feedback.getInstance().showNotification("Durata attività invalida",
-					"Inserire una durata di attività di almeno " + TimeUtils.formatTime(minTimerDuration)
-							+ "\nOppure cambiare la durata minima dalle impostazioni");
+			Feedback.getInstance().showNotification(LocationHandler.getInstance().get("msg.invalidtimeHeader"),
+					LocationHandler.getInstance().get("msg.invalidtimeMsg", TimeUtils.formatTime(minTimerDuration)));
 			return false;
 		}
 
@@ -309,8 +308,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> {
-				if (Feedback.getInstance().askYesNoConfirmation("Interrompere attività",
-						"Sei sicuro di voler interrompere l'attività?"))
+				if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.getInstance().get("msg.stopactivityHeader"),
+						LocationHandler.getInstance().get("msg.stopactivityMsg")))
 					ActivityHandler.getInstance().stopCurrentActivity();
 
 			}

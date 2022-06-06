@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
+import javafx.concurrent.Task;
 import mafiadelprimobanco.focusproject.client.Client;
 import mafiadelprimobanco.focusproject.client.ConnectionException;
 import mafiadelprimobanco.focusproject.model.User;
@@ -60,29 +61,27 @@ public class AutentificationHandler
 		return false;
 	}
 
-	public boolean registerUser(User user)
+	public void registerUser(User user)
 	{
-		try
-		{
-			String id = Client.getInstance().register(user.email(), user.password());
-
-			if (id == null) {
-				Feedback.getInstance().showError("Errore", "Utente già esistente");
-				return false;
-			}
-
-			if (Client.getInstance().sendEmailVerification())
+		new Thread(() -> {
+			try
 			{
-				Feedback.getInstance().showInfo("Info", "Controlla la tua mail per confermare la registrazione");
-				return true;
-			}
-		}
-		catch (IOException | ConnectionException e)
-		{
-			e.printStackTrace();
-		}
+				String id = Client.getInstance().register(user.email(), user.password());
 
-		return false;
+				if (id == null) {
+					Feedback.getInstance().showError("Errore", "Utente già esistente");
+					return;
+				}
+
+				if (Client.getInstance().sendEmailVerification())
+					Feedback.getInstance().showInfo("Info", "Controlla la tua mail per confermare la registrazione");
+
+			}
+			catch (IOException | ConnectionException e)
+			{
+				e.printStackTrace();
+			}
+		}).start();
 	}
 
 	public boolean doLogin(User user)

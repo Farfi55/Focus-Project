@@ -17,8 +17,8 @@
             <MFXPasswordField fx:id="passwordField" floatMode="BORDER" floatingText="Password" minWidth="300.0" promptText="Password" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
-                  <MFXButton depthLevel="LEVEL3" minWidth="100.0" onAction="#doRegisterUser" text="Registrati" />
-                  <MFXButton depthLevel="LEVEL3" minWidth="100.0" onAction="#doLogin" text="Accedi" />
+                  <MFXButton fx:id="registrationButton" depthLevel="LEVEL3" minWidth="100.0" onAction="#doRegisterUser" text="Registrati" />
+                  <MFXButton fx:id="loginButton" depthLevel="LEVEL3" minWidth="100.0" onAction="#doLogin" text="Accedi" />
                </children>
             </HBox>
          </children>

@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject;
 
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
@@ -72,6 +73,11 @@ public class SceneHandler
 
 		stage.widthProperty().addListener(e -> closeLoginPopup());
 		stage.heightProperty().addListener(e -> closeLoginPopup());
+		popupPane.setOnMouseClicked(e -> {
+			//If the click is on popup pane close the login popup
+			if (e.getPickResult().getIntersectedNode().equals(popupPane))
+				closeLoginPopup();
+		});
 	}
 
 	public void showLoginPopup() throws IOException

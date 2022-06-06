@@ -15,12 +15,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.AutentificationHandler;
+import mafiadelprimobanco.focusproject.LocationHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.User;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class RegistrationPageController
 {
@@ -36,16 +38,16 @@ public class RegistrationPageController
 		loginField = new MFXTextField();
 		passwordField = new MFXPasswordField();
 		usernameField = new MFXTextField();
-		checkbox = new MFXCheckbox("Vuoi confermare i dati?");
+		checkbox = new MFXCheckbox(LocationHandler.getInstance().get("registration.confirm"));
 	}
 
 
 	@FXML
 	void initialize() {
 		loginField.setPromptText("Email");
-		loginField.getValidator().constraint("L'email non può essere nulla", loginField.textProperty().isNotEmpty());
+		loginField.getValidator().constraint(LocationHandler.getInstance().get("registration.emailnotnull"), loginField.textProperty().isNotEmpty());
 		loginField.setLeadingIcon(new MFXIconWrapper("mfx-user", 16, Color.web("#4D4D4D"), 24));
-		passwordField.getValidator().constraint("La password deve essere lunga almeno 8 caratteri", passwordField.textProperty().length().greaterThanOrEqualTo(8));
+		passwordField.getValidator().constraint(LocationHandler.getInstance().get("registration.passwordlengtherror"), passwordField.textProperty().length().greaterThanOrEqualTo(8));
 		passwordField.setPromptText("Password");
 
 		usernameField.setPromptText("Username");
@@ -64,7 +66,7 @@ public class RegistrationPageController
 		MFXStepperToggle step2 = new MFXStepperToggle("Step 2", new MFXFontIcon("mfx-variant7-mark", 16, Color.web("#85CB33")));
 		Node step3Grid = createGrid();
 		step2.setContent(step3Grid);
-		step2.getValidator().constraint("Devi confermare i dati", checkbox.selectedProperty());
+		step2.getValidator().constraint(LocationHandler.getInstance().get("registration.confirmerror"), checkbox.selectedProperty());
 
 		return List.of(step1, step2);
 	}

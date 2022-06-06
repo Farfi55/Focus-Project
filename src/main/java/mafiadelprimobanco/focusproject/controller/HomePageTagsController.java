@@ -1,12 +1,15 @@
 package mafiadelprimobanco.focusproject.controller;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import mafiadelprimobanco.focusproject.LocationHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.TagHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
@@ -21,6 +24,10 @@ public class HomePageTagsController implements TagsObserver
 
 	private ToggleGroup toggleGroup;
 
+	@FXML private MFXButton newTagButton;
+
+	@FXML private Label tagLabel;
+
 	@FXML private MFXScrollPane tagsSidebar;
 
 
@@ -30,6 +37,9 @@ public class HomePageTagsController implements TagsObserver
 		TagHandler.getInstance().addListener(this);
 		toggleGroup = new ToggleGroup();
 		populateTagsList();
+
+		LocationHandler.getInstance().setLabel(tagLabel, "tag.tags");
+		LocationHandler.getInstance().setButton(newTagButton, "tag.new");
 	}
 
 	@Override
