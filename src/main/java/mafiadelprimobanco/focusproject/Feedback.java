@@ -1,6 +1,5 @@
 package mafiadelprimobanco.focusproject;
 
-import com.sun.javafx.scene.shape.ArcToHelper;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
@@ -197,22 +196,24 @@ public class Feedback
 
 	private String getButtonTextFromType(ButtonData buttonType)
 	{
-		return switch (buttonType)
+		String buttonTextKey = switch (buttonType)
 				{
-					case CANCEL_CLOSE -> "Annulla";
-					case OK_DONE -> "OK";
-					case YES -> "Si";
-					case NO -> "No";
-					case APPLY -> "Applica";
-					case FINISH -> "Finisci";
-					case NEXT_FORWARD -> "Prossimo";
-					case BACK_PREVIOUS -> "Precedente";
-					case HELP -> "Aiuto";
-					case LEFT -> "Sinistra";
-					case RIGHT -> "Destra";
-					case OTHER -> "Altro";
-					default -> throw new IllegalArgumentException("Usupported buttonType" + buttonType);
+					case CANCEL_CLOSE -> "feedback.button.cancel";
+					case OK_DONE -> "feedback.button.ok";
+					case YES -> "feedback.button.yes";
+					case NO -> "feedback.button.no";
+					case APPLY -> "feedback.button.apply";
+					case FINISH -> "feedback.button.finish";
+					case NEXT_FORWARD -> "feedback.button.next";
+					case BACK_PREVIOUS -> "feedback.button.back";
+					case HELP -> "feedback.button.help";
+					case LEFT -> "feedback.button.left";
+					case RIGHT -> "feedback.button.right";
+					case OTHER -> "feedback.button.other";
+					default -> throw new IllegalArgumentException("Unsupported buttonType" + buttonType);
 				};
+
+		return Localization.get(buttonTextKey);
 	}
 
 
@@ -403,8 +404,8 @@ public class Feedback
 	{
 		addText(textContent, "\n\nRecap progressi tag", FontWeight.BLACK);
 		Tag tag = ActivityHandler.getInstance().getCurrentActivity().getTag();
-		addText(textContent, "\nTempo impiegato per il tag: \t"+ tag.getName() + " ");
-		textContent.getChildren().add(new Circle(6,tag.getColor()));
+		addText(textContent, "\nTempo impiegato per il tag: \t" + tag.getName() + " ");
+		textContent.getChildren().add(new Circle(6, tag.getColor()));
 
 		ActivityStatsHandler.ActivityTime tagActivityTime = ActivityStatsHandler.getInstance().getTagActivityTime(tag);
 
@@ -416,7 +417,6 @@ public class Feedback
 		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.monthTime));
 		addText(textContent, "\nQuesto anno: \t\t");
 		addBoldText(textContent, TimeUtils.formatTime(tagActivityTime.yearTime));
-
 
 
 	}
