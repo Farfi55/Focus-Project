@@ -4,13 +4,15 @@ import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import mafiadelprimobanco.focusproject.*;
+import mafiadelprimobanco.focusproject.ActivityHandler;
+import mafiadelprimobanco.focusproject.Feedback;
+import mafiadelprimobanco.focusproject.KeyPressManager;
+import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -27,7 +29,7 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	@FXML private MFXRectangleToggleNode homeButton;
 	@FXML private MFXRectangleToggleNode progressButton;
 	@FXML private MFXRectangleToggleNode statisticsButton;
-//	@FXML private MFXRectangleToggleNode tagButton;
+	//	@FXML private MFXRectangleToggleNode tagButton;
 	@FXML private MFXRectangleToggleNode infoButton;
 	@FXML private MFXRectangleToggleNode accountButton;
 	@FXML private MFXRectangleToggleNode settingsButton;
@@ -127,15 +129,9 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	}
 
 	@FXML
-	void onAccountClick() {
-		try
-		{
-			SceneHandler.getInstance().showLoginPopup();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+	void onAccountClick()
+	{
+		SceneHandler.getInstance().toggleLoginPopup();
 	}
 
 	@FXML
@@ -148,9 +144,8 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	{
 		if (!canNavigate && !pagePathRef.equals(FXMLReferences.SETTINGS))
 		{
-			Feedback.getInstance()
-					.showNotification("Navigazione disabilitata",
-							"La navigazione è disabilitata una volta iniziata l'attività");
+			Feedback.getInstance().showNotification("Navigazione disabilitata",
+					"La navigazione è disabilitata una volta iniziata l'attività");
 			return;
 		}
 		try
