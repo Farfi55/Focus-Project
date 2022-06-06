@@ -4,6 +4,7 @@
     -fx-font-size: 14px;
     -fx-background-color: palette1-0;
     -fx-border-color: palette2-1;
+    -fx-text-fill: palette4-1;
 }
 
 .mfx-text-field:focused {
