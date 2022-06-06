@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -27,9 +28,13 @@ import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class HomePageController implements ActivityObserver, EventHandler<KeyEvent>
+public class HomePageController implements PageController, ActivityObserver, EventHandler<KeyEvent>
 {
+	private PageController tagsController;
+
 	@FXML private BorderPane homeRoot;
 
 	// fullscreen button controls
@@ -58,12 +63,11 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	private int treePhase = 0;
 	private Tree chosenActivityTree;
 
-
 	@FXML
-	void initialize()
+	@Override
+	public void initialize(URL location, ResourceBundle resources)
 	{
-		ActivityHandler.getInstance().addListener(this);
-		KeyPressManager.getInstance().addHandler(this);
+		subscribeListeners();
 
 		activitySelectorComboBox.getItems().addAll(Localization.get("activity.chronometer"),
 				Localization.get("activity.timer"));
@@ -107,6 +111,26 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 
 		resetInterface();
+	}
+
+
+	@Override
+	public void terminate()
+	{
+		tagsController.terminate();
+		unsubscribeListeners();
+	}
+
+	private void subscribeListeners()
+	{
+		ActivityHandler.getInstance().addListener(this);
+		KeyPressManager.getInstance().addHandler(this);
+	}
+
+	private void unsubscribeListeners()
+	{
+		ActivityHandler.getInstance().removeListener(this);
+		KeyPressManager.getInstance().removeHandler(this);
 	}
 
 	@Override
@@ -197,7 +221,10 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		try
 		{
-			homeRoot.setRight(SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS));
+			FXMLLoader fxmlLoader = SceneHandler.getInstance().getFXMLLoader(FXMLReferences.HOME_TAGS);
+			homeRoot.setRight(fxmlLoader.load());
+
+			tagsController = fxmlLoader.getController();
 		}
 		catch (IOException e)
 		{

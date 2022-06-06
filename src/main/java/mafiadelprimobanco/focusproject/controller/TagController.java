@@ -14,10 +14,14 @@ import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.TagHandler;
+import mafiadelprimobanco.focusproject.model.Page;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
 
-public class TagController extends AnchorPane implements TagsObserver
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class TagController implements TagsObserver, PageController
 {
 	// we have a reference to the tag, but we never modify it directly
 	// only using the TagHandler class
@@ -30,11 +34,16 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML private MFXRectangleToggleNode selectionButton;
 
 	@Override
+	public void initialize(URL location, ResourceBundle resources)
+	{
+	}
+
+	@Override
 	public void onTagRemoving(Tag tag)
 	{
 		if (this.tag.equals(tag))
 		{
-			Platform.runLater(() -> TagHandler.getInstance().removeListener(this));
+			Platform.runLater(this::terminate);
 		}
 	}
 
@@ -111,6 +120,12 @@ public class TagController extends AnchorPane implements TagsObserver
 	{
 		setText(tag.getName());
 		setColor(tag.getColor());
+	}
+
+	@Override
+	public void terminate()
+	{
+		TagHandler.getInstance().removeListener(this);
 	}
 
 	public final Tag getTag()

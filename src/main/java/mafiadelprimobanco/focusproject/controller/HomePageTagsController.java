@@ -16,23 +16,32 @@ import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class HomePageTagsController implements TagsObserver
+public class HomePageTagsController implements TagsObserver, PageController
 {
 
+	List<TagController> tagsControllers;
 	@FXML private VBox tagsList;
-
 	private ToggleGroup toggleGroup;
-
 	@FXML private MFXButton newTagButton;
-
 	@FXML private Label tagLabel;
-
 	@FXML private MFXScrollPane tagsSidebar;
 
+	@Override
+	public void terminate()
+	{
+		for (var tagController : tagsControllers)
+		{
+			tagController.terminate();
+		}
+		TagHandler.getInstance().removeListener(this);
+	}
 
-	@FXML
-	void initialize()
+	@Override
+	public void initialize(URL location, ResourceBundle resources)
 	{
 		TagHandler.getInstance().addListener(this);
 		toggleGroup = new ToggleGroup();
@@ -63,11 +72,11 @@ public class HomePageTagsController implements TagsObserver
 	{
 		for (Node child : tagsList.getChildren())
 		{
-			if (child.getProperties().containsKey("tag-uuid")) if (child.getProperties().get("tag-uuid").equals(
+			if (child.getProperties().containsKey("tag-uuid") && child.getProperties().get("tag-uuid").equals(
 					tag.getUuid()))
 			{
 				tagsList.getChildren().remove(child);
-				return;
+				break;
 			}
 		}
 	}
@@ -76,7 +85,7 @@ public class HomePageTagsController implements TagsObserver
 	{
 		// -1 because we want to keep the addTag button at the bottom
 		int index = tagsList.getChildren().size() - 1;
-		Node tagView = SceneHandler.getInstance().createTagView(tag, this.toggleGroup);
+		Node tagView = SceneHandler.getInstance().createTagView(tag, this.toggleGroup, tagsControllers);
 		tagsList.getChildren().add(index, tagView);
 
 //		if(tagView instanceof Toggle toggle)
