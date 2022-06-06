@@ -269,14 +269,14 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		if (chosenActivityTree == null)
 		{
-			Feedback.getInstance().showNotification(Localization.get("msg.trees.noTreeSelectedHeader"),
-					Localization.get("msg.trees.noTreeSelectedMsg"));
+			Feedback.getInstance().showNotification(Localization.get("feedback.trees.noTreeSelectedHeader"),
+					Localization.get("feedback.trees.noTreeSelectedMsg"));
 			return false;
 		}
 		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
-			Feedback.getInstance().showNotification(Localization.get("msg.trees.treeNotAvailableHeade"),
-					Localization.get("msg.trees.treeNotAvailableMsg"));
+			Feedback.getInstance().showNotification(Localization.get("feedback.trees.treeNotAvailableHeader"),
+					Localization.get("feedback.trees.treeNotAvailableMsg"));
 			return false;
 		}
 

@@ -44,10 +44,10 @@ public class RegistrationPageController
 	@FXML
 	void initialize() {
 		loginField.setPromptText("Email");
-		loginField.getValidator().constraint(Localization.get("registration.emailnotnull"), loginField.textProperty().isNotEmpty());
+		loginField.getValidator().constraint(Localization.get("registration.emailNotNull"), loginField.textProperty().isNotEmpty());
 		loginField.setLeadingIcon(new MFXIconWrapper("mfx-user", 16, Color.web("#4D4D4D"), 24));
 		passwordField.getValidator().constraint(
-				Localization.get("registration.passwordlengtherror"), passwordField.textProperty().length().greaterThanOrEqualTo(8));
+				Localization.get("registration.passwordLengthError"), passwordField.textProperty().length().greaterThanOrEqualTo(8));
 		passwordField.setPromptText("Password");
 
 		usernameField.setPromptText("Username");
@@ -66,7 +66,7 @@ public class RegistrationPageController
 		MFXStepperToggle step2 = new MFXStepperToggle("Step 2", new MFXFontIcon("mfx-variant7-mark", 16, Color.web("#85CB33")));
 		Node step3Grid = createGrid();
 		step2.setContent(step3Grid);
-		step2.getValidator().constraint(Localization.get("registration.confirmerror"), checkbox.selectedProperty());
+		step2.getValidator().constraint(Localization.get("registration.confirmError"), checkbox.selectedProperty());
 
 		return List.of(step1, step2);
 	}
