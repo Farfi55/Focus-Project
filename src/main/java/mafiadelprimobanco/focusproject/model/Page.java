@@ -4,14 +4,14 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-import mafiadelprimobanco.focusproject.controller.PageController;
+import mafiadelprimobanco.focusproject.controller.Controller;
 
 public record Page(
 		Integer uuid,
 		String FXMLPath,
 		String pageNameKey,
 		SimpleObjectProperty<Node> pageRoot,
-		SimpleObjectProperty<PageController> controller,
+		SimpleObjectProperty<Controller> controller,
 		SimpleBooleanProperty isSelected,
 		SimpleBooleanProperty isNavigationAlwaysEnabled,
 		SimpleBooleanProperty keepInBackground,
@@ -27,12 +27,12 @@ public record Page(
 				new SimpleBooleanProperty(keepInBackground), shortCutKey);
 	}
 
-	public PageController getController()
+	public Controller getController()
 	{
 		return controller.get();
 	}
 
-	public void setController(PageController controller)
+	public void setController(Controller controller)
 	{
 		this.controller.set(controller);
 	}

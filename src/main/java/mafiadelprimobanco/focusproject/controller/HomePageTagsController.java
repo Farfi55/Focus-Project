@@ -20,7 +20,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class HomePageTagsController implements TagsObserver, PageController
+public class HomePageTagsController implements TagsObserver, Controller
 {
 
 	List<TagController> tagsControllers;

@@ -9,19 +9,17 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.TagHandler;
-import mafiadelprimobanco.focusproject.model.Page;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TagController implements TagsObserver, PageController
+public class TagController implements TagsObserver, Controller
 {
 	// we have a reference to the tag, but we never modify it directly
 	// only using the TagHandler class

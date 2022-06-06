@@ -31,9 +31,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomePageController implements PageController, ActivityObserver, EventHandler<KeyEvent>
+public class HomePageController implements Controller, ActivityObserver, EventHandler<KeyEvent>
 {
-	private PageController tagsController;
+	private Controller tagsController;
 
 	@FXML private BorderPane homeRoot;
 

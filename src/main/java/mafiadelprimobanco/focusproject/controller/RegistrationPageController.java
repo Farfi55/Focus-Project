@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class RegistrationPageController implements PageController
+public class RegistrationPageController implements Controller
 {
 	private final MFXTextField loginField;
 	private final MFXPasswordField passwordField;
