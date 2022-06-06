@@ -3,6 +3,7 @@ package mafiadelprimobanco.focusproject.model;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import mafiadelprimobanco.focusproject.controller.PageController;
 
 public record Page(
@@ -12,15 +13,18 @@ public record Page(
 		SimpleObjectProperty<Node> pageRoot,
 		SimpleObjectProperty<PageController> controller,
 		SimpleBooleanProperty isSelected,
-		boolean isNavigationAlwaysEnabled,
-		boolean keepInBackground)
+		SimpleBooleanProperty isNavigationAlwaysEnabled,
+		SimpleBooleanProperty keepInBackground,
+		KeyCode shortCutKey)
 {
 
 	public Page(Integer uuid, String FXMLPath, String pageNameKey, boolean isNavigationAlwaysEnabled,
-			boolean keepInBackground)
+			boolean keepInBackground,
+			KeyCode shortCutKey)
 	{
 		this(uuid, FXMLPath, pageNameKey, new SimpleObjectProperty<>(), new SimpleObjectProperty<>(),
-				new SimpleBooleanProperty(), isNavigationAlwaysEnabled, keepInBackground);
+				new SimpleBooleanProperty(), new SimpleBooleanProperty(isNavigationAlwaysEnabled),
+				new SimpleBooleanProperty(keepInBackground), shortCutKey);
 	}
 
 	public PageController getController()
