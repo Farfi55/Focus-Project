@@ -9,10 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import mafiadelprimobanco.focusproject.ActivityHandler;
-import mafiadelprimobanco.focusproject.Feedback;
-import mafiadelprimobanco.focusproject.KeyPressManager;
-import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -82,7 +79,6 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	@Override
 	public void handle(KeyEvent keyEvent)
 	{
-		System.out.println("key pressed: " + keyEvent.getCode());
 		if (keyEvent.isControlDown() || keyEvent.isShortcutDown())
 		{
 			switch (keyEvent.getCode())
@@ -101,19 +97,19 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	@FXML
 	void onHomeClick()
 	{
-		navigateTo(FXMLReferences.HOME, homeButton, "Home");
+		navigateTo(FXMLReferences.HOME, homeButton, Localization.get("homePage.name"));
 	}
 
 	@FXML
 	void onProgressClick()
 	{
-		navigateTo(FXMLReferences.PROGRESS, progressButton, "Progressi");
+		navigateTo(FXMLReferences.PROGRESS, progressButton, Localization.get("progressPage.name"));
 	}
 
 	@FXML
 	void onStatisticsClick()
 	{
-		navigateTo(FXMLReferences.STATISTICS, statisticsButton, "Statistiche");
+		navigateTo(FXMLReferences.STATISTICS, statisticsButton, Localization.get("statisticsPage.name"));
 	}
 
 //	@FXML
@@ -125,7 +121,7 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	@FXML
 	void onInfoClick()
 	{
-		navigateTo(FXMLReferences.INFO, infoButton, "Informazioni");
+		navigateTo(FXMLReferences.INFO, infoButton, Localization.get("infoPage.name"));
 	}
 
 	@FXML
@@ -137,15 +133,15 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	@FXML
 	void onSettingsClick()
 	{
-		navigateTo(FXMLReferences.SETTINGS, settingsButton, "Impostazioni");
+		navigateTo(FXMLReferences.SETTINGS, settingsButton, Localization.get("settingsPage.name"));
 	}
 
 	private void navigateTo(String pagePathRef, MFXRectangleToggleNode button, String pageName)
 	{
 		if (!canNavigate && !pagePathRef.equals(FXMLReferences.SETTINGS))
 		{
-			Feedback.getInstance().showNotification("Navigazione disabilitata",
-					"La navigazione è disabilitata una volta iniziata l'attività");
+			Feedback.getInstance().showNotification(Localization.get("error.navigationDisabled.header"),
+					Localization.get("error.navigationDisabled.message"));
 			return;
 		}
 		try
@@ -160,7 +156,7 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 		catch (IOException e)
 		{
 			e.printStackTrace();
-			Feedback.getInstance().showError("Errore Di caricamento", "Impossibile caricare la pagina " + pageName);
+			Feedback.getInstance().showError(Localization.get("error.loadingPage.header"), Localization.get("error.loadingPage.message", pageName));
 		}
 	}
 

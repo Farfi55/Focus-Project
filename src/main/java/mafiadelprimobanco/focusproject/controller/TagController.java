@@ -29,14 +29,6 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML private MFXButton removeButton;
 	@FXML private MFXRectangleToggleNode selectionButton;
 
-	// todo refactor: this should not go in here
-	public static String toHexColor(Color color)
-	{
-		// return "#" + Integer.toHexString(your_color.getRGB()).substring(2);
-		return String.format("#%02X%02X%02X", (int)(color.getRed() * 255), (int)(color.getGreen() * 255),
-				(int)(color.getBlue() * 255));
-	}
-
 	@Override
 	public void onTagRemoving(Tag tag)
 	{
@@ -94,8 +86,8 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML
 	void onRemoveAction(Event event)
 	{
-		if (Feedback.getInstance().askYesNoConfirmation(Localization.get("feedback.tag.deleteTagHeader"),
-				Localization.get("feedback.tag.deleteTagMsg")))
+		if (Feedback.getInstance().askYesNoConfirmation(Localization.get("warning.tag.deleteTag.header"),
+				Localization.get("warning.tag.deleteTag.message")))
 		{
 			TagHandler.getInstance().removeTag(tag.getUuid());
 		}

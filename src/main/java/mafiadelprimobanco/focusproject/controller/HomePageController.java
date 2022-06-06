@@ -269,14 +269,14 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		if (chosenActivityTree == null)
 		{
-			Feedback.getInstance().showNotification(Localization.get("feedback.trees.noTreeSelectedHeader"),
-					Localization.get("feedback.trees.noTreeSelectedMsg"));
+			Feedback.getInstance().showNotification(Localization.get("error.tree.noTreeSelected.header"),
+					Localization.get("error.tree.noTreeSelected.message"));
 			return false;
 		}
 		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
-			Feedback.getInstance().showNotification(Localization.get("feedback.trees.treeNotAvailableHeader"),
-					Localization.get("feedback.trees.treeNotAvailableMsg"));
+			Feedback.getInstance().showNotification(Localization.get("error.tree.treeNotAvailable.header"),
+					Localization.get("error.tree.treeNotAvailable.message"));
 			return false;
 		}
 
@@ -295,8 +295,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		int minTimerDuration = 10; // 10 secondi
 		if (getInputTimerDuration() < minTimerDuration)
 		{
-			Feedback.getInstance().showNotification(Localization.get("feedback.time.invalidTimeHeader"),
-					Localization.get("feedback.time.invalidTimeMsg", TimeUtils.formatTime(minTimerDuration)));
+			Feedback.getInstance().showNotification(Localization.get("error.time.invalidTime.header"),
+					Localization.get("error.time.invalidTime.message", TimeUtils.formatTime(minTimerDuration)));
 			return false;
 		}
 
@@ -308,8 +308,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> {
-				if (Feedback.getInstance().askYesNoConfirmation(Localization.get("feedback.activity.stopActivityHeader"),
-						Localization.get("feedback.activity.stopActivityMsg")))
+				if (Feedback.getInstance().askYesNoConfirmation(Localization.get("warning.activity.stopActivity.header"),
+						Localization.get("warning.activity.stopActivity.message")))
 					ActivityHandler.getInstance().stopCurrentActivity();
 
 			}
@@ -344,10 +344,6 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		return 0;
 	}
 
-	@FXML
-	void updateSecondValue(KeyEvent event) {
-		//secondSpinnerModel.setValue(
-	}
 
 	private void showSpinners() { setSpinnersVisible(true); }
 
