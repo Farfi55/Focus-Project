@@ -6,7 +6,6 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 
 import java.text.MessageFormat;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public final class LocationHandler
+public final class Localization
 {
 	/**
 	 * the current selected Locale.

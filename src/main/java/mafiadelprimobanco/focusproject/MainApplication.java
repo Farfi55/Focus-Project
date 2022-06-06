@@ -18,8 +18,8 @@ public class MainApplication extends Application
 	{
 		try
 		{
-			LocationHandler.setLocale(Locale.ITALIAN);
-			
+			Localization.setLocale(Locale.ITALIAN);
+
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());

@@ -67,9 +67,9 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		ActivityHandler.getInstance().addListener(this);
 		KeyPressManager.getInstance().addHandler(this);
 
-		activitySelectorComboBox.getItems().addAll(LocationHandler.get("activity.chronometer"),
-				LocationHandler.get("activity.timer"));
-		LocationHandler.setMFXComboboxFloatingText(activitySelectorComboBox, "activity.mode");
+		activitySelectorComboBox.getItems().addAll(Localization.get("activity.chronometer"),
+				Localization.get("activity.timer"));
+		Localization.setMFXComboboxFloatingText(activitySelectorComboBox, "activity.mode");
 		activitySelectorComboBox.selectFirst();
 
 		loadTagsView();
@@ -114,7 +114,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	@Override
 	public void onActivityStarting(AbstractActivity currentActivity)
 	{
-		LocationHandler.setButton(activityButton, "activity.stop");
+		Localization.setButton(activityButton, "activity.stop");
 
 		showNode(activityTimeLabel);
 
@@ -209,7 +209,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	private void resetInterface()
 	{
-		LocationHandler.setButton(activityButton, "activity.start");
+		Localization.setButton(activityButton, "activity.start");
 
 		hideNode(activityTimeLabel);
 
@@ -269,14 +269,14 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		if (chosenActivityTree == null)
 		{
-			Feedback.getInstance().showNotification(LocationHandler.get("msg.trees.noTreeSelectedHeader"),
-					LocationHandler.get("msg.trees.noTreeSelectedMsg"));
+			Feedback.getInstance().showNotification(Localization.get("msg.trees.noTreeSelectedHeader"),
+					Localization.get("msg.trees.noTreeSelectedMsg"));
 			return false;
 		}
 		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
-			Feedback.getInstance().showNotification(LocationHandler.get("msg.trees.treeNotAvailableHeade"),
-					LocationHandler.get("msg.trees.treeNotAvailableMsg"));
+			Feedback.getInstance().showNotification(Localization.get("msg.trees.treeNotAvailableHeade"),
+					Localization.get("msg.trees.treeNotAvailableMsg"));
 			return false;
 		}
 
@@ -295,8 +295,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		int minTimerDuration = 10; // 10 secondi
 		if (getInputTimerDuration() < minTimerDuration)
 		{
-			Feedback.getInstance().showNotification(LocationHandler.get("feedback.time.invalidTimeHeader"),
-					LocationHandler.get("feedback.time.invalidTimeMsg", TimeUtils.formatTime(minTimerDuration)));
+			Feedback.getInstance().showNotification(Localization.get("feedback.time.invalidTimeHeader"),
+					Localization.get("feedback.time.invalidTimeMsg", TimeUtils.formatTime(minTimerDuration)));
 			return false;
 		}
 
@@ -308,8 +308,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> {
-				if (Feedback.getInstance().askYesNoConfirmation(LocationHandler.get("feedback.activity.stopActivityHeader"),
-						LocationHandler.get("feedback.activity.stopActivityMsg")))
+				if (Feedback.getInstance().askYesNoConfirmation(Localization.get("feedback.activity.stopActivityHeader"),
+						Localization.get("feedback.activity.stopActivityMsg")))
 					ActivityHandler.getInstance().stopCurrentActivity();
 
 			}

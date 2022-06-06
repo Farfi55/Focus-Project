@@ -6,7 +6,7 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import mafiadelprimobanco.focusproject.AutentificationHandler;
-import mafiadelprimobanco.focusproject.LocationHandler;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.User;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -49,8 +49,8 @@ public class LoginPopUpController {
 
 	@FXML void initialize()
 	{
-		LocationHandler.setButton(loginButton, "login.signIn");
-		LocationHandler.setButton(registrationButton, "login.signUp");
+		Localization.setButton(loginButton, "login.signIn");
+		Localization.setButton(registrationButton, "login.signUp");
 	}
 
 }
