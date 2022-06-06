@@ -1,7 +1,6 @@
 package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
-import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleGroup;
@@ -9,18 +8,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import mafiadelprimobanco.focusproject.*;
-import mafiadelprimobanco.focusproject.model.ActivityObserver;
-import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
-import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
+import javafx.util.Pair;
+import mafiadelprimobanco.focusproject.KeyPressManager;
+import mafiadelprimobanco.focusproject.PagesHandler;
+import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.model.Page;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
+public class BaseController implements EventHandler<KeyEvent>
 {
-	List<MFXRectangleToggleNode> navButtons = new ArrayList<>();
+	List<Pair<MFXRectangleToggleNode, Page>> navButtonsPages = new ArrayList<>();
 	@FXML private AnchorPane root;
 	@FXML private StackPane contentRoot;
 	@FXML private MFXRectangleToggleNode homeButton;
@@ -30,145 +29,66 @@ public class BaseController implements ActivityObserver, EventHandler<KeyEvent>
 	@FXML private MFXRectangleToggleNode infoButton;
 	@FXML private MFXRectangleToggleNode accountButton;
 	@FXML private MFXRectangleToggleNode settingsButton;
-	@FXML private ToggleGroup nav_toggle_group;
-	private boolean canNavigate = true;
+
 
 	@FXML
 	void initialize()
 	{
 		SceneHandler.getInstance().setRoot(root);
-		MFXTooltip.of(homeButton, "Home page (ctrl+H)").install();
-		MFXTooltip.of(progressButton, "Progress page (ctrl+P)").install();
-		MFXTooltip.of(statisticsButton, "Statistics page (ctrl+S)").install();
-//		MFXTooltip.of(tagButton, "Tag page (ctrl+T)").install();
-		MFXTooltip.of(infoButton, "Help (ctrl+I)").install();
-		MFXTooltip.of(accountButton, "Account settings page (ctrl+U)").install();
-		MFXTooltip.of(settingsButton, "Settings page (ctrl+,)").install();
-		//
-		//		navButtons = nav_toggle_group.getToggles();
-		navButtons.add(homeButton);
-		navButtons.add(progressButton);
-		navButtons.add(statisticsButton);
-//		navButtons.add(tagButton);
-		navButtons.add(infoButton);
-		navButtons.add(accountButton);
-		navButtons.add(settingsButton);
-		setNavigationEnabled(true);
-		ActivityHandler.getInstance().addListener(this);
+
+		navButtonsPages.add(new Pair<>(homeButton, PagesHandler.home));
+		navButtonsPages.add(new Pair<>(progressButton, PagesHandler.progress));
+		navButtonsPages.add(new Pair<>(statisticsButton, PagesHandler.statistics));
+		navButtonsPages.add(new Pair<>(infoButton, PagesHandler.info));
+		navButtonsPages.add(new Pair<>(accountButton, PagesHandler.account));
+		navButtonsPages.add(new Pair<>(settingsButton, PagesHandler.settings));
+
+		for (var buttonPage : navButtonsPages)
+		{
+			MFXRectangleToggleNode button = buttonPage.getKey();
+			Page page = buttonPage.getValue();
+
+			button.disableProperty().bind(
+					page.isNavigationAlwaysEnabled().not().and(PagesHandler.isNavigationEnabledProperty().not()));
+
+			button.setOnAction(event -> {
+				PagesHandler.navigateTo(page);
+				SceneHandler.getInstance().closeLoginPopup();
+				button.setSelected(true);
+			});
+
+//			button.selectedProperty().bind(page.isSelected());
+		}
+
+		// override behaviour
+		accountButton.setOnAction(event -> SceneHandler.getInstance().toggleLoginPopup());
+
 		KeyPressManager.getInstance().addHandler(this);
 		SceneHandler.getInstance().setContentPane(contentRoot);
-
-		onHomeClick();
 	}
 
-	@Override
-	public void onActivityStartingSafe(AbstractActivity currentActivity)
-	{
-		switch (ActivityHandler.getInstance().getCurrentActivityType())
-		{
-			case TIMER, TOMATO_TIMER -> setNavigationEnabled(false);
-		}
-	}
-
-	@Override
-	public void onActivityEndSafe(AbstractActivity currentActivity)
-	{
-		setNavigationEnabled(true);
-	}
 
 	@Override
 	public void handle(KeyEvent keyEvent)
 	{
 		if (keyEvent.isControlDown() || keyEvent.isShortcutDown())
 		{
-			switch (keyEvent.getCode())
+			for (var buttonPage : navButtonsPages)
 			{
-				case DIGIT1, H -> onHomeClick();
-				case DIGIT2, P -> onProgressClick();
-				case DIGIT3, S -> onStatisticsClick();
-				case DIGIT4, I -> onInfoClick();
-				case DIGIT5, U -> onAccountClick();
-				case DIGIT6, COMMA -> onSettingsClick();
+				Page page = buttonPage.getValue();
+				if (keyEvent.getCode().equals(page.shortCutKey()))
+				{
+					MFXRectangleToggleNode button = buttonPage.getKey();
+					button.fire();
+					keyEvent.consume();
+					return;
+				}
 			}
 		}
-		else if (keyEvent.getCode() == KeyCode.F1) onInfoClick();
-	}
-
-	@FXML
-	void onHomeClick()
-	{
-		navigateTo(FXMLReferences.HOME, homeButton, Localization.get("homePage.name"));
-	}
-
-	@FXML
-	void onProgressClick()
-	{
-		navigateTo(FXMLReferences.PROGRESS, progressButton, Localization.get("progressPage.name"));
-	}
-
-	@FXML
-	void onStatisticsClick()
-	{
-		navigateTo(FXMLReferences.STATISTICS, statisticsButton, Localization.get("statisticsPage.name"));
-	}
-
-//	@FXML
-//	void onTagClick()
-//	{
-//		navigateTo(FXMLReferences.TAGS, tagButton, "Tag");
-//	}
-
-	@FXML
-	void onInfoClick()
-	{
-		navigateTo(FXMLReferences.INFO, infoButton, Localization.get("infoPage.name"));
-	}
-
-	@FXML
-	void onAccountClick()
-	{
-		SceneHandler.getInstance().toggleLoginPopup();
-	}
-
-	@FXML
-	void onSettingsClick()
-	{
-		navigateTo(FXMLReferences.SETTINGS, settingsButton, Localization.get("settingsPage.name"));
-	}
-
-	private void navigateTo(String pagePathRef, MFXRectangleToggleNode button, String pageName)
-	{
-		if (!canNavigate && !pagePathRef.equals(FXMLReferences.SETTINGS))
-		{
-			Feedback.getInstance().showNotification(Localization.get("error.navigationDisabled.header"),
-					Localization.get("error.navigationDisabled.message"));
-			return;
+		else if (keyEvent.getCode() == KeyCode.F1) {
+			infoButton.fire();
+			keyEvent.consume();
 		}
-		try
-		{
-			if (!pagePathRef.equals(""))
-			{
-				SceneHandler.getInstance().navTo(pagePathRef);
-			}
-			else System.out.println("navigation to empty page reference");
-			button.setSelected(true);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			Feedback.getInstance().showError(Localization.get("error.loadingPage.header"), Localization.get("error.loadingPage.message", pageName));
-		}
-	}
-
-	private void setNavigationEnabled(boolean value)
-	{
-		System.out.println("navigation enabled: " + value);
-		canNavigate = value;
-		for (MFXRectangleToggleNode button : navButtons)
-		{
-			button.setDisable(!value);
-		}
-		settingsButton.setDisable(false);
 	}
 
 

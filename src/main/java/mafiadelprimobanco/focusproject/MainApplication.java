@@ -18,7 +18,7 @@ public class MainApplication extends Application
 	{
 		try
 		{
-			Localization.setLocale(Locale.ITALIAN);
+//			Localization.setLocale(Locale.ITALIAN);
 
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
@@ -27,6 +27,7 @@ public class MainApplication extends Application
 			// just to call the constructor
 			ActivityStatsHandler.getInstance().init();
 
+			PagesHandler.navigateTo(PagesHandler.home);
 		} catch (IOException e)
 		{
 			e.printStackTrace();

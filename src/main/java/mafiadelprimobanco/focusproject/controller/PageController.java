@@ -1,7 +1,8 @@
 package mafiadelprimobanco.focusproject.controller;
 
-public interface PageController
+import javafx.fxml.Initializable;
+
+public interface PageController extends Initializable
 {
-	void initialize();
-	void deinitialize();
+	void terminate();
 }

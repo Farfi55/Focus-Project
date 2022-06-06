@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import mafiadelprimobanco.focusproject.AutentificationHandler;
 import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.PagesHandler;
 import mafiadelprimobanco.focusproject.SceneHandler;
 import mafiadelprimobanco.focusproject.model.User;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
@@ -37,14 +38,7 @@ public class LoginPopUpController {
 	@FXML void doRegisterUser(ActionEvent event)
 	{
 		SceneHandler.getInstance().closeLoginPopup();
-		try
-		{
-			SceneHandler.getInstance().navTo(FXMLReferences.ACCOUNT);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		PagesHandler.navigateTo(PagesHandler.account);
 	}
 
 	@FXML void initialize()
