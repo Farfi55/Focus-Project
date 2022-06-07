@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject.controller;
 
+import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
@@ -9,6 +10,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -111,7 +114,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 		updateTreeImageView();
 		treeChooserPopup = new TreeChooserPopup();
-		treeButton.setOnAction(event -> treeChooserPopup.show(treeButton));
+		treeButton.setOnAction(event -> treeChooserPopup.show(treeButton, Alignment.of(HPos.RIGHT, VPos.CENTER),200,0));
 		TreeHandler.getInstance().selectedActivityTreeProperty().addListener(observable -> updateTreeImageView());
 
 		resetInterface();

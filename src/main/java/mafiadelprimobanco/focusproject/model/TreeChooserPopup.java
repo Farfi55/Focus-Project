@@ -1,15 +1,18 @@
 package mafiadelprimobanco.focusproject.model;
 
+import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.controls.MFXPopup;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
-import javafx.geometry.Orientation;
+import io.github.palexdev.materialfx.factories.InsetsFactory;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.TilePane;
 import mafiadelprimobanco.focusproject.Feedback;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.ResourcesLoader;
@@ -23,6 +26,8 @@ public class TreeChooserPopup extends MFXPopup
 	private MFXScrollPane scrollPane;
 	private GridPane treesPane;
 
+	private ToggleGroup toggleGroup;
+
 	private Map<Tree, MFXRectangleToggleNode> treeButtons = new HashMap<>();
 
 	public TreeChooserPopup()
@@ -33,18 +38,45 @@ public class TreeChooserPopup extends MFXPopup
 
 	private void initialize()
 	{
-		setMaxSize(220, 220);
+		toggleGroup = new ToggleGroup();
 		treesPane = new GridPane();
+		treesPane.setHgap(5);
+		treesPane.setVgap(5);
 		scrollPane = new MFXScrollPane(treesPane);
+		scrollPane.setMaxSize(400, 400);
+		scrollPane.setPadding(InsetsFactory.of(5, 5, 5, 5));
+		scrollPane.setFitToWidth(true);
 		createTreeButtons();
 		setContent(scrollPane);
 //		setAutoHide(false);
+	}
+
+
+	@Override
+	public void show(Node ownerNode, double anchorX, double anchorY)
+	{
+		super.show(ownerNode, anchorX, anchorY);
+		updateTreeButtons();
 	}
 
 	@Override
 	public void show(Node node)
 	{
 		super.show(node);
+		updateTreeButtons();
+	}
+
+	@Override
+	public void show(Node node, Alignment alignment)
+	{
+		super.show(node, alignment);
+		updateTreeButtons();
+	}
+
+	@Override
+	public void show(Node node, Alignment alignment, double xOffset, double yOffset)
+	{
+		super.show(node, alignment, xOffset, yOffset);
 		updateTreeButtons();
 	}
 
@@ -56,7 +88,9 @@ public class TreeChooserPopup extends MFXPopup
 			MFXRectangleToggleNode button = buildTreeButton(tree);
 			treeButtons.put(tree, button);
 			treesPane.add(button, i++, j);
-			if(i == treesPane.getColumnCount()){
+			System.out.println(treesPane.getColumnCount());
+			if (i == 3)
+			{
 				i = 0;
 				j++;
 			}
@@ -69,7 +103,7 @@ public class TreeChooserPopup extends MFXPopup
 		for (Tree tree : treeButtons.keySet())
 		{
 			MFXRectangleToggleNode button = treeButtons.get(tree);
-			button.setDisable(tree.isUnlocked());
+			button.setDisable(!tree.isUnlocked());
 		}
 		if (TreeHandler.getInstance().getSelectedActivityTree() != null) treeButtons.get(
 				TreeHandler.getInstance().getSelectedActivityTree()).setSelected(true);
@@ -83,12 +117,24 @@ public class TreeChooserPopup extends MFXPopup
 		image.setFitHeight(80);
 
 		Label treeLabel = new Label(tree.getName(), image);
+		treeLabel.setMaxSize(-1, -1);
+		treeLabel.setMinSize(-1, -1);
+		treeLabel.setPrefSize(100, 110);
+		treeLabel.setPadding(Insets.EMPTY);
+		treeLabel.setAlignment(Pos.CENTER);
+
+
 		treeLabel.setContentDisplay(ContentDisplay.TOP);
 		treeLabel.setGraphicTextGap(8);
 
-		MFXRectangleToggleNode button = new MFXRectangleToggleNode("", treeLabel);
-		button.setContentDisplay(ContentDisplay.CENTER);
-		button.setPrefSize(100, 120);
+		MFXRectangleToggleNode button = new MFXRectangleToggleNode();
+		button.setGraphic(treeLabel);
+		button.setToggleGroup(toggleGroup);
+		button.setAlignment(Pos.CENTER);
+		button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+		button.setMaxSize(-1, -1);
+		button.setMinSize(-1, -1);
+		button.setPrefSize(120, 120);
 		button.setOnAction(event ->
 		{
 			if (tree.isUnlocked())
