@@ -49,7 +49,7 @@ public class StyleHandler
 		reloadStyles();
 	}
 
-	private void changeTheme(String newTheme)
+	public void setTheme(String newTheme)
 	{
 		// if the user can use custom themes then sanitize 'newTheme'
 		currentTheme.setValue(newTheme);

@@ -5,19 +5,22 @@
 * {
     /* NOT ACTUAL COLOR, TESTING ONLY */
 
-    palette1-0: #625f5c;
-    palette1-1: #3a2f02;
-    palette1-2: #7d802d;
-    palette1-3: #a26565;
-    palette2-1: #3549cb;
-    palette2-2: #c01d1d;
-    palette2-3: #b6e833;
-    palette2-4: #a45050;
-    palette2-5: #b7b48f;
-    palette3-1: #A98467;
-    palette3-2: #95755E;
-    palette3-3: #ecb995;
-    palette3-4: #cbab99;
-    palette4-1: #ffffff;
+    palette1-0: #111111;
+
+    palette1-1: #2f3838;
+    palette1-2: #485b59;
+    palette1-3: #506e6c;
+
+    palette2-1: #95bb43;
+    palette2-2: #77a849;
+    palette2-3: #4d8849;
+
+    palette3-1: #20559a;
+    palette3-2: #3681b6;
+    palette3-3: #4497b0;
+
+    palette4-1: #dad7cd;
+
+    shadow1: rgba(41, 45, 54, 0.3);
 
 }

@@ -8,6 +8,7 @@ import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -27,16 +28,18 @@ import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class HomePageController implements ActivityObserver, EventHandler<KeyEvent>
+public class HomePageController implements Controller, ActivityObserver, EventHandler<KeyEvent>
 {
-	//
+	private Controller tagsController;
+
 	@FXML private BorderPane homeRoot;
 
 	// fullscreen button controls
 	@FXML private MFXButton fullScreenButton;
 	@FXML private FontIcon fullScreenIcon;
-
 
 	// selected tag controls
 	@FXML private Circle selectedTagColorCircle;
@@ -53,22 +56,22 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	@FXML private MFXSpinner<Integer> secondsSpinnerSelector;
 
 
-	private int treePhase = 0;
 	@FXML private ImageView treeImageViewer;
 
 	@FXML private MFXButton activityButton;
 
+	private int treePhase = 0;
 	private Tree chosenActivityTree;
 
-
 	@FXML
-	void initialize()
+	@Override
+	public void initialize(URL location, ResourceBundle resources)
 	{
-		ActivityHandler.getInstance().addListener(this);
-		KeyPressManager.getInstance().addHandler(this);
+		subscribeListeners();
 
-		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer");
-//		activitySelectorComboBox.getItems().addAll("Cronometro", "Timer", "Timer Pomodoro");
+		activitySelectorComboBox.getItems().addAll(Localization.get("activity.chronometer"),
+				Localization.get("activity.timer"));
+		Localization.setMFXComboboxFloatingText(activitySelectorComboBox, "activity.mode");
 		activitySelectorComboBox.selectFirst();
 
 		loadTagsView();
@@ -80,28 +83,15 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		var minuteSpinnerModel = new IntegerSpinnerModel(0);
 		var secondSpinnerModel = new IntegerSpinnerModel(0);
 
-		secondSpinnerModel.setMax(60);
-		minuteSpinnerModel.setMax(60);
-
-		secondSpinnerModel.setMin(-1);
-		minuteSpinnerModel.setMin(-1);
+		secondSpinnerModel.setMax(59);
+		minuteSpinnerModel.setMax(59);
 
 		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
 		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
 		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
 
-		minutesSpinnerSelector.valueProperty().addListener(e ->
-		{
-			if (minutesSpinnerSelector.getValue() > 59) minutesSpinnerSelector.setValue(0);
-			else if (minutesSpinnerSelector.getValue() < 0) minutesSpinnerSelector.setValue(59);
-
-		});
-
-		secondsSpinnerSelector.valueProperty().addListener(e ->
-		{
-			if (secondsSpinnerSelector.getValue() > 59) secondsSpinnerSelector.setValue(0);
-			else if (secondsSpinnerSelector.getValue() < 0) secondsSpinnerSelector.setValue(59);
-		});
+		minuteSpinnerModel.setWrapAround(true);
+		secondSpinnerModel.setWrapAround(true);
 
 		hoursSpinnerSelector.setOnCommit(e ->
 		{
@@ -123,10 +113,30 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		resetInterface();
 	}
 
+
+	@Override
+	public void terminate()
+	{
+		tagsController.terminate();
+		unsubscribeListeners();
+	}
+
+	private void subscribeListeners()
+	{
+		ActivityHandler.getInstance().addListener(this);
+		KeyPressManager.getInstance().addHandler(this);
+	}
+
+	private void unsubscribeListeners()
+	{
+		ActivityHandler.getInstance().removeListener(this);
+		KeyPressManager.getInstance().removeHandler(this);
+	}
+
 	@Override
 	public void onActivityStarting(AbstractActivity currentActivity)
 	{
-		activityButton.setText("Interrompi");
+		Localization.setButton(activityButton, "activity.stop");
 
 		showNode(activityTimeLabel);
 
@@ -211,7 +221,10 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		try
 		{
-			homeRoot.setRight(SceneHandler.getInstance().loadFXML(FXMLReferences.HOME_TAGS));
+			FXMLLoader fxmlLoader = SceneHandler.getInstance().getFXMLLoader(FXMLReferences.HOME_TAGS);
+			homeRoot.setRight(fxmlLoader.load());
+
+			tagsController = fxmlLoader.getController();
 		}
 		catch (IOException e)
 		{
@@ -221,7 +234,7 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 
 	private void resetInterface()
 	{
-		activityButton.setText("Avvia");
+		Localization.setButton(activityButton, "activity.start");
 
 		hideNode(activityTimeLabel);
 
@@ -281,14 +294,14 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		if (chosenActivityTree == null)
 		{
-			Feedback.getInstance().showNotification("Nessun Albero selezionato",
-					"Devi scegliere un albero per l'attività");
+			Feedback.getInstance().showNotification(Localization.get("error.tree.noTreeSelected.header"),
+					Localization.get("error.tree.noTreeSelected.message"));
 			return false;
 		}
 		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
 		{
-			Feedback.getInstance().showNotification("Albero selezionato non sbloccato",
-					"Devi scegliere un albero già sbloccato per l'attività");
+			Feedback.getInstance().showNotification(Localization.get("error.tree.treeNotAvailable.header"),
+					Localization.get("error.tree.treeNotAvailable.message"));
 			return false;
 		}
 
@@ -307,9 +320,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		int minTimerDuration = 10; // 10 secondi
 		if (getInputTimerDuration() < minTimerDuration)
 		{
-			Feedback.getInstance().showNotification("Durata attività invalida",
-					"Inserire una durata di attività di almeno " + TimeUtils.formatTime(minTimerDuration)
-							+ "\nOppure cambiare la durata minima dalle impostazioni");
+			Feedback.getInstance().showNotification(Localization.get("error.time.invalidTime.header"),
+					Localization.get("error.time.invalidTime.message", TimeUtils.formatTime(minTimerDuration)));
 			return false;
 		}
 
@@ -321,8 +333,8 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> {
-				if (Feedback.getInstance().askYesNoConfirmation("Interrompere attività",
-						"Sei sicuro di voler interrompere l'attività?"))
+				if (Feedback.getInstance().askYesNoConfirmation(Localization.get("warning.activity.stopActivity.header"),
+						Localization.get("warning.activity.stopActivity.message")))
 					ActivityHandler.getInstance().stopCurrentActivity();
 
 			}
@@ -345,17 +357,18 @@ public class HomePageController implements ActivityObserver, EventHandler<KeyEve
 	{
 		int currVal = 0;
 
+		//System.out.println(secondsSpinnerSelector.getValue().intValue());
+		//secondSpinnerModel.setValue(
 		try
 		{
-			currVal = Integer.parseInt(num);
-		}
-		catch (Exception ignore)
+			return Integer.parseInt(num);
+		}catch (Exception e)
 		{
-			Feedback.getInstance().showError("Errore", "Impossibile determinare il valore inserito");
 		}
 
-		return currVal;
+		return 0;
 	}
+
 
 	private void showSpinners() { setSpinnersVisible(true); }
 

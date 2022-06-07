@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.ProgressPageController">
+    <children>
+        <Label fx:id="pageTitle" alignment="CENTER" layoutX="286.0" layoutY="122.0" prefHeight="18.0" prefWidth="114.0" text="title" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" />
+        <MFXTextField alignment="CENTER" floatMode="DISABLED" layoutX="258.0" layoutY="150.0" prefHeight="35.0" prefWidth="94.0" promptText="some prompt" text="some  text" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" />
+    </children>
+</AnchorPane>
+

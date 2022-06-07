@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class MainApplication extends Application
 {
@@ -17,6 +18,8 @@ public class MainApplication extends Application
 	{
 		try
 		{
+//			Localization.setLocale(Locale.ITALIAN);
+
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
@@ -24,7 +27,7 @@ public class MainApplication extends Application
 			// just to call the constructor
 			ActivityStatsHandler.getInstance().init();
 
-
+			PagesHandler.navigateTo(PagesHandler.home);
 		} catch (IOException e)
 		{
 			e.printStackTrace();

@@ -9,14 +9,17 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import mafiadelprimobanco.focusproject.Feedback;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.TagHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
 
-public class TagController extends AnchorPane implements TagsObserver
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class TagController implements TagsObserver, Controller
 {
 	// we have a reference to the tag, but we never modify it directly
 	// only using the TagHandler class
@@ -28,12 +31,9 @@ public class TagController extends AnchorPane implements TagsObserver
 	@FXML private MFXButton removeButton;
 	@FXML private MFXRectangleToggleNode selectionButton;
 
-	// todo refactor: this should not go in here
-	public static String toHexColor(Color color)
+	@Override
+	public void initialize(URL location, ResourceBundle resources)
 	{
-		// return "#" + Integer.toHexString(your_color.getRGB()).substring(2);
-		return String.format("#%02X%02X%02X", (int)(color.getRed() * 255), (int)(color.getGreen() * 255),
-				(int)(color.getBlue() * 255));
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class TagController extends AnchorPane implements TagsObserver
 	{
 		if (this.tag.equals(tag))
 		{
-			Platform.runLater(() -> TagHandler.getInstance().removeListener(this));
+			Platform.runLater(this::terminate);
 		}
 	}
 
@@ -87,15 +87,14 @@ public class TagController extends AnchorPane implements TagsObserver
 		Color colorPicked = colorPicker.getValue();
 		TagHandler.getInstance().changeTag(tag.getName(), colorPicked, tag.getUuid());
 		event.consume();
-
 	}
 
 
 	@FXML
 	void onRemoveAction(Event event)
 	{
-		if (Feedback.getInstance().askYesNoConfirmation("Eliminazione tag",
-				"Sei sicuro di voler rimuovere questa tag?"))
+		if (Feedback.getInstance().askYesNoConfirmation(Localization.get("warning.tag.deleteTag.header"),
+				Localization.get("warning.tag.deleteTag.message")))
 		{
 			TagHandler.getInstance().removeTag(tag.getUuid());
 		}
@@ -119,6 +118,12 @@ public class TagController extends AnchorPane implements TagsObserver
 	{
 		setText(tag.getName());
 		setColor(tag.getColor());
+	}
+
+	@Override
+	public void terminate()
+	{
+		TagHandler.getInstance().removeListener(this);
 	}
 
 	public final Tag getTag()
