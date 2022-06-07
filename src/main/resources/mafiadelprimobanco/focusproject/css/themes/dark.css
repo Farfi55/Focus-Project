@@ -5,7 +5,8 @@
 * {
     /* NOT ACTUAL COLOR, TESTING ONLY */
 
-    palette1-0: #1f2121;
+    palette1-0: #111111;
+
     palette1-1: #2f3838;
     palette1-2: #485b59;
     palette1-3: #506e6c;
@@ -19,5 +20,7 @@
     palette3-3: #4497b0;
 
     palette4-1: #dad7cd;
+
+    shadow1: rgba(41, 45, 54, 0.3);
 
 }
