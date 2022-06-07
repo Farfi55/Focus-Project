@@ -3,7 +3,6 @@ package mafiadelprimobanco.focusproject.controller;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -51,13 +50,13 @@ public class BaseController implements EventHandler<KeyEvent>
 			button.disableProperty().bind(
 					page.isNavigationAlwaysEnabled().not().and(PagesHandler.isNavigationEnabledProperty().not()));
 
-			button.setOnAction(event -> {
+			button.setOnAction(event ->
+			{
 				PagesHandler.navigateTo(page);
 				SceneHandler.getInstance().closeLoginPopup();
 				button.setSelected(true);
 			});
-
-//			button.selectedProperty().bind(page.isSelected());
+			page.isSelected().addListener(observable -> button.setSelected(page.isSelected().get()));
 		}
 
 		// override behaviour
@@ -85,7 +84,8 @@ public class BaseController implements EventHandler<KeyEvent>
 				}
 			}
 		}
-		else if (keyEvent.getCode() == KeyCode.F1) {
+		else if (keyEvent.getCode() == KeyCode.F1)
+		{
 			infoButton.fire();
 			keyEvent.consume();
 		}

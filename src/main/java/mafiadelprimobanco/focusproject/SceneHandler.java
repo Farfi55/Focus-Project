@@ -20,6 +20,7 @@ import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class SceneHandler
 {
@@ -47,11 +48,11 @@ public class SceneHandler
 		stage.setTitle("Focus");
 		stage.setScene(scene);
 		isFullScreen = stage.fullScreenProperty();
+		loginPopup = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Login-popup-view.fxml")));
 		loadFonts();
 		setStyleSheets();
 		stage.show();
 
-		loginPopup = FXMLLoader.load(getClass().getResource("Login-popup-view.fxml"));
 
 		popupPane.getChildren().add(loginPopup);
 
@@ -138,6 +139,7 @@ public class SceneHandler
 	private void setStyleSheets()
 	{
 		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
+		loginPopup.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
 	}
 
 	public void toggleLoginPopup()
