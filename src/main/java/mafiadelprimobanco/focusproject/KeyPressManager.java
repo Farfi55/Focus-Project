@@ -7,6 +7,7 @@ import javafx.scene.input.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class KeyPressManager implements EventHandler<KeyEvent>
 {
@@ -30,10 +31,16 @@ public class KeyPressManager implements EventHandler<KeyEvent>
 
 	private void debug(KeyEvent event)
 	{
-		if(event.isControlDown() && event.getCode().equals(KeyCode.K))
+		if (event.isControlDown() && event.getCode().equals(KeyCode.K))
 			StyleHandler.getInstance().toggleLightDarkTheme();
-		else if(event.isControlDown() && event.getCode().equals(KeyCode.L))
-			StyleHandler.getInstance().setTheme("light2");
+		else if (event.isControlDown() && event.getCode().equals(KeyCode.L)) StyleHandler.getInstance().setTheme(
+				"light2");
+		else if (event.isControlDown() && event.getCode().equals(KeyCode.J))
+		{
+			if (Localization.getLocale() == Locale.ENGLISH) Localization.setLocale(Locale.ITALIAN);
+			else Localization.setLocale(Locale.ENGLISH);
+
+		}
 
 	}
 
