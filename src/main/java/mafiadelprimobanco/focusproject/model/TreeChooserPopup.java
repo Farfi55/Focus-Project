@@ -5,6 +5,7 @@ import io.github.palexdev.materialfx.controls.MFXPopup;
 import io.github.palexdev.materialfx.controls.MFXRectangleToggleNode;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -13,10 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import mafiadelprimobanco.focusproject.Feedback;
-import mafiadelprimobanco.focusproject.Localization;
-import mafiadelprimobanco.focusproject.ResourcesLoader;
-import mafiadelprimobanco.focusproject.TreeHandler;
+import mafiadelprimobanco.focusproject.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +47,10 @@ public class TreeChooserPopup extends MFXPopup
 		createTreeButtons();
 		setContent(scrollPane);
 //		setAutoHide(false);
+		StyleHandler.getInstance().getObservableStyles().addListener(
+				(ListChangeListener<? super String>)c -> setStyleSheets());
+		setStyleSheets();
 	}
-
 
 	@Override
 	public void show(Node ownerNode, double anchorX, double anchorY)
@@ -78,6 +78,11 @@ public class TreeChooserPopup extends MFXPopup
 	{
 		super.show(node, alignment, xOffset, yOffset);
 		updateTreeButtons();
+	}
+
+	private void setStyleSheets()
+	{
+		getStyleSheets().setAll(StyleHandler.getInstance().getObservableStyles());
 	}
 
 	private void createTreeButtons()
