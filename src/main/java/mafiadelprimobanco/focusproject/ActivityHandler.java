@@ -37,6 +37,7 @@ public class ActivityHandler
 		activityTimer = new Timer();
 
 		currentActivity.setTagUuid(TagHandler.getInstance().getSelectedTag().getUuid());
+		currentActivity.setTreeUuid(TreeHandler.getInstance().getSelectedActivityTree().getUuid());
 		currentActivity.startActivity();
 		invokeOnActivityStarting();
 
@@ -155,14 +156,6 @@ public class ActivityHandler
 		});
 	}
 
-	public void setActivityTree(Tree chosenTree) { setActivityTree(chosenTree.getUuid());}
-
-	public void setActivityTree(Integer chosenTreeUuid)
-	{
-		currentActivity.setTreeUuid(chosenTreeUuid);
-	}
-
-
 	public boolean isActivityRunning()
 	{
 		return currentActivity.isRunning();
@@ -172,7 +165,6 @@ public class ActivityHandler
 	{
 		return currentActivity;
 	}
-
 
 	public int getRemainingTimerDuration()
 	{
@@ -186,7 +178,6 @@ public class ActivityHandler
 	//GETTERS
 	public ActivityType getCurrentActivityType() { return currentActivityType; }
 
-
 	/**
 	 * @return 0.0 just started ... 1.0 completed
 	 */
@@ -197,6 +188,13 @@ public class ActivityHandler
 			return timerActivity.getProgress();
 		}
 		return -1;
+	}
+
+	public void setActivityTree(Tree chosenTree) { setActivityTree(chosenTree.getUuid()); }
+
+	public void setActivityTree(Integer chosenTreeUuid)
+	{
+		currentActivity.setTreeUuid(chosenTreeUuid);
 	}
 
 	//SETTERS

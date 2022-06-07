@@ -104,7 +104,7 @@
     - #homeActivitySelectorComboBox
     - #homeProgressDisplay
       - .mfx-progress-spinner
-      - #homeTreeBackground
+      - #homeTreeButton
       - .image-view
     - #homeActivityButton
   - <home page tags>
@@ -200,14 +200,14 @@
 
 
 #homeProgressDisplay .mfx-progress-spinner {
-    /*-mfx-color1: palette2-1;*/
-    /*-mfx-color2: palette2-3;*/
-    /*-mfx-color3: palette2-4;*/
-    /*-mfx-color4: palette2-2;*/
+    -mfx-color1: palette3-1;
+    -mfx-color2: palette3-1;
+    -mfx-color3: palette3-1;
+    -mfx-color4: palette3-1;
 }
 
-#homeTreeBackground {
-    -fx-effect: innershadow(gaussian, shadow1, 15, 0, 0, 0);
+#homeTreeButton {
+    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.3, 0, 5);
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
 }

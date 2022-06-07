@@ -122,11 +122,14 @@ public class PagesHandler
 			}
 
 			// we only need to load the page from the disk if it isn't present in background
-			if (page.keepInBackground().get() && page.controller().get() != null)
+			if (page.controller().get() == null || !page.keepInBackground().get())
+			{
+				SceneHandler.getInstance().loadPage(page);
+			}
+			else
 			{
 				SceneHandler.getInstance().showPage(page);
 			}
-			else SceneHandler.getInstance().loadPage(page);
 
 			page.isSelected().set(true);
 			currentPage = page;

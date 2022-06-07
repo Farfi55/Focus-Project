@@ -7,10 +7,7 @@ import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class TreeHandler implements ActivityObserver
 {
@@ -22,12 +19,12 @@ public class TreeHandler implements ActivityObserver
 	}
 
 	private final SimpleObjectProperty<Tree> selectedTreeToUnlock = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Tree> selectedActivityTree = new SimpleObjectProperty<>();
 	private final SimpleIntegerProperty unusedProgressTime = new SimpleIntegerProperty();
 	private final List<Image> treePhasesImages = new ArrayList<>(5);
 	HashMap<Integer, Tree> trees = new HashMap<>();
 	HashSet<Integer> treesToUnlock = new HashSet<>();
 	HashSet<Integer> unlockedTrees = new HashSet<>();
-
 	private TreeHandler()
 	{
 		loadTrees();
@@ -40,6 +37,11 @@ public class TreeHandler implements ActivityObserver
 	public void onActivityEnd(AbstractActivity currentActivity)
 	{
 		addProgressTime(currentActivity.getFinalDuration());
+	}
+
+	public SimpleObjectProperty<Tree> selectedActivityTreeProperty()
+	{
+		return selectedActivityTree;
 	}
 
 	public Image getTreePhaseImage(int index)
@@ -74,7 +76,6 @@ public class TreeHandler implements ActivityObserver
 		}
 	}
 
-
 	private void addProgressTime(int seconds)
 	{
 		assert seconds >= 0;
@@ -95,10 +96,20 @@ public class TreeHandler implements ActivityObserver
 		else unusedProgressTime.add(seconds);
 	}
 
-
 	public Tree getTree(int uuid)
 	{
 		return trees.get(uuid);
+	}
+
+	public Tree getSelectedActivityTree()
+	{
+		return selectedActivityTree.get();
+	}
+
+	public void setSelectedActivityTree(Tree selectedActivityTree)
+	{
+		if (selectedActivityTree == null || selectedActivityTree.isUnlocked())
+			this.selectedActivityTree.set(selectedActivityTree);
 	}
 
 	public SimpleIntegerProperty getUnusedProgressTimeProperty()
@@ -111,9 +122,12 @@ public class TreeHandler implements ActivityObserver
 		return unusedProgressTime.get();
 	}
 
-	public HashMap<Integer, Tree> getTrees()
+	public HashMap<Integer, Tree> getTreesMap()
 	{
 		return trees;
+	}
+	public Collection<Tree> getTrees(){
+		return trees.values();
 	}
 
 	public HashSet<Integer> getTreesToUnlock()

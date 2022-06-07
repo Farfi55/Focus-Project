@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -19,7 +20,7 @@ import javafx.scene.shape.Circle;
 import mafiadelprimobanco.focusproject.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
-import mafiadelprimobanco.focusproject.model.Tree;
+import mafiadelprimobanco.focusproject.model.TreeChooserPopup;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -55,13 +56,14 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@FXML private MFXSpinner<Integer> minutesSpinnerSelector;
 	@FXML private MFXSpinner<Integer> secondsSpinnerSelector;
 
-
+	@FXML private MFXButton treeButton;
 	@FXML private ImageView treeImageViewer;
 
 	@FXML private MFXButton activityButton;
 
 	private int treePhase = 0;
-	private Tree chosenActivityTree;
+
+	private TreeChooserPopup treeChooserPopup;
 
 	@FXML
 	@Override
@@ -75,8 +77,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		activitySelectorComboBox.selectFirst();
 
 		loadTagsView();
-
-		setChosenActivityTree(TreeHandler.getInstance().getFirstUnlockedTree());
 
 
 		var hourSpinnerModel = new IntegerSpinnerModel(0);
@@ -109,28 +109,19 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 			hoursSpinnerSelector.requestFocus();
 		});
 
+		updateTreeImageView();
+		treeChooserPopup = new TreeChooserPopup();
+		treeButton.setOnAction(event -> treeChooserPopup.show(treeButton));
+		TreeHandler.getInstance().selectedActivityTreeProperty().addListener(observable -> updateTreeImageView());
 
 		resetInterface();
 	}
-
 
 	@Override
 	public void terminate()
 	{
 		tagsController.terminate();
 		unsubscribeListeners();
-	}
-
-	private void subscribeListeners()
-	{
-		ActivityHandler.getInstance().addListener(this);
-		KeyPressManager.getInstance().addHandler(this);
-	}
-
-	private void unsubscribeListeners()
-	{
-		ActivityHandler.getInstance().removeListener(this);
-		KeyPressManager.getInstance().removeHandler(this);
 	}
 
 	@Override
@@ -140,7 +131,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 		showNode(activityTimeLabel);
 
-		ActivityHandler.getInstance().setActivityTree(chosenActivityTree);
 		if (currentActivity instanceof TimerActivity)
 		{
 			ActivityHandler.getInstance().setChosenTimerDuration(getInputTimerDuration());
@@ -160,7 +150,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		showNode(selectedTagRoot);
 
 		treePhase = 0;
-		treeImageViewer.setImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
+		setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
 
 
 	}
@@ -174,21 +164,19 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	}
 
 	@Override
-	public void onActivityEndSafe(AbstractActivity currentActivity) {
+	public void onActivityEndSafe(AbstractActivity currentActivity)
+	{
 		resetInterface();
 
 		if (currentActivity instanceof TimerActivity timerActivity)
 		{
-			if (timerActivity.wasInterrupted()) treeImageViewer.setImage(
-					ResourcesLoader.loadImage(currentActivity.getTree().getDeadTreeSprite()));
-			else treeImageViewer.setImage(ResourcesLoader.loadImage(currentActivity.getTree().getMatureTreeSprite()));
+			if (timerActivity.wasInterrupted()) setTreeImage(currentActivity.getTree().getDeadTreeSprite());
+			else setTreeImage(currentActivity.getTree().getMatureTreeSprite());
 		}
 		else if (currentActivity instanceof ChronometerActivity)
 		{
-			if (treePhase < 5) treeImageViewer.setImage(
-					ResourcesLoader.loadImage(currentActivity.getTree().getDeadTreeSprite()));
-			else treeImageViewer.setImage(
-					ResourcesLoader.loadImage(currentActivity.getTree().getMatureTreeSprite()));
+			if (treePhase < 5) setTreeImage(currentActivity.getTree().getDeadTreeSprite());
+			else setTreeImage(currentActivity.getTree().getMatureTreeSprite());
 		}
 
 		Feedback.getInstance().showActivityRecap(currentActivity);
@@ -202,6 +190,24 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 			if (event.getCode().equals(KeyCode.ENTER) && !ActivityHandler.getInstance().isActivityRunning())
 				startActivity();
 		}
+	}
+
+	private void updateTreeImageView()
+	{
+		if (TreeHandler.getInstance().getSelectedActivityTree() == null) setTreeImage((Image)null);
+		else setTreeImage(TreeHandler.getInstance().getSelectedActivityTree().getMatureTreeSprite());
+	}
+
+	private void subscribeListeners()
+	{
+		ActivityHandler.getInstance().addListener(this);
+		KeyPressManager.getInstance().addHandler(this);
+	}
+
+	private void unsubscribeListeners()
+	{
+		ActivityHandler.getInstance().removeListener(this);
+		KeyPressManager.getInstance().removeHandler(this);
 	}
 
 	@FXML
@@ -246,13 +252,10 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		activityTimeLabel.setText(TimeUtils.formatTime(0));
 		activityProgressSpinner.setProgress(0.0);
 
-//		treeImageViewer.setImage(ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
 
 		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
 		else hideSpinners();
 	}
-
-
 
 	public void onTimerUpdate(TimerActivity timerActivity)
 	{
@@ -266,8 +269,8 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		if (treePhase < 5 && progress >= (treePhase + 1) / 5f)
 		{
 			treePhase++;
-			if (treePhase < 5) treeImageViewer.setImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
-			else treeImageViewer.setImage(ResourcesLoader.loadImage(timerActivity.getTree().getMatureTreeSprite()));
+			if (treePhase < 5) setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
+			else setTreeImage(timerActivity.getTree().getMatureTreeSprite());
 		}
 
 	}
@@ -283,25 +286,18 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		if (treePhase < 5 && secondsElapsed >= minSuccessChronometerDuration / 5f * (treePhase + 1))
 		{
 			treePhase++;
-			if (treePhase < 5) treeImageViewer.setImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
-			else treeImageViewer.setImage(ResourcesLoader.loadImage(chronometerActivity.getTree().getMatureTreeSprite()));
+			if (treePhase < 5) setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
+			else setTreeImage(chronometerActivity.getTree().getMatureTreeSprite());
 		}
 
 	}
 
-
 	private boolean canStartActivity()
 	{
-		if (chosenActivityTree == null)
+		if (TreeHandler.getInstance().getSelectedActivityTree() == null)
 		{
 			Feedback.getInstance().showNotification(Localization.get("error.tree.noTreeSelected.header"),
 					Localization.get("error.tree.noTreeSelected.message"));
-			return false;
-		}
-		else if (!TreeHandler.getInstance().getUnlockedTrees().contains(chosenActivityTree.getUuid()))
-		{
-			Feedback.getInstance().showNotification(Localization.get("error.tree.treeNotAvailable.header"),
-					Localization.get("error.tree.treeNotAvailable.message"));
 			return false;
 		}
 
@@ -333,7 +329,8 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
 			case TIMER, TOMATO_TIMER -> {
-				if (Feedback.getInstance().askYesNoConfirmation(Localization.get("warning.activity.stopActivity.header"),
+				if (Feedback.getInstance().askYesNoConfirmation(
+						Localization.get("warning.activity.stopActivity.header"),
 						Localization.get("warning.activity.stopActivity.message")))
 					ActivityHandler.getInstance().stopCurrentActivity();
 
@@ -362,13 +359,13 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		try
 		{
 			return Integer.parseInt(num);
-		}catch (Exception e)
+		}
+		catch (Exception e)
 		{
 		}
 
 		return 0;
 	}
-
 
 	private void showSpinners() { setSpinnersVisible(true); }
 
@@ -391,6 +388,16 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		int secondsFromSecondsSelector = secondsSpinnerSelector.getValue();
 
 		return secondsFromHoursSelector + secondsFromMinutesSelector + secondsFromSecondsSelector;
+	}
+
+	private void setTreeImage(Image image)
+	{
+		treeImageViewer.setImage(image);
+	}
+
+	private void setTreeImage(String path)
+	{
+		setTreeImage(ResourcesLoader.loadImage(path));
 	}
 
 	private void setSpinnersVisible(boolean value)
@@ -418,12 +425,12 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	}
 
 
-	public void setChosenActivityTree(Tree chosenActivityTree)
-	{
-		this.chosenActivityTree = chosenActivityTree;
-		if (chosenActivityTree != null) treeImageViewer.setImage(
-				ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
-		else treeImageViewer.setImage(null);
-	}
+//	public void setChosenActivityTree(Tree chosenActivityTree)
+//	{
+//		this.chosenActivityTree = chosenActivityTree;
+//		if (chosenActivityTree != null) treeImageViewer.setImage(
+//				ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
+//		else treeImageViewer.setImage(null);
+//	}
 }
 
