@@ -1,3 +1,7 @@
+.root{
+    -fx-background-color: palette1-1;
+}
+
 .text, .mfx-text-field {
     /*just to make it obvious where it's missing*/
     -fx-font-family: "Roboto";
@@ -13,6 +17,17 @@
 
 .mfx-text-field .floating-text {
     -fx-background-color: inherit;
+}
+
+.mfx-combo-box {
+    -fx-background-color: palette1-0;
+    -fx-border-color: transparent;
+
+}
+
+.mfx-combo-box .combo-popup {
+    -fx-background-color: palette1-0;
+    -fx-min-height: 200;
 }
 
 
@@ -34,11 +49,6 @@
 #navBar {
     -fx-background-color: palette2-2;
     -fx-background-radius: 0 10 10 0;
-    /*
-        doesn't work properly
-    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.4, 0, 0);
-    */
-
 }
 
 #navBar .mfx-rectangle-toggle-node {
@@ -138,8 +148,7 @@
 }
 
 #homeRoot .mfx-spinner:focused,
-#homeRoot .mfx-spinner:hover,
-#homeRoot .mfx-spinner:focus-within {
+#homeRoot .mfx-spinner:hover {
     -fx-border-color: palette3-2;
 }
 
@@ -147,15 +156,21 @@
 #homeRoot .mfx-spinner .mfx-icon-wrapper {
     -fx-translate-x: 15;
     -fx-background-color: palette1-1;
-    -fx-border-color: palette4-1;
+    -fx-border-color: transparent;
     -fx-border-width: 1;
     -fx-border-radius: 50%;
 }
 
 #homeRoot .mfx-spinner .mfx-icon-wrapper:hover {
-    -fx-background-color: palette1-0;
+    -fx-background-color: palette1-2;
+    -fx-border-color: palette3-2;
+    -fx-border-width: 1;
 }
 
+#homeRoot .mfx-spinner .mfx-icon-wrapper:pressed, #homeRoot .mfx-spinner .mfx-icon-wrapper:armed {
+    -fx-border-width: 2;
+    -fx-border-color: palette3-3;
+}
 
 #homeRoot .mfx-spinner .mfx-icon-wrapper .mfx-font-icon {
     -mfx-color: palette4-1;
@@ -212,13 +227,16 @@
     -fx-background-radius: 50%;
 }
 
+#homeTreeButton .mfx-ripple-generator {
+    -mfx-paused: true;
+}
+
 #homeActivityButton {
     -fx-border-color: palette3-2;
     -fx-border-width: 2;
     -fx-border-radius: 8;
     -fx-background-color: palette3-1;
     -fx-background-radius: 10;
-    -fx-text-fill: palette1-0;
     -fx-font-size: 20;
     -fx-effect: dropshadow(gaussian, shadow1, 10, 0.2, 3, 3);
 }
@@ -233,8 +251,51 @@
     /*-fx-text-fill: palette3-2;*/
     -fx-border-color: palette3-3;
     -fx-background-color: palette3-2;
+    -fx-border-width: 3;
 }
 
+#treeChooserPopup .mfx-scroll-pane {
+    -fx-background-radius: 5;
+    -fx-background-color: palette1-1;
+    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.2, 2, 3);
+}
+
+#treeChooserPopup .mfx-scroll-pane .track {
+    -fx-background-color: palette1-2;
+}
+
+#treeChooserPopup .mfx-scroll-pane .thumb {
+    -fx-background-color: palette3-1;
+}
+
+#treeChooserPopup .mfx-scroll-pane .thumb:hover {
+    -fx-background-color: palette3-2;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node {
+    -fx-effect: dropshadow(gaussian, shadow1, 5, 0.2, 2, 2);
+    -fx-background-color: palette1-2;
+    -fx-border-color: palette1-3;
+    -fx-border-width: 2;
+    -fx-background-radius: 6;
+    -fx-border-radius: 5;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node:disabled {
+    -fx-effect: none;
+    -fx-background-color: palette1-1;
+    -fx-border-color: palette1-2;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node:selected {
+    -fx-border-color: palette3-3;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node:hover {
+    -fx-border-color: palette3-2;
+    -fx-border-width: 3;
+
+}
 
 /*#homeTagList {*/
 
@@ -274,7 +335,6 @@ todo: this should be a reusable class
     -fx-border-radius: 8;
     -fx-background-color: palette3-1;
     -fx-background-radius: 10;
-    -fx-text-fill: palette1-0;
     -fx-font-weight: 800;
     -fx-effect: dropshadow(gaussian, shadow1, 10, 0.2, 3, 3);
 }
@@ -284,16 +344,6 @@ todo: this should be a reusable class
     -fx-border-color: palette3-3;
     -fx-background-color: palette3-2;
 }
-
-
-.progress-indicator .percentage {
-    -fx-fill: null;
-}
-
-#loginPane {
-    -fx-background-color: transparent;
-}
-
 
 
 /* TAG STYLE
@@ -336,11 +386,17 @@ todo: this should be a reusable class
 
 }
 
+.homeTag .mfx-ripple-generator {
+    -mfx-paused: true;
+}
+
+
 .tagColorButton {
     -fx-background-radius: 50%;
     -fx-border-radius: 50%;
     -fx-effect: dropshadow(gaussian, shadow1, 5, 0.3, 0, 0);
 }
+
 .tagColorButton:hover {
     -fx-effect: dropshadow(gaussian, shadow1, 6, 0.7, 0, 0);
 }
@@ -373,10 +429,6 @@ todo: this should be a reusable class
 
 /*
 FEEDBACK STYLE
-
-- .notification
-  - HBox
-    - label
 */
 
 
@@ -408,6 +460,37 @@ FEEDBACK STYLE
 
 .notification .content .text {
     -fx-font-size: 14;
+}
+
+
+.dialog {
+    -fx-background-color: palette1-1;
+}
+
+.dialog .content-container, .dialog .content-container .content{
+    -fx-background-color: transparent;
+}
+.dialog .header-label{
+    -fx-background-color: transparent;
+}
+
+.dialog .actions-pane .mfx-button{
+    -fx-background-color: palette3-1;
+    -fx-border-color: palette3-2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-width: 2;
+}
+.dialog .actions-pane .mfx-button:hover{
+    -fx-background-color: palette3-2;
+    -fx-border-color: palette3-3;
+}
+.dialog .actions-pane .mfx-button .mfx-ripple-generator{
+    -mfx-ripple-color: palette3-3;
+}
+
+#endOfActivityRecap {
+    -fx-background-color: palette1-1;
 }
 
 
@@ -459,4 +542,13 @@ REGISTRATION STYLE
 .outline-button:focused {
     -fx-background-color: -mfx-purple;
     -fx-text-fill: white;
+}
+
+
+.progress-indicator .percentage {
+    -fx-fill: null;
+}
+
+#loginPane {
+    -fx-background-color: transparent;
 }

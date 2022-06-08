@@ -89,7 +89,7 @@
                                     <Color />
                                  </color3>
                               </MFXProgressSpinner>
-                              <MFXButton id="homeTreeButton" fx:id="treeButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="10.0" layoutY="10.0" prefHeight="180.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <MFXButton id="homeTreeButton" fx:id="treeButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="10.0" layoutY="10.0" pickOnBounds="false" prefHeight="180.0" prefWidth="180.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                  <graphic>
                                     <ImageView fx:id="treeImageViewer" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" />
                                  </graphic>

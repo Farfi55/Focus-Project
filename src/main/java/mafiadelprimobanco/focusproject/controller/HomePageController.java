@@ -114,7 +114,11 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 		updateTreeImageView();
 		treeChooserPopup = new TreeChooserPopup();
-		treeButton.setOnAction(event -> treeChooserPopup.show(treeButton, Alignment.of(HPos.RIGHT, VPos.CENTER),200,0));
+		treeButton.setOnAction(event ->
+		{
+			if(!ActivityHandler.getInstance().isActivityRunning())
+				treeChooserPopup.show(treeButton, Alignment.of(HPos.RIGHT, VPos.CENTER), 200, 0);
+		});
 		TreeHandler.getInstance().selectedActivityTreeProperty().addListener(observable -> updateTreeImageView());
 
 		resetInterface();

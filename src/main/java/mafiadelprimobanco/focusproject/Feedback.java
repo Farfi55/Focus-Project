@@ -80,6 +80,7 @@ public class Feedback
 
 		// activityRecap dialog init
 		activityRecapDialogContent = new ActivityRecapDialog();
+		activityRecapDialogContent.setId("endOfActivityRecap");
 		activityRecapDialogContent.setMaxSize(500, 500);
 		activityRecapDialog = initDialog(activityRecapDialogContent);
 		addButton(activityRecapDialogContent, activityRecapDialog, ButtonData.OK_DONE);
@@ -110,7 +111,7 @@ public class Feedback
 
 	private MFXGenericDialog initDialogContent()
 	{
-		return MFXGenericDialogBuilder.build().makeScrollable(true).get();
+		return MFXGenericDialogBuilder.build().addStyleClasses("dialog").makeScrollable(true).get();
 	}
 
 	private MFXStageDialog initDialog(MFXGenericDialog dialogContent)

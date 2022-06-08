@@ -21,12 +21,11 @@ import java.util.Map;
 
 public class TreeChooserPopup extends MFXPopup
 {
-	private MFXScrollPane scrollPane;
 	private GridPane treesPane;
 
 	private ToggleGroup toggleGroup;
 
-	private Map<Tree, MFXRectangleToggleNode> treeButtons = new HashMap<>();
+	private final Map<Tree, MFXRectangleToggleNode> treeButtons = new HashMap<>();
 
 	public TreeChooserPopup()
 	{
@@ -36,11 +35,12 @@ public class TreeChooserPopup extends MFXPopup
 
 	private void initialize()
 	{
+		setId("treeChooserPopup");
 		toggleGroup = new ToggleGroup();
 		treesPane = new GridPane();
 		treesPane.setHgap(5);
 		treesPane.setVgap(5);
-		scrollPane = new MFXScrollPane(treesPane);
+		MFXScrollPane scrollPane = new MFXScrollPane(treesPane);
 		scrollPane.setMaxSize(400, 400);
 		scrollPane.setPadding(InsetsFactory.of(5, 5, 5, 5));
 		scrollPane.setFitToWidth(true);
