@@ -1,6 +1,7 @@
 package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyCode;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
@@ -23,17 +24,17 @@ public class PagesHandler
 	public static final Page account = new Page(4, ACCOUNT, "RegistrationPage.name", false, false, KeyCode.A);
 	public static final Page settings = new Page(5, SETTINGS, "settingsPage.name", true, false, KeyCode.COMMA);
 	private static final SimpleBooleanProperty isNavigationEnabled;
-	static List<Page> pages;
-	private static Page currentPage;
+	private static final SimpleObjectProperty<Page> currentPage;
+	private static List<Page> pages;
 
 	static
 	{
+		currentPage = new SimpleObjectProperty<>();
 		isNavigationEnabled = new SimpleBooleanProperty(true);
 		initPages();
 
 		subscribeToEvents();
 	}
-
 
 	private static void initPages()
 	{
@@ -110,15 +111,15 @@ public class PagesHandler
 		try
 		{
 			// unload current page
-			if (currentPage != null)
+			if (currentPage.get() != null)
 			{
-				currentPage.isSelected().set(false);
+				currentPage.get().isSelected().set(false);
 
-				if (!currentPage.keepInBackground().get())
+				if (!currentPage.get().keepInBackground().get())
 				{
-					currentPage.controller().get().terminate();
-					currentPage.controller().set(null);
-					currentPage.pageRoot().set(null);
+					currentPage.get().controller().get().terminate();
+					currentPage.get().controller().set(null);
+					currentPage.get().pageRoot().set(null);
 				}
 			}
 
@@ -133,9 +134,7 @@ public class PagesHandler
 			}
 
 			page.isSelected().set(true);
-			currentPage = page;
-
-
+			currentPage.set(page);
 		}
 		catch (IOException e)
 		{
@@ -152,6 +151,19 @@ public class PagesHandler
 		return isNavigationEnabled;
 	}
 
+	public static List<Page> getPages()
+	{
+		return pages;
+	}
+
+	public static Page getCurrentPage()
+	{
+		return currentPage.get();
+	}
+	public static SimpleObjectProperty<Page> getCurrentPagePropriety()
+	{
+		return currentPage;
+	}
 
 	public static boolean isNavigationEnabled()
 	{

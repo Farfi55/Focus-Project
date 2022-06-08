@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.controller.TagController;
 import mafiadelprimobanco.focusproject.model.Page;
 import mafiadelprimobanco.focusproject.model.Tag;
@@ -44,7 +45,7 @@ public class SceneHandler
 	{
 		this.stage = stage;
 		this.scene = new Scene(loadFXML(FXMLReferences.BASE), 1150, 600);
-		stage.setTitle("Focus");
+		setTitle("Focus");
 		stage.setScene(scene);
 		isFullScreen = stage.fullScreenProperty();
 		loginPopup = loadFXML(FXMLReferences.LOGIN_POPUP);
@@ -55,6 +56,7 @@ public class SceneHandler
 
 		popupPane.getChildren().add(loginPopup);
 
+		subscribeToEvents();
 		subscribeToStyleChanges();
 
 		KeyPressManager.getInstance().addHandler(event ->
@@ -76,6 +78,18 @@ public class SceneHandler
 			//If the click is on popup pane close the login popup
 			if (e.getPickResult().getIntersectedNode().equals(popupPane)) closeLoginPopup();
 		});
+	}
+
+	private void subscribeToEvents()
+	{
+		subscribeToStyleChanges();
+		PagesHandler.getCurrentPagePropriety().addListener(observable -> updateTitle());
+		Localization.localeProperty().addListener(observable -> updateTitle());
+	}
+
+	private void updateTitle()
+	{
+		setTitle("Focus - " + Localization.get(PagesHandler.getCurrentPage().pageNameKey()));
 	}
 
 	public void showLoginPopup()
@@ -173,6 +187,11 @@ public class SceneHandler
 	public AnchorPane getRoot() { return this.root; }
 
 	public void setRoot(AnchorPane root) { this.root = root; }
+
+	private void setTitle(String title)
+	{
+		stage.setTitle(title);
+	}
 
 	public void setContentPane(StackPane pane) { this.contentPane = pane; }
 }
