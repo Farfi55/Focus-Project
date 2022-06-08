@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ListChangeListener;
@@ -16,11 +16,11 @@ import javafx.stage.Stage;
 import mafiadelprimobanco.focusproject.controller.TagController;
 import mafiadelprimobanco.focusproject.model.Page;
 import mafiadelprimobanco.focusproject.model.Tag;
-import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
+import mafiadelprimobanco.focusproject.utils.FXMLReferences;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class SceneHandler
 {
@@ -43,12 +43,11 @@ public class SceneHandler
 	public void init(Stage stage) throws IOException
 	{
 		this.stage = stage;
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLReferences.BASE));
-		this.scene = new Scene(fxmlLoader.load(), 1150, 600);
+		this.scene = new Scene(loadFXML(FXMLReferences.BASE), 1150, 600);
 		stage.setTitle("Focus");
 		stage.setScene(scene);
 		isFullScreen = stage.fullScreenProperty();
-		loginPopup = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Login-popup-view.fxml")));
+		loginPopup = loadFXML(FXMLReferences.LOGIN_POPUP);
 		loadFonts();
 		setStyleSheets();
 		stage.show();
@@ -95,15 +94,15 @@ public class SceneHandler
 				(ListChangeListener<String>)change -> setStyleSheets());
 	}
 
-	public Node loadFXML(String fxmlPath) throws IOException
+	public Parent loadFXML(String fxmlPath) throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+		FXMLLoader loader = getFXMLLoader(fxmlPath);
 		return loader.load();
 	}
 
 	public FXMLLoader getFXMLLoader(String fxmlPath) throws IOException
 	{
-		return new FXMLLoader(getClass().getResource(fxmlPath));
+		return new FXMLLoader(ResourcesLoader.loadURL(fxmlPath));
 	}
 
 	public Node createTagView(Tag tag) throws IOException
@@ -114,7 +113,7 @@ public class SceneHandler
 
 	public Node createTagView(Tag tag, ToggleGroup toggleGroup, List<TagController> tagControllers) throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
+		FXMLLoader loader = getFXMLLoader(FXMLReferences.TAG);
 		Node node = loader.load();
 		node.getProperties().put("tag-uuid", tag.getUuid());
 		TagController tagController = loader.getController();
@@ -127,7 +126,7 @@ public class SceneHandler
 	private void loadFonts()
 	{
 		// load fonts
-		for (String font : List.of("fonts/Roboto/Roboto-Regular.ttf", "fonts/Roboto/Roboto-Bold.ttf"))
+		for (String font : List.of("../fonts/Roboto/Roboto-Regular.ttf", "../fonts/Roboto/Roboto-Bold.ttf"))
 			Font.loadFont(String.valueOf(getClass().getResource(font)), 10);
 	}
 
@@ -155,7 +154,7 @@ public class SceneHandler
 
 	public void loadPage(Page page) throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(page.FXMLPath()));
+		FXMLLoader loader = getFXMLLoader(page.FXMLPath());
 		page.pageRoot().set(loader.load());
 		page.controller().set(loader.getController());
 		showPage(page);

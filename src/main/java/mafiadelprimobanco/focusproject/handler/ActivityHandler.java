@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;

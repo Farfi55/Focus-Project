@@ -1,7 +1,8 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.input.KeyCode;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.Page;
@@ -11,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static mafiadelprimobanco.focusproject.model.utils.FXMLReferences.*;
+import static mafiadelprimobanco.focusproject.utils.FXMLReferences.*;
 
 public class PagesHandler
 {

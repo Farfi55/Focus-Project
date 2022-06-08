@@ -21,14 +21,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Circle;
 import mafiadelprimobanco.focusproject.*;
+import mafiadelprimobanco.focusproject.handler.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.TreeChooserPopup;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
-import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
-import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
+import mafiadelprimobanco.focusproject.utils.FXMLReferences;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
+import mafiadelprimobanco.focusproject.utils.TimeUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;

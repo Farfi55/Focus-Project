@@ -10,9 +10,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
-import mafiadelprimobanco.focusproject.Feedback;
+import mafiadelprimobanco.focusproject.handler.Feedback;
 import mafiadelprimobanco.focusproject.Localization;
-import mafiadelprimobanco.focusproject.TagHandler;
+import mafiadelprimobanco.focusproject.handler.TagHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
 

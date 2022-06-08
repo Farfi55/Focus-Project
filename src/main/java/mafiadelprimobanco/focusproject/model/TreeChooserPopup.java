@@ -15,6 +15,10 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import mafiadelprimobanco.focusproject.*;
+import mafiadelprimobanco.focusproject.handler.Feedback;
+import mafiadelprimobanco.focusproject.handler.StyleHandler;
+import mafiadelprimobanco.focusproject.handler.TreeHandler;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
 import java.util.HashMap;
 import java.util.Map;

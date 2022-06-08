@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject.model.utils;
+package mafiadelprimobanco.focusproject.utils;
 
 public class FXMLReferences
 {
@@ -12,5 +12,6 @@ public class FXMLReferences
 	public static final String SETTINGS = "Settings-page-view.fxml";
 
 	public static final String TAG = "Tag-view.fxml";
+	public static final String LOGIN_POPUP = "Login-popup-view.fxml";
 
 }

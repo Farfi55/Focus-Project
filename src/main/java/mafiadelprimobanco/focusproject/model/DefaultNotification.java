@@ -8,8 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import mafiadelprimobanco.focusproject.SceneHandler;
 
 public class DefaultNotification extends MFXSimpleNotification
 {

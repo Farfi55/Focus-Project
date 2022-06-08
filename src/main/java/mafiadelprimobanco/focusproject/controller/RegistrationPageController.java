@@ -14,9 +14,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import mafiadelprimobanco.focusproject.AutentificationHandler;
+import mafiadelprimobanco.focusproject.handler.AutentificationHandler;
 import mafiadelprimobanco.focusproject.Localization;
-import mafiadelprimobanco.focusproject.PagesHandler;
+import mafiadelprimobanco.focusproject.handler.PagesHandler;
 import mafiadelprimobanco.focusproject.model.User;
 
 import java.net.URL;

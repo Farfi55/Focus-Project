@@ -8,9 +8,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
-import mafiadelprimobanco.focusproject.KeyPressManager;
-import mafiadelprimobanco.focusproject.PagesHandler;
-import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.handler.KeyPressManager;
+import mafiadelprimobanco.focusproject.handler.PagesHandler;
+import mafiadelprimobanco.focusproject.handler.SceneHandler;
 import mafiadelprimobanco.focusproject.model.Page;
 
 import java.util.ArrayList;

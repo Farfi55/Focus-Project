@@ -5,14 +5,11 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import mafiadelprimobanco.focusproject.AutentificationHandler;
+import mafiadelprimobanco.focusproject.handler.AutentificationHandler;
 import mafiadelprimobanco.focusproject.Localization;
-import mafiadelprimobanco.focusproject.PagesHandler;
-import mafiadelprimobanco.focusproject.SceneHandler;
+import mafiadelprimobanco.focusproject.handler.PagesHandler;
+import mafiadelprimobanco.focusproject.handler.SceneHandler;
 import mafiadelprimobanco.focusproject.model.User;
-import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
-
-import java.io.IOException;
 
 public class LoginPopUpController {
 

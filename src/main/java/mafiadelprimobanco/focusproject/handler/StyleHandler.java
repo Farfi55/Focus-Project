@@ -1,9 +1,10 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
 import java.util.ArrayList;
 import java.util.List;

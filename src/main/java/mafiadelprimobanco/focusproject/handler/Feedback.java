@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.model.ActivityRecapDialog;
 import mafiadelprimobanco.focusproject.model.DefaultNotification;
 import mafiadelprimobanco.focusproject.model.Tag;
@@ -27,7 +28,7 @@ import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
-import mafiadelprimobanco.focusproject.model.utils.TimeUtils;
+import mafiadelprimobanco.focusproject.utils.TimeUtils;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
