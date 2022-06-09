@@ -493,6 +493,16 @@ FEEDBACK STYLE
     -fx-background-color: palette1-1;
 }
 
+#endOfActivityRecap .content-container,
+#endOfActivityRecap .content-container .content{
+    -fx-background-color: transparent;
+}
+
+
+#endOfActivityRecap .header-label {
+    -fx-font-size: 18;
+}
+
 
 /*
 REGISTRATION STYLE

@@ -30,6 +30,7 @@ public class TreeHandler implements ActivityObserver
 	{
 		loadTrees();
 		setSelectedTreeToUnlock(getFirstTreeToUnlock());
+		setSelectedActivityTree(getFirstUnlockedTree());
 		loadTreePhasesImages();
 		ActivityHandler.getInstance().addListener(this);
 	}
