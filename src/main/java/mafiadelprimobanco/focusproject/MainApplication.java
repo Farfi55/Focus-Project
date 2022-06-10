@@ -31,9 +31,7 @@ public class MainApplication extends Application
 		} catch (IOException e)
 		{
 			e.printStackTrace();
-			//todo localization
-			Feedback.getInstance().showError("Errore di caricamento",
-					"Non è stato possibile caricare l'applicazione");
+			Feedback.getInstance().showError(Localization.get("error.loadingApplication.header"),Localization.get("error.loadingApplication.message"));
 		}
 	}
 }

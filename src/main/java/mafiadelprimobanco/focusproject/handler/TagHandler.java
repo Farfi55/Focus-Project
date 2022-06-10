@@ -36,7 +36,6 @@ public class TagHandler
 
 	private void createUnsetTag()
 	{
-		// todo: translate
 		addTag("Unset", Color.GRAY, 0);
 		this.unsetTag = tags.get(0);
 		setSelectedTag(this.unsetTag);
