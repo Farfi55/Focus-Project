@@ -87,13 +87,6 @@ public class HomePageTagsController implements TagsObserver, Controller
 		int index = tagsList.getChildren().size() - 1;
 		Node tagView = SceneHandler.getInstance().createTagView(tag, this.toggleGroup, tagsControllers);
 		tagsList.getChildren().add(index, tagView);
-
-//		if(tagView instanceof Toggle toggle)
-//		{
-//			toggle.setToggleGroup(this.toggleGroup);
-//			System.out.println(toggle.getToggleGroup());
-//		}
-//		else System.err.println("Unable to inject toggle group to tag " + tag.getName());
 	}
 
 	@FXML

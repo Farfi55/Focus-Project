@@ -57,7 +57,6 @@ public class ActivityStatsHandler implements ActivityObserver
 		TreeSet<AbstractActivity> tagActivities = this.activities.get(uuid);
 		if (tagActivities == null) return null;
 
-		System.out.println(tagActivities);
 		ActivityTime activityTime = new ActivityTime();
 		for (var activity : tagActivities)
 		{

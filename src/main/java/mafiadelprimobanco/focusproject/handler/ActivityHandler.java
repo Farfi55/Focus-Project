@@ -57,7 +57,6 @@ public class ActivityHandler
 
 	public void stopCurrentActivity()
 	{
-		System.out.println("stop");
 		currentActivity.endActivity();
 
 		if (activityTimer != null)

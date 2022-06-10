@@ -156,7 +156,7 @@ public class TreeHandler implements ActivityObserver
 
 	public void setSelectedTreeToUnlock(Tree tree)
 	{
-		if (!treesToUnlock.contains(tree.getUuid()) || !trees.containsKey(tree.getUuid())) System.out.println(
+		if (!treesToUnlock.contains(tree.getUuid()) || !trees.containsKey(tree.getUuid())) System.err.println(
 				"there is no tree '" + tree.getName() + "' to unlock");
 		else this.selectedTreeToUnlock.set(tree);
 	}

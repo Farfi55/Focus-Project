@@ -97,7 +97,6 @@ public class TreeChooserPopup extends MFXPopup
 			MFXRectangleToggleNode button = buildTreeButton(tree);
 			treeButtons.put(tree, button);
 			treesPane.add(button, i++, j);
-			System.out.println(treesPane.getColumnCount());
 			if (i == 3)
 			{
 				i = 0;
