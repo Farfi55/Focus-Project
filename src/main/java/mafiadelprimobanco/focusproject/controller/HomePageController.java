@@ -3,6 +3,8 @@ package mafiadelprimobanco.focusproject.controller;
 import io.github.palexdev.materialfx.beans.Alignment;
 import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
+import io.github.palexdev.materialfx.utils.NumberUtils;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,6 +37,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class HomePageController implements Controller, ActivityObserver, EventHandler<KeyEvent>
@@ -57,6 +60,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@FXML private Label activityTimeLabel;
 	@FXML private MFXProgressSpinner activityProgressSpinner;
 
+
 	@FXML private MFXSpinner<Integer> hoursSpinnerSelector;
 	@FXML private MFXSpinner<Integer> minutesSpinnerSelector;
 	@FXML private MFXSpinner<Integer> secondsSpinnerSelector;
@@ -70,6 +74,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private TreeChooserPopup treeChooserPopup;
 
+
 	@FXML
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -77,7 +82,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		subscribeListeners();
 
 		initializeActivitySelectorComboBox();
-		initializeSpinners();
+		initializeSpinnersSelectors();
 		initializeTreeView();
 
 		loadTagsView();
@@ -91,6 +96,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		tagsController.terminate();
 		unsubscribeListeners();
 	}
+
 
 	@Override
 	public void onActivityStarting(AbstractActivity currentActivity)
@@ -162,13 +168,29 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 			}
 			if (!ActivityHandler.getInstance().isActivityRunning())
 			{
-				if (event.getCode().equals(KeyCode.C)) ActivityHandler.getInstance().setCurrentActivityType(
+				if (event.getCode().equals(KeyCode.Y)) ActivityHandler.getInstance().setCurrentActivityType(
 						ActivityType.CHRONOMETER);
 				else if (event.getCode().equals(KeyCode.T)) ActivityHandler.getInstance().setCurrentActivityType(
 						ActivityType.TIMER);
 			}
 
 		}
+	}
+
+	private void subscribeListeners()
+	{
+		KeyPressManager.getInstance().addHandler(this);
+		ActivityHandler.getInstance().addListener(this);
+		ActivityHandler.getInstance().currentActivityTypeProperty().addListener(onActivityTypeChanged());
+		TreeHandler.getInstance().selectedActivityTreeProperty().addListener(observable -> updateTreeImageView());
+	}
+
+	private void unsubscribeListeners()
+	{
+		KeyPressManager.getInstance().removeHandler(this);
+		ActivityHandler.getInstance().removeListener(this);
+		ActivityHandler.getInstance().currentActivityTypeProperty().removeListener(onActivityTypeChanged());
+		TreeHandler.getInstance().selectedActivityTreeProperty().removeListener(observable -> updateTreeImageView());
 	}
 
 	private void initializeTreeView()
@@ -182,37 +204,47 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		});
 	}
 
-	private void initializeSpinners()
+	private void initializeSpinnersSelectors()
 	{
-		var hourSpinnerModel = new IntegerSpinnerModel(0);
-		var minuteSpinnerModel = new IntegerSpinnerModel(0);
-		var secondSpinnerModel = new IntegerSpinnerModel(0);
+		// todo: move to settings
+		SimpleBooleanProperty focusNextSpinnerOnCommit = new SimpleBooleanProperty(true);
 
-		secondSpinnerModel.setMax(59);
-		minuteSpinnerModel.setMax(59);
+		List<MFXSpinner<Integer>> spinners = List.of(hoursSpinnerSelector, minutesSpinnerSelector,
+				secondsSpinnerSelector);
 
-		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
-		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
-		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
-
-		minuteSpinnerModel.setWrapAround(true);
-		secondSpinnerModel.setWrapAround(true);
-
-		hoursSpinnerSelector.setOnCommit(e ->
+		for (int i = 0; i < spinners.size(); i++)
 		{
-			hourSpinnerModel.setValue(filterInput(e));
-			minutesSpinnerSelector.requestFocus();
-		});
-		minutesSpinnerSelector.setOnCommit(e ->
-		{
-			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
-			secondsSpinnerSelector.requestFocus();
-		});
-		secondsSpinnerSelector.setOnCommit(e ->
-		{
-			secondSpinnerModel.setValue(Math.min(filterInput(e), 59));
-			hoursSpinnerSelector.requestFocus();
-		});
+			MFXSpinner<Integer> spinner = spinners.get(i);
+
+			var model = new IntegerSpinnerModel(0);
+
+			if (spinner != hoursSpinnerSelector)
+			{
+				model.setMax(59);
+				model.setWrapAround(true);
+			}
+			spinner.setSpinnerModel(model);
+
+			MFXSpinner<Integer> nextSpinner = spinners.get((i + 1) % spinners.size());
+			spinner.setOnCommit(e ->
+			{
+				model.setValue(filterInput(model, e));
+				if (focusNextSpinnerOnCommit.get()) focusSpinnerTextField(nextSpinner);
+			});
+			spinner.setOnKeyPressed(event ->
+			{
+				if (event.getCode().equals(KeyCode.UP))
+				{
+					model.next();
+					event.consume();
+				}
+				else if (event.getCode().equals(KeyCode.DOWN))
+				{
+					model.previous();
+					event.consume();
+				}
+			});
+		}
 	}
 
 	private void initializeActivitySelectorComboBox()
@@ -243,74 +275,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		updateActivityComboBoxStrings();
 	}
 
-	private void updateActivityComboBoxStrings()
-	{
-		activitySelectorComboBox.getItems().clear();
-		activitySelectorComboBox.getItems().addAll(ActivityType.CHRONOMETER, ActivityType.TIMER);
-		updateActivityComboBoxSelectedItem();
-	}
-
-	private void updateActivityComboBoxSelectedItem()
-	{
-		activitySelectorComboBox.selectItem(ActivityHandler.getInstance().getCurrentActivityType());
-		activitySelectorComboBox.setText(Localization.get(ActivityHandler.getInstance().getCurrentActivityType().key));
-	}
-
-	private void focusSpinnerTextField(MFXSpinner<Integer> spinnerSelector)
-	{
-		BoundTextField textField = getSpinnerTextField(spinnerSelector);
-		if (textField != null) textField.requestFocus();
-	}
-
-	private BoundTextField getSpinnerTextField(MFXSpinner<Integer> spinnerSelector)
-	{
-		try
-		{
-			return (BoundTextField)((Parent)(((Parent)spinnerSelector.getChildrenUnmodifiable().get(
-					0)).getChildrenUnmodifiable().get(2))).getChildrenUnmodifiable().get(1);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.err.println("SpinnerSelector hierarchy probably changed");
-			return null;
-		}
-	}
-
-	private void updateTreeImageView()
-	{
-		if (TreeHandler.getInstance().getSelectedActivityTree() == null) setTreeImage((Image)null);
-		else setTreeImage(TreeHandler.getInstance().getSelectedActivityTree().getMatureTreeSprite());
-	}
-
-	private void subscribeListeners()
-	{
-		KeyPressManager.getInstance().addHandler(this);
-		ActivityHandler.getInstance().addListener(this);
-		ActivityHandler.getInstance().currentActivityTypeProperty().addListener(onActivityTypeChanged());
-		TreeHandler.getInstance().selectedActivityTreeProperty().addListener(observable -> updateTreeImageView());
-	}
-
-	private void unsubscribeListeners()
-	{
-		KeyPressManager.getInstance().removeHandler(this);
-		ActivityHandler.getInstance().removeListener(this);
-		ActivityHandler.getInstance().currentActivityTypeProperty().removeListener(onActivityTypeChanged());
-		TreeHandler.getInstance().selectedActivityTreeProperty().removeListener(observable -> updateTreeImageView());
-	}
-
-	@FXML
-	void toggleActivityState()
-	{
-		if (!ActivityHandler.getInstance().isActivityRunning())
-		{
-			if (canStartActivity()) startActivityDelegate();
-		}
-		else
-		{
-			stopActivityDelegate();
-		}
-	}
 
 	private void loadTagsView()
 	{
@@ -327,58 +291,38 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		}
 	}
 
-	private void resetInterface()
+
+	@FXML
+	void toggleActivityState()
 	{
-		Localization.setButton(activityButton, "activity.start");
-
-		hideNode(activityTimeLabel);
-
-		hideNode(selectedTagRoot);
-
-		showNode(homeRoot.getRight());
-		showNode(activitySelectorComboBox);
-
-		activityTimeLabel.setText(TimeUtils.formatTime(0));
-		activityProgressSpinner.setProgress(0.0);
-
-		updateActivityComboBoxSelectedItem();
-		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
-		else hideSpinners();
+		if (!ActivityHandler.getInstance().isActivityRunning())
+		{
+			if (canStartActivity()) startActivityDelegate();
+		}
+		else
+		{
+			stopActivityDelegate();
+		}
 	}
 
-	public void onTimerUpdate(TimerActivity timerActivity)
+	private void startActivityDelegate()
 	{
-		double progress = timerActivity.getProgress();
-		activityProgressSpinner.setProgress(1.0 - progress);
-
-		int remainingSeconds = timerActivity.getRemainingDuration();
-		activityTimeLabel.setText(TimeUtils.formatTime(remainingSeconds));
-
-
-		if (treePhase < 5 && progress >= (treePhase + 1) / 5f)
-		{
-			treePhase++;
-			if (treePhase < 5) setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
-			else setTreeImage(timerActivity.getTree().getMatureTreeSprite());
-		}
-
+		ActivityHandler.getInstance().startActivity();
 	}
 
-	public void onChronometerUpdate(ChronometerActivity chronometerActivity)
+	private void stopActivityDelegate()
 	{
-		int secondsElapsed = chronometerActivity.getSecondsSinceStart();
-		activityTimeLabel.setText(TimeUtils.formatTime(secondsElapsed));
-
-		// todo: move this into settings
-		int minSuccessChronometerDuration = 20; // 10 seconds
-
-		if (treePhase < 5 && secondsElapsed >= minSuccessChronometerDuration / 5f * (treePhase + 1))
+		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
-			treePhase++;
-			if (treePhase < 5) setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
-			else setTreeImage(chronometerActivity.getTree().getMatureTreeSprite());
-		}
+			case TIMER, POMODORO -> {
+				if (Feedback.getInstance().askYesNoConfirmation(
+						Localization.get("warning.activity.stopActivity.header"),
+						Localization.get("warning.activity.stopActivity.message")))
+					ActivityHandler.getInstance().stopCurrentActivity();
 
+			}
+			case CHRONOMETER -> ActivityHandler.getInstance().stopCurrentActivity();
+		}
 	}
 
 	private boolean canStartActivity()
@@ -413,26 +357,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		return true;
 	}
 
-	private void stopActivityDelegate()
-	{
-		switch (ActivityHandler.getInstance().getCurrentActivityType())
-		{
-			case TIMER, POMODORO -> {
-				if (Feedback.getInstance().askYesNoConfirmation(
-						Localization.get("warning.activity.stopActivity.header"),
-						Localization.get("warning.activity.stopActivity.message")))
-					ActivityHandler.getInstance().stopCurrentActivity();
-
-			}
-			case CHRONOMETER -> ActivityHandler.getInstance().stopCurrentActivity();
-		}
-	}
-
-	private void startActivityDelegate()
-	{
-		ActivityHandler.getInstance().startActivity();
-	}
-
 	private ChangeListener<ActivityType> onActivityTypeChanged()
 	{
 		return (observable, oldValue, newValue) ->
@@ -445,27 +369,130 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		};
 	}
 
+	public void onTimerUpdate(TimerActivity timerActivity)
+	{
+		double progress = timerActivity.getProgress();
+		activityProgressSpinner.setProgress(1.0 - progress);
+
+		int remainingSeconds = timerActivity.getRemainingDuration();
+		activityTimeLabel.setText(TimeUtils.formatTime(remainingSeconds));
+
+
+		if (treePhase < 5 && progress >= (treePhase + 1) / 5f)
+		{
+			treePhase++;
+			if (treePhase < 5) setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
+			else setTreeImage(timerActivity.getTree().getMatureTreeSprite());
+		}
+
+	}
+
+
+	public void onChronometerUpdate(ChronometerActivity chronometerActivity)
+	{
+		int secondsElapsed = chronometerActivity.getSecondsSinceStart();
+		activityTimeLabel.setText(TimeUtils.formatTime(secondsElapsed));
+
+		// todo: move this into settings
+		int minSuccessChronometerDuration = 20; // 10 seconds
+
+		if (treePhase < 5 && secondsElapsed >= minSuccessChronometerDuration / 5f * (treePhase + 1))
+		{
+			treePhase++;
+			if (treePhase < 5) setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
+			else setTreeImage(chronometerActivity.getTree().getMatureTreeSprite());
+		}
+
+	}
+
+
+	// -------------------------------------------------
+	// UTILITY METHODS
+	// -------------------------------------------------
+
+	private BoundTextField getSpinnerTextField(MFXSpinner<Integer> spinnerSelector)
+	{
+		try
+		{
+			return (BoundTextField)((Parent)(((Parent)spinnerSelector.getChildrenUnmodifiable().get(
+					0)).getChildrenUnmodifiable().get(2))).getChildrenUnmodifiable().get(1);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("SpinnerSelector hierarchy probably changed");
+			return null;
+		}
+	}
+
+	Integer filterInput(IntegerSpinnerModel spinnerModel, String newValue)
+	{
+		try
+		{
+			return NumberUtils.clamp(Integer.parseInt(newValue), spinnerModel.getMin(), spinnerModel.getMax());
+		}
+		catch (NumberFormatException ignored)
+		{
+			return spinnerModel.getValue();
+		}
+	}
+
+
+	// -------------------------------------------------
+	// INTERFACE UPDATE METHODS
+	// -------------------------------------------------
+
+	private void focusSpinnerTextField(MFXSpinner<Integer> spinnerSelector)
+	{
+		BoundTextField textField = getSpinnerTextField(spinnerSelector);
+		if (textField != null) textField.requestFocus();
+	}
+
+	private void updateTreeImageView()
+	{
+		if (TreeHandler.getInstance().getSelectedActivityTree() == null) setTreeImage((Image)null);
+		else setTreeImage(TreeHandler.getInstance().getSelectedActivityTree().getMatureTreeSprite());
+	}
+
+	private void resetInterface()
+	{
+		Localization.setButton(activityButton, "activity.start");
+
+		hideNode(activityTimeLabel);
+
+		hideNode(selectedTagRoot);
+
+		showNode(homeRoot.getRight());
+		showNode(activitySelectorComboBox);
+
+		activityTimeLabel.setText(TimeUtils.formatTime(0));
+		activityProgressSpinner.setProgress(0.0);
+
+		updateActivityComboBoxSelectedItem();
+		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
+		else hideSpinners();
+	}
+
+
+	private void updateActivityComboBoxStrings()
+	{
+		activitySelectorComboBox.getItems().clear();
+		activitySelectorComboBox.getItems().addAll(ActivityType.CHRONOMETER, ActivityType.TIMER);
+		updateActivityComboBoxSelectedItem();
+	}
+
+	private void updateActivityComboBoxSelectedItem()
+	{
+		activitySelectorComboBox.selectItem(ActivityHandler.getInstance().getCurrentActivityType());
+		activitySelectorComboBox.setText(Localization.get(ActivityHandler.getInstance().getCurrentActivityType().key));
+	}
+
+
+
 	@FXML
 	void toggleFullScreen()
 	{
 		SceneHandler.getInstance().toggleFullScreen();
-	}
-
-	int filterInput(String num)
-	{
-		int currVal = 0;
-
-		//System.out.println(secondsSpinnerSelector.getValue().intValue());
-		//secondSpinnerModel.setValue(
-		try
-		{
-			return Integer.parseInt(num);
-		}
-		catch (Exception e)
-		{
-		}
-
-		return 0;
 	}
 
 	private void showSpinners() { setSpinnersVisible(true); }
@@ -476,7 +503,11 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	void hideNode(Node node) { setNodeVisible(node, false); }
 
-	void setNodeVisible(Node node, boolean visible)
+
+	// GETTER - SETTER METHODS
+	// -------------------------------------------------
+
+	private void setNodeVisible(Node node, boolean visible)
 	{
 		node.setVisible(visible);
 		node.setManaged(visible);
@@ -491,6 +522,13 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		return secondsFromHoursSelector + secondsFromMinutesSelector + secondsFromSecondsSelector;
 	}
 
+	@FXML
+	private void setActivityType(ActionEvent event)
+	{
+		ActivityType selectedActivityType = activitySelectorComboBox.getSelectedItem();
+		if (selectedActivityType != null) ActivityHandler.getInstance().setCurrentActivityType(selectedActivityType);
+	}
+
 	private void setTreeImage(Image image)
 	{
 		treeImageViewer.setImage(image);
@@ -501,6 +539,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		setTreeImage(ResourcesLoader.loadImage(path));
 	}
 
+
 	private void setSpinnersVisible(boolean value)
 	{
 		setNodeVisible(hoursSpinnerSelector, value);
@@ -508,28 +547,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		setNodeVisible(secondsSpinnerSelector, value);
 	}
 
-	@FXML
-	void setActivityType(ActionEvent event)
-	{
-		ActivityType selectedActivityType = activitySelectorComboBox.getSelectedItem();
-		if(selectedActivityType != null)
-			ActivityHandler.getInstance().setCurrentActivityType(selectedActivityType);
-	}
 
-//	int index = activitySelectorComboBox.getItems().indexOf(activityTypeSelected);
-//		if (index == -1)
-//	{
-//		System.err.println("Couldn't find " + activityTypeSelected + " in the comboBox items");
-//		return;
-//	}
-
-
-//	public void setChosenActivityTree(Tree chosenActivityTree)
-//	{
-//		this.chosenActivityTree = chosenActivityTree;
-//		if (chosenActivityTree != null) treeImageViewer.setImage(
-//				ResourcesLoader.loadImage(chosenActivityTree.getMatureTreeSprite()));
-//		else treeImageViewer.setImage(null);
-//	}
 }
 

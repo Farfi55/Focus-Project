@@ -68,7 +68,7 @@
                         <Label id="homeActivityTimeLabel" fx:id="activityTimeLabel" text="00:00:00" />
                      </children>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="15.0" />
                      </VBox.margin>
                   </HBox>
                   <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" prefWidth="200.0">
