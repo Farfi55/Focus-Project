@@ -35,7 +35,7 @@ public class LoginPopUpController {
 	@FXML void doRegisterUser(ActionEvent event)
 	{
 		SceneHandler.getInstance().closeLoginPopup();
-		PagesHandler.navigateTo(PagesHandler.account);
+		PagesHandler.navigateTo(PagesHandler.registration);
 	}
 
 	@FXML void initialize()

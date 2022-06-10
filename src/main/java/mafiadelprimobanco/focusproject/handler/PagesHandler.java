@@ -21,7 +21,7 @@ public class PagesHandler
 	public static final Page progress = new Page(1, PROGRESS, "progressPage.name", false, false, KeyCode.P);
 	public static final Page statistics = new Page(2, STATISTICS, "statisticsPage.name", false, false, KeyCode.S);
 	public static final Page info = new Page(3, INFO, "infoPage.name", false, false, KeyCode.I);
-	public static final Page account = new Page(4, ACCOUNT, "RegistrationPage.name", false, false, KeyCode.A);
+	public static final Page registration = new Page(4, REGISTRATION, "RegistrationPage.name", false, false, KeyCode.R);
 	public static final Page settings = new Page(5, SETTINGS, "settingsPage.name", true, false, KeyCode.COMMA);
 	private static final SimpleBooleanProperty isNavigationEnabled;
 	private static final SimpleObjectProperty<Page> currentPage;
@@ -43,7 +43,7 @@ public class PagesHandler
 		pages.add(progress);
 		pages.add(statistics);
 		pages.add(info);
-		pages.add(account);
+		pages.add(registration);
 		pages.add(settings);
 	}
 

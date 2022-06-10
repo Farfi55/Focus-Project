@@ -8,7 +8,7 @@ public class FXMLReferences
 	public static final String PROGRESS = "Progress-page-view.fxml";
 	public static final String STATISTICS = "Statistics-page-view.fxml";
 	public static final String INFO = "Info-page-view.fxml";
-	public static final String ACCOUNT = "Registration-page-view.fxml";
+	public static final String REGISTRATION = "Registration-page-view.fxml";
 	public static final String SETTINGS = "Settings-page-view.fxml";
 
 	public static final String TAG = "Tag-view.fxml";

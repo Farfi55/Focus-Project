@@ -39,7 +39,7 @@ public class BaseController implements EventHandler<KeyEvent>
 		navButtonsPages.add(new Pair<>(progressButton, PagesHandler.progress));
 		navButtonsPages.add(new Pair<>(statisticsButton, PagesHandler.statistics));
 		navButtonsPages.add(new Pair<>(infoButton, PagesHandler.info));
-		navButtonsPages.add(new Pair<>(accountButton, PagesHandler.account));
+		navButtonsPages.add(new Pair<>(accountButton, PagesHandler.registration));
 		navButtonsPages.add(new Pair<>(settingsButton, PagesHandler.settings));
 
 		for (var buttonPage : navButtonsPages)

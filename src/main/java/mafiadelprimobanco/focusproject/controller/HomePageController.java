@@ -1,11 +1,9 @@
 package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.beans.Alignment;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXProgressSpinner;
-import io.github.palexdev.materialfx.controls.MFXSpinner;
+import io.github.palexdev.materialfx.controls.*;
 import io.github.palexdev.materialfx.controls.models.spinner.IntegerSpinnerModel;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +19,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Circle;
-import mafiadelprimobanco.focusproject.*;
+import javafx.util.StringConverter;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.handler.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
@@ -52,7 +52,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@FXML private Label selectedTagText;
 	@FXML private Node selectedTagRoot;
 
-	@FXML private MFXComboBox<String> activitySelectorComboBox;
+	@FXML private MFXComboBox<ActivityType> activitySelectorComboBox;
 
 	@FXML private Label activityTimeLabel;
 	@FXML private MFXProgressSpinner activityProgressSpinner;
@@ -76,52 +76,11 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	{
 		subscribeListeners();
 
-		activitySelectorComboBox.getItems().addAll(Localization.get("activity.chronometer"),
-				Localization.get("activity.timer"));
-		Localization.setMFXComboboxFloatingText(activitySelectorComboBox, "activity.mode");
-		activitySelectorComboBox.selectFirst();
+		initializeActivitySelectorComboBox();
+		initializeSpinners();
+		initializeTreeView();
 
 		loadTagsView();
-
-
-		var hourSpinnerModel = new IntegerSpinnerModel(0);
-		var minuteSpinnerModel = new IntegerSpinnerModel(0);
-		var secondSpinnerModel = new IntegerSpinnerModel(0);
-
-		secondSpinnerModel.setMax(59);
-		minuteSpinnerModel.setMax(59);
-
-		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
-		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
-		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
-
-		minuteSpinnerModel.setWrapAround(true);
-		secondSpinnerModel.setWrapAround(true);
-
-		hoursSpinnerSelector.setOnCommit(e ->
-		{
-			hourSpinnerModel.setValue(filterInput(e));
-			minutesSpinnerSelector.requestFocus();
-		});
-		minutesSpinnerSelector.setOnCommit(e ->
-		{
-			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
-			secondsSpinnerSelector.requestFocus();
-		});
-		secondsSpinnerSelector.setOnCommit(e ->
-		{
-			secondSpinnerModel.setValue(Math.min(filterInput(e), 59));
-			hoursSpinnerSelector.requestFocus();
-		});
-
-		updateTreeImageView();
-		treeChooserPopup = new TreeChooserPopup();
-		treeButton.setOnAction(event ->
-		{
-			if(!ActivityHandler.getInstance().isActivityRunning())
-				treeChooserPopup.show(treeButton, Alignment.of(HPos.RIGHT, VPos.CENTER), 200, 0);
-		});
-		TreeHandler.getInstance().selectedActivityTreeProperty().addListener(observable -> updateTreeImageView());
 
 		resetInterface();
 	}
@@ -160,8 +119,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 		treePhase = 0;
 		setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
-
-
 	}
 
 	@Override
@@ -196,8 +153,127 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	{
 		if (event.isControlDown())
 		{
-			if (event.getCode().equals(KeyCode.ENTER) && !ActivityHandler.getInstance().isActivityRunning())
-				startActivity();
+			if (event.getCode().equals(KeyCode.ENTER)) toggleActivityState();
+			if (hoursSpinnerSelector.isVisible())
+			{
+				if (event.getCode().equals(KeyCode.DIGIT1)) focusSpinnerTextField(hoursSpinnerSelector);
+				else if (event.getCode().equals(KeyCode.DIGIT2)) focusSpinnerTextField(minutesSpinnerSelector);
+				else if (event.getCode().equals(KeyCode.DIGIT3)) focusSpinnerTextField(secondsSpinnerSelector);
+			}
+			if (!ActivityHandler.getInstance().isActivityRunning())
+			{
+				if (event.getCode().equals(KeyCode.C)) ActivityHandler.getInstance().setCurrentActivityType(
+						ActivityType.CHRONOMETER);
+				else if (event.getCode().equals(KeyCode.T)) ActivityHandler.getInstance().setCurrentActivityType(
+						ActivityType.TIMER);
+			}
+
+		}
+	}
+
+	private void initializeTreeView()
+	{
+		updateTreeImageView();
+		treeChooserPopup = new TreeChooserPopup();
+		treeButton.setOnAction(event ->
+		{
+			if (!ActivityHandler.getInstance().isActivityRunning()) treeChooserPopup.show(treeButton,
+					Alignment.of(HPos.RIGHT, VPos.CENTER), 200, 0);
+		});
+	}
+
+	private void initializeSpinners()
+	{
+		var hourSpinnerModel = new IntegerSpinnerModel(0);
+		var minuteSpinnerModel = new IntegerSpinnerModel(0);
+		var secondSpinnerModel = new IntegerSpinnerModel(0);
+
+		secondSpinnerModel.setMax(59);
+		minuteSpinnerModel.setMax(59);
+
+		minutesSpinnerSelector.setSpinnerModel(minuteSpinnerModel);
+		secondsSpinnerSelector.setSpinnerModel(secondSpinnerModel);
+		hoursSpinnerSelector.setSpinnerModel(hourSpinnerModel);
+
+		minuteSpinnerModel.setWrapAround(true);
+		secondSpinnerModel.setWrapAround(true);
+
+		hoursSpinnerSelector.setOnCommit(e ->
+		{
+			hourSpinnerModel.setValue(filterInput(e));
+			minutesSpinnerSelector.requestFocus();
+		});
+		minutesSpinnerSelector.setOnCommit(e ->
+		{
+			minuteSpinnerModel.setValue(Math.min(filterInput(e), 59));
+			secondsSpinnerSelector.requestFocus();
+		});
+		secondsSpinnerSelector.setOnCommit(e ->
+		{
+			secondSpinnerModel.setValue(Math.min(filterInput(e), 59));
+			hoursSpinnerSelector.requestFocus();
+		});
+	}
+
+	private void initializeActivitySelectorComboBox()
+	{
+		activitySelectorComboBox.setConverter(new StringConverter<>()
+		{
+			@Override
+			public String toString(ActivityType object)
+			{
+				if (object != null) return Localization.get(object.key);
+				else return "";
+			}
+
+			@Override
+			public ActivityType fromString(String string)
+			{
+				if (string == null || string.isEmpty()) return null;
+				for (ActivityType activityType : ActivityType.values())
+					if (Localization.get(activityType.key).equals(string)) return activityType;
+				return null;
+			}
+		});
+
+		Localization.localeProperty().addListener(observable -> updateActivityComboBoxStrings());
+
+		activitySelectorComboBox.floatingTextProperty().bind(Localization.createStringBinding("activity.type"));
+
+		updateActivityComboBoxStrings();
+	}
+
+	private void updateActivityComboBoxStrings()
+	{
+		activitySelectorComboBox.getItems().clear();
+		activitySelectorComboBox.getItems().addAll(ActivityType.CHRONOMETER, ActivityType.TIMER);
+		updateActivityComboBoxSelectedItem();
+	}
+
+	private void updateActivityComboBoxSelectedItem()
+	{
+		activitySelectorComboBox.selectItem(ActivityHandler.getInstance().getCurrentActivityType());
+		activitySelectorComboBox.setText(Localization.get(ActivityHandler.getInstance().getCurrentActivityType().key));
+	}
+
+	private void focusSpinnerTextField(MFXSpinner<Integer> spinnerSelector)
+	{
+		BoundTextField textField = getSpinnerTextField(spinnerSelector);
+		if (textField != null) textField.requestFocus();
+	}
+
+	private BoundTextField getSpinnerTextField(MFXSpinner<Integer> spinnerSelector)
+	{
+		try
+		{
+			return (BoundTextField)((Parent)(((Parent)spinnerSelector.getChildrenUnmodifiable().get(
+					0)).getChildrenUnmodifiable().get(2))).getChildrenUnmodifiable().get(1);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.err.println("SpinnerSelector hierarchy probably changed");
+			return null;
 		}
 	}
 
@@ -209,14 +285,18 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void subscribeListeners()
 	{
-		ActivityHandler.getInstance().addListener(this);
 		KeyPressManager.getInstance().addHandler(this);
+		ActivityHandler.getInstance().addListener(this);
+		ActivityHandler.getInstance().currentActivityTypeProperty().addListener(onActivityTypeChanged());
+		TreeHandler.getInstance().selectedActivityTreeProperty().addListener(observable -> updateTreeImageView());
 	}
 
 	private void unsubscribeListeners()
 	{
-		ActivityHandler.getInstance().removeListener(this);
 		KeyPressManager.getInstance().removeHandler(this);
+		ActivityHandler.getInstance().removeListener(this);
+		ActivityHandler.getInstance().currentActivityTypeProperty().removeListener(onActivityTypeChanged());
+		TreeHandler.getInstance().selectedActivityTreeProperty().removeListener(observable -> updateTreeImageView());
 	}
 
 	@FXML
@@ -224,11 +304,11 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	{
 		if (!ActivityHandler.getInstance().isActivityRunning())
 		{
-			if (canStartActivity()) startActivity();
+			if (canStartActivity()) startActivityDelegate();
 		}
 		else
 		{
-			stopActivity();
+			stopActivityDelegate();
 		}
 	}
 
@@ -261,7 +341,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		activityTimeLabel.setText(TimeUtils.formatTime(0));
 		activityProgressSpinner.setProgress(0.0);
 
-
+		updateActivityComboBoxSelectedItem();
 		if (ActivityHandler.getInstance().getCurrentActivityType() == ActivityType.TIMER) showSpinners();
 		else hideSpinners();
 	}
@@ -333,11 +413,11 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		return true;
 	}
 
-	private void stopActivity()
+	private void stopActivityDelegate()
 	{
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
-			case TIMER, TOMATO_TIMER -> {
+			case TIMER, POMODORO -> {
 				if (Feedback.getInstance().askYesNoConfirmation(
 						Localization.get("warning.activity.stopActivity.header"),
 						Localization.get("warning.activity.stopActivity.message")))
@@ -348,9 +428,21 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		}
 	}
 
-	private void startActivity()
+	private void startActivityDelegate()
 	{
 		ActivityHandler.getInstance().startActivity();
+	}
+
+	private ChangeListener<ActivityType> onActivityTypeChanged()
+	{
+		return (observable, oldValue, newValue) ->
+		{
+			updateActivityComboBoxSelectedItem();
+			System.out.println("Activity type changed from " + oldValue + " to " + newValue);
+
+			if (newValue == ActivityType.TIMER) showSpinners();
+			else hideSpinners();
+		};
 	}
 
 	@FXML
@@ -419,19 +511,17 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@FXML
 	void setActivityType(ActionEvent event)
 	{
-		// todo refactor: this isn't safe, if you change order you dont get
-
-		final int activityIndex = activitySelectorComboBox.getSelectedIndex();
-
-		var activityTypeSelected = ActivityType.values()[activityIndex];
-
-		ActivityHandler.getInstance().setActivityType(activityTypeSelected);
-
-		if (activityTypeSelected == ActivityType.TIMER) showSpinners();
-		else hideSpinners();
-
-		System.out.println("Activity type set to: " + ActivityHandler.getInstance().getCurrentActivityType());
+		ActivityType selectedActivityType = activitySelectorComboBox.getSelectedItem();
+		if(selectedActivityType != null)
+			ActivityHandler.getInstance().setCurrentActivityType(selectedActivityType);
 	}
+
+//	int index = activitySelectorComboBox.getItems().indexOf(activityTypeSelected);
+//		if (index == -1)
+//	{
+//		System.err.println("Couldn't find " + activityTypeSelected + " in the comboBox items");
+//		return;
+//	}
 
 
 //	public void setChosenActivityTree(Tree chosenActivityTree)
