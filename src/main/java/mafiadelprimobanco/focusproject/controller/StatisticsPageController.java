@@ -2,7 +2,7 @@ package mafiadelprimobanco.focusproject.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.Localization;
 
 import java.net.URL;
 import java.util.ResourceBundle;

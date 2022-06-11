@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject.model.activity;
 
+import mafiadelprimobanco.focusproject.model.ActivityType;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
@@ -67,7 +68,7 @@ public class TimerActivity extends AbstractActivity
 
 	public JSONObject toJsonObject()
 	{
-		return new JSONObject("{" + "type:Timer," + "tagUuid:" + tagUuid + ", treeUuid:" + treeUuid + ", startTime:" + "\"" + startTime
+		return new JSONObject("{" + "type:" + ActivityType.TIMER.key + ", tagUuid:" + tagUuid + ", treeUuid:" + treeUuid + ", startTime:" + "\"" + startTime
 				+ "\"" + ", endTime:" + "\"" + endTime +  "\"" + ", chosenDuration:" + chosenDuration + '}');
 	}
 }

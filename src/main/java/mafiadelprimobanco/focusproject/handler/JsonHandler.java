@@ -1,5 +1,7 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
+import mafiadelprimobanco.focusproject.handler.TagHandler;
+import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -90,19 +92,18 @@ public final class JsonHandler
 			{
 				JSONObject activity = (JSONObject)userActivities.get(dataKey);
 				String type = activity.getString("type");
-				switch (type)
-				{
-					case "Chrono" -> activityList.add(new ChronometerActivity(
+				if (ActivityType.TIMER.key.equals(type))
+					activityList.add(new ChronometerActivity(
 							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
 							LocalDateTime.parse(activity.getString("startTime")),
 							LocalDateTime.parse(activity.getString("endTime"))));
 
-					case "Timer"  -> activityList.add(new TimerActivity(
+				else if (ActivityType.CHRONOMETER.key.equals(type))
+					activityList.add(new TimerActivity(
 							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
 							LocalDateTime.parse(activity.getString("startTime")),
 							LocalDateTime.parse(activity.getString("endTime")),
 							activity.getInt("chosenDuration")));
-				}
 			}
 		});
 
