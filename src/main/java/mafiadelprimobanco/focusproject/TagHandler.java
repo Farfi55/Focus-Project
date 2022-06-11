@@ -135,6 +135,8 @@ public class TagHandler
 
 		var tag = tags.get(uuid);
 
+		JsonHandler.editTag(tag.getName(), name, color.toString().substring(2), uuid);
+
 		if (!name.equals(tag.getName()))
 		{
 			if (isNameUsed(name))
