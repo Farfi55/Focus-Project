@@ -23,9 +23,9 @@ public class TreeHandler implements ActivityObserver
 	private final SimpleObjectProperty<Tree> selectedActivityTree = new SimpleObjectProperty<>();
 	private final SimpleIntegerProperty unusedProgressTime = new SimpleIntegerProperty();
 	private final List<Image> treePhasesImages = new ArrayList<>(5);
-	HashMap<Integer, Tree> trees = new HashMap<>();
-	HashSet<Integer> treesToUnlock = new HashSet<>();
-	HashSet<Integer> unlockedTrees = new HashSet<>();
+	LinkedHashMap<Integer, Tree> trees = new LinkedHashMap<>();
+	LinkedHashSet<Integer> treesToUnlock = new LinkedHashSet<>();
+	LinkedHashSet<Integer> unlockedTrees = new LinkedHashSet<>();
 	private TreeHandler()
 	{
 		loadTrees();
@@ -124,7 +124,7 @@ public class TreeHandler implements ActivityObserver
 		return unusedProgressTime.get();
 	}
 
-	public HashMap<Integer, Tree> getTreesMap()
+	public LinkedHashMap<Integer, Tree> getTreesMap()
 	{
 		return trees;
 	}
@@ -132,12 +132,12 @@ public class TreeHandler implements ActivityObserver
 		return trees.values();
 	}
 
-	public HashSet<Integer> getTreesToUnlock()
+	public LinkedHashSet<Integer> getTreesToUnlock()
 	{
 		return treesToUnlock;
 	}
 
-	public HashSet<Integer> getUnlockedTrees()
+	public LinkedHashSet<Integer> getUnlockedTrees()
 	{
 		return unlockedTrees;
 	}

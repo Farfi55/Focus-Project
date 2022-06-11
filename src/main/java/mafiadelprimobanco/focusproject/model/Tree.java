@@ -1,6 +1,6 @@
 package mafiadelprimobanco.focusproject.model;
 
-import javafx.scene.image.Image;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class Tree
 {
@@ -13,11 +13,10 @@ public class Tree
 	 * time in seconds required to unlock this tree
 	 */
 	private final Integer totalRequiredTime;
-
 	/**
 	 * time put in to unlock this tree
 	 */
-	private Integer progressTime;
+	private final SimpleIntegerProperty progressTime = new SimpleIntegerProperty(this, "progressTime");
 
 	public Tree(Integer uuid, String name, String matureTreeSprite, String deadTreeSprite, Integer totalRequiredTime,
 			Integer progressTime)
@@ -27,19 +26,23 @@ public class Tree
 		this.matureTreeSprite = matureTreeSprite;
 		this.deadTreeSprite = deadTreeSprite;
 		this.totalRequiredTime = totalRequiredTime;
-		this.progressTime = progressTime;
+		this.progressTime.set(progressTime);
 	}
 
+	public SimpleIntegerProperty progressTimeProperty()
+	{
+		return progressTime;
+	}
 
 	public int addProgressTime(Integer seconds)
 	{
 		assert seconds >= 0;
 
-		progressTime += seconds;
-		if (progressTime > totalRequiredTime)
+		progressTime.set((int)(progressTime.get() + (seconds)));
+		if (progressTime.get() > totalRequiredTime)
 		{
-			int overflow = progressTime - totalRequiredTime;
-			progressTime = totalRequiredTime;
+			int overflow = progressTime.get() - totalRequiredTime;
+			progressTime.set(totalRequiredTime);
 			return overflow;
 		}
 		return 0;
@@ -60,20 +63,21 @@ public class Tree
 
 	public Integer getProgressTime()
 	{
-		return progressTime;
+		return progressTime.get();
 	}
 
 	public Integer getRemainingRequiredTime()
 	{
-		return totalRequiredTime - progressTime;
+		return totalRequiredTime - progressTime.get();
 	}
 
 	public boolean isUnlocked()
 	{
-		return progressTime.equals(totalRequiredTime);
+		return getProgressTime().equals(totalRequiredTime);
 	}
 
-	public float getUnlockProgress()
+	public Float getUnlockProgress()
+
 	{
 		if (totalRequiredTime == 0) return 1.0f;
 		else return (float)getProgressTime() / getTotalRequiredTime();
