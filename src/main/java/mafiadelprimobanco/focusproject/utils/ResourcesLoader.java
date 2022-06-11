@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.utils;
 
 import javafx.scene.image.Image;
 
@@ -13,7 +13,7 @@ public class ResourcesLoader
 
 	public static URL loadURL(String path)
 	{
-		return ResourcesLoader.class.getResource(path);
+		return ResourcesLoader.class.getResource("../" + path);
 	}
 
 	public static String load(String path)
@@ -23,7 +23,7 @@ public class ResourcesLoader
 
 	public static InputStream loadStream(String name)
 	{
-		return ResourcesLoader.class.getResourceAsStream(name);
+		return ResourcesLoader.class.getResourceAsStream("../" +name);
 	}
 
 	public static Image loadImage(String path)

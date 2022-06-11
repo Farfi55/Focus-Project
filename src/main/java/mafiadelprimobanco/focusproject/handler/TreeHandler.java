@@ -1,16 +1,14 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class TreeHandler implements ActivityObserver
 {
@@ -22,16 +20,17 @@ public class TreeHandler implements ActivityObserver
 	}
 
 	private final SimpleObjectProperty<Tree> selectedTreeToUnlock = new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Tree> selectedActivityTree = new SimpleObjectProperty<>();
 	private final SimpleIntegerProperty unusedProgressTime = new SimpleIntegerProperty();
 	private final List<Image> treePhasesImages = new ArrayList<>(5);
 	HashMap<Integer, Tree> trees = new HashMap<>();
 	HashSet<Integer> treesToUnlock = new HashSet<>();
 	HashSet<Integer> unlockedTrees = new HashSet<>();
-
 	private TreeHandler()
 	{
 		loadTrees();
 		setSelectedTreeToUnlock(getFirstTreeToUnlock());
+		setSelectedActivityTree(getFirstUnlockedTree());
 		loadTreePhasesImages();
 		ActivityHandler.getInstance().addListener(this);
 	}
@@ -40,6 +39,11 @@ public class TreeHandler implements ActivityObserver
 	public void onActivityEnd(AbstractActivity currentActivity)
 	{
 		addProgressTime(currentActivity.getFinalDuration());
+	}
+
+	public SimpleObjectProperty<Tree> selectedActivityTreeProperty()
+	{
+		return selectedActivityTree;
 	}
 
 	public Image getTreePhaseImage(int index)
@@ -74,7 +78,6 @@ public class TreeHandler implements ActivityObserver
 		}
 	}
 
-
 	private void addProgressTime(int seconds)
 	{
 		assert seconds >= 0;
@@ -95,10 +98,20 @@ public class TreeHandler implements ActivityObserver
 		else unusedProgressTime.add(seconds);
 	}
 
-
 	public Tree getTree(int uuid)
 	{
 		return trees.get(uuid);
+	}
+
+	public Tree getSelectedActivityTree()
+	{
+		return selectedActivityTree.get();
+	}
+
+	public void setSelectedActivityTree(Tree selectedActivityTree)
+	{
+		if (selectedActivityTree == null || selectedActivityTree.isUnlocked())
+			this.selectedActivityTree.set(selectedActivityTree);
 	}
 
 	public SimpleIntegerProperty getUnusedProgressTimeProperty()
@@ -111,9 +124,12 @@ public class TreeHandler implements ActivityObserver
 		return unusedProgressTime.get();
 	}
 
-	public HashMap<Integer, Tree> getTrees()
+	public HashMap<Integer, Tree> getTreesMap()
 	{
 		return trees;
+	}
+	public Collection<Tree> getTrees(){
+		return trees.values();
 	}
 
 	public HashSet<Integer> getTreesToUnlock()
@@ -140,7 +156,7 @@ public class TreeHandler implements ActivityObserver
 
 	public void setSelectedTreeToUnlock(Tree tree)
 	{
-		if (!treesToUnlock.contains(tree.getUuid()) || !trees.containsKey(tree.getUuid())) System.out.println(
+		if (!treesToUnlock.contains(tree.getUuid()) || !trees.containsKey(tree.getUuid())) System.err.println(
 				"there is no tree '" + tree.getName() + "' to unlock");
 		else this.selectedTreeToUnlock.set(tree);
 	}

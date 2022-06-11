@@ -30,13 +30,11 @@ public class TimerActivity extends AbstractActivity
 	{
 		if (!hasStarted() || isRunning()) return false;
 
-		return getExpectedEndTime().isBefore(endTime);
+		return endTime.isBefore(getExpectedEndTime());
 	}
 	public boolean wasCompleted()
 	{
-		if (!hasStarted() || isRunning()) return false;
-
-		return getExpectedEndTime().isEqual(endTime);
+		return !wasInterrupted();
 	}
 
 	public double getProgress()

@@ -1,9 +1,10 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class StyleHandler
 		reloadStyles();
 	}
 
-	private void changeTheme(String newTheme)
+	public void setTheme(String newTheme)
 	{
 		// if the user can use custom themes then sanitize 'newTheme'
 		currentTheme.setValue(newTheme);

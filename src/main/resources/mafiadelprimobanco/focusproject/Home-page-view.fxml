@@ -68,7 +68,7 @@
                         <Label id="homeActivityTimeLabel" fx:id="activityTimeLabel" text="00:00:00" />
                      </children>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="15.0" />
                      </VBox.margin>
                   </HBox>
                   <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" prefWidth="200.0">
@@ -77,7 +77,7 @@
                            <children>
                               <MFXProgressSpinner fx:id="activityProgressSpinner" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" progress="0.0" startingAngle="90.0">
                                  <color4>
-                                    <Color red="0.05263157933950424" green="0.05263157933950424" blue="0.05263157933950424" />
+                                    <Color />
                                  </color4>
                                  <color1>
                                     <Color />
@@ -89,11 +89,11 @@
                                     <Color />
                                  </color3>
                               </MFXProgressSpinner>
-                              <AnchorPane id="homeTreeBackground" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="180.0">
-                                 <children>
-                                    <ImageView fx:id="treeImageViewer" fitHeight="130.0" fitWidth="130.0" layoutX="25.0" layoutY="25.0" pickOnBounds="true" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
-                                 </children>
-                              </AnchorPane>
+                              <MFXButton id="homeTreeButton" fx:id="treeButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="10.0" layoutY="10.0" pickOnBounds="false" prefHeight="180.0" prefWidth="180.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                 <graphic>
+                                    <ImageView fx:id="treeImageViewer" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" />
+                                 </graphic>
+                              </MFXButton>
                            </children>
                         </AnchorPane>
                      </children>

@@ -2,6 +2,7 @@ package mafiadelprimobanco.focusproject;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.handler.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -29,12 +30,11 @@ public class MainApplication extends Application
 			// just to call the constructor
 			ActivityStatsHandler.getInstance().init();
 
+			PagesHandler.navigateTo(PagesHandler.home);
 		} catch (IOException e)
 		{
 			e.printStackTrace();
-			//todo localization
-			Feedback.getInstance().showError("Errore di caricamento",
-					"Non è stato possibile caricare l'applicazione");
+			Feedback.getInstance().showError(Localization.get("error.loadingApplication.header"),Localization.get("error.loadingApplication.message"));
 		}
 	}
 }

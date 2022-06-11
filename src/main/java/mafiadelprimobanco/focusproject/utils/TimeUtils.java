@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject.model.utils;
+package mafiadelprimobanco.focusproject.utils;
 
 public class TimeUtils
 {

@@ -1,9 +1,14 @@
+.root{
+    -fx-background-color: palette1-1;
+}
+
 .text, .mfx-text-field {
     /*just to make it obvious where it's missing*/
     -fx-font-family: "Roboto";
-    -fx-font-size: 14px;
+    -fx-font-size: 14;
     -fx-background-color: palette1-0;
-    -fx-border-color: palette2-1;
+    -fx-border-color: palette4-1;
+    -fx-text-fill: palette4-1;
 }
 
 .mfx-text-field:focused {
@@ -14,7 +19,16 @@
     -fx-background-color: inherit;
 }
 
+.mfx-combo-box {
+    -fx-background-color: palette1-0;
+    -fx-border-color: transparent;
 
+}
+
+.mfx-combo-box .combo-popup {
+    -fx-background-color: palette1-0;
+    -fx-min-height: 200;
+}
 
 
 /* BASE STYLE
@@ -34,18 +48,13 @@
 
 #navBar {
     -fx-background-color: palette2-2;
-    -fx-background-radius: 0 10px 10px 0;
-    /*
-        doesn't work properly
-    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.25), 20, 0.4, 0, 0);
-    */
-
+    -fx-background-radius: 0 10 10 0;
 }
 
 #navBar .mfx-rectangle-toggle-node {
-    -fx-border-width: 0px;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-border-width: 0;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
     -fx-background-color: inherit;
     -fx-text-fill: palette1-1;
     -fx-icon-color: palette1-1;
@@ -56,12 +65,12 @@
 #navBar .mfx-ripple-generator {
     /* since I cant get the size right, I just disabled it*/
     -mfx-paused: true;
-    -fx-background-size: 60px 60px;
+    -fx-background-size: 60 60;
 
 }
 
 #navBar .ikonli-font-icon {
-    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 0, 0.2, 2, 2);
+    -fx-effect: dropshadow(gaussian, shadow1, 0, 0.2, 2, 2);
 }
 
 #pageRoot {
@@ -70,23 +79,23 @@
 
 
 /*#navBar .mfx-rectangle-toggle-node:focused {*/
-/*    -fx-border-radius: 2px;*/
+/*    -fx-border-radius: 2;*/
 /*    -fx-border-color: #ccFFcc;*/
 /*}*/
 
 #navBar .mfx-rectangle-toggle-node:hover {
-    -fx-background-color: palette2-3;
-    -fx-icon-color: palette1-1;
+    /*-fx-background-color: palette2-3;*/
+    -fx-icon-color: palette3-3;
 }
 
 #navBar .mfx-rectangle-toggle-node:selected {
-    -fx-background-color: palette1-1;
-    -fx-icon-color: palette2-2;
-    -fx-effect: innershadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 0, 3);
+    -fx-background-color: palette3-2;
+    -fx-icon-color: palette1-1;
+    -fx-effect: innershadow(gaussian, shadow1, 10, 0.2, 0, 3);
 }
 
 #navBar .mfx-rectangle-toggle-node:selected .ikonli-font-icon {
-    -fx-effect: none;
+    /*-fx-effect: none;*/
 }
 
 #navBar .mfx-rectangle-toggle-node * {
@@ -105,7 +114,7 @@
     - #homeActivitySelectorComboBox
     - #homeProgressDisplay
       - .mfx-progress-spinner
-      - #homeTreeBackground
+      - #homeTreeButton
       - .image-view
     - #homeActivityButton
   - <home page tags>
@@ -120,6 +129,7 @@
     -fx-background-color: transparent;
     -fx-fill: palette2-2;
 }
+
 #homeFullScreenButton * {
     -fx-fill: palette2-2;
 }
@@ -129,43 +139,47 @@
 /*}*/
 
 #homeRoot .mfx-spinner {
-    -fx-background-color: palette1-3;
-    -fx-background-radius: 30px;
+    -fx-background-color: palette2-2;
+    -fx-background-radius: 30;
     -fx-border-color: palette2-2;
-    -fx-padding: 5px 5px 5px 5px;
-    -fx-border-radius: 30px;
+    -fx-padding: 5;
+    -fx-border-radius: 30;
     /*-fx-effect: innershadow(gaussian, palette1-3, 15, 0.4, 0, 0);*/
 }
 
 #homeRoot .mfx-spinner:focused,
-#homeRoot .mfx-spinner:focus-within {
-    -fx-border-color: palette2-3;
-}
-
 #homeRoot .mfx-spinner:hover {
-    -fx-border-color: palette2-3;
+    -fx-border-color: palette3-2;
 }
 
-#homeRoot .mfx-spinner .mfx-icon-wrapper{
-    -fx-translate-x: 15px;
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper {
+    -fx-translate-x: 15;
     -fx-background-color: palette1-1;
-    -fx-border-color: palette2-3;
-    -fx-border-width: 1px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
     -fx-border-radius: 50%;
 }
-#homeRoot .mfx-spinner .mfx-icon-wrapper:hover{
-    -fx-background-color: palette1-0;
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper:hover {
+    -fx-background-color: palette1-2;
+    -fx-border-color: palette3-2;
+    -fx-border-width: 1;
+}
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper:pressed, #homeRoot .mfx-spinner .mfx-icon-wrapper:armed {
+    -fx-border-width: 2;
+    -fx-border-color: palette3-3;
+}
+
+#homeRoot .mfx-spinner .mfx-icon-wrapper .mfx-font-icon {
+    -mfx-color: palette4-1;
 }
 
 
-#homeRoot .mfx-spinner .mfx-icon-wrapper .mfx-font-icon{
-    -mfx-color: palette2-3;
-}
-
-
-#homeRoot .mfx-spinner .mfx-text-field{
-    -fx-pref-width: 50px;
-    -fx-min-width: 50px;
+#homeRoot .mfx-spinner .mfx-text-field {
+    -fx-pref-width: 50;
+    -fx-min-width: 50;
     -fx-background-color: palette1-0;
     -fx-border-color: palette2-2;
     -fx-text-alignment: center;
@@ -174,68 +188,114 @@
 
 #homeSelectedTagRoot {
     -fx-background-color: palette1-3;
-    -fx-background-radius: 25px;
-    -fx-padding: 10px 20px 10px 20px;
-    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 3);
+    -fx-background-radius: 25;
+    -fx-padding: 10 20 10 20;
+    -fx-effect: innershadow(gaussian, shadow1, 15, 0, 0, 3);
 }
 
 #homeSelectedTagRoot * {
     -fx-text-fill: palette4-1;
-    -fx-font-size: 20px;
+    -fx-font-size: 20;
     -fx-font-family: "Roboto";
 
 }
 
 #homeActivityTimeLabel {
     -fx-background-color: palette2-1;
-    -fx-background-radius: 40px;
-    -fx-padding: 0 20px 0 20px;
+    -fx-background-radius: 40;
+    -fx-padding: 0 20 0 20;
     -fx-text-fill: palette1-1;
-    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 3);
+    -fx-effect: innershadow(gaussian, shadow1, 15, 0, 0, 3);
 }
 
-#homeActivityTimeLabel .text{
-    -fx-font-size: 48px;
+#homeActivityTimeLabel .text {
+    -fx-font-size: 48;
     -fx-font-family: "Roboto";
 }
 
 
 #homeProgressDisplay .mfx-progress-spinner {
-    /*-mfx-color1: palette2-1;*/
-    /*-mfx-color2: palette2-3;*/
-    /*-mfx-color3: palette2-4;*/
-    /*-mfx-color4: palette2-2;*/
+    -mfx-color1: palette3-1;
+    -mfx-color2: palette3-1;
+    -mfx-color3: palette3-1;
+    -mfx-color4: palette3-1;
 }
 
-#homeTreeBackground {
-    -fx-effect: innershadow(gaussian, rgba(46, 75, 26, 0.3), 15, 0, 0, 0);
+#homeTreeButton {
+    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.3, 0, 5);
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
 }
 
-#homeActivityButton{
-    -fx-border-color: palette3-2;
-    -fx-border-width: 2px;
-    -fx-border-radius: 8px;
-    -fx-background-color: palette3-1;
-    -fx-background-radius: 10px;
-    -fx-text-fill: palette1-0;
-    -fx-font-size: 20px;
-    -fx-effect: dropshadow(gaussian, rgba(91, 71, 42, 0.3), 10, 0.2, 3, 3);
+#homeTreeButton .mfx-ripple-generator {
+    -mfx-paused: true;
 }
-#homeActivityButton *{
-    -fx-font-size: 20px;
+
+#homeActivityButton {
+    -fx-border-color: palette3-2;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-background-color: palette3-1;
+    -fx-background-radius: 10;
+    -fx-font-size: 20;
+    -fx-effect: dropshadow(gaussian, shadow1, 10, 0.2, 3, 3);
+}
+
+#homeActivityButton * {
+    -fx-font-size: 20;
     -fx-font-family: "Roboto Bold";
 }
 
-#homeActivityButton:hover{
+#homeActivityButton:hover {
     /*-fx-background-color: palette1-0;*/
     /*-fx-text-fill: palette3-2;*/
     -fx-border-color: palette3-3;
     -fx-background-color: palette3-2;
+    -fx-border-width: 3;
 }
 
+#treeChooserPopup .mfx-scroll-pane {
+    -fx-background-radius: 5;
+    -fx-background-color: palette1-1;
+    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.2, 2, 3);
+}
 
+#treeChooserPopup .mfx-scroll-pane .track {
+    -fx-background-color: palette1-2;
+}
+
+#treeChooserPopup .mfx-scroll-pane .thumb {
+    -fx-background-color: palette3-1;
+}
+
+#treeChooserPopup .mfx-scroll-pane .thumb:hover {
+    -fx-background-color: palette3-2;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node {
+    -fx-effect: dropshadow(gaussian, shadow1, 5, 0.2, 2, 2);
+    -fx-background-color: palette1-2;
+    -fx-border-color: palette1-3;
+    -fx-border-width: 2;
+    -fx-background-radius: 6;
+    -fx-border-radius: 5;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node:disabled {
+    -fx-effect: none;
+    -fx-background-color: palette1-1;
+    -fx-border-color: palette1-2;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node:selected {
+    -fx-border-color: palette3-3;
+}
+
+#treeChooserPopup .mfx-rectangle-toggle-node:hover {
+    -fx-border-color: palette3-2;
+    -fx-border-width: 3;
+
+}
 
 /*#homeTagList {*/
 
@@ -251,19 +311,18 @@
 
 #homePageTagsRoot {
     -fx-background-color: palette2-2;
-    -fx-background-radius: 10px 0 0 10px;
-    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.25), 20, 0.4, 0, 0);
-
+    -fx-background-radius: 10 0 0 10;
+    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.4, 0, 0);
 }
 
 #homePageTagsRoot .label {
-    -fx-background-color: palette1-3;
-    -fx-background-radius: 23px;
-    -fx-padding: 5px 25px 5px 25px;
-    -fx-text-fill: palette3-2;
+    -fx-background-color: palette1-1;
+    -fx-background-radius: 23;
+    -fx-padding: 5 25 5 25;
+    -fx-text-fill: palette4-1;
     -fx-font-weight: 800;
-    -fx-font-size: 16px;
-    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.25), 20, 0.4, 0, 0);
+    -fx-font-size: 16;
+    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.4, 0, 0);
 
 }
 
@@ -272,13 +331,12 @@ todo: this should be a reusable class
  */
 #newTagButton {
     -fx-border-color: palette3-2;
-    -fx-border-width: 2px;
-    -fx-border-radius: 8px;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
     -fx-background-color: palette3-1;
-    -fx-background-radius: 10px;
-    -fx-text-fill: palette1-0;
+    -fx-background-radius: 10;
     -fx-font-weight: 800;
-    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 3, 3);
+    -fx-effect: dropshadow(gaussian, shadow1, 10, 0.2, 3, 3);
 }
 
 
@@ -286,24 +344,6 @@ todo: this should be a reusable class
     -fx-border-color: palette3-3;
     -fx-background-color: palette3-2;
 }
-
-
-.progress-indicator .percentage
-{
-    -fx-fill: null;
-}
-
-#loginPane
-{
-    -fx-background-color: transparent;
-}
-
-/*.mfx-minus
-{
-    -fx-alignment: center;
-    -fx-body-color: red;
-}
-*/
 
 
 /* TAG STYLE
@@ -324,47 +364,54 @@ todo: this should be a reusable class
 
 .homeTag {
     -fx-background-color: palette1-1;
-    -fx-border-color: palette1-3;
-    -fx-border-radius: 21px;
-    -fx-background-radius: 21px;
-    -fx-text-fill: inherit;
+    -fx-border-color: transparent;
+    -fx-border-radius: 21;
+    -fx-background-radius: 21;
+    -fx-text-fill: palette4-1;
 
-    -fx-border-width: 2px;
-    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 3, 3);
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, shadow1, 10, 0.2, 3, 3);
+}
 
+.homeTag:hover {
+    -fx-border-color: palette3-3;
 }
 
 .homeTag:selected {
     -fx-background-color: palette3-1;
     -fx-border-color: palette3-3;
-    -fx-border-width: 3px;
+    -fx-border-width: 3;
 
-    -fx-effect: innershadow(gaussian, rgba(75, 65, 26, 0.5), 10, 0.2, 3, 3);
+    -fx-effect: innershadow(gaussian, shadow1, 10, 0.2, 3, 3);
 
 }
+
+.homeTag .mfx-ripple-generator {
+    -mfx-paused: true;
+}
+
 
 .tagColorButton {
     -fx-background-radius: 50%;
     -fx-border-radius: 50%;
-    /*-fx-effect: innershadow(gaussian, rgba(75, 65, 26, 0.5), 10, 0.2, 3, 3);*/
+    -fx-effect: dropshadow(gaussian, shadow1, 5, 0.3, 0, 0);
+}
 
-    -fx-effect: dropshadow(gaussian, rgba(67, 91, 42, 0.3), 10, 0.2, 2, 2);
-    -fx-border-width: 1px;
-    -fx-border-color: black;
-
+.tagColorButton:hover {
+    -fx-effect: dropshadow(gaussian, shadow1, 6, 0.7, 0, 0);
 }
 
 
 .tagTextField {
     -fx-font-weight: 800;
-    -fx-text-fill: palette3-3;
-    -fx-border-width: 0px;
+    -fx-text-fill: palette4-1;
+    -fx-border-width: 0;
     -fx-background-color: transparent;
 }
 
-.homeTag:selected .tagTextField {
-    -fx-text-fill: palette1-1;
-}
+/*.homeTag:selected .tagTextField {*/
+/*    -fx-text-fill: palette1-0;*/
+/*}*/
 
 .tagTextField * {
     -fx-text-fill: inherit;
@@ -372,7 +419,7 @@ todo: this should be a reusable class
 
 .tagRemoveButton {
     -fx-background-color: transparent;
-    -fx-icon-color: palette3-3;
+    -fx-icon-color: palette4-1;
 }
 
 .tagRemoveButton * {
@@ -382,79 +429,123 @@ todo: this should be a reusable class
 
 /*
 FEEDBACK STYLE
-
-- .notification
-  - HBox
-    - label
 */
 
 
 .header {
     -fx-font-weight: 800;
-    -fx-font-size: 18px;
+    -fx-font-size: 18;
 }
 
 
 .notification {
     -fx-background-color: palette1-1;
-    -fx-background-radius: 4px;
-    -fx-border-width: 2px;
-    -fx-border-radius: 4px;
-    -fx-border-color: palette2-1;
+    -fx-background-radius: 4;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
+    -fx-border-color: palette1-3;
+    -fx-padding: 4;
+    -fx-text-fill: palette4-1;
+
 }
 
 .notification .header {
-    -fx-text-fill: palette3-3;
-    -fx-effect: dropshadow(gaussian, rgba(89, 69, 38, 0.3), 4, 0.2, 2, 2);
+    -fx-background-color: palette2-1;
+    -fx-background-radius: 4;
 }
 
-.notification .content {
-    -fx-text-fill: palette4-1;
-    -fx-font-weight: 400;
-    -fx-font-size: 16px;
+.notification .header .text {
+    -fx-font-size: 16;
 }
+
+.notification .content .text {
+    -fx-font-size: 14;
+}
+
+
+.dialog {
+    -fx-background-color: palette1-1;
+}
+
+.dialog .content-container, .dialog .content-container .content{
+    -fx-background-color: transparent;
+}
+.dialog .header-label{
+    -fx-background-color: transparent;
+}
+
+.dialog .actions-pane .mfx-button{
+    -fx-background-color: palette3-1;
+    -fx-border-color: palette3-2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-border-width: 2;
+}
+.dialog .actions-pane .mfx-button:hover{
+    -fx-background-color: palette3-2;
+    -fx-border-color: palette3-3;
+}
+.dialog .actions-pane .mfx-button .mfx-ripple-generator{
+    -mfx-ripple-color: palette3-3;
+}
+
+#endOfActivityRecap {
+    -fx-background-color: palette1-1;
+}
+
+#endOfActivityRecap .content-container,
+#endOfActivityRecap .content-container .content{
+    -fx-background-color: transparent;
+}
+
+
+#endOfActivityRecap .header-label {
+    -fx-font-size: 18;
+}
+
+
+/*
+REGISTRATION STYLE
+
+*/
 
 
 .mfx-stepper .mfx-text-field {
     -mfx-float-mode: disabled;
-    -fx-font-family: 'Visby Round CF Medium';
     -fx-pref-width: 200;
 }
 
 .mfx-stepper .mfx-stepper-toggle .mfx-text-field {
     -fx-border-color: transparent;
-    -fx-font-family: 'Visby Round CF Bold';
     -fx-pref-width: 1;
 }
 
-.mfx-stepper .error-label {
-    -fx-font-family: 'Visby Round CF Medium';
-    -fx-text-fill: -mfx-red;
-}
 
 .mfx-stepper .header-label {
     -fx-border-color: transparent;
-    -fx-font-family: 'Visby Round CF Demi Bold';
 }
 
 .mfx-stepper .completed-label {
     -fx-border-color: transparent;
-    -fx-font-family: 'Visby Round CF Bold';
     -fx-font-size: 24;
     -fx-alignment: center;
-    -fx-text-fill: -mfx-green;
 }
 
 .outline-button {
     -fx-background-color: transparent;
-    -fx-border-color: -mfx-purple;
     -fx-border-radius: 3;
-
-    -fx-text-fill: -mfx-purple;
 }
 
 .outline-button:hover,
 .outline-button:focused {
-    -fx-background-color: -mfx-purple;
     -fx-text-fill: white;
+}
+
+
+.progress-indicator .percentage {
+    -fx-fill: null;
+}
+
+#loginPane {
+    -fx-background-color: transparent;
 }

@@ -1,17 +1,13 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
-import javafx.concurrent.Task;
 import mafiadelprimobanco.focusproject.client.Client;
 import mafiadelprimobanco.focusproject.client.ConnectionException;
 import mafiadelprimobanco.focusproject.model.User;
 import org.json.JSONObject;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 
 
 public class AutentificationHandler

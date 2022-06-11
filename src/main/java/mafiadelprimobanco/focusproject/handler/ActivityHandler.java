@@ -1,9 +1,9 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
-import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -20,15 +20,12 @@ public class ActivityHandler
 	public static ActivityHandler getInstance() { return instance; }
 
 	private final List<ActivityObserver> listeners = new ArrayList<>();
-
-	private ActivityType currentActivityType = ActivityType.CHRONOMETER;
+	private final SimpleObjectProperty<ActivityType> currentActivityType = new SimpleObjectProperty<>(this,
+			"currentActivityType", ActivityType.CHRONOMETER);
 	private AbstractActivity currentActivity = new ChronometerActivity();
-
 	private Timer activityTimer = null;
-
 	//seconds -- used inside the timer function
 	private int chosenTimerDuration = 0;
-
 
 	private ActivityHandler() { }
 
@@ -37,10 +34,11 @@ public class ActivityHandler
 		activityTimer = new Timer();
 
 		currentActivity.setTagUuid(TagHandler.getInstance().getSelectedTag().getUuid());
+		currentActivity.setTreeUuid(TreeHandler.getInstance().getSelectedActivityTree().getUuid());
 		currentActivity.startActivity();
 		invokeOnActivityStarting();
 
-		switch (currentActivityType)
+		switch (currentActivityType.get())
 		{
 			case CHRONOMETER -> startChronometerActivity();
 			case TIMER -> startTimerActivity();
@@ -49,17 +47,16 @@ public class ActivityHandler
 
 	private AbstractActivity createActivity()
 	{
-		return switch (currentActivityType)
+		return switch (currentActivityType.get())
 				{
 					case CHRONOMETER -> new ChronometerActivity();
 					case TIMER -> new TimerActivity();
-					default -> throw new IllegalStateException("Unexpected value: " + currentActivityType);
+					default -> throw new IllegalStateException("Unexpected value: " + currentActivityType.get());
 				};
 	}
 
 	public void stopCurrentActivity()
 	{
-		System.out.println("stop");
 		currentActivity.endActivity();
 
 		if (activityTimer != null)
@@ -155,14 +152,6 @@ public class ActivityHandler
 		});
 	}
 
-	public void setActivityTree(Tree chosenTree) { setActivityTree(chosenTree.getUuid());}
-
-	public void setActivityTree(Integer chosenTreeUuid)
-	{
-		currentActivity.setTreeUuid(chosenTreeUuid);
-	}
-
-
 	public boolean isActivityRunning()
 	{
 		return currentActivity.isRunning();
@@ -173,7 +162,6 @@ public class ActivityHandler
 		return currentActivity;
 	}
 
-
 	public int getRemainingTimerDuration()
 	{
 		assert currentActivity instanceof TimerActivity;
@@ -183,9 +171,13 @@ public class ActivityHandler
 
 	}
 
-	//GETTERS
-	public ActivityType getCurrentActivityType() { return currentActivityType; }
+	public SimpleObjectProperty<ActivityType> currentActivityTypeProperty()
+	{
+		return currentActivityType;
+	}
 
+	//GETTERS
+	public ActivityType getCurrentActivityType() { return currentActivityType.get(); }
 
 	/**
 	 * @return 0.0 just started ... 1.0 completed
@@ -200,9 +192,9 @@ public class ActivityHandler
 	}
 
 	//SETTERS
-	public void setActivityType(ActivityType type)
+	public void setCurrentActivityType(ActivityType type)
 	{
-		currentActivityType = type;
+		currentActivityType.set(type);
 		currentActivity = createActivity();
 	}
 

@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ListChangeListener;
@@ -13,9 +13,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.controller.TagController;
+import mafiadelprimobanco.focusproject.model.Page;
 import mafiadelprimobanco.focusproject.model.Tag;
-import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;
+import mafiadelprimobanco.focusproject.utils.FXMLReferences;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,39 +30,42 @@ public class SceneHandler
 
 	public static SceneHandler getInstance() { return instance; }
 
+	//TODO: Make that less ugly
+	private final Pane popupPane = new Pane();
 	private Stage stage;
 	private Parent loginPopup;
 	private Scene scene;
 	private AnchorPane root;
-	private StackPane  contentPane;
+	private StackPane contentPane;
 	private ReadOnlyBooleanProperty isFullScreen;
-
-	//TODO: Make that less ugly
-	Pane popupPane = new Pane();
 
 	private SceneHandler() { }
 
 	public void init(Stage stage) throws IOException
 	{
 		this.stage = stage;
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLReferences.BASE));
-		this.scene = new Scene(fxmlLoader.load(), 1150, 600);
-		stage.setTitle("Focus");
+		this.scene = new Scene(loadFXML(FXMLReferences.BASE), 1150, 600);
+		setTitle("Focus");
 		stage.setScene(scene);
 		isFullScreen = stage.fullScreenProperty();
+		loginPopup = loadFXML(FXMLReferences.LOGIN_POPUP);
 		loadFonts();
 		setStyleSheets();
 		stage.show();
 
-		loginPopup = FXMLLoader.load(getClass().getResource("Login-popup-view.fxml"));
 
 		popupPane.getChildren().add(loginPopup);
 
+		subscribeToEvents();
 		subscribeToStyleChanges();
 
 		KeyPressManager.getInstance().addHandler(event ->
 		{
-			if (event.getCode().equals(KeyCode.F11)) toggleFullScreen();
+			if (event.getCode().equals(KeyCode.F11))
+			{
+				toggleFullScreen();
+				event.consume();
+			}
 		});
 
 		stage.setOnCloseRequest(windowEvent ->
@@ -71,11 +77,23 @@ public class SceneHandler
 
 		stage.widthProperty().addListener(e -> closeLoginPopup());
 		stage.heightProperty().addListener(e -> closeLoginPopup());
-		popupPane.setOnMouseClicked(e -> {
+		popupPane.setOnMouseClicked(e ->
+		{
 			//If the click is on popup pane close the login popup
-			if (e.getPickResult().getIntersectedNode().equals(popupPane))
-				closeLoginPopup();
+			if (e.getPickResult().getIntersectedNode().equals(popupPane)) closeLoginPopup();
 		});
+	}
+
+	private void subscribeToEvents()
+	{
+		subscribeToStyleChanges();
+		PagesHandler.getCurrentPagePropriety().addListener(observable -> updateTitle());
+		Localization.localeProperty().addListener(observable -> updateTitle());
+	}
+
+	private void updateTitle()
+	{
+		setTitle("Focus - " + Localization.get(PagesHandler.getCurrentPage().pageNameKey()));
 	}
 
 	public void showLoginPopup()
@@ -94,29 +112,39 @@ public class SceneHandler
 				(ListChangeListener<String>)change -> setStyleSheets());
 	}
 
-	public Node loadFXML(String fxmlPath) throws IOException
+	public Parent loadFXML(String fxmlPath) throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+		FXMLLoader loader = getFXMLLoader(fxmlPath);
 		return loader.load();
 	}
 
-	public Node createTagView(Tag tag) throws IOException { return createTagView(tag, null); }
+	public FXMLLoader getFXMLLoader(String fxmlPath) throws IOException
+	{
+		return new FXMLLoader(ResourcesLoader.loadURL(fxmlPath));
+	}
+
+	public Node createTagView(Tag tag) throws IOException
+	{ return createTagView(tag, null, null); }
 
 	public Node createTagView(Tag tag, ToggleGroup toggleGroup) throws IOException
+	{ return createTagView(tag, toggleGroup, null); }
+
+	public Node createTagView(Tag tag, ToggleGroup toggleGroup, List<TagController> tagControllers) throws IOException
 	{
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(FXMLReferences.TAG));
+		FXMLLoader loader = getFXMLLoader(FXMLReferences.TAG);
 		Node node = loader.load();
 		node.getProperties().put("tag-uuid", tag.getUuid());
 		TagController tagController = loader.getController();
 		tagController.init(tag);
 		tagController.setToggleGroup(toggleGroup);
+		if (tagControllers != null) tagControllers.add(tagController);
 		return node;
 	}
 
 	private void loadFonts()
 	{
 		// load fonts
-		for (String font : List.of("fonts/Roboto/Roboto-Regular.ttf", "fonts/Roboto/Roboto-Bold.ttf"))
+		for (String font : List.of("../fonts/Roboto/Roboto-Regular.ttf", "../fonts/Roboto/Roboto-Bold.ttf"))
 			Font.loadFont(String.valueOf(getClass().getResource(font)), 10);
 	}
 
@@ -128,13 +156,26 @@ public class SceneHandler
 	private void setStyleSheets()
 	{
 		scene.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
+		loginPopup.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
 	}
 
 	public void toggleLoginPopup()
 	{
-		if(popupPane.getParent() == null)
-			showLoginPopup();
+		if (popupPane.getParent() == null) showLoginPopup();
 		else closeLoginPopup();
+	}
+
+	public void showPage(Page page)
+	{
+		contentPane.getChildren().setAll(page.pageRoot().get());
+	}
+
+	public void loadPage(Page page) throws IOException
+	{
+		FXMLLoader loader = getFXMLLoader(page.FXMLPath());
+		page.pageRoot().set(loader.load());
+		page.controller().set(loader.getController());
+		showPage(page);
 	}
 
 	public ReadOnlyBooleanProperty getIsFullScreen()
@@ -147,15 +188,14 @@ public class SceneHandler
 		return isFullScreen.get();
 	}
 
-	public void navTo(String path) throws IOException
-	{
-		Node page = SceneHandler.getInstance().loadFXML(path);
-		contentPane.getChildren().setAll(page);
-	}
-
-	public void setContentPane(StackPane pane) {this.contentPane = pane; }
-
 	public AnchorPane getRoot() { return this.root; }
 
 	public void setRoot(AnchorPane root) { this.root = root; }
+
+	private void setTitle(String title)
+	{
+		stage.setTitle(title);
+	}
+
+	public void setContentPane(StackPane pane) { this.contentPane = pane; }
 }

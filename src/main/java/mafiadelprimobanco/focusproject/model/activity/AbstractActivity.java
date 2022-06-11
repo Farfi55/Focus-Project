@@ -1,8 +1,8 @@
 package mafiadelprimobanco.focusproject.model.activity;
 
 import mafiadelprimobanco.focusproject.JsonHandler;
-import mafiadelprimobanco.focusproject.TagHandler;
-import mafiadelprimobanco.focusproject.TreeHandler;
+import mafiadelprimobanco.focusproject.handler.TagHandler;
+import mafiadelprimobanco.focusproject.handler.TreeHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.Tree;
 import org.json.JSONObject;

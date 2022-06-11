@@ -101,8 +101,8 @@ public final class Localization
 	{
 		button.textProperty().bind(createStringBinding(key, args));
 	}
-	public static void setMFXComboboxFloatingText(final MFXComboBox<String> comboBox, final String key, final Object... args)
-	{
-		comboBox.floatingTextProperty().bind(createStringBinding(key, args));
-	}
+//	public static void setMFXComboboxFloatingText(final MFXComboBox<String> comboBox, final String key, final Object... args)
+//	{
+//		comboBox.floatingTextProperty().bind(createStringBinding(key, args));
+//	}
 }
