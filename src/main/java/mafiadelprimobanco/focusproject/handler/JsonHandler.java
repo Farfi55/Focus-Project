@@ -91,14 +91,16 @@ public final class JsonHandler
 			if (startData.isBefore(data) && endData.isAfter(data))
 			{
 				JSONObject activity = (JSONObject)userActivities.get(dataKey);
+
 				String type = activity.getString("type");
-				if (ActivityType.TIMER.key.equals(type))
+
+				if (ActivityType.CHRONOMETER.key.equals(type))
 					activityList.add(new ChronometerActivity(
 							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
 							LocalDateTime.parse(activity.getString("startTime")),
 							LocalDateTime.parse(activity.getString("endTime"))));
 
-				else if (ActivityType.CHRONOMETER.key.equals(type))
+				else if (ActivityType.TIMER.key.equals(type))
 					activityList.add(new TimerActivity(
 							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
 							LocalDateTime.parse(activity.getString("startTime")),
@@ -106,6 +108,8 @@ public final class JsonHandler
 							activity.getInt("chosenDuration")));
 			}
 		});
+
+		System.out.println(activityList);
 
 		return activityList;
 	}
