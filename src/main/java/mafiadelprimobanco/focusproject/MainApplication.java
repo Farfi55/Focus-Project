@@ -21,7 +21,7 @@ public class MainApplication extends Application
 		{
 			Localization.setLocale(Locale.ITALIAN);
 			JsonHandler.init();
-			
+
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());
