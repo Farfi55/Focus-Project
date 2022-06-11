@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import io.github.palexdev.materialfx.dialogs.MFXGenericDialog?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<MFXGenericDialog id="loginPane" alwaysOnTop="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" showAlwaysOnTop="false" showClose="false" showMinimize="false" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.LoginPageController">
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0" BorderPane.alignment="CENTER">
+         <children>
+            <MFXTextField fx:id="usernameField" floatMode="BORDER" floatingText="Username" minWidth="300.0" promptText="Username" />
+            <MFXPasswordField fx:id="passwordField" floatMode="BORDER" floatingText="Password" minWidth="300.0" promptText="Password" />
+            <MFXButton minWidth="200.0" onAction="#doLogin" text="Entra" />
+         </children>
+      </VBox>
+   </center>
+</MFXGenericDialog>

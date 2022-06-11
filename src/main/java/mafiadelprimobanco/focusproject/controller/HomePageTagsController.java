@@ -1,35 +1,54 @@
 package mafiadelprimobanco.focusproject.controller;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXScrollPane;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
-import mafiadelprimobanco.focusproject.SceneHandler;
-import mafiadelprimobanco.focusproject.TagHandler;
+import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.SceneHandler;
+import mafiadelprimobanco.focusproject.handler.TagHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class HomePageTagsController implements TagsObserver
+public class HomePageTagsController implements TagsObserver, Controller
 {
 
+	List<TagController> tagsControllers;
 	@FXML private VBox tagsList;
-
 	private ToggleGroup toggleGroup;
-
+	@FXML private MFXButton newTagButton;
+	@FXML private Label tagLabel;
 	@FXML private MFXScrollPane tagsSidebar;
 
+	@Override
+	public void terminate()
+	{
+		for (var tagController : tagsControllers)
+		{
+			tagController.terminate();
+		}
+		TagHandler.getInstance().removeListener(this);
+	}
 
-	@FXML
-	void initialize()
+	@Override
+	public void initialize(URL location, ResourceBundle resources)
 	{
 		TagHandler.getInstance().addListener(this);
 		toggleGroup = new ToggleGroup();
 		populateTagsList();
+
+		Localization.setLabel(tagLabel, "tag.tags");
+		Localization.setButton(newTagButton, "tag.newTag");
 	}
 
 	@Override
@@ -53,11 +72,11 @@ public class HomePageTagsController implements TagsObserver
 	{
 		for (Node child : tagsList.getChildren())
 		{
-			if (child.getProperties().containsKey("tag-uuid")) if (child.getProperties().get("tag-uuid").equals(
+			if (child.getProperties().containsKey("tag-uuid") && child.getProperties().get("tag-uuid").equals(
 					tag.getUuid()))
 			{
 				tagsList.getChildren().remove(child);
-				return;
+				break;
 			}
 		}
 	}
@@ -66,15 +85,8 @@ public class HomePageTagsController implements TagsObserver
 	{
 		// -1 because we want to keep the addTag button at the bottom
 		int index = tagsList.getChildren().size() - 1;
-		Node tagView = SceneHandler.getInstance().createTagView(tag, this.toggleGroup);
+		Node tagView = SceneHandler.getInstance().createTagView(tag, this.toggleGroup, tagsControllers);
 		tagsList.getChildren().add(index, tagView);
-
-//		if(tagView instanceof Toggle toggle)
-//		{
-//			toggle.setToggleGroup(this.toggleGroup);
-//			System.out.println(toggle.getToggleGroup());
-//		}
-//		else System.err.println("Unable to inject toggle group to tag " + tag.getName());
 	}
 
 	@FXML
