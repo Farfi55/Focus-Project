@@ -10,28 +10,21 @@
         https://coolors.co/palette/f0ead2-e7e8c4-dde5b6-c5d397-b9ca88-adc178-a98467-95755e-806755-6c584c
 
     */
-    primaryBackgroundColor: #F0EAD2;
-    secondaryBackgroundColor: #DDE5B6;
-    primarySelectionColor: #ADC178;
-
-
-    secondarySelectionColor: #A98467;
-    tertiarySelectionColor: #6C584C;
-    textColor: #332924;
-    selectedTextColor: #4d3f36;
-    navSelectedBackground: #7b8f4b;
-
-
 
     palette1-0: #faf6ef;
     palette1-1: #F0EAD2;
     palette1-2: #E7E8C4;
     palette1-3: #DDE5B6;
+
     palette2-1: #C5D397;
     palette2-2: #B9CA88;
     palette2-3: #acc273;
+
     palette3-1: #A98467;
     palette3-2: #95755E;
     palette3-3: #806755;
+
     palette4-1: #1e1715;
+
+    shadow1: rgba(46, 75, 26, 0.3);
 }
