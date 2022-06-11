@@ -1,6 +1,5 @@
 package mafiadelprimobanco.focusproject;
 
-import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import mafiadelprimobanco.focusproject.controller.TagController;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.utils.FXMLReferences;

@@ -19,6 +19,7 @@ public class MainApplication extends Application
 		try
 		{
 			Localization.setLocale(Locale.ITALIAN);
+			JsonHandler.init();
 
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);

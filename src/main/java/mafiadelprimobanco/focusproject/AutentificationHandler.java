@@ -69,12 +69,14 @@ public class AutentificationHandler
 				String id = Client.getInstance().register(user.email(), user.password());
 
 				if (id == null) {
-					Feedback.getInstance().showError("Errore", "Utente già esistente");
+					Feedback.getInstance().showError(Localization.get("error.autentification.UserExistsHeader"),
+							Localization.get("error.autentification.UserExistsMsg"));
 					return;
 				}
 
 				if (Client.getInstance().sendEmailVerification())
-					Feedback.getInstance().showInfo("Info", "Controlla la tua mail per confermare la registrazione");
+					Feedback.getInstance().showError(Localization.get("info.autentification.EmailConfirmHeader"),
+							Localization.get("info.autentification.EmailConfirmMsg"));
 
 			}
 			catch (IOException | ConnectionException e)
@@ -92,13 +94,15 @@ public class AutentificationHandler
 
 			if (id == null)
 			{
-				Feedback.getInstance().showError("Errore", "Username o password errata");
+				Feedback.getInstance().showError(Localization.get("error.autentification.UoPNotValidHeader"),
+						Localization.get("error.autentification.UoPNotValidMsg"));
 				return false;
 			}
 
 			if (!Client.getInstance().isEmailVerified())
 			{
-				Feedback.getInstance().showError("Errore", "Email non verificata");
+				Feedback.getInstance().showError(Localization.get("error.autentification.emailNotValidHeader"),
+						Localization.get("error.autentification.emailNotValidMsg"));
 				return false;
 			}
 
@@ -121,7 +125,8 @@ public class AutentificationHandler
 		}
 		catch (IOException | ConnectionException e)
 		{
-			e.printStackTrace();
+			Feedback.getInstance().showError(Localization.get("error.autentification.connectionErrorHeader"),
+					Localization.get("error.autentification.connectionErrorMsg"));
 		}
 
 		return false;

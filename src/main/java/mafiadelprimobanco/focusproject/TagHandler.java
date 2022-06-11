@@ -30,7 +30,7 @@ public class TagHandler
 	{
 		// todo: get saved tags from database
 		createUnsetTag();
-		debugLoad();
+		//debugLoad();
 
 	}
 
@@ -54,7 +54,7 @@ public class TagHandler
 	{
 		int uuid = rand.nextInt();
 		while (tags.containsKey(uuid)) uuid = rand.nextInt();
-
+		JsonHandler.addTag(name, color.toString().substring(2), uuid);
 		return addTag(name, color, uuid);
 	}
 
@@ -108,6 +108,7 @@ public class TagHandler
 			else setSelectedTag(unsetTag);
 		}
 		invokeOnTagRemoving(tag);
+		JsonHandler.deleteTag(tag.getName());
 		names.remove(tag.getName());
 		tags.remove(uuid);
 		return true;
