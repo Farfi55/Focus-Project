@@ -61,7 +61,11 @@ public class SceneHandler
 
 		KeyPressManager.getInstance().addHandler(event ->
 		{
-			if (event.getCode().equals(KeyCode.F11)) toggleFullScreen();
+			if (event.getCode().equals(KeyCode.F11))
+			{
+				toggleFullScreen();
+				event.consume();
+			}
 		});
 
 		stage.setOnCloseRequest(windowEvent ->

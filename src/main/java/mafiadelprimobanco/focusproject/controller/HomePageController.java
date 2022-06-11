@@ -142,10 +142,8 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 		if (currentActivity instanceof TimerActivity timerActivity)
 		{
-			if (timerActivity.wasInterrupted())
-				setTreeImage(currentActivity.getTree().getDeadTreeSprite());
-			else
-				setTreeImage(currentActivity.getTree().getMatureTreeSprite());
+			if (timerActivity.wasInterrupted()) setTreeImage(currentActivity.getTree().getDeadTreeSprite());
+			else setTreeImage(currentActivity.getTree().getMatureTreeSprite());
 		}
 		else if (currentActivity instanceof ChronometerActivity)
 		{
@@ -159,24 +157,51 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@Override
 	public void handle(KeyEvent event)
 	{
-		if (event.isControlDown())
+		if (event.getCode().equals(KeyCode.ESCAPE) && ActivityHandler.getInstance().isActivityRunning())
 		{
-			if (event.getCode().equals(KeyCode.ENTER)) toggleActivityState();
-			if (hoursSpinnerSelector.isVisible())
-			{
-				if (event.getCode().equals(KeyCode.DIGIT1)) focusSpinnerTextField(hoursSpinnerSelector);
-				else if (event.getCode().equals(KeyCode.DIGIT2)) focusSpinnerTextField(minutesSpinnerSelector);
-				else if (event.getCode().equals(KeyCode.DIGIT3)) focusSpinnerTextField(secondsSpinnerSelector);
-			}
-			if (!ActivityHandler.getInstance().isActivityRunning())
-			{
-				if (event.getCode().equals(KeyCode.Y)) ActivityHandler.getInstance().setCurrentActivityType(
-						ActivityType.CHRONOMETER);
-				else if (event.getCode().equals(KeyCode.T)) ActivityHandler.getInstance().setCurrentActivityType(
-						ActivityType.TIMER);
-			}
-
+			stopActivityDelegate();
+			event.consume();
 		}
+		else if (event.isControlDown())
+		{
+			if (event.getCode().equals(KeyCode.ENTER))
+			{
+				toggleActivityState();
+				event.consume();
+			}
+			else if (hoursSpinnerSelector.isVisible())
+			{
+				if (event.getCode().equals(KeyCode.DIGIT1))
+				{
+					focusSpinnerTextField(hoursSpinnerSelector);
+					event.consume();
+				}
+				else if (event.getCode().equals(KeyCode.DIGIT2))
+				{
+					focusSpinnerTextField(minutesSpinnerSelector);
+					event.consume();
+				}
+				else if (event.getCode().equals(KeyCode.DIGIT3))
+				{
+					focusSpinnerTextField(secondsSpinnerSelector);
+					event.consume();
+				}
+			}
+		}
+		else if (event.isAltDown() && !ActivityHandler.getInstance().isActivityRunning())
+		{
+			if (event.getCode().equals(KeyCode.C))
+			{
+				ActivityHandler.getInstance().setCurrentActivityType(ActivityType.CHRONOMETER);
+				event.consume();
+			}
+			else if (event.getCode().equals(KeyCode.T))
+			{
+				ActivityHandler.getInstance().setCurrentActivityType(ActivityType.TIMER);
+				event.consume();
+			}
+		}
+
 	}
 
 	private void subscribeListeners()
@@ -506,6 +531,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	void hideNode(Node node) { setNodeVisible(node, false); }
 
 
+	// -------------------------------------------------
 	// GETTER - SETTER METHODS
 	// -------------------------------------------------
 
