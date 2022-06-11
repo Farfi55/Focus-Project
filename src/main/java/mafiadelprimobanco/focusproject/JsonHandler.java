@@ -1,26 +1,39 @@
 package mafiadelprimobanco.focusproject;
 
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import org.json.JSONObject;
 
 
 import javafx.scene.paint.*;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 public final class JsonHandler
 {
 
-	private static Path localTagFile = Path.of("userdata.json");
+	private static Path localTagFile = Path.of("tags.json");
+	private static Path localActivitiesFile = Path.of("activities.json");
 	static JSONObject userTags;
+	static JSONObject userActivities;
 
 	public static void init()
 	{
-		if (!localTagFile.toFile().exists()) return;
-
 		try
 		{
+			if (!localTagFile.toFile().exists())
+				Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
+
+			if (!localActivitiesFile.toFile().exists())
+				Files.writeString(localActivitiesFile, "{}", StandardOpenOption.CREATE);
+
+
 			userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
+			userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
 		}
 		catch (IOException e)
 		{
@@ -34,7 +47,6 @@ public final class JsonHandler
 	{
 		try
 		{
-			if (!localTagFile.toFile().exists()) Files.createFile(localTagFile);
 			Files.writeString(localTagFile, userTags.toString());
 		}
 		catch (IOException e)
@@ -42,6 +54,25 @@ public final class JsonHandler
 			e.printStackTrace();
 		}
 	}
+
+	static void updateActivitiesFile()
+	{
+		try
+		{
+			Files.writeString(localActivitiesFile, userActivities.toString());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
+	{
+		userActivities.put(key.toString(), activity.toJsonObject());
+		updateActivitiesFile();
+	}
+
 
 	static void loadTags()
 	{
@@ -53,10 +84,18 @@ public final class JsonHandler
 
 	static void addTag(String name, String colorHex, Integer UUID)
 	{
-		JSONObject newTag = new JSONObject("{"
+		userTags.put(name, new JSONObject("{"
 				+ "UUID:"+UUID+", Color:"+colorHex +
-				"}");
-		userTags.put(name, newTag);
+				"}"));
+		updateTagFile();
+	}
+
+	static void editTag(String oldTagName, String name, String colorHex, Integer UUID)
+	{
+		userTags.remove(oldTagName);
+		userTags.put(name, new JSONObject("{"
+				+ "UUID:"+UUID+", Color:"+colorHex +
+				"}"));
 		updateTagFile();
 	}
 
