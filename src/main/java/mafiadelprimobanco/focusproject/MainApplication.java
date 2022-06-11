@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 public class MainApplication extends Application
@@ -20,7 +21,7 @@ public class MainApplication extends Application
 		{
 			Localization.setLocale(Locale.ITALIAN);
 			JsonHandler.init();
-
+			
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
 			Feedback.getInstance().setRoot(SceneHandler.getInstance().getRoot());

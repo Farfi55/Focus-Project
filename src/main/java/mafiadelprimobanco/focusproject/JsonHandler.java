@@ -1,6 +1,8 @@
 package mafiadelprimobanco.focusproject;
 
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
+import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 import org.json.JSONObject;
 
 
@@ -11,7 +13,9 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 public final class JsonHandler
 {
@@ -43,7 +47,8 @@ public final class JsonHandler
 		loadTags();
 	}
 
-	static void updateTagFile()
+	//Use an enum to deal with that
+	private static void updateTagFile()
 	{
 		try
 		{
@@ -55,7 +60,7 @@ public final class JsonHandler
 		}
 	}
 
-	static void updateActivitiesFile()
+	private static void updateActivitiesFile()
 	{
 		try
 		{
@@ -73,6 +78,37 @@ public final class JsonHandler
 		updateActivitiesFile();
 	}
 
+	public static List<AbstractActivity> getAllActivities(LocalDateTime startData, LocalDateTime endData)
+	{
+		List<AbstractActivity> activityList = new Vector<>();
+
+		userActivities.keys().forEachRemaining(dataKey ->
+		{
+			LocalDateTime data = LocalDateTime.parse(dataKey);
+
+			if (startData.isBefore(data) && endData.isAfter(data))
+			{
+				JSONObject activity = (JSONObject)userActivities.get(dataKey);
+				String type = activity.getString("type");
+				switch (type)
+				{
+					case "Chrono" -> activityList.add(new ChronometerActivity(
+							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
+							LocalDateTime.parse(activity.getString("startTime")),
+							LocalDateTime.parse(activity.getString("endTime"))));
+
+					case "Timer"  -> activityList.add(new TimerActivity(
+							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
+							LocalDateTime.parse(activity.getString("startTime")),
+							LocalDateTime.parse(activity.getString("endTime")),
+							activity.getInt("chosenDuration")));
+				}
+			}
+		});
+
+		return activityList;
+	}
+
 
 	static void loadTags()
 	{
@@ -82,7 +118,7 @@ public final class JsonHandler
 		});
 	}
 
-	static void addTag(String name, String colorHex, Integer UUID)
+	public static void addTag(String name, String colorHex, Integer UUID)
 	{
 		userTags.put(name, new JSONObject("{"
 				+ "UUID:"+UUID+", Color:"+colorHex +
@@ -90,24 +126,16 @@ public final class JsonHandler
 		updateTagFile();
 	}
 
-	static void editTag(String oldTagName, String name, String colorHex, Integer UUID)
+	public static void editTag(String oldTagName, String name, String colorHex, Integer UUID)
 	{
 		userTags.remove(oldTagName);
-		userTags.put(name, new JSONObject("{"
-				+ "UUID:"+UUID+", Color:"+colorHex +
-				"}"));
-		updateTagFile();
+		addTag(name, colorHex, UUID);
 	}
 
-	static void deleteTag(String tagName)
+	public static void deleteTag(String tagName)
 	{
 		userTags.remove(tagName);
 		updateTagFile();
 	}
-
-
-
-
-
 
 }
