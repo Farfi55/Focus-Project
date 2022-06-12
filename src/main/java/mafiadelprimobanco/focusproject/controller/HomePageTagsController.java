@@ -9,11 +9,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
-import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.handler.SceneHandler;
 import mafiadelprimobanco.focusproject.handler.TagHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.TagsObserver;
+import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,8 +47,8 @@ public class HomePageTagsController implements TagsObserver, Controller
 		toggleGroup = new ToggleGroup();
 		populateTagsList();
 
-		Localization.setLabel(tagLabel, "tag.tags");
-		Localization.setButton(newTagButton, "tag.newTag");
+		LocalizationUtils.bindLabelText(tagLabel, "tag.tags");
+		LocalizationUtils.bindButtonText(newTagButton, "tag.newTag");
 	}
 
 	@Override

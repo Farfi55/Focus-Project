@@ -6,10 +6,10 @@ import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import mafiadelprimobanco.focusproject.handler.AutentificationHandler;
-import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.handler.PagesHandler;
 import mafiadelprimobanco.focusproject.handler.SceneHandler;
 import mafiadelprimobanco.focusproject.model.User;
+import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 
 public class LoginPopUpController {
 
@@ -40,8 +40,8 @@ public class LoginPopUpController {
 
 	@FXML void initialize()
 	{
-		Localization.setButton(loginButton, "login.signIn");
-		Localization.setButton(registrationButton, "login.signUp");
+		LocalizationUtils.bindButtonText(loginButton, "login.signIn");
+		LocalizationUtils.bindButtonText(registrationButton, "login.signUp");
 	}
 
 }

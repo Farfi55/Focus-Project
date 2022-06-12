@@ -30,10 +30,7 @@ import mafiadelprimobanco.focusproject.model.TreeChooserPopup;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
-import mafiadelprimobanco.focusproject.utils.FXMLReferences;
-import mafiadelprimobanco.focusproject.utils.NodeUtils;
-import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
-import mafiadelprimobanco.focusproject.utils.TimeUtils;
+import mafiadelprimobanco.focusproject.utils.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
@@ -102,7 +99,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@Override
 	public void onActivityStarting(AbstractActivity currentActivity)
 	{
-		Localization.setButton(activityButton, "activity.stop");
+		LocalizationUtils.bindButtonText(activityButton, "activity.stop");
 
 		NodeUtils.showNode(activityTimeLabel);
 
@@ -484,7 +481,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void resetInterface()
 	{
-		Localization.setButton(activityButton, "activity.start");
+		LocalizationUtils.bindButtonText(activityButton, "activity.start");
 
 		NodeUtils.hideNode(activityTimeLabel);
 
