@@ -2,7 +2,10 @@ package mafiadelprimobanco.focusproject.handler;
 
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
+import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -27,15 +30,15 @@ public class ActivityStatsHandler implements ActivityObserver
 	{
 	}
 
-	public void init()
-	{
-		ActivityHandler.getInstance().addListener(this);
-	}
-
 	@Override
 	public void onActivityEnd(AbstractActivity currentActivity)
 	{
 		addActivity(currentActivity);
+	}
+
+	public void init()
+	{
+		ActivityHandler.getInstance().addListener(this);
 	}
 
 	private void addActivity(AbstractActivity currentActivity)
@@ -67,12 +70,61 @@ public class ActivityStatsHandler implements ActivityObserver
 		return activityTime;
 	}
 
+	public TreeStats getTreesStats(Tree tree)
+	{
+		return getTreesStats(tree.getUuid());
+	}
+
+	public TreeStats getTreesStats(Integer treeUuid)
+	{
+		TreeStats stats = new TreeStats();
+
+		for (TreeSet<AbstractActivity> activityTreeSet : activities.values())
+		{
+			activityTreeSet.forEach(activity ->
+			{
+				if (activity.getTreeUuid().equals(treeUuid))
+				{
+					stats.totalPlanted++;
+
+					if (activity.getStartTime().isAfter(stats.lastPlanted))
+						stats.lastPlanted = activity.getStartTime();
+
+					if (activity instanceof TimerActivity timerActivity)
+					{
+						if (timerActivity.wasInterrupted()) stats.totaDead++;
+						else stats.totalMature++;
+					}
+					if (activity instanceof ChronometerActivity chronometerActivity)
+					{
+						//TODO: move into settings
+						int successfulChronometerMinimunTime = 10;
+						if (chronometerActivity.getFinalDuration() < successfulChronometerMinimunTime) stats.totaDead++;
+						else stats.totalMature++;
+					}
+
+				}
+			});
+
+		}
+		return stats;
+
+	}
 
 
 	public enum statsInterval
 	{
 		DAY, WEEK, MONTH, YEAR
 	}
+
+	public class TreeStats
+	{
+		public Integer totalPlanted = 0;
+		public Integer totalMature = 0;
+		public Integer totaDead = 0;
+		public LocalDateTime lastPlanted = LocalDateTime.MIN;
+	}
+
 
 	public class ActivityTime
 	{
