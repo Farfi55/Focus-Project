@@ -18,6 +18,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.ActivityStatsHandler;
 import mafiadelprimobanco.focusproject.handler.TreeHandler;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
@@ -26,6 +28,8 @@ import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 import mafiadelprimobanco.focusproject.utils.TimeUtils;
 
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -228,8 +232,6 @@ public class ProgressPageController implements Controller
 		{
 			setSelectedPreviewTree(selectedPreviewTreeIndex.get() + 1);
 		}
-
-
 	}
 
 	@FXML
@@ -264,6 +266,19 @@ public class ProgressPageController implements Controller
 
 	private void updateUnlockedTreeDetails()
 	{
+		ActivityStatsHandler.TreeStats stats = ActivityStatsHandler.getInstance().getTreesStats(
+				selectedPreviewTree.get());
+		plantedTreesLabel.setText(stats.totalPlanted.toString());
+		matureTreesLabel.setText(stats.totalMature.toString());
+		deadTreesLabel.setText(stats.totaDead.toString());
+		if(stats.lastPlanted.equals(LocalDateTime.MIN))
+			LocalizationUtils.bindLabelText(lastTreeLabel, "progress.treeNeverPlanted");
+		else
+		{
+			lastTreeLabel.textProperty().unbind();
+			lastTreeLabel.setText(stats.lastPlanted.truncatedTo(ChronoUnit.SECONDS).toString());
+		}
+
 	}
 
 	private void updateToUnlockTreeDetails()
