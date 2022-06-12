@@ -25,21 +25,23 @@
                            <children>
                               <StackPane prefHeight="150.0" prefWidth="594.0">
                                  <children>
-                                    <HBox fx:id="treeSelectionHBox" alignment="CENTER" prefHeight="100.0" prefWidth="481.0" />
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="481.0" spacing="100.0">
-                                       <children>
-                                          <MFXButton contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectPreviousAction" text="previous">
-                                             <graphic>
-                                                <FontIcon iconLiteral="mdi2a-arrow-left" iconSize="20" />
-                                             </graphic>
-                                          </MFXButton>
-                                          <MFXButton contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectNextAction" text="next">
-                                             <graphic>
-                                                <FontIcon iconLiteral="mdi2a-arrow-right" iconSize="20" />
-                                             </graphic>
-                                          </MFXButton>
-                                       </children>
-                                    </HBox>
+                                    <HBox fx:id="treeSelectionHBox" alignment="CENTER" prefHeight="100.0" prefWidth="481.0" spacing="10.0" />
+                                    <MFXButton fx:id="treeSelectPreviousButton" contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectPreviousAction" text="previous" translateX="-50.0">
+                                       <graphic>
+                                          <FontIcon iconLiteral="mdi2a-arrow-left" iconSize="20" />
+                                       </graphic>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </MFXButton>
+                                    <MFXButton fx:id="treeSelectNextButton" contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectNextAction" text="next" translateX="50.0">
+                                       <graphic>
+                                          <FontIcon iconLiteral="mdi2a-arrow-right" iconSize="20" />
+                                       </graphic>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </MFXButton>
                                  </children>
                               </StackPane>
                               <GridPane fx:id="unlockedTreeDetailsGrid" hgap="10.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="114.0" prefWidth="177.0" vgap="5.0">
