@@ -158,7 +158,19 @@ public class ProgressPageController implements Controller
 
 	private void initializeToUnlockTreeDetailGrid()
 	{
-
+		int row = 0;
+		for (var key : List.of("progress.treeRequiredTime", "progress.treeProgressTime"))
+		{
+			Label label = new Label();
+			label.setAlignment(Pos.CENTER);
+			LocalizationUtils.bindLabelText(label, key);
+			Label valueLabel = new Label();
+			valueLabel.setAlignment(Pos.CENTER);
+			toUnlockTreeDetailsGrid.addRow(row, label, valueLabel);
+			row++;
+		}
+		toUnlockTreeDetailsGrid.add(new MFXProgressBar(0), 0, row++, 2, 1);
+		toUnlockTreeDetailsGrid.add(new MFXButton(), 0, row, 2, 1);
 	}
 
 	private void initializeIntervalComboBox()
