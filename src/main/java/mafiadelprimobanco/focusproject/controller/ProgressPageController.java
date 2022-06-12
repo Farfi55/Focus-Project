@@ -19,13 +19,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import mafiadelprimobanco.focusproject.handler.TreeHandler;
 import mafiadelprimobanco.focusproject.model.Tree;
+import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 import mafiadelprimobanco.focusproject.utils.NodeUtils;
 import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
@@ -40,23 +41,18 @@ public class ProgressPageController implements Controller
 	 * <pre> X T X </pre>
 	 */
 	private final int extraTreesShownInSelectionHBox = 1;
-
+	private final LinkedHashMap<Tree, Node> previewSelectionTreesNodes = new LinkedHashMap<>();
+	private final SimpleObjectProperty<Tree> selectedPreviewTree = new SimpleObjectProperty<>(this,
+			"selectedPreviewTree");
+	private final SimpleIntegerProperty selectedPreviewTreeIndex = new SimpleIntegerProperty(this,
+			"selectedPreviewTreeIndex");
 	@FXML private HBox treeSelectionHBox;
 	@FXML private MFXButton treeSelectNextButton;
 	@FXML private MFXButton treeSelectPreviousButton;
-
 	@FXML private GridPane toUnlockTreeDetailsGrid;
 	@FXML private GridPane unlockedTreeDetailsGrid;
-
 	@FXML private MFXComboBox<String> intervalComboBox;
 	@FXML private GridPane treeGrid;
-
-	private final LinkedHashMap<Tree, Node> previewSelectionTreesNodes = new LinkedHashMap<>();
-
-	private final SimpleObjectProperty<Tree> selectedPreviewTree = new SimpleObjectProperty<>(this, "selectedPreviewTree");
-	private final SimpleIntegerProperty selectedPreviewTreeIndex = new SimpleIntegerProperty(this,
-			"selectedPreviewTreeIndex");
-
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -64,6 +60,7 @@ public class ProgressPageController implements Controller
 		initializeTreeSelectionHBox();
 		initializeUnlockedTreeDetailGrid();
 		initializeToUnlockTreeDetailGrid();
+		updateTreePreviewDetails();
 		initializeIntervalComboBox();
 		initializeTreeGrid();
 	}
@@ -148,7 +145,15 @@ public class ProgressPageController implements Controller
 
 	private void initializeUnlockedTreeDetailGrid()
 	{
-
+		int row = 0;
+		for (var key : List.of("progress.plantedTrees", "progress.matureTrees", "progress.deadTrees",
+				"progress.lastTree"))
+		{
+			Label label = new Label();
+			LocalizationUtils.bindLabelText(label, key);
+			Label valueLabel = new Label();
+			unlockedTreeDetailsGrid.addRow(row++, label, valueLabel);
+		}
 	}
 
 	private void initializeToUnlockTreeDetailGrid()
@@ -169,7 +174,8 @@ public class ProgressPageController implements Controller
 	@FXML
 	void onTreeSelectNextAction(ActionEvent event)
 	{
-		if (selectedPreviewTreeIndex.get() < treeSelectionHBox.getChildren().size() - extraTreesShownInSelectionHBox - 1)
+		if (selectedPreviewTreeIndex.get()
+				< treeSelectionHBox.getChildren().size() - extraTreesShownInSelectionHBox - 1)
 		{
 			setSelectedPreviewTree(selectedPreviewTreeIndex.get() + 1);
 		}
@@ -194,6 +200,13 @@ public class ProgressPageController implements Controller
 			Node node = treeSelectionHBox.getChildren().get(i);
 			NodeUtils.setNodeVisible(node, isVisible);
 		}
+	}
+
+	private void updateTreePreviewDetails()
+	{
+		boolean isPreviewUnlocked = this.selectedPreviewTree.get().isUnlocked();
+		NodeUtils.setNodeVisible(unlockedTreeDetailsGrid, isPreviewUnlocked);
+		NodeUtils.setNodeVisible(toUnlockTreeDetailsGrid, !isPreviewUnlocked);
 	}
 
 	private Tree getSelectedPreviewTree()
@@ -224,12 +237,5 @@ public class ProgressPageController implements Controller
 
 		updateTreeSelectionHBoxItems();
 		updateTreePreviewDetails();
-	}
-
-	private void updateTreePreviewDetails()
-	{
-		boolean isPreviewUnlocked = this.selectedPreviewTree.get().isUnlocked();
-		NodeUtils.setNodeVisible(unlockedTreeDetailsGrid, isPreviewUnlocked);
-		NodeUtils.setNodeVisible(toUnlockTreeDetailsGrid, !isPreviewUnlocked);
 	}
 }
