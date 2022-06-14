@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject.handler;
 
+import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.client.Client;
 import mafiadelprimobanco.focusproject.client.ConnectionException;
 import mafiadelprimobanco.focusproject.model.User;
@@ -59,26 +60,29 @@ public class AutentificationHandler
 
 	public void registerUser(User user)
 	{
-		new Thread(() -> {
-			try
+		new Thread(() ->
+		{
+			Platform.runLater(() ->
 			{
-				String id = Client.getInstance().register(user.email(), user.password());
+				try
+				{
+					String id = Client.getInstance().register(user.email(), user.password());
 
-				if (id == null) {
-					Feedback.getInstance().showError(Localization.get("error.autentification.UserExistsHeader"),
-							Localization.get("error.autentification.UserExistsMsg"));
-					return;
-				}
+					if (id == null)
+					{
+						Feedback.getInstance().showError(Localization.get("error.autentification.UserExistsHeader"),
+								Localization.get("error.autentification.UserExistsMsg"));
+						return;
+					}
 
-				if (Client.getInstance().sendEmailVerification())
-					Feedback.getInstance().showError(Localization.get("info.autentification.EmailConfirmHeader"),
+					if (Client.getInstance().sendEmailVerification()) Feedback.getInstance().showError(Localization.get("info.autentification.EmailConfirmHeader"),
 							Localization.get("info.autentification.EmailConfirmMsg"));
-
-			}
-			catch (IOException | ConnectionException e)
-			{
-				e.printStackTrace();
-			}
+				}
+				catch (IOException | ConnectionException e)
+				{
+					e.printStackTrace();
+				}
+			});
 		}).start();
 	}
 
@@ -113,6 +117,11 @@ public class AutentificationHandler
 			jsonUser.put("password", user.password());
 
 			Files.writeString(localDatabaseFile, jsonUser.toString(), StandardOpenOption.CREATE_NEW);*/
+
+			//birep32027@serosin.com
+
+			Feedback.getInstance().showNotification(Localization.get("info.autentification.loginSuccessfull.Header"),
+					Localization.get("info.autentification.loginSuccessfull.Msg", user.username()));
 
 			this.user = user;
 
