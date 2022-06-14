@@ -8,6 +8,8 @@ import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.TreeSet;
 
@@ -112,12 +114,7 @@ public class ActivityStatsHandler implements ActivityObserver
 	}
 
 
-	public enum statsInterval
-	{
-		DAY, WEEK, MONTH, YEAR
-	}
-
-	public class TreeStats
+	public static class TreeStats
 	{
 		public Integer totalPlanted = 0;
 		public Integer totalMature = 0;
@@ -126,7 +123,7 @@ public class ActivityStatsHandler implements ActivityObserver
 	}
 
 
-	public class ActivityTime
+	public static class ActivityTime
 	{
 		public Integer dayTime = 0;
 		public Integer weekTime = 0;
