@@ -21,6 +21,7 @@ import javafx.scene.text.TextAlignment;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.handler.ActivityStatsHandler;
 import mafiadelprimobanco.focusproject.handler.TreeHandler;
+import mafiadelprimobanco.focusproject.model.Interval;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 import mafiadelprimobanco.focusproject.utils.NodeUtils;
@@ -57,7 +58,7 @@ public class ProgressPageController implements Controller
 	@FXML private MFXButton treeSelectPreviousButton;
 	@FXML private GridPane toUnlockTreeDetailsGrid;
 	@FXML private GridPane unlockedTreeDetailsGrid;
-	@FXML private MFXComboBox<String> intervalComboBox;
+	@FXML private MFXComboBox<Interval> intervalComboBox;
 	@FXML private GridPane treeGrid;
 
 
@@ -71,6 +72,8 @@ public class ProgressPageController implements Controller
 	private MFXProgressBar treeUnlockProgressBar;
 	private MFXButton selectTreeToUnlockButton;
 
+	private final SimpleObjectProperty<Interval> treeGridInterval = new SimpleObjectProperty<>(this, "treeGridInterval");
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
@@ -83,6 +86,7 @@ public class ProgressPageController implements Controller
 		initializeTreeGrid();
 
 		setSelectedPreviewTree(TreeHandler.getInstance().getSelectedTreeToUnlock());
+
 	}
 
 	@Override
@@ -139,8 +143,10 @@ public class ProgressPageController implements Controller
 		tree.progressTimeProperty().addListener(observable ->
 		{
 			unlockProgressBar.setProgress(tree.getUnlockProgress());
+			unlockProgressBar.setVisible(!tree.isUnlocked());
 		});
 		unlockProgressBar.setMinHeight(8);
+		unlockProgressBar.setVisible(!tree.isUnlocked());
 
 
 		VBox vBox = new VBox(6, treeImageView, treeNameLabel, unlockProgressBar);
@@ -181,7 +187,7 @@ public class ProgressPageController implements Controller
 		lastTreeLabel = new Label();
 
 		unlockedTreeDetailsGrid.addColumn(1, plantedTreesLabel, matureTreesLabel, deadTreesLabel, lastTreeLabel);
-		unlockedTreeDetailsGrid.setGridLinesVisible(true);
+//		unlockedTreeDetailsGrid.setGridLinesVisible(true);
 	}
 
 	private void initializeToUnlockTreeDetailGrid()
@@ -211,15 +217,47 @@ public class ProgressPageController implements Controller
 		toUnlockTreeDetailsGrid.add(selectTreeToUnlockButton, 0, row, 2, 1);
 		GridPane.setHalignment(treeUnlockProgressBar, HPos.CENTER);
 		GridPane.setHalignment(selectTreeToUnlockButton, HPos.CENTER);
-		toUnlockTreeDetailsGrid.setGridLinesVisible(true);
+//		toUnlockTreeDetailsGrid.setGridLinesVisible(true);
 	}
 
 	private void initializeIntervalComboBox()
 	{
+		intervalComboBox.setOnAction(event -> setTreeGridInterval(intervalComboBox.getValue()));
+		Localization.localeProperty().addListener(observable -> resetIntervalComboBox());
+
+		resetIntervalComboBox();
 
 	}
 
+	private void setTreeGridInterval(Interval value)
+	{
+		if(value == null || value == treeGridInterval.getValue())
+			return;
+
+		treeGridInterval.set(value);
+		buildTreeGrid();
+	}
+
+	private void resetIntervalComboBox()
+	{
+		Interval selected = intervalComboBox.getSelectedItem();
+
+		intervalComboBox.getItems().clear();
+		for (Interval interval : Interval.values())
+		{
+			intervalComboBox.getItems().add(interval);
+		}
+
+		if (selected == null) intervalComboBox.selectLast();
+		else intervalComboBox.selectItem(selected);
+	}
+
 	private void initializeTreeGrid()
+	{
+		buildTreeGrid();
+	}
+
+	private void buildTreeGrid()
 	{
 
 	}
@@ -271,8 +309,8 @@ public class ProgressPageController implements Controller
 		plantedTreesLabel.setText(stats.totalPlanted.toString());
 		matureTreesLabel.setText(stats.totalMature.toString());
 		deadTreesLabel.setText(stats.totaDead.toString());
-		if(stats.lastPlanted.equals(LocalDateTime.MIN))
-			LocalizationUtils.bindLabelText(lastTreeLabel, "progress.treeNeverPlanted");
+		if (stats.lastPlanted.equals(LocalDateTime.MIN)) LocalizationUtils.bindLabelText(lastTreeLabel,
+				"progress.treeNeverPlanted");
 		else
 		{
 			lastTreeLabel.textProperty().unbind();

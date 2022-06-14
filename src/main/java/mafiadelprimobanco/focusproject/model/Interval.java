@@ -1,5 +1,7 @@
 package mafiadelprimobanco.focusproject.model;
 
+import mafiadelprimobanco.focusproject.Localization;
+
 import java.time.temporal.ChronoUnit;
 
 public enum Interval
@@ -17,5 +19,11 @@ public enum Interval
 	{
 		this.key = key;
 		this.unit = unit;
+	}
+
+	@Override
+	public String toString()
+	{
+		return Localization.get(key);
 	}
 }
