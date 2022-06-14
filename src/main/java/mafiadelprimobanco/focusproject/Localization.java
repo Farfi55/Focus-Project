@@ -7,6 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import mafiadelprimobanco.focusproject.handler.SettingsHandler;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public final class Localization
 	{
 		locale = new SimpleObjectProperty<>(getDefaultLocale());
 		locale.addListener((observable, oldValue, newValue) -> Locale.setDefault(newValue));
+		SettingsHandler.getInstance().getSettings().getCurrentLanguage().addListener((observable, oldValue, newValue) -> {
+			setLocale(SettingsHandler.getInstance().getSettings().getCurrentLanguage().get().language);
+		});
 	}
 
 

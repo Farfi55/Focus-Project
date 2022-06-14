@@ -9,9 +9,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.handler.Feedback;
 import mafiadelprimobanco.focusproject.handler.SettingsHandler;
+import mafiadelprimobanco.focusproject.utils.Language;
 
 import java.net.URL;
 import java.util.Locale;
@@ -51,7 +53,7 @@ public class SettingsController implements Controller
 	private Label hideTutorialLabel;
 
 	@FXML
-	private MFXComboBox<String> languageComboBox;
+	private MFXComboBox<Language> languageComboBox;
 
 	@FXML
 	private Label languageLabel;
@@ -171,6 +173,7 @@ public class SettingsController implements Controller
 
 		onSliderScrollEnd(musicSlider, settingsHandler.getSettings().getMusicVolume().getValue());
 		onSliderScrollEnd(soundSlider, settingsHandler.getSettings().getSoundVolume().getValue());
+		onLanguageChanged();
 
 	}
 
@@ -278,7 +281,7 @@ public class SettingsController implements Controller
 
 	private void setCurrentLanguage()
 	{
-		languageComboBox.setText(settingsHandler.getSettings().getCurrentLanguage().get());
+		languageComboBox.setValue(settingsHandler.getSettings().getCurrentLanguage().get());
 	}
 
 	private void onLanguageChanged()
@@ -294,8 +297,26 @@ public class SettingsController implements Controller
 
 	private void setLanguagesAvailable()
 	{
-		languageComboBox.getItems().add(Localization.get("settings.language.italian"));
-		languageComboBox.getItems().add(Localization.get("settings.language.english"));
+		languageComboBox.setConverter(new StringConverter<Language>() {
+			@Override
+			public String toString(Language object)
+			{
+				if(object == null) return "";
+				return Localization.get(object.key);
+			}
+
+			@Override
+			public Language fromString(String string)
+			{
+				for(var language : Language.values())
+				{
+					if(Localization.get(language.key).equals(string)) return language;
+				}
+				return null;
+			}
+		});
+		languageComboBox.getItems().add(Language.ITALIAN);
+		languageComboBox.getItems().add(Language.ENGLISH);
 	}
 
 	private void setNavigation()

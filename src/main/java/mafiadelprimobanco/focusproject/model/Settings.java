@@ -1,13 +1,11 @@
 package mafiadelprimobanco.focusproject.model;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
+import mafiadelprimobanco.focusproject.utils.Language;
 
 public class Settings
 {
-	private SimpleStringProperty currentLanguage;
+	private SimpleObjectProperty<Language> currentLanguage;
 	private SimpleStringProperty currentTheme;
 	private SimpleBooleanProperty blockNavigation;
 	private SimpleBooleanProperty hideTutorial;
@@ -29,7 +27,7 @@ public class Settings
 
 	public Settings()
 	{
-		this.currentLanguage = new SimpleStringProperty();
+		this.currentLanguage = new SimpleObjectProperty<>();
 		this.currentTheme = new SimpleStringProperty();
 		this.blockNavigation = new SimpleBooleanProperty();
 		this.hideTutorial = new SimpleBooleanProperty();
@@ -45,8 +43,8 @@ public class Settings
 	}
 
 
-	public SimpleStringProperty getCurrentLanguage() { return currentLanguage; }
-	public void setCurrentLanguage(String currentLanguage) { this.currentLanguage.set(currentLanguage); }
+	public SimpleObjectProperty<Language> getCurrentLanguage() { return currentLanguage; }
+	public void setCurrentLanguage(Language currentLanguage) { this.currentLanguage.set(currentLanguage); }
 
 	public SimpleStringProperty getCurrentTheme() { return currentTheme; }
 	public void setCurrentTheme(String currentTheme) { this.currentTheme.set(currentTheme); }

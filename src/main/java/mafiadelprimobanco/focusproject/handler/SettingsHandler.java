@@ -2,6 +2,7 @@ package mafiadelprimobanco.focusproject.handler;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import mafiadelprimobanco.focusproject.model.Settings;
+import mafiadelprimobanco.focusproject.utils.Language;
 
 public class SettingsHandler
 {
@@ -27,7 +28,7 @@ public class SettingsHandler
 		settings.setMusicVolume(30.0);
 		settings.setAdvancedOptionsShowing(true);
 		settings.setConfirmBeforeExit(true);
-		settings.setCurrentLanguage("english");
+		settings.setCurrentLanguage(Language.ENGLISH);
 		settings.setCurrentTheme("light");
 		settings.setHideTutorial(true);
 		settings.setSoundVolume(70.0);
