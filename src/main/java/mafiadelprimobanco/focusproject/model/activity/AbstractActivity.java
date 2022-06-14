@@ -53,6 +53,16 @@ public abstract class AbstractActivity implements Comparable<AbstractActivity>
 		return endTime != null;
 	}
 
+	public boolean wasSuccessful() {
+		return true;
+	}
+
+	public String getFinalTreeSpritePath()
+	{
+		if (wasSuccessful()) return getTree().getMatureTreeSprite();
+		else return getTree().getDeadTreeSprite();
+	}
+
 	public Integer getTreeUuid()
 	{
 		return treeUuid;

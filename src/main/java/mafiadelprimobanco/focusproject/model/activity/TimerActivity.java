@@ -18,6 +18,13 @@ public class TimerActivity extends AbstractActivity
 		super.startActivity();
 	}
 
+	@Override
+	public boolean wasSuccessful()
+	{
+		return wasCompleted();
+	}
+
+
 	public TimerActivity(Integer tagUuid, Integer treeUuid, LocalDateTime startTime, LocalDateTime endTime, Integer chosenDuration)
 	{
 		super(tagUuid, treeUuid, startTime, endTime);

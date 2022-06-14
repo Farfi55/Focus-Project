@@ -10,4 +10,13 @@ public class ChronometerActivity extends AbstractActivity
 	{
 		super(tagUuid, treeUuid, startTime, endTime);
 	}
+
+	@Override
+	public boolean wasSuccessful()
+	{
+		//todo: move into settings
+		int minSuccessChronometerDuration = 20;
+		return (getFinalDuration() >= minSuccessChronometerDuration);
+	}
+
 }
