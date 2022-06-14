@@ -217,6 +217,15 @@ public class TagHandler
 
 	}
 
+	public Integer getRandomTagUuid() {
+		List<Integer> tagsUuid = tags.keySet().stream().toList();
+		return tagsUuid.get(rand.nextInt(tagsUuid.size()));
+	}
+
+	public Tag getRandomTag() {
+		return tags.get(getRandomTagUuid());
+	}
+
 	public Collection<Tag> getTags()
 	{
 		return Collections.unmodifiableCollection(tags.values());

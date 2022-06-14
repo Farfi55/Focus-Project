@@ -13,6 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.TreeSet;
 
 public class ActivityStatsHandler implements ActivityObserver
@@ -32,6 +33,29 @@ public class ActivityStatsHandler implements ActivityObserver
 
 	private ActivityStatsHandler()
 	{
+		loadActivities();
+	}
+
+	private void loadActivities()
+	{
+		for (int i = 0; i < 100; i++){
+			AbstractActivity activity;
+			Random random = new Random();
+			Integer tagUuid = TagHandler.getInstance().getRandomTagUuid();
+			Integer treeUuid = TreeHandler.getInstance().getRandomUnlockedTreeUuid();
+			LocalDateTime startDate = LocalDateTime.now().minusDays(random.nextInt(400));
+
+			Integer duration = random.nextInt(1200);
+			LocalDateTime endDate = startDate.plusSeconds(duration);
+
+
+			if(i%2 == 0)
+				activity = new ChronometerActivity(tagUuid, treeUuid, startDate, endDate);
+			else if(i%13==0) activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration/2);
+			else activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration);
+
+			addActivity(activity);
+		}
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -270,6 +271,10 @@ public class ProgressPageController implements Controller
 		{
 			Node node = buildTree(activity);
 			treeGrid.add(node, i, (j * 2) + (i % 2), 2, 1);
+			GridPane.setHalignment(node, HPos.CENTER);
+			GridPane.setValignment(node, VPos.CENTER);
+			GridPane.setFillWidth(node, true);
+			GridPane.setFillHeight(node, true);
 			j++;
 			if (j == cols)
 			{

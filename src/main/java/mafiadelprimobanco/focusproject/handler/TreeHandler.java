@@ -26,6 +26,7 @@ public class TreeHandler implements ActivityObserver
 	LinkedHashMap<Integer, Tree> trees = new LinkedHashMap<>();
 	LinkedHashSet<Integer> treesToUnlock = new LinkedHashSet<>();
 	LinkedHashSet<Integer> unlockedTrees = new LinkedHashSet<>();
+
 	private TreeHandler()
 	{
 		loadTrees();
@@ -34,6 +35,7 @@ public class TreeHandler implements ActivityObserver
 		loadTreePhasesImages();
 		ActivityHandler.getInstance().addListener(this);
 	}
+
 
 	@Override
 	public void onActivityEnd(AbstractActivity currentActivity)
@@ -110,10 +112,22 @@ public class TreeHandler implements ActivityObserver
 
 	public void setSelectedActivityTree(Tree selectedActivityTree)
 	{
-		if (selectedActivityTree == null || selectedActivityTree.isUnlocked())
-			this.selectedActivityTree.set(selectedActivityTree);
+		if (selectedActivityTree == null || selectedActivityTree.isUnlocked()) this.selectedActivityTree.set(
+				selectedActivityTree);
 	}
 
+
+	public Integer getRandomUnlockedTreeUuid()
+	{
+		List<Integer> unlockedTreeList = unlockedTrees.stream().toList();
+		return unlockedTreeList.get(new Random().nextInt(unlockedTreeList.size()));
+	}
+
+	public Tree getRandomUnlockedTree()
+	{
+		return trees.get(getRandomUnlockedTreeUuid());
+	}
+	
 	public SimpleIntegerProperty getUnusedProgressTimeProperty()
 	{
 		return unusedProgressTime;
@@ -128,7 +142,9 @@ public class TreeHandler implements ActivityObserver
 	{
 		return trees;
 	}
-	public Collection<Tree> getTrees(){
+
+	public Collection<Tree> getTrees()
+	{
 		return trees.values();
 	}
 
