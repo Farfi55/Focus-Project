@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
+import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import mafiadelprimobanco.focusproject.handler.ActivityStatsHandler;
 import mafiadelprimobanco.focusproject.handler.TreeHandler;
 import mafiadelprimobanco.focusproject.model.Interval;
 import mafiadelprimobanco.focusproject.model.Tree;
+import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 import mafiadelprimobanco.focusproject.utils.NodeUtils;
 import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
@@ -31,10 +33,7 @@ import mafiadelprimobanco.focusproject.utils.TimeUtils;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class ProgressPageController implements Controller
@@ -72,7 +71,8 @@ public class ProgressPageController implements Controller
 	private MFXProgressBar treeUnlockProgressBar;
 	private MFXButton selectTreeToUnlockButton;
 
-	private final SimpleObjectProperty<Interval> treeGridInterval = new SimpleObjectProperty<>(this, "treeGridInterval");
+	private final SimpleObjectProperty<Interval> treeGridInterval = new SimpleObjectProperty<>(this,
+			"treeGridInterval");
 
 
 	@Override
@@ -231,8 +231,7 @@ public class ProgressPageController implements Controller
 
 	private void setTreeGridInterval(Interval value)
 	{
-		if(value == null || value == treeGridInterval.getValue())
-			return;
+		if (value == null || value == treeGridInterval.getValue()) return;
 
 		treeGridInterval.set(value);
 		buildTreeGrid();
@@ -259,7 +258,33 @@ public class ProgressPageController implements Controller
 
 	private void buildTreeGrid()
 	{
+		TreeSet<AbstractActivity> activities = ActivityStatsHandler.getInstance().getAllActivities();
 
+		treeGrid.getChildren().clear();
+		int activityCount = activities.size();
+		int minCols = 4, maxCols = 12;
+		int cols = NumberUtils.clamp(activityCount / 3, minCols, maxCols);
+
+		int i = 0, j = 0;
+		for (AbstractActivity activity : activities)
+		{
+			Node node = buildTree(activity);
+			treeGrid.add(node, i, (j * 2) + (i % 2), 2, 1);
+			j++;
+			if (j == cols)
+			{
+				j = 0;
+				i++;
+			}
+		}
+
+	}
+
+	private Node buildTree(AbstractActivity activity)
+	{
+		ImageView imageView = new ImageView(ResourcesLoader.loadImage(activity.getFinalTreeSpritePath()));
+
+		return imageView;
 	}
 
 	@FXML

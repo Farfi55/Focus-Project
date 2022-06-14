@@ -137,17 +137,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	public void onActivityEndSafe(AbstractActivity currentActivity)
 	{
 		resetInterface();
-
-		if (currentActivity instanceof TimerActivity timerActivity)
-		{
-			if (timerActivity.wasInterrupted()) setTreeImage(currentActivity.getTree().getDeadTreeSprite());
-			else setTreeImage(currentActivity.getTree().getMatureTreeSprite());
-		}
-		else if (currentActivity instanceof ChronometerActivity)
-		{
-			if (treePhase < 5) setTreeImage(currentActivity.getTree().getDeadTreeSprite());
-			else setTreeImage(currentActivity.getTree().getMatureTreeSprite());
-		}
+		setTreeImage(currentActivity.getFinalTreeSpritePath());
 
 		Feedback.getInstance().showActivityRecap(currentActivity);
 	}

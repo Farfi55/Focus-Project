@@ -1,6 +1,7 @@
 package mafiadelprimobanco.focusproject.handler;
 
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
+import mafiadelprimobanco.focusproject.model.Interval;
 import mafiadelprimobanco.focusproject.model.Tag;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeSet;
 
 public class ActivityStatsHandler implements ActivityObserver
@@ -51,6 +53,28 @@ public class ActivityStatsHandler implements ActivityObserver
 		activities.get(tagUuid).add(currentActivity);
 	}
 
+	public TreeSet<AbstractActivity> getAllActivities()
+	{
+		TreeSet<AbstractActivity> allActivities = new TreeSet<>();
+		for (TreeSet<AbstractActivity> activityTreeSet : activities.values())
+		{
+			allActivities.addAll(activityTreeSet);
+		}
+		return allActivities;
+	}
+
+	public Iterable<AbstractActivity> getAllActivitiesInInterval(Interval interval)
+	{
+		TreeSet<AbstractActivity> allActivities = new TreeSet<>();
+		for (TreeSet<AbstractActivity> activityTreeSet : activities.values())
+		{
+			allActivities.addAll(activityTreeSet.stream()
+					.filter(activity -> activity.getStartTime().isAfter(LocalDateTime.now().minus(1, interval.unit)))
+					.toList());
+		}
+		return allActivities;
+	}
+
 
 	public ActivityTime getTagActivityTime(Tag tag)
 	{
@@ -89,8 +113,7 @@ public class ActivityStatsHandler implements ActivityObserver
 				{
 					stats.totalPlanted++;
 
-					if (activity.getStartTime().isAfter(stats.lastPlanted))
-						stats.lastPlanted = activity.getStartTime();
+					if (activity.getStartTime().isAfter(stats.lastPlanted)) stats.lastPlanted = activity.getStartTime();
 
 					if (activity instanceof TimerActivity timerActivity)
 					{
