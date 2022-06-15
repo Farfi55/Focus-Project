@@ -177,89 +177,12 @@ public class SettingsController implements Controller
 		updateSlider(musicSlider, settingsHandler.getSettings().getMusicVolume().getValue());
 		updateSlider(soundSlider, settingsHandler.getSettings().getSoundVolume().getValue());
 		updateLanguage();
-		updateTheme();
+		updateThemes();
 
 	}
 
-	private void outOfTextFieldFocus(MFXTextField textField, Integer oldValue)
-	{
-			textField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
 
-			if (!newStatus)
-			{
-				String input = removeLeadingZeros(textField.getText());
-
-				if (!validateInput(input))
-				{
-					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
-					textField.setText(oldValue.toString());
-				}
-				else
-				{
-					textField.setText(input);
-				}
-			}
-		});
-	}
-
-	private void updateTheme()
-	{
-		themeComboBox.selectedItemProperty().addListener((observer, oldValue, newValue) ->
-		{
-			if (newValue != null)
-			{
-				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
-				settingsHandler.getSettings().setCurrentTheme(newValue);
-				setThemeSettings(newValue);
-				updateSelectedTheme();
-			}
-		});
-	}
-
-	private void updateSlider(MFXSlider slider, Double oldValue)
-	{
-		slider.pressedProperty().addListener((observer, whenScrollEnd, whenScrollStarts) ->
-		{
-			if (!whenScrollStarts && (slider.getValue() != oldValue))
-			{
-				setMusicVolume(slider.getValue());
-			}
-		});
-	}
-
-	Boolean validateInput(String input)
-	{
-		Matcher matcher = inputValidation.matcher(input);
-
-		if (matcher.matches()) { return true; }
-
-		return false;
-	}
-
-	String removeLeadingZeros(String input)
-	{
-		return input.replaceFirst("^0+(?!$)", "");
-	}
-
-	@FXML
-	void onMouseClickedAdvancedSettingsButton(MouseEvent event) {
-
-		if (!advancedSettingsVBox.isVisible())
-		{
-			advancedSettingsVBox.setVisible(true);
-			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.hide"));
-			advancedSettingsVBox.setManaged(true);
-
-		}
-		else
-		{
-			advancedSettingsVBox.setVisible(false);
-			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.show"));
-			advancedSettingsVBox.setManaged(false);
-		}
-
-	}
-
+	// Language combo box behaviour
 	void setStringsBasedOnCurrentLanguage()
 	{
 		generalCategoryLabel.setText(Localization.get("settings.general.categoryName"));
@@ -320,6 +243,23 @@ public class SettingsController implements Controller
 	{
 		languageComboBox.getItems().addAll(Language.ITALIAN, Language.ENGLISH);
 	}
+	// --------------------------
+
+
+	// Theme combo box behaviour
+	private void updateThemes()
+	{
+		themeComboBox.selectedItemProperty().addListener((observer, oldValue, newValue) ->
+		{
+			if (newValue != null)
+			{
+				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
+				settingsHandler.getSettings().setCurrentTheme(newValue);
+				setThemeSettings(newValue);
+				updateSelectedTheme();
+			}
+		});
+	}
 
 	private void setAvailableThemes()
 	{
@@ -334,11 +274,20 @@ public class SettingsController implements Controller
 		themeComboBox.setText(Localization.get(settingsHandler.getSettings().getCurrentTheme().getValue().key));
 	}
 
+	private void setThemeSettings(Theme theme)
+	{
+		themeComboBox.setText(theme.toString());
+	}
+	// --------------------------
+
+
 	private void setNavigation()
 	{
 		navigationToggleButton.setSelected(settingsHandler.getSettings().isNavigationBlocked().get());
 	}
 
+
+	// Audio sliders behaviour
 	private void setMusicVolume(Double volume)
 	{
 		settingsHandler.getSettings().setMusicVolume(volume);
@@ -350,6 +299,19 @@ public class SettingsController implements Controller
 		settingsHandler.getSettings().setSoundVolume(volume);
 		soundSlider.setValue(settingsHandler.getSettings().getSoundVolume().get());
 	}
+
+	private void updateSlider(MFXSlider slider, Double oldValue)
+	{
+		slider.pressedProperty().addListener((observer, whenScrollEnd, whenScrollStarts) ->
+		{
+			if (!whenScrollStarts && (slider.getValue() != oldValue))
+			{
+				setMusicVolume(slider.getValue());
+			}
+		});
+	}
+	// --------------------------
+
 
 	private void setTimerSettings(Integer input)
 	{
@@ -375,19 +337,17 @@ public class SettingsController implements Controller
 		stopChronometerTextField.setText(input.toString());
 	}
 
-	private void setThemeSettings(Theme theme)
-	{
-		themeComboBox.setText(theme.toString());
-	}
-
-	private void setTutorialReset()
-	{
-		tutorialResetToggleButton.setSelected(settingsHandler.getSettings().isTutorialResetted().get());
-	}
 
 	private void setTutorialShowing()
 	{
 		tutorialToggleButton.setSelected(settingsHandler.getSettings().getHideTutorial().get());
+	}
+
+
+	// -- Advanced Settings behavior --
+	private void setAdvancedSettingsVisible()
+	{
+		advancedSettingsVBox.setVisible(settingsHandler.getSettings().areAdvancedOptionsShowing().get());
 	}
 
 	private void setConfirmationRequest()
@@ -395,9 +355,52 @@ public class SettingsController implements Controller
 		confirmationRequestToggleButton.setSelected(settingsHandler.getSettings().isRequestingConfirmationBeforeExiting().get());
 	}
 
-	private void setAdvancedSettingsVisible()
+	private void setTutorialReset()
 	{
-		advancedSettingsVBox.setVisible(settingsHandler.getSettings().areAdvancedOptionsShowing().get());
+		tutorialResetToggleButton.setSelected(settingsHandler.getSettings().isTutorialResetted().get());
+	}
+
+	@FXML
+	void onMouseClickedAdvancedSettingsButton(MouseEvent event) {
+
+		if (!advancedSettingsVBox.isVisible())
+		{
+			advancedSettingsVBox.setVisible(true);
+			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.hide"));
+			advancedSettingsVBox.setManaged(true);
+
+		}
+		else
+		{
+			advancedSettingsVBox.setVisible(false);
+			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.show"));
+			advancedSettingsVBox.setManaged(false);
+		}
+
+	}
+	// --------------------------
+
+
+	// -- Text boxes behaviour --
+	private void outOfTextFieldFocus(MFXTextField textField, Integer oldValue)
+	{
+		textField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
+
+			if (!newStatus)
+			{
+				String input = removeLeadingZeros(textField.getText());
+
+				if (!validateInput(input))
+				{
+					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
+					textField.setText(oldValue.toString());
+				}
+				else
+				{
+					textField.setText(input);
+				}
+			}
+		});
 	}
 
 	private void setGlobalMeasureUnit(String measureUnit, Double gap)
@@ -414,6 +417,21 @@ public class SettingsController implements Controller
 		stopChronometerTextField.setMeasureUnit(measureUnit);
 		stopChronometerTextField.setMeasureUnitGap(gap);
 	}
+
+	Boolean validateInput(String input)
+	{
+		Matcher matcher = inputValidation.matcher(input);
+
+		if (matcher.matches()) { return true; }
+
+		return false;
+	}
+
+	String removeLeadingZeros(String input)
+	{
+		return input.replaceFirst("^0+(?!$)", "");
+	}
+	// --------------------------
 
 
 	@Override
