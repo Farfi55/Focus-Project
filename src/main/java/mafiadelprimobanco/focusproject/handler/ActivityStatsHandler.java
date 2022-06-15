@@ -45,7 +45,7 @@ public class ActivityStatsHandler implements ActivityObserver
 			Integer treeUuid = TreeHandler.getInstance().getRandomUnlockedTreeUuid();
 			LocalDateTime startDate = LocalDateTime.now().minusDays(random.nextInt(400));
 
-			Integer duration = random.nextInt(1200);
+			int duration = random.nextInt(1200);
 			LocalDateTime endDate = startDate.plusSeconds(duration);
 
 
@@ -53,7 +53,6 @@ public class ActivityStatsHandler implements ActivityObserver
 				activity = new ChronometerActivity(tagUuid, treeUuid, startDate, endDate);
 			else if(i%13==0) activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration/2);
 			else activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration);
-
 			addActivity(activity);
 		}
 	}
@@ -87,7 +86,7 @@ public class ActivityStatsHandler implements ActivityObserver
 		return allActivities;
 	}
 
-	public Iterable<AbstractActivity> getAllActivitiesInInterval(Interval interval)
+	public TreeSet<AbstractActivity> getAllActivitiesInInterval(Interval interval)
 	{
 		TreeSet<AbstractActivity> allActivities = new TreeSet<>();
 		for (TreeSet<AbstractActivity> activityTreeSet : activities.values())

@@ -4,21 +4,18 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
-import io.github.palexdev.materialfx.utils.NumberUtils;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.handler.ActivityStatsHandler;
@@ -59,7 +56,7 @@ public class ProgressPageController implements Controller
 	@FXML private GridPane toUnlockTreeDetailsGrid;
 	@FXML private GridPane unlockedTreeDetailsGrid;
 	@FXML private MFXComboBox<Interval> intervalComboBox;
-	@FXML private GridPane treeGrid;
+	@FXML private FlowPane treesRoot;
 
 
 	private Label plantedTreesLabel;
@@ -72,8 +69,7 @@ public class ProgressPageController implements Controller
 	private MFXProgressBar treeUnlockProgressBar;
 	private MFXButton selectTreeToUnlockButton;
 
-	private final SimpleObjectProperty<Interval> treeGridInterval = new SimpleObjectProperty<>(this,
-			"treeGridInterval");
+	private final SimpleObjectProperty<Interval> treesInterval = new SimpleObjectProperty<>(this, "treeGridInterval");
 
 
 	@Override
@@ -84,7 +80,8 @@ public class ProgressPageController implements Controller
 		initializeToUnlockTreeDetailGrid();
 
 		initializeIntervalComboBox();
-		initializeTreeGrid();
+		initializeTreeFlow();
+		setTreesInterval(Interval.DAY);
 
 		setSelectedPreviewTree(TreeHandler.getInstance().getSelectedTreeToUnlock());
 
@@ -223,19 +220,22 @@ public class ProgressPageController implements Controller
 
 	private void initializeIntervalComboBox()
 	{
-		intervalComboBox.setOnAction(event -> setTreeGridInterval(intervalComboBox.getValue()));
+		intervalComboBox.setOnAction(event -> setTreesInterval(intervalComboBox.getValue()));
 		Localization.localeProperty().addListener(observable -> resetIntervalComboBox());
 
 		resetIntervalComboBox();
 
 	}
 
-	private void setTreeGridInterval(Interval value)
+	private void setTreesInterval(Interval value)
 	{
-		if (value == null || value == treeGridInterval.getValue()) return;
+		if (value == null || value == treesInterval.getValue()) return;
 
-		treeGridInterval.set(value);
-		buildTreeGrid();
+		treesInterval.set(value);
+		if(!intervalComboBox.getSelectedItem().equals(value))
+			intervalComboBox.selectItem(value);
+
+		buildTrees();
 	}
 
 	private void resetIntervalComboBox()
@@ -248,39 +248,38 @@ public class ProgressPageController implements Controller
 			intervalComboBox.getItems().add(interval);
 		}
 
-		if (selected == null) intervalComboBox.selectLast();
+		if (selected == null) intervalComboBox.selectFirst();
 		else intervalComboBox.selectItem(selected);
 	}
 
-	private void initializeTreeGrid()
+	private void initializeTreeFlow()
 	{
-		buildTreeGrid();
+		treesRoot.setOrientation(Orientation.HORIZONTAL);
+		treesRoot.setAlignment(Pos.CENTER);
+		treesRoot.setColumnHalignment(HPos.CENTER);
+		treesRoot.setRowValignment(VPos.CENTER);
+		treesRoot.setHgap(10);
+		treesRoot.setVgap(10);
 	}
 
-	private void buildTreeGrid()
+	private void buildTrees()
 	{
-		TreeSet<AbstractActivity> activities = ActivityStatsHandler.getInstance().getAllActivities();
+		TreeSet<AbstractActivity> activities = ActivityStatsHandler.getInstance().getAllActivitiesInInterval(
+				treesInterval.get());
 
-		treeGrid.getChildren().clear();
-		int activityCount = activities.size();
-		int minCols = 4, maxCols = 12;
-		int cols = NumberUtils.clamp(activityCount / 3, minCols, maxCols);
+		treesRoot.getChildren().clear();
 
-		int i = 0, j = 0;
+//		int activityCount = activities.size();
+//		int minCols = 4, maxCols = 12;
+//		int cols = NumberUtils.clamp(activityCount / 3, minCols, maxCols);
+//		int rows = Math.min((activityCount / cols) + 1, 3);
+
+		treesRoot.prefWrapLengthProperty().bind(treesRoot.widthProperty());
+
 		for (AbstractActivity activity : activities)
 		{
-			Node node = buildTree(activity);
-			treeGrid.add(node, i, (j * 2) + (i % 2), 2, 1);
-			GridPane.setHalignment(node, HPos.CENTER);
-			GridPane.setValignment(node, VPos.CENTER);
-			GridPane.setFillWidth(node, true);
-			GridPane.setFillHeight(node, true);
-			j++;
-			if (j == cols)
-			{
-				j = 0;
-				i++;
-			}
+			StackPane node = (StackPane)buildTree(activity);
+			treesRoot.getChildren().add(node);
 		}
 
 	}
@@ -288,8 +287,17 @@ public class ProgressPageController implements Controller
 	private Node buildTree(AbstractActivity activity)
 	{
 		ImageView imageView = new ImageView(ResourcesLoader.loadImage(activity.getFinalTreeSpritePath()));
-
-		return imageView;
+		StackPane treeRoot = new StackPane(imageView);
+		imageView.fitWidthProperty().bind(treeRoot.widthProperty());
+		imageView.fitWidthProperty().bind(treeRoot.heightProperty());
+//		imageView.fitWidthProperty().setValue(120);
+//		imageView.fitWidthProperty().setValue(120);
+		treeRoot.setAlignment(Pos.CENTER);
+		imageView.setPreserveRatio(true);
+//		treeRoot.setPrefSize(120, 120);
+		treeRoot.setMaxSize(100, 100);
+		treeRoot.setMinSize(100, 100);
+		return treeRoot;
 	}
 
 	@FXML
