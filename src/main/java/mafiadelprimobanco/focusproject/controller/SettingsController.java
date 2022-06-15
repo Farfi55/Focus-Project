@@ -9,11 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.handler.Feedback;
 import mafiadelprimobanco.focusproject.handler.SettingsHandler;
+import mafiadelprimobanco.focusproject.handler.StyleHandler;
 import mafiadelprimobanco.focusproject.utils.Language;
+import mafiadelprimobanco.focusproject.utils.Theme;
 
 import java.net.URL;
 import java.util.Locale;
@@ -103,7 +104,7 @@ public class SettingsController implements Controller
 	private MFXTextField stopChronometerTextField;
 
 	@FXML
-	private MFXComboBox<String> themeComboBox;
+	private MFXComboBox<Theme> themeComboBox;
 
 	@FXML
 	private Label themeLabel;
@@ -137,7 +138,9 @@ public class SettingsController implements Controller
 		setStringsBasedOnCurrentLanguage();
 		setCurrentLanguage();
 
-		setLanguagesAvailable();
+		setAvailableLanguages();
+
+		setAvailableThemes();
 
 		setNavigation();
 
@@ -152,7 +155,7 @@ public class SettingsController implements Controller
 
 		setChronometerSettings(settingsHandler.getSettings().getStopChronometerAfter().getValue());
 
-		setThemeSettings(settingsHandler.getSettings().getCurrentTheme().get());
+		setThemeSettings(settingsHandler.getSettings().getCurrentTheme().getValue());
 
 		setTutorialReset();
 		setTutorialShowing();
@@ -161,7 +164,7 @@ public class SettingsController implements Controller
 		setConfirmationRequest();
 
 		feedback = Feedback.getInstance();
-		inputValidation = Pattern.compile("\\d{1,3}");
+		inputValidation = Pattern.compile("[1-9]\\d{0,2}");
 
 		setGlobalMeasureUnit("min", 0.5);
 
@@ -171,9 +174,10 @@ public class SettingsController implements Controller
 		outOfTextFieldFocus(pomodoroPauseTimeTextField, settingsHandler.getSettings().getPomodoroPauseTime().getValue());
 		outOfTextFieldFocus(stopChronometerTextField, settingsHandler.getSettings().getStopChronometerAfter().getValue());
 
-		onSliderScrollEnd(musicSlider, settingsHandler.getSettings().getMusicVolume().getValue());
-		onSliderScrollEnd(soundSlider, settingsHandler.getSettings().getSoundVolume().getValue());
-		onLanguageChanged();
+		updateSlider(musicSlider, settingsHandler.getSettings().getMusicVolume().getValue());
+		updateSlider(soundSlider, settingsHandler.getSettings().getSoundVolume().getValue());
+		updateLanguage();
+		updateTheme();
 
 	}
 
@@ -198,7 +202,21 @@ public class SettingsController implements Controller
 		});
 	}
 
-	private void onSliderScrollEnd(MFXSlider slider, Double oldValue)
+	private void updateTheme()
+	{
+		themeComboBox.selectedItemProperty().addListener((observer, oldValue, newValue) ->
+		{
+			if (newValue != null)
+			{
+				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
+				settingsHandler.getSettings().setCurrentTheme(newValue);
+				setThemeSettings(newValue);
+				updateSelectedTheme();
+			}
+		});
+	}
+
+	private void updateSlider(MFXSlider slider, Double oldValue)
 	{
 		slider.pressedProperty().addListener((observer, whenScrollEnd, whenScrollStarts) ->
 		{
@@ -256,7 +274,6 @@ public class SettingsController implements Controller
 
 		timerCategoryLabel.setText(Localization.get("settings.timer.categoryName"));
 		minimumTimerLabel.setText(Localization.get("settings.timer.minimumActivityTime"));
-		minimumTimerLabel.setText(Localization.get("settings.chronometer.stopActivityAfter"));
 
 		pomodoroCategoryLabel.setText(Localization.get("settings.pomodoro.categoryName"));
 		pausePeriodLabel.setText(Localization.get("settings.pomodoro.focusPeriod"));
@@ -266,8 +283,6 @@ public class SettingsController implements Controller
 		stopChronometerLabel.setText(Localization.get("settings.chronometer.stopActivityAfter"));
 
 		themeLabel.setText(Localization.get("settings.theme"));
-		themeComboBox.getItems().add(Localization.get("settings.theme.light"));
-		themeComboBox.getItems().add(Localization.get("settings.theme.dark"));
 
 		tutorialResetLabel.setText(Localization.get("settings.advancedOptions.tutorialReset"));
 
@@ -277,46 +292,46 @@ public class SettingsController implements Controller
 		confirmBeforeExitLabel.setText(Localization.get("settings.advancedOptions.requestConfirmationBeforExiting"));
 
 		hideTutorialLabel.setText(Localization.get("settings.hideTutorial"));
+
+		setThemeSettings(settingsHandler.getSettings().getCurrentTheme().getValue());
+
 	}
 
 	private void setCurrentLanguage()
 	{
-		languageComboBox.setValue(settingsHandler.getSettings().getCurrentLanguage().get());
+		languageComboBox.setText(settingsHandler.getSettings().getCurrentLanguage().getValue().toString());
 	}
 
-	private void onLanguageChanged()
+	private void updateLanguage()
 	{
 		languageComboBox.selectedItemProperty().addListener((observer, latestLanguage, newLanguage) ->
 		{
-			System.out.println(newLanguage);
-
-			settingsHandler.getSettings().setCurrentLanguage(newLanguage);
-			//set language
+			if (!newLanguage.toString().equals(settingsHandler.getSettings().getCurrentLanguage().toString()))
+			{
+				settingsHandler.getSettings().setCurrentLanguage(newLanguage);
+				setStringsBasedOnCurrentLanguage();
+			}
 		});
+
+		Localization.localeProperty().addListener(observable -> setAvailableThemes());
 	}
 
-	private void setLanguagesAvailable()
+	private void setAvailableLanguages()
 	{
-		languageComboBox.setConverter(new StringConverter<Language>() {
-			@Override
-			public String toString(Language object)
-			{
-				if(object == null) return "";
-				return Localization.get(object.key);
-			}
+		languageComboBox.getItems().addAll(Language.ITALIAN, Language.ENGLISH);
+	}
 
-			@Override
-			public Language fromString(String string)
-			{
-				for(var language : Language.values())
-				{
-					if(Localization.get(language.key).equals(string)) return language;
-				}
-				return null;
-			}
-		});
-		languageComboBox.getItems().add(Language.ITALIAN);
-		languageComboBox.getItems().add(Language.ENGLISH);
+	private void setAvailableThemes()
+	{
+		themeComboBox.getItems().clear();
+		themeComboBox.getItems().addAll(Theme.LIGHT, Theme.DARK);
+		updateSelectedTheme();
+	}
+
+	private void updateSelectedTheme()
+	{
+		themeComboBox.selectItem(settingsHandler.getSettings().getCurrentTheme().getValue());
+		themeComboBox.setText(Localization.get(settingsHandler.getSettings().getCurrentTheme().getValue().key));
 	}
 
 	private void setNavigation()
@@ -360,9 +375,9 @@ public class SettingsController implements Controller
 		stopChronometerTextField.setText(input.toString());
 	}
 
-	private void setThemeSettings(String theme)
+	private void setThemeSettings(Theme theme)
 	{
-		themeComboBox.setText(theme);
+		themeComboBox.setText(theme.toString());
 	}
 
 	private void setTutorialReset()
@@ -399,6 +414,7 @@ public class SettingsController implements Controller
 		stopChronometerTextField.setMeasureUnit(measureUnit);
 		stopChronometerTextField.setMeasureUnitGap(gap);
 	}
+
 
 	@Override
 	public void terminate()

@@ -1,8 +1,8 @@
 package mafiadelprimobanco.focusproject.handler;
 
-import javafx.beans.property.SimpleBooleanProperty;
 import mafiadelprimobanco.focusproject.model.Settings;
 import mafiadelprimobanco.focusproject.utils.Language;
+import mafiadelprimobanco.focusproject.utils.Theme;
 
 public class SettingsHandler
 {
@@ -29,7 +29,7 @@ public class SettingsHandler
 		settings.setAdvancedOptionsShowing(true);
 		settings.setConfirmBeforeExit(true);
 		settings.setCurrentLanguage(Language.ENGLISH);
-		settings.setCurrentTheme("light");
+		settings.setCurrentTheme(Theme.LIGHT);
 		settings.setHideTutorial(true);
 		settings.setSoundVolume(70.0);
 		settings.setNavigationBlock(false);
@@ -38,6 +38,7 @@ public class SettingsHandler
 		settings.setPomodoroFocusTime(25);
 		settings.setPomodoroPauseTime(5);
 		settings.setMinimumTimerTime(10);
+		settings.setResetTutorial(false);
 	}
 
 	public Settings getSettings() {return settings;}

@@ -2,11 +2,12 @@ package mafiadelprimobanco.focusproject.model;
 
 import javafx.beans.property.*;
 import mafiadelprimobanco.focusproject.utils.Language;
+import mafiadelprimobanco.focusproject.utils.Theme;
 
 public class Settings
 {
 	private SimpleObjectProperty<Language> currentLanguage;
-	private SimpleStringProperty currentTheme;
+	private SimpleObjectProperty<Theme> currentTheme;
 	private SimpleBooleanProperty blockNavigation;
 	private SimpleBooleanProperty hideTutorial;
 
@@ -28,7 +29,7 @@ public class Settings
 	public Settings()
 	{
 		this.currentLanguage = new SimpleObjectProperty<>();
-		this.currentTheme = new SimpleStringProperty();
+		this.currentTheme = new SimpleObjectProperty();
 		this.blockNavigation = new SimpleBooleanProperty();
 		this.hideTutorial = new SimpleBooleanProperty();
 		this.musicVolume = new SimpleDoubleProperty();
@@ -46,8 +47,8 @@ public class Settings
 	public SimpleObjectProperty<Language> getCurrentLanguage() { return currentLanguage; }
 	public void setCurrentLanguage(Language currentLanguage) { this.currentLanguage.set(currentLanguage); }
 
-	public SimpleStringProperty getCurrentTheme() { return currentTheme; }
-	public void setCurrentTheme(String currentTheme) { this.currentTheme.set(currentTheme); }
+	public SimpleObjectProperty<Theme> getCurrentTheme() { return currentTheme; }
+	public void setCurrentTheme(Theme currentTheme) { this.currentTheme.set(currentTheme); }
 
 	public SimpleBooleanProperty isNavigationBlocked() { return blockNavigation; }
 	public void setNavigationBlock(Boolean blockNavigation) { this.blockNavigation.set(blockNavigation); }

@@ -84,6 +84,12 @@ public final class Localization
 		return MessageFormat.format(bundle.getString(key), args);
 	}
 
+	public static String get(final String key, Locale local, final Object... args)
+	{
+		ResourceBundle bundle = ResourceBundle.getBundle("lang", local);
+		return MessageFormat.format(bundle.getString(key), args);
+	}
+
 	/**
 	 * creates a String binding to a localized String for the given message bundle key
 	 *

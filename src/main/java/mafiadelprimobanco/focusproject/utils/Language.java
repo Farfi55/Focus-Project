@@ -1,5 +1,7 @@
 package mafiadelprimobanco.focusproject.utils;
 
+import mafiadelprimobanco.focusproject.Localization;
+
 import java.util.Locale;
 
 public enum Language
@@ -13,5 +15,11 @@ public enum Language
 	{
 		this.key = key;
 		this.language = language;
+	}
+
+	@Override
+	public String toString()
+	{
+		return Localization.get(key);
 	}
 }
