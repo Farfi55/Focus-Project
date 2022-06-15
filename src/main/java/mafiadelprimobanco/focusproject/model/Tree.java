@@ -38,14 +38,17 @@ public class Tree
 	{
 		assert seconds >= 0;
 
-		progressTime.set((int)(progressTime.get() + (seconds)));
-		if (progressTime.get() > totalRequiredTime)
+		int overflow = seconds - getRemainingRequiredTime();
+		if (overflow > 0)
 		{
-			int overflow = progressTime.get() - totalRequiredTime;
 			progressTime.set(totalRequiredTime);
 			return overflow;
 		}
-		return 0;
+		else
+		{
+			progressTime.setValue(progressTime.getValue() + seconds);
+			return 0;
+		}
 	}
 
 	public Integer getUuid() { return uuid; }

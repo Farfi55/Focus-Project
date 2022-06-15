@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject.handler;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
@@ -71,7 +72,10 @@ public class TreeHandler implements ActivityObserver
 		trees.put(0, new Tree(0, "albero 1", "trees/tile000.png", deadTree, 0, 0));
 		trees.put(1, new Tree(1, "albero 2", "trees/tile001.png", deadTree, 600, 200));
 		trees.put(2, new Tree(2, "albero 3", "trees/tile007.png", deadTree, 1200, 1200));
-		trees.put(3, new Tree(3, "albero 4", "trees/tile008.png", deadTree, 600, 0));
+		trees.put(3, new Tree(3, "albero 4", "trees/tile008.png", deadTree, 600, 598));
+		trees.put(4, new Tree(4, "albero 5", "trees/tile002.png", deadTree, 600, 600));
+		trees.put(5, new Tree(5, "albero 6", "trees/tile006.png", deadTree, 200, 200));
+		trees.put(6, new Tree(6, "albero 7", "trees/tile004.png", deadTree, 10, 0));
 
 		for (Tree tree : trees.values())
 		{
@@ -90,14 +94,16 @@ public class TreeHandler implements ActivityObserver
 			int overflow = selectedTreeToUnlock.get().addProgressTime(seconds);
 			if (selectedTreeToUnlock.get().isUnlocked())
 			{
-				Feedback.getInstance().showNotification("Albero Sbloccato!",
-						"Evviva!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'");
+				Platform.runLater(() -> Feedback.getInstance()
+						.showNotification("Albero Sbloccato!",
+								"Evviva!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'"));
 
 				treesToUnlock.remove(selectedTreeToUnlock.get().getUuid());
+				unlockedTrees.add(selectedTreeToUnlock.get().getUuid());
 			}
-			unusedProgressTime.add(overflow);
+			unusedProgressTime.setValue(unusedProgressTime.getValue() + overflow);
 		}
-		else unusedProgressTime.add(seconds);
+		else unusedProgressTime.setValue(unusedProgressTime.getValue() + seconds);
 	}
 
 	public Tree getTree(int uuid)
@@ -127,7 +133,7 @@ public class TreeHandler implements ActivityObserver
 	{
 		return trees.get(getRandomUnlockedTreeUuid());
 	}
-	
+
 	public SimpleIntegerProperty getUnusedProgressTimeProperty()
 	{
 		return unusedProgressTime;

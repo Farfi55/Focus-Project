@@ -44,7 +44,7 @@ public class ProgressPageController implements Controller
 	 * <p>with 1:</p>
 	 * <pre> X T X </pre>
 	 */
-	private final int extraTreesShownInSelectionHBox = 1;
+	private final int extraTreesShownInSelectionHBox = 2;
 	private final LinkedHashMap<Tree, Node> previewSelectionTreesNodes = new LinkedHashMap<>();
 	private final SimpleObjectProperty<Tree> selectedPreviewTree = new SimpleObjectProperty<>(this,
 			"selectedPreviewTree");
@@ -83,7 +83,10 @@ public class ProgressPageController implements Controller
 		initializeTreeFlow();
 		setTreesInterval(Interval.DAY);
 
-		setSelectedPreviewTree(TreeHandler.getInstance().getSelectedTreeToUnlock());
+		if(TreeHandler.getInstance().getSelectedTreeToUnlock() != null)
+			setSelectedPreviewTree(TreeHandler.getInstance().getSelectedTreeToUnlock());
+		else
+			setSelectedPreviewTree(extraTreesShownInSelectionHBox);
 
 	}
 
@@ -98,6 +101,8 @@ public class ProgressPageController implements Controller
 		Stream<Tree> treeStream = TreeHandler.getInstance().getTrees().stream().sorted(Comparator.comparing(
 				Tree::getUnlockProgress).reversed().thenComparing(Tree::getUuid));
 
+		treeSelectionHBox.setSpacing(20);
+		
 		for (int i = 0; i < extraTreesShownInSelectionHBox; i++)
 			treeSelectionHBox.getChildren().add(buildPlaceholderThreeSelectionCard());
 
@@ -114,14 +119,14 @@ public class ProgressPageController implements Controller
 		treeSelectPreviousButton.disableProperty().bind(
 				selectedPreviewTreeIndex.lessThanOrEqualTo(extraTreesShownInSelectionHBox));
 		treeSelectNextButton.disableProperty().bind(selectedPreviewTreeIndex.greaterThanOrEqualTo(
-				treeSelectionHBox.getChildren().size() + extraTreesShownInSelectionHBox));
+				treeSelectionHBox.getChildren().size() - extraTreesShownInSelectionHBox - 1));
 	}
 
 	private Node buildPlaceholderThreeSelectionCard()
 	{
 		Region node = new Region();
-		node.setMaxSize(-1, -1);
-		node.setMinSize(-1, -1);
+		node.setMaxSize(100, 120);
+		node.setMinSize(100, 120);
 		node.setPrefSize(100, 120);
 		return node;
 	}
@@ -161,8 +166,8 @@ public class ProgressPageController implements Controller
 		{
 			setSelectedPreviewTree(tree);
 		});
-		button.setMaxSize(-1, -1);
-		button.setMinSize(-1, -1);
+		button.setMaxSize(100, 120);
+		button.setMinSize(100, 120);
 		button.setPrefSize(100, 120);
 		button.getProperties().put("tree-uuid", tree.getUuid());
 

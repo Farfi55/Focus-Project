@@ -9,10 +9,7 @@ import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -112,8 +109,6 @@ public class ActivityStatsHandler implements ActivityObserver
 		ActivityTime activityTime = new ActivityTime();
 		for (var activity : tagActivities)
 		{
-			if (activity.getStartTime().isBefore(LocalDateTime.now().minusYears(1))) break;
-
 			activityTime.addActivityDuration(activity);
 		}
 		return activityTime;
@@ -146,8 +141,8 @@ public class ActivityStatsHandler implements ActivityObserver
 					if (activity instanceof ChronometerActivity chronometerActivity)
 					{
 						//TODO: move into settings
-						int successfulChronometerMinimunTime = 10;
-						if (chronometerActivity.getFinalDuration() < successfulChronometerMinimunTime) stats.totaDead++;
+						int successfulChronometerMinimumTime = 10;
+						if (chronometerActivity.getFinalDuration() < successfulChronometerMinimumTime) stats.totaDead++;
 						else stats.totalMature++;
 					}
 
@@ -182,8 +177,8 @@ public class ActivityStatsHandler implements ActivityObserver
 			int duration = activity.getFinalDuration();
 			LocalDateTime startTime = activity.getStartTime();
 			if (startTime.isAfter(LocalDateTime.now().minusYears(1))) yearTime += duration;
-			if (startTime.isAfter(LocalDateTime.now().minusMonths(1))) weekTime += duration;
-			if (startTime.isAfter(LocalDateTime.now().minusWeeks(1))) monthTime += duration;
+			if (startTime.isAfter(LocalDateTime.now().minusMonths(1))) monthTime += duration;
+			if (startTime.isAfter(LocalDateTime.now().minusWeeks(1))) weekTime += duration;
 			if (startTime.isAfter(LocalDateTime.now().minusDays(1))) dayTime += duration;
 		}
 	}
