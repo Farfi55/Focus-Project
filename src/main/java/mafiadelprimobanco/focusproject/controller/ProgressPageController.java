@@ -13,6 +13,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -27,9 +28,11 @@ import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 import mafiadelprimobanco.focusproject.utils.NodeUtils;
 import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 import mafiadelprimobanco.focusproject.utils.TimeUtils;
+import org.springframework.format.datetime.standard.DateTimeFormatterFactory;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Stream;
@@ -58,7 +61,6 @@ public class ProgressPageController implements Controller
 	@FXML private MFXComboBox<Interval> intervalComboBox;
 	@FXML private FlowPane treesRoot;
 
-
 	private Label plantedTreesLabel;
 	private Label matureTreesLabel;
 	private Label deadTreesLabel;
@@ -81,12 +83,12 @@ public class ProgressPageController implements Controller
 
 		initializeIntervalComboBox();
 		initializeTreeFlow();
+		// also builds the trees
 		setTreesInterval(Interval.DAY);
 
-		if(TreeHandler.getInstance().getSelectedTreeToUnlock() != null)
-			setSelectedPreviewTree(TreeHandler.getInstance().getSelectedTreeToUnlock());
-		else
-			setSelectedPreviewTree(extraTreesShownInSelectionHBox);
+		if (TreeHandler.getInstance().isValidSelectedTreeToUnlock()) setSelectedPreviewTree(
+				TreeHandler.getInstance().getSelectedTreeToUnlock());
+		else setSelectedPreviewTree(extraTreesShownInSelectionHBox); // selects the first tree in HBox
 
 	}
 
@@ -98,11 +100,22 @@ public class ProgressPageController implements Controller
 
 	private void initializeTreeSelectionHBox()
 	{
+		buildTreeSelectionHBox();
+
+		treeSelectPreviousButton.disableProperty().bind(
+				selectedPreviewTreeIndex.lessThanOrEqualTo(extraTreesShownInSelectionHBox));
+		treeSelectNextButton.disableProperty().bind(selectedPreviewTreeIndex.greaterThanOrEqualTo(
+				treeSelectionHBox.getChildren().size() - extraTreesShownInSelectionHBox - 1));
+	}
+
+	private void buildTreeSelectionHBox()
+	{
 		Stream<Tree> treeStream = TreeHandler.getInstance().getTrees().stream().sorted(Comparator.comparing(
 				Tree::getUnlockProgress).reversed().thenComparing(Tree::getUuid));
 
 		treeSelectionHBox.setSpacing(20);
-		
+
+		treeSelectionHBox.getChildren().clear();
 		for (int i = 0; i < extraTreesShownInSelectionHBox; i++)
 			treeSelectionHBox.getChildren().add(buildPlaceholderThreeSelectionCard());
 
@@ -115,11 +128,6 @@ public class ProgressPageController implements Controller
 
 		for (int i = 0; i < extraTreesShownInSelectionHBox; i++)
 			treeSelectionHBox.getChildren().add(buildPlaceholderThreeSelectionCard());
-
-		treeSelectPreviousButton.disableProperty().bind(
-				selectedPreviewTreeIndex.lessThanOrEqualTo(extraTreesShownInSelectionHBox));
-		treeSelectNextButton.disableProperty().bind(selectedPreviewTreeIndex.greaterThanOrEqualTo(
-				treeSelectionHBox.getChildren().size() - extraTreesShownInSelectionHBox - 1));
 	}
 
 	private Node buildPlaceholderThreeSelectionCard()
@@ -146,30 +154,30 @@ public class ProgressPageController implements Controller
 		tree.progressTimeProperty().addListener(observable ->
 		{
 			unlockProgressBar.setProgress(tree.getUnlockProgress());
-			unlockProgressBar.setVisible(!tree.isUnlocked());
+			// we want the progress bar to occupy the same space while it's hidden
+			unlockProgressBar.setVisible(tree.isNotUnlocked());
+			if (selectedPreviewTree.get().equals(tree)) updateTreePreviewDetails();
 		});
 		unlockProgressBar.setMinHeight(8);
-		unlockProgressBar.setVisible(!tree.isUnlocked());
+		unlockProgressBar.setVisible(tree.isNotUnlocked());
 
 
 		VBox vBox = new VBox(6, treeImageView, treeNameLabel, unlockProgressBar);
 		vBox.setFillWidth(true);
 		vBox.setPadding(InsetsFactory.all(5));
-		vBox.setMaxSize(-1, -1);
-		vBox.setMinSize(-1, -1);
+		vBox.setMaxSize(100, 120);
+		vBox.setMinSize(100, 120);
 		vBox.setPrefSize(100, 120);
 		vBox.setAlignment(Pos.CENTER);
 
-		MFXButton button = new MFXButton();
-		button.setGraphic(vBox);
-		button.setOnAction(event ->
-		{
-			setSelectedPreviewTree(tree);
-		});
+		MFXButton button = new MFXButton("", vBox);
+		button.setOnAction(event -> setSelectedPreviewTree(tree));
+		button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+		button.getProperties().put("tree-uuid", tree.getUuid());
+
 		button.setMaxSize(100, 120);
 		button.setMinSize(100, 120);
 		button.setPrefSize(100, 120);
-		button.getProperties().put("tree-uuid", tree.getUuid());
 
 		return button;
 	}
@@ -211,8 +219,8 @@ public class ProgressPageController implements Controller
 		selectTreeToUnlockButton = new MFXButton();
 
 		LocalizationUtils.bindButtonText(selectTreeToUnlockButton, "progress.selectTreeButton");
-		selectTreeToUnlockButton.disableProperty().bind(
-				TreeHandler.getInstance().getSelectedTreeToUnlockProperty().isEqualTo(selectedPreviewTree));
+		TreeHandler.getInstance().getSelectedTreeToUnlockProperty().addListener(
+				observable -> updateSelectTreeToUnlockButtonDisable());
 
 
 		toUnlockTreeDetailsGrid.addColumn(1, treeRequiredTimeLabel, treeProgressTimeLabel);
@@ -237,8 +245,7 @@ public class ProgressPageController implements Controller
 		if (value == null || value == treesInterval.getValue()) return;
 
 		treesInterval.set(value);
-		if(!intervalComboBox.getSelectedItem().equals(value))
-			intervalComboBox.selectItem(value);
+		if (!intervalComboBox.getSelectedItem().equals(value)) intervalComboBox.selectItem(value);
 
 		buildTrees();
 	}
@@ -250,6 +257,7 @@ public class ProgressPageController implements Controller
 		intervalComboBox.getItems().clear();
 		for (Interval interval : Interval.values())
 		{
+
 			intervalComboBox.getItems().add(interval);
 		}
 
@@ -263,8 +271,8 @@ public class ProgressPageController implements Controller
 		treesRoot.setAlignment(Pos.CENTER);
 		treesRoot.setColumnHalignment(HPos.CENTER);
 		treesRoot.setRowValignment(VPos.CENTER);
-		treesRoot.setHgap(10);
-		treesRoot.setVgap(10);
+		treesRoot.setHgap(5);
+		treesRoot.setVgap(5);
 	}
 
 	private void buildTrees()
@@ -273,40 +281,34 @@ public class ProgressPageController implements Controller
 				treesInterval.get());
 
 		treesRoot.getChildren().clear();
-
-//		int activityCount = activities.size();
-//		int minCols = 4, maxCols = 12;
-//		int cols = NumberUtils.clamp(activityCount / 3, minCols, maxCols);
-//		int rows = Math.min((activityCount / cols) + 1, 3);
-
 		treesRoot.prefWrapLengthProperty().bind(treesRoot.widthProperty());
 
 		for (AbstractActivity activity : activities)
 		{
-			StackPane node = (StackPane)buildTree(activity);
+			StackPane node = buildTree(activity);
 			treesRoot.getChildren().add(node);
 		}
 
 	}
 
-	private Node buildTree(AbstractActivity activity)
+	private StackPane buildTree(AbstractActivity activity)
 	{
 		ImageView imageView = new ImageView(ResourcesLoader.loadImage(activity.getFinalTreeSpritePath()));
 		StackPane treeRoot = new StackPane(imageView);
+
 		imageView.fitWidthProperty().bind(treeRoot.widthProperty());
 		imageView.fitWidthProperty().bind(treeRoot.heightProperty());
-//		imageView.fitWidthProperty().setValue(120);
-//		imageView.fitWidthProperty().setValue(120);
-		treeRoot.setAlignment(Pos.CENTER);
 		imageView.setPreserveRatio(true);
-//		treeRoot.setPrefSize(120, 120);
+
+		treeRoot.setPrefSize(100, 100);
 		treeRoot.setMaxSize(100, 100);
 		treeRoot.setMinSize(100, 100);
+		treeRoot.setAlignment(Pos.CENTER);
 		return treeRoot;
 	}
 
 	@FXML
-	void onTreeSelectNextAction(ActionEvent event)
+	void onTreeSelectNextAction()
 	{
 		if (selectedPreviewTreeIndex.get()
 				< treeSelectionHBox.getChildren().size() - extraTreesShownInSelectionHBox - 1)
@@ -316,7 +318,7 @@ public class ProgressPageController implements Controller
 	}
 
 	@FXML
-	void onTreeSelectPreviousAction(ActionEvent event)
+	void onTreeSelectPreviousAction()
 	{
 		if (selectedPreviewTreeIndex.get() > extraTreesShownInSelectionHBox)
 		{
@@ -357,7 +359,8 @@ public class ProgressPageController implements Controller
 		else
 		{
 			lastTreeLabel.textProperty().unbind();
-			lastTreeLabel.setText(stats.lastPlanted.truncatedTo(ChronoUnit.SECONDS).toString());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+			lastTreeLabel.setText(stats.lastPlanted.format(formatter));
 		}
 
 	}
@@ -369,10 +372,17 @@ public class ProgressPageController implements Controller
 		treeUnlockProgressBar.setProgress(selectedPreviewTree.get().getUnlockProgress());
 		selectTreeToUnlockButton.setOnAction(event ->
 		{
-			System.out.println("before: " + TreeHandler.getInstance().getSelectedTreeToUnlock().getName());
 			TreeHandler.getInstance().setSelectedTreeToUnlock(selectedPreviewTree.get());
-			System.out.println("after: " + TreeHandler.getInstance().getSelectedTreeToUnlock().getName());
 		});
+		updateSelectTreeToUnlockButtonDisable();
+	}
+
+	private void updateSelectTreeToUnlockButtonDisable()
+	{
+		selectTreeToUnlockButton.setDisable(
+				TreeHandler.getInstance().isValidSelectedTreeToUnlock() && TreeHandler.getInstance()
+						.getSelectedTreeToUnlock()
+						.equals(selectedPreviewTree.get()));
 	}
 
 	private Tree getSelectedPreviewTree()

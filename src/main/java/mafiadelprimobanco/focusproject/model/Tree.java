@@ -79,6 +79,8 @@ public class Tree
 		return getProgressTime().equals(totalRequiredTime);
 	}
 
+	public boolean isNotUnlocked() { return !isUnlocked(); }
+
 	public Float getUnlockProgress()
 
 	{

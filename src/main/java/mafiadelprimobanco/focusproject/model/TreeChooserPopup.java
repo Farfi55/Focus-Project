@@ -111,7 +111,7 @@ public class TreeChooserPopup extends MFXPopup
 		for (Tree tree : treeButtons.keySet())
 		{
 			MFXRectangleToggleNode button = treeButtons.get(tree);
-			button.setDisable(!tree.isUnlocked());
+			button.setDisable(tree.isNotUnlocked());
 		}
 		if (TreeHandler.getInstance().getSelectedActivityTree() != null) treeButtons.get(
 				TreeHandler.getInstance().getSelectedActivityTree()).setSelected(true);

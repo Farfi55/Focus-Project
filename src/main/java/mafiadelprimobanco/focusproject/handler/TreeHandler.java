@@ -87,23 +87,41 @@ public class TreeHandler implements ActivityObserver
 	private void addProgressTime(int seconds)
 	{
 		assert seconds >= 0;
-		if (selectedTreeToUnlock.get().isUnlocked()) selectedTreeToUnlock.set(null);
+
+
+		if (!isValidSelectedTreeToUnlock())
+			selectedTreeToUnlock.set(null);
 
 		if (selectedTreeToUnlock.get() != null)
 		{
+
 			int overflow = selectedTreeToUnlock.get().addProgressTime(seconds);
 			if (selectedTreeToUnlock.get().isUnlocked())
 			{
-				Platform.runLater(() -> Feedback.getInstance()
-						.showNotification("Albero Sbloccato!",
-								"Evviva!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'"));
-
-				treesToUnlock.remove(selectedTreeToUnlock.get().getUuid());
-				unlockedTrees.add(selectedTreeToUnlock.get().getUuid());
+				UnlockSelectedTreeToUnlock();
 			}
 			unusedProgressTime.setValue(unusedProgressTime.getValue() + overflow);
 		}
 		else unusedProgressTime.setValue(unusedProgressTime.getValue() + seconds);
+	}
+
+
+	public boolean isValidSelectedTreeToUnlock()
+	{
+		return selectedTreeToUnlock.get() != null && selectedTreeToUnlock.get().isNotUnlocked();
+	}
+
+	private void UnlockSelectedTreeToUnlock()
+	{
+		treesToUnlock.remove(selectedTreeToUnlock.get().getUuid());
+		unlockedTrees.add(selectedTreeToUnlock.get().getUuid());
+		assert !isValidSelectedTreeToUnlock();
+
+		Platform.runLater(() ->
+		{
+			Feedback.getInstance().showNotification("Albero Sbloccato!",
+					"Evviva!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'");
+		});
 	}
 
 	public Tree getTree(int uuid)
