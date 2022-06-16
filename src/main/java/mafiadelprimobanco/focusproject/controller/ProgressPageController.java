@@ -100,7 +100,11 @@ public class ProgressPageController implements Controller
 
 	private void initializeTreeSelectionHBox()
 	{
+		treeSelectionHBox.setId("progressTreeSelection");
 		buildTreeSelectionHBox();
+
+		treeSelectPreviousButton.getStyleClass().add("progressTreeSelectionButton");
+		treeSelectNextButton.getStyleClass().add("progressTreeSelectionButton");
 
 		treeSelectPreviousButton.disableProperty().bind(
 				selectedPreviewTreeIndex.lessThanOrEqualTo(extraTreesShownInSelectionHBox));
@@ -136,6 +140,7 @@ public class ProgressPageController implements Controller
 		node.setMaxSize(100, 120);
 		node.setMinSize(100, 120);
 		node.setPrefSize(100, 120);
+		node.getStyleClass().add("progressPlaceHolderTreeCard");
 		return node;
 	}
 
@@ -174,6 +179,8 @@ public class ProgressPageController implements Controller
 		button.setOnAction(event -> setSelectedPreviewTree(tree));
 		button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 		button.getProperties().put("tree-uuid", tree.getUuid());
+		button.getStyleClass().add("progressTreeCard");
+
 
 		button.setMaxSize(100, 120);
 		button.setMinSize(100, 120);
@@ -184,6 +191,9 @@ public class ProgressPageController implements Controller
 
 	private void initializeUnlockedTreeDetailGrid()
 	{
+		toUnlockTreeDetailsGrid.setId("progressUnlockedTreeDetailGrid");
+		toUnlockTreeDetailsGrid.getStyleClass().add("progressTreeDetailGrid");
+
 		int row = 0;
 		for (var key : List.of("progress.plantedTrees", "progress.matureTrees", "progress.deadTrees",
 				"progress.lastTree"))
@@ -203,6 +213,9 @@ public class ProgressPageController implements Controller
 
 	private void initializeToUnlockTreeDetailGrid()
 	{
+		toUnlockTreeDetailsGrid.setId("progressToUnlockTreeDetailGrid");
+		toUnlockTreeDetailsGrid.getStyleClass().add("progressTreeDetailGrid");
+
 		int row = 0;
 		for (var key : List.of("progress.treeRequiredTime", "progress.treeProgressTime"))
 		{
@@ -233,6 +246,7 @@ public class ProgressPageController implements Controller
 
 	private void initializeIntervalComboBox()
 	{
+		intervalComboBox.setId("progressIntervalComboBox");
 		intervalComboBox.setOnAction(event -> setTreesInterval(intervalComboBox.getValue()));
 		Localization.localeProperty().addListener(observable -> resetIntervalComboBox());
 
@@ -272,6 +286,7 @@ public class ProgressPageController implements Controller
 		treesRoot.setRowValignment(VPos.CENTER);
 		treesRoot.setHgap(5);
 		treesRoot.setVgap(5);
+		treesRoot.setId("progressTreeContainer");
 	}
 
 	private void buildTrees()
@@ -294,6 +309,8 @@ public class ProgressPageController implements Controller
 	{
 		ImageView imageView = new ImageView(ResourcesLoader.loadImage(activity.getFinalTreeSpritePath()));
 		StackPane treeRoot = new StackPane(imageView);
+		treeRoot.getStyleClass().add("progressTree");
+		imageView.getStyleClass().add("progressTreeImageView");
 
 		imageView.fitWidthProperty().bind(treeRoot.widthProperty());
 		imageView.fitWidthProperty().bind(treeRoot.heightProperty());
