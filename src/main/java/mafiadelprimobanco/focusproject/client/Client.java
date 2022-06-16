@@ -46,10 +46,7 @@ public class Client {
         Objects.requireNonNull(conn, "Connection cannot be null");
         InputStream is = new BufferedInputStream(conn.getInputStream());
         String res = new String(is.readAllBytes());
-
-        //if (Base64.isArrayByteBase64(res.getBytes()))
         res = new String(Base64.getDecoder().decode(res));
-
         is.close();
         try {
             JSONObject object = new JSONObject(res);
@@ -330,6 +327,11 @@ public class Client {
      * */
     public String register(String email, String password) throws IOException, ConnectionException {
         return authentication.register(email, password);
+    }
+
+    public String loginWithCustomToken(String token) throws IOException, ConnectionException
+    {
+        return  authentication.loginWithCustomToken(token);
     }
 
     /**

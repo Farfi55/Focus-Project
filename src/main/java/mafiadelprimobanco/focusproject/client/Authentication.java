@@ -59,7 +59,25 @@ class Authentication {
                 client.token = output.getString("idToken");
                 client.refreshToken = output.getString("refreshToken");
                 scheduleRefresh(Integer.parseInt(output.getString("expiresIn")));
-                return client.user;
+                return client.token;
+            }
+        }
+        return null;
+    }
+
+    public String loginWithCustomToken(String token) throws IOException, ConnectionException {
+        Objects.requireNonNull(token, "Token cannot be null");
+        QueryResult result = client.parseOutput(client.connect(client.url + "/token?key=" + token), true);
+        System.out.println(result);
+        if(result.success()) {
+            JSONObject output = new JSONObject(result.message());
+            if (output.has("localId")) {
+                //client.email = username;
+                client.user = output.getString("localId");
+                client.token = output.getString("idToken");
+                client.refreshToken = output.getString("refreshToken");
+                scheduleRefresh(Integer.parseInt(output.getString("expiresIn")));
+                return client.token;
             }
         }
         return null;

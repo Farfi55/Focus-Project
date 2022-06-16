@@ -5,10 +5,13 @@ import mafiadelprimobanco.focusproject.client.Client;
 import mafiadelprimobanco.focusproject.client.ConnectionException;
 import mafiadelprimobanco.focusproject.model.User;
 import org.json.JSONObject;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 
 public class AutentificationHandler
@@ -37,19 +40,19 @@ public class AutentificationHandler
 			{
 				JSONObject obj = new JSONObject(new String(Files.readAllBytes(localDatabaseFile)));
 
-				String email = obj.getString("email");
-				String username = obj.getString("username");
-				String password = obj.getString("password");
+				String token = obj.getString("userToken");
 
-				boolean res = doLogin(new User(email, username, password));
+				String res = Client.getInstance().loginWithCustomToken(token);
 
-				if (res) {
+				if (res != null) {
+					Feedback.getInstance().showNotification(Localization.get("info.autentification.loginSuccessfull.Header"),
+							Localization.get("info.autentification.loginSuccessfull.Msg", user.username()));
 					isLogged = true;
 					return true;
 				}
 			}
 		}
-		catch (IOException e)
+		catch (IOException | ConnectionException e)
 		{
 			e.printStackTrace();
 		}
@@ -90,9 +93,9 @@ public class AutentificationHandler
 	{
 		try
 		{
-			String id = Client.getInstance().login(user.email(), user.password());
+			String token = Client.getInstance().login(user.email(), user.password());
 
-			if (id == null)
+			if (token == null)
 			{
 				Feedback.getInstance().showError(Localization.get("error.autentification.UoPNotValidHeader"),
 						Localization.get("error.autentification.UoPNotValidMsg"));
@@ -106,19 +109,15 @@ public class AutentificationHandler
 				return false;
 			}
 
-			/*if (localDatabaseFile.toFile().exists())
+			if (localDatabaseFile.toFile().exists())
 				Files.delete(localDatabaseFile);
 
 
 			JSONObject jsonUser = new JSONObject();
 
-			jsonUser.put("email", user.email());
-			jsonUser.put("username", user.username());
-			jsonUser.put("password", user.password());
+			jsonUser.put("userToken", token);
 
-			Files.writeString(localDatabaseFile, jsonUser.toString(), StandardOpenOption.CREATE_NEW);*/
-
-			//birep32027@serosin.com
+			Files.writeString(localDatabaseFile, jsonUser.toString(), StandardOpenOption.CREATE);
 
 			Feedback.getInstance().showNotification(Localization.get("info.autentification.loginSuccessfull.Header"),
 					Localization.get("info.autentification.loginSuccessfull.Msg", user.username()));

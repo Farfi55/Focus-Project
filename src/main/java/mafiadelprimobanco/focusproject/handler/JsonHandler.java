@@ -80,7 +80,37 @@ public final class JsonHandler
 		updateActivitiesFile();
 	}
 
-	public static List<AbstractActivity> getAllActivities(LocalDateTime startData, LocalDateTime endData)
+	private static void getActivity(List<AbstractActivity> activityList, String dataKey)
+	{
+		JSONObject activity = (JSONObject)userActivities.get(dataKey);
+
+		String type = activity.getString("type");
+
+		if (ActivityType.CHRONOMETER.key.equals(type))
+			activityList.add(new ChronometerActivity(
+					activity.getInt("tagUuid"), activity.getInt("treeUuid"),
+					LocalDateTime.parse(activity.getString("startTime")),
+					LocalDateTime.parse(activity.getString("endTime"))));
+
+		else if (ActivityType.TIMER.key.equals(type))
+			activityList.add(new TimerActivity(
+					activity.getInt("tagUuid"), activity.getInt("treeUuid"),
+					LocalDateTime.parse(activity.getString("startTime")),
+					LocalDateTime.parse(activity.getString("endTime")),
+					activity.getInt("chosenDuration")));
+	}
+
+	public static List<AbstractActivity> getAllActivities()
+	{
+		List<AbstractActivity> activityList = new Vector<>();
+
+		userActivities.keys().forEachRemaining(dataKey -> getActivity(activityList, dataKey));
+
+		return activityList;
+	}
+
+
+	public static List<AbstractActivity> getAllActivitiesBetween(LocalDateTime startData, LocalDateTime endData)
 	{
 		List<AbstractActivity> activityList = new Vector<>();
 
@@ -90,26 +120,9 @@ public final class JsonHandler
 
 			if (startData.isBefore(data) && endData.isAfter(data))
 			{
-				JSONObject activity = (JSONObject)userActivities.get(dataKey);
-
-				String type = activity.getString("type");
-
-				if (ActivityType.CHRONOMETER.key.equals(type))
-					activityList.add(new ChronometerActivity(
-							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
-							LocalDateTime.parse(activity.getString("startTime")),
-							LocalDateTime.parse(activity.getString("endTime"))));
-
-				else if (ActivityType.TIMER.key.equals(type))
-					activityList.add(new TimerActivity(
-							activity.getInt("tagUuid"), activity.getInt("treeUuid"),
-							LocalDateTime.parse(activity.getString("startTime")),
-							LocalDateTime.parse(activity.getString("endTime")),
-							activity.getInt("chosenDuration")));
+				getActivity(activityList, dataKey);
 			}
 		});
-
-		System.out.println(activityList);
 
 		return activityList;
 	}

@@ -25,17 +25,29 @@ public class LoginPopUpController {
 		SceneHandler.getInstance().closeLoginPopup();
 	}
 
+	void clean()
+	{
+		emailField.setText("");
+		passwordField.setText("");
+	}
+
 	@FXML void doLogin(ActionEvent event)
 	{
-		AutentificationHandler.getInstance().doLogin(
-				new User(emailField.getText(), emailField.getText(), passwordField.getText())
-		);
+		if (AutentificationHandler.getInstance().doLogin(
+				new User(emailField.getText(), emailField.getText(), passwordField.getText()))
+			)
+		{
+			SceneHandler.getInstance().closeLoginPopup();
+			clean();
+		}
 	}
 
 	@FXML void doRegisterUser(ActionEvent event)
 	{
 		SceneHandler.getInstance().closeLoginPopup();
 		PagesHandler.navigateTo(PagesHandler.registration);
+
+		clean();
 	}
 
 	@FXML void initialize()
