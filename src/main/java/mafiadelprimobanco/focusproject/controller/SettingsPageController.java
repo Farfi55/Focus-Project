@@ -21,105 +21,72 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.*;
 
-public class SettingsController implements Controller
+public class SettingsPageController implements Controller
 {
-	@FXML
-	private Label advancedOptionCategoryLabel;
+	@FXML private Label advancedOptionCategoryLabel;
 
-	@FXML
-	private MFXButton advancedSettingsButton;
+	@FXML private MFXButton advancedSettingsButton;
 
-	@FXML
-	private VBox advancedSettingsVBox;
+	@FXML private VBox advancedSettingsVBox;
 
-	@FXML
-	private Label audioCategoryLabel;
+	@FXML private Label audioCategoryLabel;
 
-	@FXML
-	private Label chronometerCategoryLabel;
+	@FXML private Label chronometerCategoryLabel;
 
-	@FXML
-	private Label confirmBeforeExitLabel;
+	@FXML private Label confirmBeforeExitLabel;
 
-	@FXML
-	private MFXToggleButton confirmationRequestToggleButton;
+	@FXML private MFXToggleButton confirmationRequestToggleButton;
 
-	@FXML
-	private Label focusTimeLabel;
+	@FXML private Label focusTimeLabel;
 
-	@FXML
-	private Label generalCategoryLabel;
+	@FXML private Label generalCategoryLabel;
 
-	@FXML
-	private Label hideTutorialLabel;
+	@FXML private Label hideTutorialLabel;
 
-	@FXML
-	private MFXComboBox<Language> languageComboBox;
+	@FXML private MFXComboBox<Language> languageComboBox;
 
-	@FXML
-	private Label languageLabel;
+	@FXML private Label languageLabel;
 
-	@FXML
-	private Label minimumTimerLabel;
+	@FXML private Label minimumTimerLabel;
 
-	@FXML
-	private MFXTextField minimumTimerTextField;
+	@FXML private MFXTextField minimumTimerTextField;
 
-	@FXML
-	private MFXSlider musicSlider;
+	@FXML private MFXSlider musicSlider;
 
-	@FXML
-	private Label musicLabel;
-	@FXML
-	private Label navigationBlockLabel;
+	@FXML private Label musicLabel;
+	@FXML private Label navigationBlockLabel;
 
-	@FXML
-	private MFXToggleButton navigationToggleButton;
+	@FXML private MFXToggleButton navigationToggleButton;
 
-	@FXML
-	private Label pageTitle;
+	@FXML private Label pageTitle;
 
-	@FXML
-	private Label pausePeriodLabel;
+	@FXML private Label pausePeriodLabel;
 
-	@FXML
-	private Label pomodoroCategoryLabel;
+	@FXML private Label pomodoroCategoryLabel;
 
-	@FXML
-	private MFXTextField pomodoroFocusTimeTextField;
+	@FXML private MFXTextField pomodoroFocusTimeTextField;
 
-	@FXML
-	private MFXTextField pomodoroPauseTimeTextField;
+	@FXML private MFXTextField pomodoroPauseTimeTextField;
 
-	@FXML
-	private Label soundLabel;
+	@FXML private Label soundLabel;
 
-	@FXML
-	private MFXSlider soundSlider;
+	@FXML private MFXSlider soundSlider;
 
-	@FXML
-	private Label stopChronometerLabel;
+	@FXML private Label stopChronometerLabel;
 
-	@FXML
-	private MFXTextField stopChronometerTextField;
+	@FXML private MFXTextField stopChronometerTextField;
 
-	@FXML
-	private MFXComboBox<Theme> themeComboBox;
+	@FXML private MFXComboBox<Theme> themeComboBox;
 
-	@FXML
-	private Label themeLabel;
+	@FXML private Label themeLabel;
 
-	@FXML
-	private Label timerCategoryLabel;
+	@FXML private Label timerCategoryLabel;
 
-	@FXML
-	private Label tutorialResetLabel;
+	@FXML private Label tutorialResetLabel;
 
-	@FXML
-	private MFXToggleButton tutorialResetToggleButton;
+	@FXML private MFXToggleButton tutorialResetToggleButton;
 
-	@FXML
-	private MFXToggleButton tutorialToggleButton;
+	@FXML private MFXToggleButton tutorialToggleButton;
 
 	private SettingsHandler settingsHandler;
 
@@ -164,7 +131,6 @@ public class SettingsController implements Controller
 		updateAdvancedSettingsVisibility();
 		updateConfirmationRequestToggleBox();
 		// --------------------------------
-
 
 
 		feedback = Feedback.getInstance();
@@ -217,7 +183,7 @@ public class SettingsController implements Controller
 		pausePeriodLabel.setText(Localization.get("settings.pomodoro.focusPeriod"));
 		focusTimeLabel.setText(Localization.get("settings.pomodoro.pausePeriod"));
 
-		chronometerCategoryLabel.setText(Localization.get("setting.chronometer.categoryName"));
+		chronometerCategoryLabel.setText(Localization.get("settings.chronometer.categoryName"));
 		stopChronometerLabel.setText(Localization.get("settings.chronometer.stopActivityAfter"));
 
 		themeLabel.setText(Localization.get("settings.theme"));
@@ -227,7 +193,7 @@ public class SettingsController implements Controller
 		advancedOptionCategoryLabel.setText(Localization.get("settings.advancedOptions.categoryName"));
 		advancedSettingsButton.setText(Localization.get("settings.advancedOptions.show"));
 
-		confirmBeforeExitLabel.setText(Localization.get("settings.advancedOptions.requestConfirmationBeforExiting"));
+		confirmBeforeExitLabel.setText(Localization.get("settings.advancedOptions.askConfirmationBeforeQuitting"));
 
 		hideTutorialLabel.setText(Localization.get("settings.hideTutorial"));
 
@@ -244,21 +210,28 @@ public class SettingsController implements Controller
 	{
 		languageComboBox.selectedItemProperty().addListener((observer, latestLanguage, newLanguage) ->
 		{
-			if (!newLanguage.toString().equals(settingsHandler.getSettings().getCurrentLanguage().toString()))
+			if (newLanguage != null && !newLanguage.toString().equals(
+					settingsHandler.getSettings().getCurrentLanguage().toString()))
 			{
 				settingsHandler.getSettings().setCurrentLanguage(newLanguage);
 				updateStringsBasedOnCurrentLanguage();
 			}
 		});
 
-		settingsHandler.getSettings().getCurrentLanguage().addListener(observable -> {updateCurrentLanguage();});
+		settingsHandler.getSettings().getCurrentLanguage().addListener(observable ->
+		{
+			updateCurrentLanguage();
+		});
 
+		// todo move: why is this here?
 		Localization.localeProperty().addListener(observable -> updateAvailableThemes());
 	}
 
 	private void updateAvailableLanguages()
 	{
-		languageComboBox.getItems().addAll(Language.ITALIAN, Language.ENGLISH);
+		languageComboBox.getItems().clear();
+		for (Language language : Language.values())
+			languageComboBox.getItems().add(language);
 	}
 	// --------------------------
 
@@ -270,6 +243,7 @@ public class SettingsController implements Controller
 		{
 			if (newValue != null)
 			{
+				//todo refactor: a bit unsafe, theme localized in english has to be equal to file name
 				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
 				settingsHandler.getSettings().setCurrentTheme(newValue);
 				updateThemeComboBox();
@@ -277,13 +251,14 @@ public class SettingsController implements Controller
 			}
 		});
 
-		settingsHandler.getSettings().getCurrentTheme().addListener(observable -> {updateThemeComboBox();});
+		settingsHandler.getSettings().getCurrentTheme().addListener(observable -> updateThemeComboBox());
 	}
 
 	private void updateAvailableThemes()
 	{
 		themeComboBox.getItems().clear();
-		themeComboBox.getItems().addAll(Theme.LIGHT, Theme.DARK);
+		for (Theme theme : Theme.values())
+			themeComboBox.getItems().add(theme);
 		updateSelectedTheme();
 	}
 
@@ -313,7 +288,7 @@ public class SettingsController implements Controller
 			settingsHandler.getSettings().setNavigationBlock(newValue);
 		});
 
-		settingsHandler.getSettings().isNavigationBlocked().addListener(observable -> {updateNavigationToggleButton();});
+		settingsHandler.getSettings().isNavigationBlocked().addListener(observable -> updateNavigationToggleButton());
 	}
 	// --------------------------
 
@@ -339,7 +314,10 @@ public class SettingsController implements Controller
 			}
 		});
 
-		settingsHandler.getSettings().getMusicVolume().addListener(observable -> {updateMusicVolume();});
+		settingsHandler.getSettings().getMusicVolume().addListener(observable ->
+		{
+			updateMusicVolume();
+		});
 	}
 
 	private void subscribeSoundSlider()
@@ -352,7 +330,10 @@ public class SettingsController implements Controller
 			}
 		});
 
-		settingsHandler.getSettings().getSoundVolume().addListener(observable -> {updateSoundVolume();});
+		settingsHandler.getSettings().getSoundVolume().addListener(observable ->
+		{
+			updateSoundVolume();
+		});
 	}
 	// --------------------------
 
@@ -365,26 +346,35 @@ public class SettingsController implements Controller
 
 	private void subscribeTimerTextField()
 	{
-		minimumTimerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
-
-			if (!newStatus)
-			{
-				String input = removeLeadingZeros(minimumTimerTextField.getText());
-
-				if (!validateInput(input))
-				{
-					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
-					minimumTimerTextField.setText(settingsHandler.getSettings().getMinimumTimerTime().getValue().toString());
-				}
-				else
-				{
-					minimumTimerTextField.setText(input);
-					settingsHandler.getSettings().setMinimumTimerTime(Integer.valueOf(input));
-				}
-			}
+		minimumTimerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
+		{
+			if (!newStatus) validateMinimumTimerValue();
 		});
 
-		settingsHandler.getSettings().getMinimumTimerTime().addListener(observable -> {updateTimerTextField();});
+		minimumTimerTextField.setOnAction(event -> validateMinimumTimerValue());
+
+		settingsHandler.getSettings().getMinimumTimerTime().addListener(observable ->
+		{
+			updateTimerTextField();
+		});
+	}
+
+	private void validateMinimumTimerValue()
+	{
+		String input = removeLeadingZeros(minimumTimerTextField.getText());
+
+		if (!validateInput(input))
+		{
+			feedback.showError(Localization.get("error.settings.invalidTime.header"),
+					Localization.get("error.settings.invalidTime.message"));
+			minimumTimerTextField.setText(
+					settingsHandler.getSettings().getMinimumTimerTime().getValue().toString());
+		}
+		else
+		{
+			minimumTimerTextField.setText(input);
+			settingsHandler.getSettings().setMinimumTimerTime(Integer.valueOf(input));
+		}
 	}
 	// --------------------------
 
@@ -397,26 +387,35 @@ public class SettingsController implements Controller
 
 	private void subscribePomodoroFocusTimeTextField()
 	{
-		pomodoroFocusTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
-
-			if (!newStatus)
-			{
-				String input = removeLeadingZeros(pomodoroFocusTimeTextField.getText());
-
-				if (!validateInput(input))
-				{
-					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
-					pomodoroFocusTimeTextField.setText(settingsHandler.getSettings().getPomodoroFocusTime().getValue().toString());
-				}
-				else
-				{
-					pomodoroFocusTimeTextField.setText(input);
-					settingsHandler.getSettings().setPomodoroFocusTime(Integer.valueOf(input));
-				}
-			}
+		pomodoroFocusTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
+		{
+			if (!newStatus) validatePomodoroFocusTimeValue();
 		});
 
-		settingsHandler.getSettings().getPomodoroFocusTime().addListener(observable -> {updatePomodoroFocusTimeTextField();});
+		pomodoroFocusTimeTextField.setOnAction(event -> validatePomodoroFocusTimeValue());
+
+		settingsHandler.getSettings().getPomodoroFocusTime().addListener(observable ->
+		{
+			updatePomodoroFocusTimeTextField();
+		});
+	}
+
+	private void validatePomodoroFocusTimeValue()
+	{
+		String input = removeLeadingZeros(pomodoroFocusTimeTextField.getText());
+
+		if (!validateInput(input))
+		{
+			feedback.showError(Localization.get("error.settings.invalidTime.header"),
+					Localization.get("error.settings.invalidTime.message"));
+			pomodoroFocusTimeTextField.setText(
+					settingsHandler.getSettings().getPomodoroFocusTime().getValue().toString());
+		}
+		else
+		{
+			pomodoroFocusTimeTextField.setText(input);
+			settingsHandler.getSettings().setPomodoroFocusTime(Integer.valueOf(input));
+		}
 	}
 
 	private void updatePomodoroPauseTimeTextField()
@@ -426,26 +425,33 @@ public class SettingsController implements Controller
 
 	private void subScribePomodoroPauseTimeTextField()
 	{
-		pomodoroPauseTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
-
-			if (!newStatus)
-			{
-				String input = removeLeadingZeros(pomodoroPauseTimeTextField.getText());
-
-				if (!validateInput(input))
-				{
-					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
-					updatePomodoroPauseTimeTextField();
-				}
-				else
-				{
-					settingsHandler.getSettings().setPomodoroPauseTime(Integer.valueOf(input));
-					updatePomodoroPauseTimeTextField();
-				}
-			}
+		pomodoroPauseTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
+		{
+			if (!newStatus) validatePomodoroPauseTimeValue();
 		});
+		pomodoroPauseTimeTextField.setOnAction(event -> validatePomodoroPauseTimeValue());
 
-		settingsHandler.getSettings().getPomodoroPauseTime().addListener(observable -> {updatePomodoroPauseTimeTextField();});
+		settingsHandler.getSettings().getPomodoroPauseTime().addListener(observable ->
+		{
+			updatePomodoroPauseTimeTextField();
+		});
+	}
+
+	private void validatePomodoroPauseTimeValue()
+	{
+		String input = removeLeadingZeros(pomodoroPauseTimeTextField.getText());
+
+		if (!validateInput(input))
+		{
+			feedback.showError(Localization.get("error.settings.invalidTime.header"),
+					Localization.get("error.settings.invalidTime.message"));
+			updatePomodoroPauseTimeTextField();
+		}
+		else
+		{
+			settingsHandler.getSettings().setPomodoroPauseTime(Integer.valueOf(input));
+			updatePomodoroPauseTimeTextField();
+		}
 	}
 	// --------------------------
 
@@ -458,26 +464,33 @@ public class SettingsController implements Controller
 
 	private void subscribeChronometerTextField()
 	{
-		stopChronometerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
-
-			if (!newStatus)
-			{
-				String input = removeLeadingZeros(stopChronometerTextField.getText());
-
-				if (!validateInput(input))
-				{
-					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
-					updateChronometerTextField();
-				}
-				else
-				{
-					settingsHandler.getSettings().setStopChronometerAfter(Integer.valueOf(input));
-					updateChronometerTextField();
-				}
-			}
+		stopChronometerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
+		{
+			if (!newStatus) validateChronometerTextFieldValue();
 		});
+		stopChronometerTextField.setOnAction(event -> validateChronometerTextFieldValue());
 
-		settingsHandler.getSettings().getStopChronometerAfter().addListener(observable -> {updateChronometerTextField();});
+		settingsHandler.getSettings().getStopChronometerAfter().addListener(observable ->
+		{
+			updateChronometerTextField();
+		});
+	}
+
+	private void validateChronometerTextFieldValue()
+	{
+		String input = removeLeadingZeros(stopChronometerTextField.getText());
+
+		if (!validateInput(input))
+		{
+			feedback.showError(Localization.get("error.settings.invalidTime.header"),
+					Localization.get("error.settings.invalidTime.message"));
+			updateChronometerTextField();
+		}
+		else
+		{
+			settingsHandler.getSettings().setStopChronometerAfter(Integer.valueOf(input));
+			updateChronometerTextField();
+		}
 	}
 	// --------------------------
 
@@ -495,7 +508,10 @@ public class SettingsController implements Controller
 			settingsHandler.getSettings().setHideTutorial(newValue);
 		});
 
-		settingsHandler.getSettings().isTutorialHidden().addListener(observable -> {updateTutorialShowingToggleButton();});
+		settingsHandler.getSettings().isTutorialHidden().addListener(observable ->
+		{
+			updateTutorialShowingToggleButton();
+		});
 	}
 	// --------------------------
 
@@ -508,7 +524,8 @@ public class SettingsController implements Controller
 
 	private void updateConfirmationRequestToggleBox()
 	{
-		confirmationRequestToggleButton.setSelected(settingsHandler.getSettings().isRequestingConfirmationBeforeExitingEnabled().get());
+		confirmationRequestToggleButton.setSelected(
+				settingsHandler.getSettings().isRequestingConfirmationBeforeExitingEnabled().get());
 	}
 
 	private void subscribeConfirmationRequestToggleButton()
@@ -518,7 +535,10 @@ public class SettingsController implements Controller
 			settingsHandler.getSettings().setConfirmBeforeExit(newValue);
 		});
 
-		settingsHandler.getSettings().isRequestingConfirmationBeforeExitingEnabled().addListener(observable -> {updateConfirmationRequestToggleBox();});
+		settingsHandler.getSettings().isRequestingConfirmationBeforeExitingEnabled().addListener(observable ->
+		{
+			updateConfirmationRequestToggleBox();
+		});
 	}
 
 	private void updateTutorialResetToggleButton()
@@ -533,18 +553,20 @@ public class SettingsController implements Controller
 			settingsHandler.getSettings().setResetTutorial(newValue);
 		});
 
-		settingsHandler.getSettings().isTutorialResetted().addListener(observable -> { updateTutorialResetToggleButton();});
+		settingsHandler.getSettings().isTutorialResetted().addListener(observable ->
+		{
+			updateTutorialResetToggleButton();
+		});
 	}
 
 	@FXML
-	void onMouseClickedAdvancedSettingsButton(MouseEvent event) {
-
+	void onMouseClickedAdvancedSettingsButton(MouseEvent event)
+	{
 		if (!advancedSettingsVBox.isVisible())
 		{
 			advancedSettingsVBox.setVisible(true);
 			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.hide"));
 			advancedSettingsVBox.setManaged(true);
-
 		}
 		else
 		{
@@ -552,7 +574,6 @@ public class SettingsController implements Controller
 			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.show"));
 			advancedSettingsVBox.setManaged(false);
 		}
-
 	}
 	// --------------------------
 
