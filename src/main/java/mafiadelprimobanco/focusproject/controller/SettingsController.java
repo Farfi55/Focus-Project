@@ -135,55 +135,70 @@ public class SettingsController implements Controller
 		settingsHandler = SettingsHandler.getInstance();
 
 
-		setStringsBasedOnCurrentLanguage();
-		setCurrentLanguage();
+		// Set settings initial state from SettingsHandler instance
+		updateStringsBasedOnCurrentLanguage();
+		updateCurrentLanguage();
 
-		setAvailableLanguages();
+		updateAvailableLanguages();
 
-		setAvailableThemes();
+		updateAvailableThemes();
 
-		setNavigation();
+		updateNavigationToggleButton();
 
-		setAudioVolume(settingsHandler.getSettings().getMusicVolume().getValue());
-		setMusicVolume(settingsHandler.getSettings().getMusicVolume().getValue());
+		updateSoundVolume();
+		updateMusicVolume();
 
-		setTimerSettings(settingsHandler.getSettings().getMinimumTimerTime().getValue());
+		updateTimerTextField();
 
 
-		setPomodoroFocusTime(settingsHandler.getSettings().getPomodoroFocusTime().getValue());
-		setPomodoroPauseTime(settingsHandler.getSettings().getPomodoroPauseTime().getValue());
+		updatePomodoroFocusTimeTextField();
+		updatePomodoroPauseTimeTextField();
 
-		setChronometerSettings(settingsHandler.getSettings().getStopChronometerAfter().getValue());
+		updateChronometerTextField();
 
-		setThemeSettings(settingsHandler.getSettings().getCurrentTheme().getValue());
+		updateThemeComboBox();
 
-		setTutorialReset();
-		setTutorialShowing();
+		updateTutorialResetToggleButton();
+		updateTutorialShowingToggleButton();
 
-		setAdvancedSettingsVisible();
-		setConfirmationRequest();
+		updateAdvancedSettingsVisibility();
+		updateConfirmationRequestToggleBox();
+		// --------------------------------
+
+
 
 		feedback = Feedback.getInstance();
-		inputValidation = Pattern.compile("[1-9]\\d{0,2}");
 
+
+		inputValidation = Pattern.compile("[1-9]\\d{0,2}");
 		setGlobalMeasureUnit("min", 0.5);
 
 
-		outOfTextFieldFocus(pomodoroFocusTimeTextField, settingsHandler.getSettings().getPomodoroFocusTime().getValue());
-		outOfTextFieldFocus(minimumTimerTextField, settingsHandler.getSettings().getMinimumTimerTime().getValue());
-		outOfTextFieldFocus(pomodoroPauseTimeTextField, settingsHandler.getSettings().getPomodoroPauseTime().getValue());
-		outOfTextFieldFocus(stopChronometerTextField, settingsHandler.getSettings().getStopChronometerAfter().getValue());
+		subscribePomodoroFocusTimeTextField();
+		subScribePomodoroPauseTimeTextField();
 
-		updateSlider(musicSlider, settingsHandler.getSettings().getMusicVolume().getValue());
-		updateSlider(soundSlider, settingsHandler.getSettings().getSoundVolume().getValue());
-		updateLanguage();
-		updateThemes();
+		subscribeTimerTextField();
 
+		subscribeChronometerTextField();
+
+		subscribeMusicSlider();
+		subscribeSoundSlider();
+
+		subscribeLanguageComboBox();
+		subscribeThemesComboBox();
+
+		subscribeNavigationToggleButton();
+
+		subscribeShowingTutorialToggleButton();
+
+		subscribeTutorialResetToggleButton();
+
+		subscribeConfirmationRequestToggleButton();
 	}
 
 
 	// Language combo box behaviour
-	void setStringsBasedOnCurrentLanguage()
+	void updateStringsBasedOnCurrentLanguage()
 	{
 		generalCategoryLabel.setText(Localization.get("settings.general.categoryName"));
 
@@ -216,30 +231,32 @@ public class SettingsController implements Controller
 
 		hideTutorialLabel.setText(Localization.get("settings.hideTutorial"));
 
-		setThemeSettings(settingsHandler.getSettings().getCurrentTheme().getValue());
+		themeComboBox.setText(settingsHandler.getSettings().getCurrentTheme().getValue().toString());
 
 	}
 
-	private void setCurrentLanguage()
+	private void updateCurrentLanguage()
 	{
 		languageComboBox.setText(settingsHandler.getSettings().getCurrentLanguage().getValue().toString());
 	}
 
-	private void updateLanguage()
+	private void subscribeLanguageComboBox()
 	{
 		languageComboBox.selectedItemProperty().addListener((observer, latestLanguage, newLanguage) ->
 		{
 			if (!newLanguage.toString().equals(settingsHandler.getSettings().getCurrentLanguage().toString()))
 			{
 				settingsHandler.getSettings().setCurrentLanguage(newLanguage);
-				setStringsBasedOnCurrentLanguage();
+				updateStringsBasedOnCurrentLanguage();
 			}
 		});
 
-		Localization.localeProperty().addListener(observable -> setAvailableThemes());
+		settingsHandler.getSettings().getCurrentLanguage().addListener(observable -> {updateCurrentLanguage();});
+
+		Localization.localeProperty().addListener(observable -> updateAvailableThemes());
 	}
 
-	private void setAvailableLanguages()
+	private void updateAvailableLanguages()
 	{
 		languageComboBox.getItems().addAll(Language.ITALIAN, Language.ENGLISH);
 	}
@@ -247,7 +264,7 @@ public class SettingsController implements Controller
 
 
 	// Theme combo box behaviour
-	private void updateThemes()
+	private void subscribeThemesComboBox()
 	{
 		themeComboBox.selectedItemProperty().addListener((observer, oldValue, newValue) ->
 		{
@@ -255,13 +272,15 @@ public class SettingsController implements Controller
 			{
 				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
 				settingsHandler.getSettings().setCurrentTheme(newValue);
-				setThemeSettings(newValue);
+				updateThemeComboBox();
 				updateSelectedTheme();
 			}
 		});
+
+		settingsHandler.getSettings().getCurrentTheme().addListener(observable -> {updateThemeComboBox();});
 	}
 
-	private void setAvailableThemes()
+	private void updateAvailableThemes()
 	{
 		themeComboBox.getItems().clear();
 		themeComboBox.getItems().addAll(Theme.LIGHT, Theme.DARK);
@@ -274,90 +293,247 @@ public class SettingsController implements Controller
 		themeComboBox.setText(Localization.get(settingsHandler.getSettings().getCurrentTheme().getValue().key));
 	}
 
-	private void setThemeSettings(Theme theme)
+	private void updateThemeComboBox()
 	{
-		themeComboBox.setText(theme.toString());
+		themeComboBox.setText(settingsHandler.getSettings().getCurrentTheme().getValue().toString());
 	}
 	// --------------------------
 
 
-	private void setNavigation()
+	// Navigation Behaviour
+	private void updateNavigationToggleButton()
 	{
-		navigationToggleButton.setSelected(settingsHandler.getSettings().isNavigationBlocked().get());
+		navigationToggleButton.setSelected(settingsHandler.getSettings().isNavigationBlocked().getValue());
 	}
+
+	private void subscribeNavigationToggleButton()
+	{
+		navigationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
+		{
+			settingsHandler.getSettings().setNavigationBlock(newValue);
+		});
+
+		settingsHandler.getSettings().isNavigationBlocked().addListener(observable -> {updateNavigationToggleButton();});
+	}
+	// --------------------------
 
 
 	// Audio sliders behaviour
-	private void setMusicVolume(Double volume)
+	private void updateMusicVolume()
 	{
-		settingsHandler.getSettings().setMusicVolume(volume);
-		musicSlider.setValue(settingsHandler.getSettings().getMusicVolume().get());
+		musicSlider.setValue(settingsHandler.getSettings().getMusicVolume().getValue());
 	}
 
-	private void setAudioVolume(Double volume)
+	private void updateSoundVolume()
 	{
-		settingsHandler.getSettings().setSoundVolume(volume);
-		soundSlider.setValue(settingsHandler.getSettings().getSoundVolume().get());
+		soundSlider.setValue(settingsHandler.getSettings().getSoundVolume().getValue());
 	}
 
-	private void updateSlider(MFXSlider slider, Double oldValue)
+	private void subscribeMusicSlider()
 	{
-		slider.pressedProperty().addListener((observer, whenScrollEnd, whenScrollStarts) ->
+		musicSlider.pressedProperty().addListener((observer, whenScrollEnd, whenScrollStarts) ->
 		{
-			if (!whenScrollStarts && (slider.getValue() != oldValue))
+			if (!whenScrollStarts)
 			{
-				setMusicVolume(slider.getValue());
+				settingsHandler.getSettings().setMusicVolume(musicSlider.getValue());
 			}
 		});
+
+		settingsHandler.getSettings().getMusicVolume().addListener(observable -> {updateMusicVolume();});
+	}
+
+	private void subscribeSoundSlider()
+	{
+		soundSlider.pressedProperty().addListener((observer, whenScrollEnd, whenScrollStarts) ->
+		{
+			if (!whenScrollStarts)
+			{
+				settingsHandler.getSettings().setSoundVolume(soundSlider.getValue());
+			}
+		});
+
+		settingsHandler.getSettings().getSoundVolume().addListener(observable -> {updateSoundVolume();});
 	}
 	// --------------------------
 
 
-	private void setTimerSettings(Integer input)
+	// Timer Behaviour
+	private void updateTimerTextField()
 	{
-		settingsHandler.getSettings().setMinimumTimerTime(input);
-		minimumTimerTextField.setText(input.toString());
+		minimumTimerTextField.setText(settingsHandler.getSettings().getMinimumTimerTime().getValue().toString());
 	}
 
-	private void setPomodoroFocusTime(Integer input)
+	private void subscribeTimerTextField()
 	{
-		settingsHandler.getSettings().setPomodoroFocusTime(input);
-		pomodoroFocusTimeTextField.setText(input.toString());
+		minimumTimerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
+
+			if (!newStatus)
+			{
+				String input = removeLeadingZeros(minimumTimerTextField.getText());
+
+				if (!validateInput(input))
+				{
+					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
+					minimumTimerTextField.setText(settingsHandler.getSettings().getMinimumTimerTime().getValue().toString());
+				}
+				else
+				{
+					minimumTimerTextField.setText(input);
+					settingsHandler.getSettings().setMinimumTimerTime(Integer.valueOf(input));
+				}
+			}
+		});
+
+		settingsHandler.getSettings().getMinimumTimerTime().addListener(observable -> {updateTimerTextField();});
+	}
+	// --------------------------
+
+
+	// Pomodoro behaviour
+	private void updatePomodoroFocusTimeTextField()
+	{
+		pomodoroFocusTimeTextField.setText(settingsHandler.getSettings().getPomodoroFocusTime().getValue().toString());
 	}
 
-	private void setPomodoroPauseTime(Integer input)
+	private void subscribePomodoroFocusTimeTextField()
 	{
-		settingsHandler.getSettings().setPomodoroPauseTime(input);
-		pomodoroPauseTimeTextField.setText(input.toString());
+		pomodoroFocusTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
+
+			if (!newStatus)
+			{
+				String input = removeLeadingZeros(pomodoroFocusTimeTextField.getText());
+
+				if (!validateInput(input))
+				{
+					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
+					pomodoroFocusTimeTextField.setText(settingsHandler.getSettings().getPomodoroFocusTime().getValue().toString());
+				}
+				else
+				{
+					pomodoroFocusTimeTextField.setText(input);
+					settingsHandler.getSettings().setPomodoroFocusTime(Integer.valueOf(input));
+				}
+			}
+		});
+
+		settingsHandler.getSettings().getPomodoroFocusTime().addListener(observable -> {updatePomodoroFocusTimeTextField();});
 	}
 
-	private void setChronometerSettings(Integer input)
+	private void updatePomodoroPauseTimeTextField()
 	{
-		settingsHandler.getSettings().setStopChronometerAfter(input);
-		stopChronometerTextField.setText(input.toString());
+		pomodoroPauseTimeTextField.setText(settingsHandler.getSettings().getPomodoroPauseTime().getValue().toString());
 	}
 
-
-	private void setTutorialShowing()
+	private void subScribePomodoroPauseTimeTextField()
 	{
-		tutorialToggleButton.setSelected(settingsHandler.getSettings().getHideTutorial().get());
+		pomodoroPauseTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
+
+			if (!newStatus)
+			{
+				String input = removeLeadingZeros(pomodoroPauseTimeTextField.getText());
+
+				if (!validateInput(input))
+				{
+					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
+					updatePomodoroPauseTimeTextField();
+				}
+				else
+				{
+					settingsHandler.getSettings().setPomodoroPauseTime(Integer.valueOf(input));
+					updatePomodoroPauseTimeTextField();
+				}
+			}
+		});
+
+		settingsHandler.getSettings().getPomodoroPauseTime().addListener(observable -> {updatePomodoroPauseTimeTextField();});
 	}
+	// --------------------------
+
+
+	// Chronometer behaviour
+	private void updateChronometerTextField()
+	{
+		stopChronometerTextField.setText(settingsHandler.getSettings().getStopChronometerAfter().getValue().toString());
+	}
+
+	private void subscribeChronometerTextField()
+	{
+		stopChronometerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
+
+			if (!newStatus)
+			{
+				String input = removeLeadingZeros(stopChronometerTextField.getText());
+
+				if (!validateInput(input))
+				{
+					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
+					updateChronometerTextField();
+				}
+				else
+				{
+					settingsHandler.getSettings().setStopChronometerAfter(Integer.valueOf(input));
+					updateChronometerTextField();
+				}
+			}
+		});
+
+		settingsHandler.getSettings().getStopChronometerAfter().addListener(observable -> {updateChronometerTextField();});
+	}
+	// --------------------------
+
+
+	// Tutorial Behaviour
+	private void updateTutorialShowingToggleButton()
+	{
+		tutorialToggleButton.setSelected(settingsHandler.getSettings().isTutorialHidden().get());
+	}
+
+	private void subscribeShowingTutorialToggleButton()
+	{
+		tutorialToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
+		{
+			settingsHandler.getSettings().setHideTutorial(newValue);
+		});
+
+		settingsHandler.getSettings().isTutorialHidden().addListener(observable -> {updateTutorialShowingToggleButton();});
+	}
+	// --------------------------
 
 
 	// -- Advanced Settings behavior --
-	private void setAdvancedSettingsVisible()
+	private void updateAdvancedSettingsVisibility()
 	{
 		advancedSettingsVBox.setVisible(settingsHandler.getSettings().areAdvancedOptionsShowing().get());
 	}
 
-	private void setConfirmationRequest()
+	private void updateConfirmationRequestToggleBox()
 	{
-		confirmationRequestToggleButton.setSelected(settingsHandler.getSettings().isRequestingConfirmationBeforeExiting().get());
+		confirmationRequestToggleButton.setSelected(settingsHandler.getSettings().isRequestingConfirmationBeforeExitingEnabled().get());
 	}
 
-	private void setTutorialReset()
+	private void subscribeConfirmationRequestToggleButton()
+	{
+		confirmationRequestToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
+		{
+			settingsHandler.getSettings().setConfirmBeforeExit(newValue);
+		});
+
+		settingsHandler.getSettings().isRequestingConfirmationBeforeExitingEnabled().addListener(observable -> {updateConfirmationRequestToggleBox();});
+	}
+
+	private void updateTutorialResetToggleButton()
 	{
 		tutorialResetToggleButton.setSelected(settingsHandler.getSettings().isTutorialResetted().get());
+	}
+
+	private void subscribeTutorialResetToggleButton()
+	{
+		tutorialResetToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
+		{
+			settingsHandler.getSettings().setResetTutorial(newValue);
+		});
+
+		settingsHandler.getSettings().isTutorialResetted().addListener(observable -> { updateTutorialResetToggleButton();});
 	}
 
 	@FXML
@@ -382,27 +558,6 @@ public class SettingsController implements Controller
 
 
 	// -- Text boxes behaviour --
-	private void outOfTextFieldFocus(MFXTextField textField, Integer oldValue)
-	{
-		textField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) -> {
-
-			if (!newStatus)
-			{
-				String input = removeLeadingZeros(textField.getText());
-
-				if (!validateInput(input))
-				{
-					feedback.showError(Localization.get("error.settings.invalidTime.header"), Localization.get("error.settings.invalidTime.message"));
-					textField.setText(oldValue.toString());
-				}
-				else
-				{
-					textField.setText(input);
-				}
-			}
-		});
-	}
-
 	private void setGlobalMeasureUnit(String measureUnit, Double gap)
 	{
 		minimumTimerTextField.setMeasureUnit(measureUnit);
@@ -422,9 +577,7 @@ public class SettingsController implements Controller
 	{
 		Matcher matcher = inputValidation.matcher(input);
 
-		if (matcher.matches()) { return true; }
-
-		return false;
+		return matcher.matches();
 	}
 
 	String removeLeadingZeros(String input)

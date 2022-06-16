@@ -53,7 +53,7 @@ public class Settings
 	public SimpleBooleanProperty isNavigationBlocked() { return blockNavigation; }
 	public void setNavigationBlock(Boolean blockNavigation) { this.blockNavigation.set(blockNavigation); }
 
-	public SimpleBooleanProperty getHideTutorial() { return hideTutorial; }
+	public SimpleBooleanProperty isTutorialHidden() { return hideTutorial; }
 	public void setHideTutorial(Boolean hideTutorial) { this.hideTutorial.set(hideTutorial); }
 
 	public SimpleDoubleProperty getMusicVolume() { return musicVolume; }
@@ -80,6 +80,6 @@ public class Settings
 	public SimpleBooleanProperty isTutorialResetted() { return resetTutorial; }
 	public void setResetTutorial(Boolean resetTutorial) { this.resetTutorial.set(resetTutorial); }
 
-	public SimpleBooleanProperty isRequestingConfirmationBeforeExiting() { return confirmBeforeExit; }
+	public SimpleBooleanProperty isRequestingConfirmationBeforeExitingEnabled() { return confirmBeforeExit; }
 	public void setConfirmBeforeExit(Boolean confirmBeforeExit) { this.confirmBeforeExit.set(confirmBeforeExit); }
 }
