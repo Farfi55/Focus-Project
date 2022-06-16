@@ -4,10 +4,12 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
+import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.utils.TimeUtils;
 
 import java.util.*;
 
@@ -42,6 +44,7 @@ public class TreeHandler implements ActivityObserver
 	public void onActivityEnd(AbstractActivity currentActivity)
 	{
 		addProgressTime(currentActivity.getFinalDuration());
+		addUnusedProgressTime();
 	}
 
 	public SimpleObjectProperty<Tree> selectedActivityTreeProperty()
@@ -89,8 +92,7 @@ public class TreeHandler implements ActivityObserver
 		assert seconds >= 0;
 
 
-		if (!isValidSelectedTreeToUnlock())
-			selectedTreeToUnlock.set(null);
+		if (!isValidSelectedTreeToUnlock()) selectedTreeToUnlock.set(null);
 
 		if (selectedTreeToUnlock.get() != null)
 		{
@@ -106,6 +108,21 @@ public class TreeHandler implements ActivityObserver
 	}
 
 
+	public void addUnusedProgressTime()
+	{
+		int unusedTime = unusedProgressTime.get();
+		if (unusedTime > 0 && isValidSelectedTreeToUnlock())
+		{
+			unusedProgressTime.set(0);
+			addProgressTime(unusedTime);
+
+			Feedback.getInstance().showNotification(Localization.get("feedback.usedUnusedProgressTime.header"),
+					Localization.get("feedback.usedUnusedProgressTime.message", TimeUtils.formatTime(unusedTime),
+							TimeUtils.formatTime(unusedProgressTime.get())));
+		}
+	}
+
+
 	public boolean isValidSelectedTreeToUnlock()
 	{
 		return selectedTreeToUnlock.get() != null && selectedTreeToUnlock.get().isNotUnlocked();
@@ -117,11 +134,9 @@ public class TreeHandler implements ActivityObserver
 		unlockedTrees.add(selectedTreeToUnlock.get().getUuid());
 		assert !isValidSelectedTreeToUnlock();
 
-		Platform.runLater(() ->
-		{
-			Feedback.getInstance().showNotification("Albero Sbloccato!",
-					"Evviva!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'");
-		});
+		Platform.runLater(() -> Feedback.getInstance()
+				.showNotification("Albero Sbloccato!",
+						"Evviva!\nHai sbloccato l'albero '" + selectedTreeToUnlock.get().getName() + "'"));
 	}
 
 	public Tree getTree(int uuid)

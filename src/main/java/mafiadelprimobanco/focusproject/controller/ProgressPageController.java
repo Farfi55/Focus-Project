@@ -257,7 +257,6 @@ public class ProgressPageController implements Controller
 		intervalComboBox.getItems().clear();
 		for (Interval interval : Interval.values())
 		{
-
 			intervalComboBox.getItems().add(interval);
 		}
 
