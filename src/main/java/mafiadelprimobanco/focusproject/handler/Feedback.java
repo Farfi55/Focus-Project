@@ -58,7 +58,7 @@ public class Feedback
 	private MFXStageDialog activityRecapDialog;
 
 
-	private DefaultNotification notification;
+//	private DefaultNotification notification;
 
 	private Feedback() { }
 
@@ -88,7 +88,7 @@ public class Feedback
 
 		// notifications init
 		MFXNotificationSystem.instance().initOwner(stage);
-		initNotification();
+//		initNotification();
 
 		subscribeToStyleChanges();
 		setStylesheets();
@@ -107,7 +107,7 @@ public class Feedback
 		dialogContent.getStylesheets().setAll(loadedStyles);
 		confirmationDialogContent.getStylesheets().setAll(loadedStyles);
 		activityRecapDialogContent.getStylesheets().setAll(loadedStyles);
-		notification.getStylesheets().setAll(loadedStyles);
+//		notification.getStylesheets().setAll(loadedStyles);
 	}
 
 	private MFXGenericDialog initDialogContent()
@@ -123,13 +123,12 @@ public class Feedback
 	}
 
 
-	private void initNotification()
-	{
-		notification = new DefaultNotification();
-		notification.setHeaderText("unset header");
-		notification.setContentText("unset content");
-
-	}
+//	private void initNotification()
+//	{
+//		notification = new DefaultNotification();
+//		notification.setHeaderText("unset header");
+//		notification.setContentText("unset content");
+//	}
 
 
 	// public confirmation button interface
@@ -322,6 +321,8 @@ public class Feedback
 
 	public void showNotification(String header, String message, NotificationPos position)
 	{
+		DefaultNotification notification = new DefaultNotification();
+		notification.getStylesheets().setAll(StyleHandler.getInstance().getObservableStyles());
 		notification.setHeaderText(header);
 		notification.setContentText(message);
 		MFXNotificationSystem.instance().setPosition(position).publish(notification);
