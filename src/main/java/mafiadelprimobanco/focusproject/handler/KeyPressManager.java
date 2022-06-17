@@ -4,7 +4,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import mafiadelprimobanco.focusproject.Localization;
 
 import java.util.ArrayList;
 import java.util.List;

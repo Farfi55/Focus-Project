@@ -20,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.model.ActivityRecapDialog;
 import mafiadelprimobanco.focusproject.model.DefaultNotification;
 import mafiadelprimobanco.focusproject.model.Tag;

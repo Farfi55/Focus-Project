@@ -13,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import mafiadelprimobanco.focusproject.Localization;
 import mafiadelprimobanco.focusproject.controller.TagController;
 import mafiadelprimobanco.focusproject.model.Page;
 import mafiadelprimobanco.focusproject.model.Tag;
@@ -72,7 +71,7 @@ public class SceneHandler
 		{
 			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
 					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
-			else AutentificationHandler.getInstance().doLogout();
+			else AuthenticationHandler.getInstance().doLogout();
 		});
 
 		stage.widthProperty().addListener(e -> closeLoginPopup());

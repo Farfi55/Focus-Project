@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,6 +46,7 @@ public class Client {
         Objects.requireNonNull(conn, "Connection cannot be null");
         InputStream is = new BufferedInputStream(conn.getInputStream());
         String res = new String(is.readAllBytes());
+        res = new String(Base64.getDecoder().decode(res));
         is.close();
         try {
             JSONObject object = new JSONObject(res);
@@ -325,6 +327,11 @@ public class Client {
      * */
     public String register(String email, String password) throws IOException, ConnectionException {
         return authentication.register(email, password);
+    }
+
+    public String loginWithCustomToken(String token) throws IOException, ConnectionException
+    {
+        return  authentication.loginWithCustomToken(token);
     }
 
     /**

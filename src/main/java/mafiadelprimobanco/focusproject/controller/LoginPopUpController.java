@@ -5,8 +5,8 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import mafiadelprimobanco.focusproject.handler.AutentificationHandler;
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.AuthenticationHandler;
+import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.PagesHandler;
 import mafiadelprimobanco.focusproject.handler.SceneHandler;
 import mafiadelprimobanco.focusproject.model.User;
@@ -25,17 +25,29 @@ public class LoginPopUpController {
 		SceneHandler.getInstance().closeLoginPopup();
 	}
 
+	void clean()
+	{
+		emailField.setText("");
+		passwordField.setText("");
+	}
+
 	@FXML void doLogin(ActionEvent event)
 	{
-		AutentificationHandler.getInstance().doLogin(
-				new User(emailField.getText(), emailField.getText(), passwordField.getText())
-		);
+		if (AuthenticationHandler.getInstance().doLogin(
+				new User(emailField.getText(), emailField.getText(), passwordField.getText()))
+			)
+		{
+			SceneHandler.getInstance().closeLoginPopup();
+			clean();
+		}
 	}
 
 	@FXML void doRegisterUser(ActionEvent event)
 	{
 		SceneHandler.getInstance().closeLoginPopup();
 		PagesHandler.navigateTo(PagesHandler.registration);
+
+		clean();
 	}
 
 	@FXML void initialize()
