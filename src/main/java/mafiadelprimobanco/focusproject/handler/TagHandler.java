@@ -14,7 +14,7 @@ public class TagHandler
 
 	public static TagHandler getInstance() { return instance; }
 
-	private final Map<Integer, Tag> tags = new TreeMap<>();
+	private final Map<Integer, Tag> tags = new LinkedHashMap<>();
 	private final HashSet<String> names = new HashSet<>();
 	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
@@ -132,7 +132,6 @@ public class TagHandler
 
 		var tag = tags.get(uuid);
 
-		JsonHandler.editTag(tag.getName(), name, color.toString().substring(2), uuid);
 
 		if (!name.equals(tag.getName()))
 		{
@@ -142,6 +141,7 @@ public class TagHandler
 				Feedback.getInstance().showError("Nome già in uso", "Esiste già una tag con nome '" + name + "'.");
 				return false;
 			}
+			JsonHandler.editTag(tag.getName(), name, color.toString().substring(2), uuid);
 			names.remove(tag.getName());
 			tag.setName(name);
 			names.add(tag.getName());
@@ -216,6 +216,17 @@ public class TagHandler
 		while (isNameUsed(uniqueName + i)) i++;
 		return uniqueName + i;
 
+	}
+
+	public Integer getRandomTagUuid()
+	{
+		List<Integer> tagsUuid = tags.keySet().stream().toList();
+		return tagsUuid.get(rand.nextInt(tagsUuid.size()));
+	}
+
+	public Tag getRandomTag()
+	{
+		return tags.get(getRandomTagUuid());
 	}
 
 	public Collection<Tag> getTags()

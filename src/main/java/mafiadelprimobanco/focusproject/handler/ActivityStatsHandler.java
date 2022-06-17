@@ -1,11 +1,17 @@
 package mafiadelprimobanco.focusproject.handler;
 
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
+import mafiadelprimobanco.focusproject.model.Interval;
 import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
+import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
+import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 import java.util.TreeSet;
 
 public class ActivityStatsHandler implements ActivityObserver
@@ -25,11 +31,39 @@ public class ActivityStatsHandler implements ActivityObserver
 
 	private ActivityStatsHandler()
 	{
+		loadActivities();
 	}
 
-	public void init()
+	private void loadActivities()
 	{
-		ActivityHandler.getInstance().addListener(this);
+		List<AbstractActivity> allActivities = JsonHandler.getAllActivities();
+		allActivities.forEach(this::addActivity);
+
+//		for (int i = 0; i < 100; i++){
+//			AbstractActivity activity = createRandomActivity(i);
+//			addActivity(activity);
+//			JsonHandler.addFinishedActivity(activity.getStartTime(), activity);
+//		}
+
+}
+
+	private AbstractActivity createRandomActivity(int i)
+	{
+		AbstractActivity activity;
+		Random random = new Random();
+		Integer tagUuid = TagHandler.getInstance().getRandomTagUuid();
+		Integer treeUuid = TreeHandler.getInstance().getRandomUnlockedTreeUuid();
+		LocalDateTime startDate = LocalDateTime.now().minusDays(random.nextInt(400));
+
+		int duration = random.nextInt(1200);
+		LocalDateTime endDate = startDate.plusSeconds(duration);
+
+
+		if(i %2 == 0)
+			activity = new ChronometerActivity(tagUuid, treeUuid, startDate, endDate);
+		else if(i % 5==0) activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration*2);
+		else activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration);
+		return activity;
 	}
 
 	@Override
@@ -38,12 +72,39 @@ public class ActivityStatsHandler implements ActivityObserver
 		addActivity(currentActivity);
 	}
 
+	public void init()
+	{
+		ActivityHandler.getInstance().addListener(this);
+	}
+
 	private void addActivity(AbstractActivity currentActivity)
 	{
 		Integer tagUuid = currentActivity.getTagUuid();
 		if (!activities.containsKey(tagUuid)) activities.put(tagUuid, new TreeSet<>());
 
 		activities.get(tagUuid).add(currentActivity);
+	}
+
+	public TreeSet<AbstractActivity> getAllActivities()
+	{
+		TreeSet<AbstractActivity> allActivities = new TreeSet<>();
+		for (TreeSet<AbstractActivity> activityTreeSet : activities.values())
+		{
+			allActivities.addAll(activityTreeSet);
+		}
+		return allActivities;
+	}
+
+	public TreeSet<AbstractActivity> getAllActivitiesInInterval(Interval interval)
+	{
+		TreeSet<AbstractActivity> allActivities = new TreeSet<>();
+		for (TreeSet<AbstractActivity> activityTreeSet : activities.values())
+		{
+			allActivities.addAll(activityTreeSet.stream()
+					.filter(activity -> activity.getStartTime().isAfter(LocalDateTime.now().minus(1, interval.unit)))
+					.toList());
+		}
+		return allActivities;
 	}
 
 
@@ -60,21 +121,62 @@ public class ActivityStatsHandler implements ActivityObserver
 		ActivityTime activityTime = new ActivityTime();
 		for (var activity : tagActivities)
 		{
-			if (activity.getStartTime().isBefore(LocalDateTime.now().minusYears(1))) break;
-
 			activityTime.addActivityDuration(activity);
 		}
 		return activityTime;
 	}
 
-
-
-	public enum statsInterval
+	public TreeStats getTreesStats(Tree tree)
 	{
-		DAY, WEEK, MONTH, YEAR
+		return getTreesStats(tree.getUuid());
 	}
 
-	public class ActivityTime
+	public TreeStats getTreesStats(Integer treeUuid)
+	{
+		TreeStats stats = new TreeStats();
+
+		for (TreeSet<AbstractActivity> activityTreeSet : activities.values())
+		{
+			activityTreeSet.forEach(activity ->
+			{
+				if (activity.getTreeUuid().equals(treeUuid))
+				{
+					stats.totalPlanted++;
+
+					if (activity.getStartTime().isAfter(stats.lastPlanted)) stats.lastPlanted = activity.getStartTime();
+
+					if (activity instanceof TimerActivity timerActivity)
+					{
+						if (timerActivity.wasInterrupted()) stats.totaDead++;
+						else stats.totalMature++;
+					}
+					if (activity instanceof ChronometerActivity chronometerActivity)
+					{
+						//TODO: move into settings
+						int successfulChronometerMinimumTime = 10;
+						if (chronometerActivity.getFinalDuration() < successfulChronometerMinimumTime) stats.totaDead++;
+						else stats.totalMature++;
+					}
+
+				}
+			});
+
+		}
+		return stats;
+
+	}
+
+
+	public static class TreeStats
+	{
+		public Integer totalPlanted = 0;
+		public Integer totalMature = 0;
+		public Integer totaDead = 0;
+		public LocalDateTime lastPlanted = LocalDateTime.MIN;
+	}
+
+
+	public static class ActivityTime
 	{
 		public Integer dayTime = 0;
 		public Integer weekTime = 0;
@@ -87,8 +189,8 @@ public class ActivityStatsHandler implements ActivityObserver
 			int duration = activity.getFinalDuration();
 			LocalDateTime startTime = activity.getStartTime();
 			if (startTime.isAfter(LocalDateTime.now().minusYears(1))) yearTime += duration;
-			if (startTime.isAfter(LocalDateTime.now().minusMonths(1))) weekTime += duration;
-			if (startTime.isAfter(LocalDateTime.now().minusWeeks(1))) monthTime += duration;
+			if (startTime.isAfter(LocalDateTime.now().minusMonths(1))) monthTime += duration;
+			if (startTime.isAfter(LocalDateTime.now().minusWeeks(1))) weekTime += duration;
 			if (startTime.isAfter(LocalDateTime.now().minusDays(1))) dayTime += duration;
 		}
 	}

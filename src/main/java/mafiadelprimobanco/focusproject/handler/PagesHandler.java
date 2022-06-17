@@ -114,7 +114,7 @@ public class PagesHandler
 			{
 				currentPage.get().isSelected().set(false);
 
-				if (!currentPage.get().keepInBackground().get())
+				if (!currentPage.get().keepInBackground().get() && currentPage.get().controller().isNotNull().get())
 				{
 					currentPage.get().controller().get().terminate();
 					currentPage.get().controller().set(null);
@@ -159,6 +159,7 @@ public class PagesHandler
 	{
 		return currentPage.get();
 	}
+
 	public static SimpleObjectProperty<Page> getCurrentPagePropriety()
 	{
 		return currentPage;

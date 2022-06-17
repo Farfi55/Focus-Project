@@ -2,7 +2,7 @@ package mafiadelprimobanco.focusproject.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import mafiadelprimobanco.focusproject.handler.Localization;
+import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,7 +14,7 @@ public class SettingsPageController implements Controller
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		Localization.setLabel(pageTitle, "settingsPage.name");
+		LocalizationUtils.bindLabelText(pageTitle, "settingsPage.name");
 	}
 
 	@Override

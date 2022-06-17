@@ -92,15 +92,6 @@ public final class Localization
 	}
 
 
-	public static void setLabel(final Label label, final String key, final Object... args)
-	{
-		label.textProperty().bind(createStringBinding(key, args));
-	}
-
-	public static void setButton(final Button button, final String key, final Object... args)
-	{
-		button.textProperty().bind(createStringBinding(key, args));
-	}
 //	public static void setMFXComboboxFloatingText(final MFXComboBox<String> comboBox, final String key, final Object... args)
 //	{
 //		comboBox.floatingTextProperty().bind(createStringBinding(key, args));

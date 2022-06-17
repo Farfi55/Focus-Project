@@ -19,4 +19,13 @@ public class ChronometerActivity extends AbstractActivity
 		return new JSONObject("{" + "type:" + ActivityType.CHRONOMETER.key + ", tagUuid:" + tagUuid + ", treeUuid:" + treeUuid +
 				", startTime:" + "\"" + startTime + "\"" + ", endTime:" + "\"" + endTime + "\"" + '}');
 	}
+
+	@Override
+	public boolean wasSuccessful()
+	{
+		//todo: move into settings
+		int minSuccessChronometerDuration = 20;
+		return (getFinalDuration() >= minSuccessChronometerDuration);
+	}
+
 }

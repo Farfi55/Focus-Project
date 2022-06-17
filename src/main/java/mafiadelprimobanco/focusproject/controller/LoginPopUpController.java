@@ -10,6 +10,7 @@ import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.PagesHandler;
 import mafiadelprimobanco.focusproject.handler.SceneHandler;
 import mafiadelprimobanco.focusproject.model.User;
+import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 
 public class LoginPopUpController {
 
@@ -52,8 +53,8 @@ public class LoginPopUpController {
 
 	@FXML void initialize()
 	{
-		Localization.setButton(loginButton, "login.signIn");
-		Localization.setButton(registrationButton, "login.signUp");
+		LocalizationUtils.bindButtonText(loginButton, "login.signIn");
+		LocalizationUtils.bindButtonText(registrationButton, "login.signUp");
 	}
 
 }

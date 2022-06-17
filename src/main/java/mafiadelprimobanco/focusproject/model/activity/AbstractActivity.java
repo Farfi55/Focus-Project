@@ -1,6 +1,5 @@
 package mafiadelprimobanco.focusproject.model.activity;
 
-import mafiadelprimobanco.focusproject.handler.JsonHandler;
 import mafiadelprimobanco.focusproject.handler.TagHandler;
 import mafiadelprimobanco.focusproject.handler.TreeHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
@@ -43,7 +42,6 @@ public abstract class AbstractActivity implements Comparable<AbstractActivity>
 	public void endActivity()
 	{
 		if (isRunning()) this.endTime = LocalDateTime.now();
-		JsonHandler.addFinishedActivity(this.startTime,this);
 	}
 
 	public boolean hasStarted()
@@ -57,6 +55,16 @@ public abstract class AbstractActivity implements Comparable<AbstractActivity>
 	}
 
 	public abstract JSONObject toJsonObject();
+
+	public boolean wasSuccessful() {
+		return true;
+	}
+
+	public String getFinalTreeSpritePath()
+	{
+		if (wasSuccessful()) return getTree().getMatureTreeSprite();
+		else return getTree().getDeadTreeSprite();
+	}
 
 	public Integer getTreeUuid()
 	{

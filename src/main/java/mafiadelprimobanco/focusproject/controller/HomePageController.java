@@ -30,9 +30,7 @@ import mafiadelprimobanco.focusproject.model.TreeChooserPopup;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
-import mafiadelprimobanco.focusproject.utils.FXMLReferences;
-import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
-import mafiadelprimobanco.focusproject.utils.TimeUtils;
+import mafiadelprimobanco.focusproject.utils.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
@@ -101,9 +99,9 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@Override
 	public void onActivityStarting(AbstractActivity currentActivity)
 	{
-		Localization.setButton(activityButton, "activity.stop");
+		LocalizationUtils.bindButtonText(activityButton, "activity.stop");
 
-		showNode(activityTimeLabel);
+		NodeUtils.showNode(activityTimeLabel);
 
 		if (currentActivity instanceof TimerActivity)
 		{
@@ -116,12 +114,12 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 			activityProgressSpinner.setProgress(-1);
 		}
 
-		hideNode(homeRoot.getRight());
-		hideNode(activitySelectorComboBox);
+		NodeUtils.hideNode(homeRoot.getRight());
+		NodeUtils.hideNode(activitySelectorComboBox);
 
 		selectedTagText.setText(currentActivity.getTag().getName());
 		selectedTagColorCircle.setFill(currentActivity.getTag().getColor());
-		showNode(selectedTagRoot);
+		NodeUtils.showNode(selectedTagRoot);
 
 		treePhase = 0;
 		setTreeImage(TreeHandler.getInstance().getTreePhaseImage(treePhase));
@@ -139,17 +137,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	public void onActivityEndSafe(AbstractActivity currentActivity)
 	{
 		resetInterface();
-
-		if (currentActivity instanceof TimerActivity timerActivity)
-		{
-			if (timerActivity.wasInterrupted()) setTreeImage(currentActivity.getTree().getDeadTreeSprite());
-			else setTreeImage(currentActivity.getTree().getMatureTreeSprite());
-		}
-		else if (currentActivity instanceof ChronometerActivity)
-		{
-			if (treePhase < 5) setTreeImage(currentActivity.getTree().getDeadTreeSprite());
-			else setTreeImage(currentActivity.getTree().getMatureTreeSprite());
-		}
+		setTreeImage(currentActivity.getFinalTreeSpritePath());
 
 		Feedback.getInstance().showActivityRecap(currentActivity);
 	}
@@ -483,14 +471,14 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void resetInterface()
 	{
-		Localization.setButton(activityButton, "activity.start");
+		LocalizationUtils.bindButtonText(activityButton, "activity.start");
 
-		hideNode(activityTimeLabel);
+		NodeUtils.hideNode(activityTimeLabel);
 
-		hideNode(selectedTagRoot);
+		NodeUtils.hideNode(selectedTagRoot);
 
-		showNode(homeRoot.getRight());
-		showNode(activitySelectorComboBox);
+		NodeUtils.showNode(homeRoot.getRight());
+		NodeUtils.showNode(activitySelectorComboBox);
 
 		activityTimeLabel.setText(TimeUtils.formatTime(0));
 		activityProgressSpinner.setProgress(0.0);
@@ -526,20 +514,14 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void hideSpinners() { setSpinnersVisible(false); }
 
-	void showNode(Node node) { setNodeVisible(node, true); }
 
-	void hideNode(Node node) { setNodeVisible(node, false); }
 
 
 	// -------------------------------------------------
 	// GETTER - SETTER METHODS
 	// -------------------------------------------------
 
-	private void setNodeVisible(Node node, boolean visible)
-	{
-		node.setVisible(visible);
-		node.setManaged(visible);
-	}
+
 
 	private int getInputTimerDuration()
 	{
@@ -570,9 +552,9 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void setSpinnersVisible(boolean value)
 	{
-		setNodeVisible(hoursSpinnerSelector, value);
-		setNodeVisible(minutesSpinnerSelector, value);
-		setNodeVisible(secondsSpinnerSelector, value);
+		NodeUtils.setNodeVisible(hoursSpinnerSelector, value);
+		NodeUtils.setNodeVisible(minutesSpinnerSelector, value);
+		NodeUtils.setNodeVisible(secondsSpinnerSelector, value);
 	}
 
 
