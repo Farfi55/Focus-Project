@@ -22,7 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Circle;
 import javafx.util.StringConverter;
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.*;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;

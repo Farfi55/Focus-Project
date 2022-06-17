@@ -1,4 +1,4 @@
-package mafiadelprimobanco.focusproject;
+package mafiadelprimobanco.focusproject.handler;
 
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.beans.binding.Bindings;

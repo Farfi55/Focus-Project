@@ -1,17 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXComboBox?>
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<?import io.github.palexdev.materialfx.controls.MFXTextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="mafiadelprimobanco.focusproject.controller.StatisticsPageController">
-    <children>
-        <Label fx:id="pageTitle" alignment="CENTER" layoutX="286.0" layoutY="122.0" prefHeight="18.0" prefWidth="114.0"
-               text="title" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0"/>
-        <MFXTextField alignment="CENTER" floatMode="DISABLED" layoutX="258.0" layoutY="150.0" prefHeight="35.0"
-                      prefWidth="94.0" promptText="some prompt" text="some  text" AnchorPane.leftAnchor="200.0"
-                      AnchorPane.rightAnchor="200.0"/>
-    </children>
-</AnchorPane>
 
+<MFXScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.StatisticPageController">
+   <content>
+      <HBox alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="615.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <MFXComboBox fx:id="dateComboBox" floatMode="ABOVE" prefHeight="40.0" prefWidth="203.0" />
+                  <HBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+                     <children>
+                        <StackedBarChart fx:id="totalDataBarChart" alternativeColumnFillVisible="true" categoryGap="0.0" legendSide="RIGHT" prefHeight="365.0" prefWidth="596.0" HBox.hgrow="ALWAYS">
+                           <xAxis>
+                              <CategoryAxis side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis fx:id="numberAxisBar" side="LEFT" />
+                           </yAxis>
+                        </StackedBarChart>
+                        <PieChart fx:id="tagsPieChart" maxWidth="400.0" />
+                     </children>
+                  </HBox>
+                  <MFXComboBox fx:id="tagComboBox" floatMode="ABOVE" prefHeight="40.0" prefWidth="203.0" />
+                  <LineChart fx:id="weekDayChart" legendSide="RIGHT">
+                     <xAxis>
+                        <CategoryAxis side="BOTTOM" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis fx:id="lineChartNumberAxis" side="LEFT" />
+                     </yAxis>
+                  </LineChart>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </content>
+</MFXScrollPane>

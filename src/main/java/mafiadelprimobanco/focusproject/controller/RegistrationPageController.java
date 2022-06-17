@@ -14,8 +14,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import mafiadelprimobanco.focusproject.handler.AutentificationHandler;
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.AuthenticationHandler;
+import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.PagesHandler;
 import mafiadelprimobanco.focusproject.model.User;
 
@@ -142,7 +142,7 @@ public class RegistrationPageController implements Controller
 		stepper.setOnLastNext(event ->
 		{
 			User user = new User(loginField.getText(), usernameField.getText(), passwordField.getText());
-			AutentificationHandler.getInstance().registerUser(user);
+			AuthenticationHandler.getInstance().registerUser(user);
 			PagesHandler.navigateTo(PagesHandler.home);
 
 		});

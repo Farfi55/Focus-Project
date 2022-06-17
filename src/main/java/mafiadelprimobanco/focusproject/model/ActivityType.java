@@ -9,6 +9,4 @@ public enum ActivityType
 	public final String key;
 
 	ActivityType(String key) { this.key = key; }
-
-
 }

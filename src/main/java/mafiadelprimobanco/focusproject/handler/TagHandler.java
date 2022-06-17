@@ -14,7 +14,7 @@ public class TagHandler
 
 	public static TagHandler getInstance() { return instance; }
 
-	private final Map<Integer, Tag> tags = new HashMap<>();
+	private final Map<Integer, Tag> tags = new TreeMap<>();
 	private final HashSet<String> names = new HashSet<>();
 	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
@@ -28,10 +28,8 @@ public class TagHandler
 
 	private void loadTags()
 	{
-		// todo: get saved tags from database
 		createUnsetTag();
-		debugLoad();
-
+		//debugLoad();
 	}
 
 	private void createUnsetTag()
@@ -53,7 +51,7 @@ public class TagHandler
 	{
 		int uuid = rand.nextInt();
 		while (tags.containsKey(uuid)) uuid = rand.nextInt();
-
+		JsonHandler.addTag(name, color.toString().substring(2), uuid);
 		return addTag(name, color, uuid);
 	}
 
@@ -64,7 +62,7 @@ public class TagHandler
 		addTag(uniqueName, randomColor);
 	}
 
-	private boolean addTag(String name, Color color, Integer uuid)
+	public boolean addTag(String name, Color color, Integer uuid)
 	{
 		if (isNameUsed(name)) return false;
 		var tag = new Tag(name, color, uuid);
@@ -107,6 +105,7 @@ public class TagHandler
 			else setSelectedTag(unsetTag);
 		}
 		invokeOnTagRemoving(tag);
+		JsonHandler.deleteTag(tag.getName());
 		names.remove(tag.getName());
 		tags.remove(uuid);
 		return true;
@@ -132,6 +131,8 @@ public class TagHandler
 		}
 
 		var tag = tags.get(uuid);
+
+		JsonHandler.editTag(tag.getName(), name, color.toString().substring(2), uuid);
 
 		if (!name.equals(tag.getName()))
 		{
