@@ -1,6 +1,6 @@
 package mafiadelprimobanco.focusproject.model;
 
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.Localization;
 
 import java.time.temporal.ChronoUnit;
 

@@ -1,9 +1,8 @@
 package mafiadelprimobanco.focusproject.utils;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.Localization;
 
 public class LocalizationUtils
 {

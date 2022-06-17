@@ -10,6 +10,7 @@ import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -35,23 +36,34 @@ public class ActivityStatsHandler implements ActivityObserver
 
 	private void loadActivities()
 	{
-		for (int i = 0; i < 100; i++){
-			AbstractActivity activity;
-			Random random = new Random();
-			Integer tagUuid = TagHandler.getInstance().getRandomTagUuid();
-			Integer treeUuid = TreeHandler.getInstance().getRandomUnlockedTreeUuid();
-			LocalDateTime startDate = LocalDateTime.now().minusDays(random.nextInt(400));
+		List<AbstractActivity> allActivities = JsonHandler.getAllActivities();
+		allActivities.forEach(this::addActivity);
 
-			int duration = random.nextInt(1200);
-			LocalDateTime endDate = startDate.plusSeconds(duration);
+//		for (int i = 0; i < 100; i++){
+//			AbstractActivity activity = createRandomActivity(i);
+//			addActivity(activity);
+//			JsonHandler.addFinishedActivity(activity.getStartTime(), activity);
+//		}
+
+}
+
+	private AbstractActivity createRandomActivity(int i)
+	{
+		AbstractActivity activity;
+		Random random = new Random();
+		Integer tagUuid = TagHandler.getInstance().getRandomTagUuid();
+		Integer treeUuid = TreeHandler.getInstance().getRandomUnlockedTreeUuid();
+		LocalDateTime startDate = LocalDateTime.now().minusDays(random.nextInt(400));
+
+		int duration = random.nextInt(1200);
+		LocalDateTime endDate = startDate.plusSeconds(duration);
 
 
-			if(i%2 == 0)
-				activity = new ChronometerActivity(tagUuid, treeUuid, startDate, endDate);
-			else if(i%13==0) activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration/2);
-			else activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration);
-			addActivity(activity);
-		}
+		if(i %2 == 0)
+			activity = new ChronometerActivity(tagUuid, treeUuid, startDate, endDate);
+		else if(i % 5==0) activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration*2);
+		else activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration);
+		return activity;
 	}
 
 	@Override

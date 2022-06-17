@@ -1,6 +1,7 @@
 package mafiadelprimobanco.focusproject.handler;
 
 import mafiadelprimobanco.focusproject.handler.TagHandler;
+import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
@@ -22,7 +23,6 @@ import java.util.Vector;
 
 public final class JsonHandler
 {
-
 	private static Path localTagFile = Path.of("tags.json");
 	private static Path localActivitiesFile = Path.of("activities.json");
 	static JSONObject userTags;
@@ -45,6 +45,14 @@ public final class JsonHandler
 		{
 			e.printStackTrace();
 		}
+
+		ActivityHandler.getInstance().addListener(new ActivityObserver() {
+			@Override
+			public void onActivityEnd(AbstractActivity currentActivity)
+			{
+				JsonHandler.addFinishedActivity(currentActivity.getStartTime(), currentActivity);
+			}
+		});
 
 		loadTags();
 	}
