@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import mafiadelprimobanco.focusproject.handler.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 public class MainApplication extends Application
@@ -21,6 +22,8 @@ public class MainApplication extends Application
 		{
 			Localization.setLocale(Locale.ITALIAN);
 			JsonHandler.init();
+
+			AutentificationHandler.getInstance().doLoginFromDatabase();
 
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
