@@ -43,8 +43,9 @@ public class AuthenticationHandler
 				String res = Client.getInstance().loginWithCustomToken(token);
 
 				if (res != null) {
-					Feedback.getInstance().showNotification(Localization.get("info.autentification.loginSuccessfull.Header"),
-							Localization.get("info.autentification.loginSuccessfull.Msg", user.username()));
+					Feedback.getInstance().showNotification(Localization.get(
+									"info.authentication.loginSuccessful.header"),
+							Localization.get("info.authentication.loginSuccessful.message", user.username()));
 					isLogged = true;
 					return true;
 				}
@@ -71,13 +72,14 @@ public class AuthenticationHandler
 
 					if (id == null)
 					{
-						Feedback.getInstance().showError(Localization.get("error.autentification.UserExistsHeader"),
-								Localization.get("error.autentification.UserExistsMsg"));
+						Feedback.getInstance().showError(Localization.get("error.authentication.UserExists.header"),
+								Localization.get("error.authentication.UserExists.message"));
 						return;
 					}
 
-					if (Client.getInstance().sendEmailVerification()) Feedback.getInstance().showError(Localization.get("info.autentification.EmailConfirmHeader"),
-							Localization.get("info.autentification.EmailConfirmMsg"));
+					if (Client.getInstance().sendEmailVerification()) Feedback.getInstance().showError(Localization.get(
+									"info.authentication.emailConfirm.header"),
+							Localization.get("info.authentication.emailConfirm.message"));
 				}
 				catch (IOException | ConnectionException e)
 				{
@@ -95,15 +97,15 @@ public class AuthenticationHandler
 
 			if (token == null)
 			{
-				Feedback.getInstance().showError(Localization.get("error.autentification.UoPNotValidHeader"),
-						Localization.get("error.autentification.UoPNotValidMsg"));
+				Feedback.getInstance().showError(Localization.get("error.authentication.UoPNotValid.header"),
+						Localization.get("error.authentication.UoPNotValid.message"));
 				return false;
 			}
 
 			if (!Client.getInstance().isEmailVerified())
 			{
-				Feedback.getInstance().showError(Localization.get("error.autentification.emailNotValidHeader"),
-						Localization.get("error.autentification.emailNotValidMsg"));
+				Feedback.getInstance().showError(Localization.get("error.authentication.emailNotValid.header"),
+						Localization.get("error.authentication.emailNotValid.message"));
 				return false;
 			}
 
@@ -117,8 +119,8 @@ public class AuthenticationHandler
 
 			Files.writeString(localDatabaseFile, jsonUser.toString(), StandardOpenOption.CREATE);
 
-			Feedback.getInstance().showNotification(Localization.get("info.autentification.loginSuccessfull.Header"),
-					Localization.get("info.autentification.loginSuccessfull.Msg", user.username()));
+			Feedback.getInstance().showNotification(Localization.get("info.authentication.loginSuccessful.header"),
+					Localization.get("info.authentication.loginSuccessful.message", user.username()));
 
 			this.user = user;
 
@@ -127,8 +129,8 @@ public class AuthenticationHandler
 		}
 		catch (IOException | ConnectionException e)
 		{
-			Feedback.getInstance().showError(Localization.get("error.autentification.connectionErrorHeader"),
-					Localization.get("error.autentification.connectionErrorMsg"));
+			Feedback.getInstance().showError(Localization.get("error.authentication.connectionError.header"),
+					Localization.get("error.authentication.connectionError.message"));
 		}
 
 		return false;

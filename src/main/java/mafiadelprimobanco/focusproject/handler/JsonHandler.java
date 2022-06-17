@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 
 import javafx.scene.paint.*;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
@@ -31,11 +32,10 @@ public final class JsonHandler
 	{
 		try
 		{
-			if (!localTagFile.toFile().exists())
-				Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
+			if (!localTagFile.toFile().exists()) Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
 
-			if (!localActivitiesFile.toFile().exists())
-				Files.writeString(localActivitiesFile, "{}", StandardOpenOption.CREATE);
+			if (!localActivitiesFile.toFile().exists()) Files.writeString(localActivitiesFile, "{}",
+					StandardOpenOption.CREATE);
 
 
 			userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
@@ -86,18 +86,15 @@ public final class JsonHandler
 
 		String type = activity.getString("type");
 
-		if (ActivityType.CHRONOMETER.key.equals(type))
-			activityList.add(new ChronometerActivity(
-					activity.getInt("tagUuid"), activity.getInt("treeUuid"),
-					LocalDateTime.parse(activity.getString("startTime")),
-					LocalDateTime.parse(activity.getString("endTime"))));
+		if (ActivityType.CHRONOMETER.key.equals(type)) activityList.add(
+				new ChronometerActivity(activity.getInt("tagUuid"), activity.getInt("treeUuid"),
+						LocalDateTime.parse(activity.getString("startTime")),
+						LocalDateTime.parse(activity.getString("endTime"))));
 
-		else if (ActivityType.TIMER.key.equals(type))
-			activityList.add(new TimerActivity(
-					activity.getInt("tagUuid"), activity.getInt("treeUuid"),
-					LocalDateTime.parse(activity.getString("startTime")),
-					LocalDateTime.parse(activity.getString("endTime")),
-					activity.getInt("chosenDuration")));
+		else if (ActivityType.TIMER.key.equals(type)) activityList.add(
+				new TimerActivity(activity.getInt("tagUuid"), activity.getInt("treeUuid"),
+						LocalDateTime.parse(activity.getString("startTime")),
+						LocalDateTime.parse(activity.getString("endTime")), activity.getInt("chosenDuration")));
 	}
 
 	public static List<AbstractActivity> getAllActivities()
@@ -139,9 +136,7 @@ public final class JsonHandler
 
 	public static void addTag(String name, String colorHex, Integer UUID)
 	{
-		userTags.put(name, new JSONObject("{"
-				+ "UUID:"+UUID+", Color:"+colorHex +
-				"}"));
+		userTags.put(name, new JSONObject("{" + "UUID:" + UUID + ", Color:" + colorHex + "}"));
 		updateTagFile();
 	}
 
