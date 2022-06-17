@@ -166,6 +166,7 @@ public class SettingsPageController implements Controller
 	// Language combo box behaviour
 	void updateStringsBasedOnCurrentLanguage()
 	{
+		//todo: bind label text using LocalizationUtils
 		generalCategoryLabel.setText(Localization.get("settings.general.categoryName"));
 
 		languageLabel.setText(Localization.get("settings.language"));
@@ -244,6 +245,7 @@ public class SettingsPageController implements Controller
 			if (newValue != null)
 			{
 				//todo refactor: a bit unsafe, theme localized in english has to be equal to file name
+				// also this should be in StyleHandler
 				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
 				settingsHandler.getSettings().currentTheme.set(newValue);
 				updateThemeComboBox();
