@@ -14,7 +14,7 @@ public class TagHandler
 
 	public static TagHandler getInstance() { return instance; }
 
-	private final Map<Integer, Tag> tags = new HashMap<>();
+	private final Map<Integer, Tag> tags = new TreeMap<>();
 	private final HashSet<String> names = new HashSet<>();
 	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
@@ -28,10 +28,8 @@ public class TagHandler
 
 	private void loadTags()
 	{
-		// todo: get saved tags from database
 		createUnsetTag();
 		//debugLoad();
-
 	}
 
 	private void createUnsetTag()

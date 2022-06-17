@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static java.time.DayOfWeek.MONDAY;
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
-public class StatisticController implements Controller{
+public class StatisticPageController implements Controller{
 
 	@FXML private MFXComboBox<String> dateComboBox;
 
@@ -38,7 +38,7 @@ public class StatisticController implements Controller{
 
 	@FXML private NumberAxis lineChartNumberAxis;
 
-	public StatisticController() { }
+	public StatisticPageController() { }
 
 	private void setMonthChart(int monthsToSub)
 	{
@@ -96,7 +96,6 @@ public class StatisticController implements Controller{
 		totalDataBarChart.getData().addAll(series);
 
 		//Load tag color. Used by the staked bar chart
-		//TODO: Colors gets mixed somehow. FIX IT
 		for (int i = 0; i < tags.size(); ++i)
 			for (Node n : totalDataBarChart.lookupAll(".default-color" + i + ".chart-bar"))
 			{
@@ -129,11 +128,11 @@ public class StatisticController implements Controller{
 			weekDayChartSeries.getNode().setStyle("-fx-stroke: #"+ tag.getColor().toString().substring(2) + ";")
 		);
 
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Lunedi", valuesDay[0]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Martedi", valuesDay[1]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Mercoledi", valuesDay[2]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Giovedi", valuesDay[3]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Venerdi", valuesDay[4]));
+		weekDayChartSeries.getData().add(new XYChart.Data<>("Lunedì", valuesDay[0]));
+		weekDayChartSeries.getData().add(new XYChart.Data<>("Martedì", valuesDay[1]));
+		weekDayChartSeries.getData().add(new XYChart.Data<>("Mercoledì", valuesDay[2]));
+		weekDayChartSeries.getData().add(new XYChart.Data<>("Giovedì", valuesDay[3]));
+		weekDayChartSeries.getData().add(new XYChart.Data<>("Venerdì", valuesDay[4]));
 		weekDayChartSeries.getData().add(new XYChart.Data<>("Sabato", valuesDay[5]));
 		weekDayChartSeries.getData().add(new XYChart.Data<>("Domenica", valuesDay[6]));
 
