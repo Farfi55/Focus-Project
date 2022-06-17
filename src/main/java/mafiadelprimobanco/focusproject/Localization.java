@@ -21,14 +21,14 @@ public final class Localization
 	/**
 	 * the current selected Locale.
 	 */
-	private static ObjectProperty<Locale> locale;
+	private static final ObjectProperty<Locale> locale;
 
 	static
 	{
 		locale = new SimpleObjectProperty<>(getDefaultLocale());
 		locale.addListener((observable, oldValue, newValue) -> Locale.setDefault(newValue));
-		SettingsHandler.getInstance().getSettings().getCurrentLanguage().addListener((observable, oldValue, newValue) -> {
-			setLocale(SettingsHandler.getInstance().getSettings().getCurrentLanguage().get().language);
+		SettingsHandler.getInstance().getSettings().currentLanguage.addListener((observable, oldValue, newValue) -> {
+			setLocale(SettingsHandler.getInstance().getSettings().currentLanguage.get().language);
 		});
 	}
 

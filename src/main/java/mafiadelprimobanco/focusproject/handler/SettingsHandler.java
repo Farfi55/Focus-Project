@@ -25,20 +25,20 @@ public class SettingsHandler
 	private void loadSettingsFromDatabase(Settings settings)
 	{
 
-		settings.setMusicVolume(30.0);
-		settings.setAdvancedOptionsShowing(true);
-		settings.setConfirmBeforeExit(true);
-		settings.setCurrentLanguage(Language.ENGLISH);
-		settings.setCurrentTheme(Theme.LIGHT);
-		settings.setHideTutorial(true);
-		settings.setSoundVolume(70.0);
-		settings.setNavigationBlock(false);
-		settings.setAdvancedOptionsShowing(false);
-		settings.setStopChronometerAfter(20);
-		settings.setPomodoroFocusTime(25);
-		settings.setPomodoroPauseTime(5);
-		settings.setMinimumTimerTime(10);
-		settings.setResetTutorial(false);
+		settings.musicVolume.setValue(30.0);
+		settings.showAdvancedOptions.setValue(true);
+		settings.confirmBeforeExit.setValue(true);
+		settings.currentLanguage.setValue(Language.ENGLISH);
+		settings.currentTheme.setValue(Theme.LIGHT);
+		settings.hideTutorial.setValue(true);
+		settings.soundVolume.setValue(70.0);
+		settings.blockNavigation.setValue(false);
+		settings.showAdvancedOptions.setValue(false);
+		settings.stopChronometerAfter.setValue(20);
+		settings.pomodoroFocusTime.setValue(25);
+		settings.pomodoroPauseTime.setValue(5);
+		settings.minimumTimerTime.setValue(10);
+		settings.resetTutorial.setValue(false);
 	}
 
 	public Settings getSettings() {return settings;}
