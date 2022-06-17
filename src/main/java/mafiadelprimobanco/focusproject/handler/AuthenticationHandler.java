@@ -5,8 +5,6 @@ import mafiadelprimobanco.focusproject.client.Client;
 import mafiadelprimobanco.focusproject.client.ConnectionException;
 import mafiadelprimobanco.focusproject.model.User;
 import org.json.JSONObject;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,12 +12,12 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 
-public class AutentificationHandler
+public class AuthenticationHandler
 {
-	private static AutentificationHandler instance = new AutentificationHandler();
+	private static AuthenticationHandler instance = new AuthenticationHandler();
 
 
-	private AutentificationHandler() { }
+	private AuthenticationHandler() { }
 
 	private boolean isLogged = false;
 
@@ -27,7 +25,7 @@ public class AutentificationHandler
 
 	private Path localDatabaseFile = Path.of("user.db");
 
-	public static AutentificationHandler getInstance()
+	public static AuthenticationHandler getInstance()
 	{
 		return instance;
 	}

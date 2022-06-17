@@ -71,7 +71,7 @@ public class SceneHandler
 		{
 			if (!Feedback.getInstance().askYesNoConfirmation("Chiudi applicazione Focus ",
 					"Sei sicuro di voler chiudere l'applicazione?")) windowEvent.consume();
-			else AutentificationHandler.getInstance().doLogout();
+			else AuthenticationHandler.getInstance().doLogout();
 		});
 
 		stage.widthProperty().addListener(e -> closeLoginPopup());
