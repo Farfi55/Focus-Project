@@ -130,9 +130,10 @@ public final class JsonHandler
 
 	static void loadTags()
 	{
-		userTags.keys().forEachRemaining(key -> {
-				JSONObject currTag = (JSONObject)userTags.get(key);
-				TagHandler.getInstance().addTag(key, Color.valueOf(currTag.getString("Color")));
+		userTags.keys().forEachRemaining(key ->
+		{
+			JSONObject currTag = (JSONObject)userTags.get(key);
+			TagHandler.getInstance().addTag(key, Color.valueOf(currTag.getString("Color")), currTag.getInt("UUID"));
 		});
 	}
 

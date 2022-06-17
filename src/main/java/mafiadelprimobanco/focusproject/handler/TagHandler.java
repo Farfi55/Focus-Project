@@ -64,7 +64,7 @@ public class TagHandler
 		addTag(uniqueName, randomColor);
 	}
 
-	private boolean addTag(String name, Color color, Integer uuid)
+	public boolean addTag(String name, Color color, Integer uuid)
 	{
 		if (isNameUsed(name)) return false;
 		var tag = new Tag(name, color, uuid);
