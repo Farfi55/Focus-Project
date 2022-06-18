@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.Feedback;
 import mafiadelprimobanco.focusproject.handler.SettingsHandler;
 import mafiadelprimobanco.focusproject.handler.StyleHandler;

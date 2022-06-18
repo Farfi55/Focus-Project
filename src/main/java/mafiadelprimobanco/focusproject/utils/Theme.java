@@ -1,6 +1,6 @@
 package mafiadelprimobanco.focusproject.utils;
 
-import mafiadelprimobanco.focusproject.Localization;
+import mafiadelprimobanco.focusproject.handler.Localization;
 
 public enum Theme
 {
