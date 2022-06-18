@@ -14,11 +14,11 @@ public class Settings
 	public final SimpleDoubleProperty musicVolume = new SimpleDoubleProperty();
 	public final SimpleDoubleProperty soundVolume = new SimpleDoubleProperty();
 
-	public final SimpleIntegerProperty pomodoroFocusTime = new SimpleIntegerProperty();
-	public final SimpleIntegerProperty pomodoroPauseTime = new SimpleIntegerProperty();
-
 	public final SimpleIntegerProperty minimumTimerTime = new SimpleIntegerProperty();
-	public final SimpleIntegerProperty stopChronometerAfter = new SimpleIntegerProperty();
+	public final SimpleBooleanProperty requestConfirmationOnFinishedTimerActivity = new SimpleBooleanProperty();
+
+	public final SimpleIntegerProperty successfulActivityMinimumChronometerTime = new SimpleIntegerProperty();
+	public final SimpleBooleanProperty requestConfirmationOnFinishedChronometerActivity = new SimpleBooleanProperty();
 
 	public final SimpleBooleanProperty showAdvancedOptions = new SimpleBooleanProperty();
 	public final SimpleBooleanProperty resetTutorial = new SimpleBooleanProperty();

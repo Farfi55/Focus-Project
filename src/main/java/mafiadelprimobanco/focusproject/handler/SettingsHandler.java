@@ -34,9 +34,9 @@ public class SettingsHandler
 		settings.soundVolume.setValue(70.0);
 		settings.blockNavigation.setValue(false);
 		settings.showAdvancedOptions.setValue(false);
-		settings.stopChronometerAfter.setValue(20);
-		settings.pomodoroFocusTime.setValue(25);
-		settings.pomodoroPauseTime.setValue(5);
+		settings.successfulActivityMinimumChronometerTime.setValue(20);
+		settings.requestConfirmationOnFinishedChronometerActivity.setValue(true);
+		settings.requestConfirmationOnFinishedTimerActivity.setValue(true);
 		settings.minimumTimerTime.setValue(10);
 		settings.resetTutorial.setValue(false);
 	}

@@ -23,70 +23,89 @@ import java.util.regex.*;
 
 public class SettingsPageController implements Controller
 {
-	@FXML private Label advancedOptionCategoryLabel;
+	@FXML
+	private Label advancedOptionCategoryLabel;
 
-	@FXML private MFXButton advancedSettingsButton;
+	@FXML
+	private MFXButton advancedSettingsButton;
 
-	@FXML private VBox advancedSettingsVBox;
+	@FXML
+	private VBox advancedSettingsVBox;
 
-	@FXML private Label audioCategoryLabel;
+	@FXML
+	private Label audioCategoryLabel;
 
-	@FXML private Label chronometerCategoryLabel;
+	@FXML
+	private Label chronometerCategoryLabel;
 
-	@FXML private Label confirmBeforeExitLabel;
+	@FXML
+	private Label chronometerConfirmationLabel;
 
-	@FXML private MFXToggleButton confirmationRequestToggleButton;
+	@FXML
+	private MFXToggleButton chronometerConfirmationToggleButton;
 
-	@FXML private Label focusTimeLabel;
+	@FXML
+	private Label confirmBeforeExitLabel;
 
-	@FXML private Label generalCategoryLabel;
+	@FXML
+	private MFXToggleButton confirmationRequestToggleButton;
 
-	@FXML private Label hideTutorialLabel;
+	@FXML
+	private Label generalCategoryLabel;
 
-	@FXML private MFXComboBox<Language> languageComboBox;
+	@FXML
+	private MFXComboBox<Language> languageComboBox;
 
-	@FXML private Label languageLabel;
+	@FXML
+	private Label languageLabel;
 
-	@FXML private Label minimumTimerLabel;
+	@FXML
+	private Label minimumTimerActivityLabel;
 
-	@FXML private MFXTextField minimumTimerTextField;
+	@FXML
+	private MFXTextField minimumTimerTextField;
 
-	@FXML private MFXSlider musicSlider;
+	@FXML
+	private Label musicLabel;
 
-	@FXML private Label musicLabel;
-	@FXML private Label navigationBlockLabel;
+	@FXML
+	private MFXSlider musicSlider;
 
-	@FXML private MFXToggleButton navigationToggleButton;
+	@FXML
+	private Label navigationBlockLabel;
 
-	@FXML private Label pageTitle;
+	@FXML
+	private MFXToggleButton navigationToggleButton;
 
-	@FXML private Label pausePeriodLabel;
+	@FXML
+	private Label pageTitle;
 
-	@FXML private Label pomodoroCategoryLabel;
+	@FXML
+	private Label soundLabel;
 
-	@FXML private MFXTextField pomodoroFocusTimeTextField;
+	@FXML
+	private MFXSlider soundSlider;
 
-	@FXML private MFXTextField pomodoroPauseTimeTextField;
+	@FXML
+	private Label successfulActivityMinimumChronometeLabel;
 
-	@FXML private Label soundLabel;
+	@FXML
+	private MFXTextField successfulActivityMinimumChronometerTextField;
 
-	@FXML private MFXSlider soundSlider;
+	@FXML
+	private MFXComboBox<Theme> themeComboBox;
 
-	@FXML private Label stopChronometerLabel;
+	@FXML
+	private Label themeLabel;
 
-	@FXML private MFXTextField stopChronometerTextField;
+	@FXML
+	private Label timerCategoryLabel;
 
-	@FXML private MFXComboBox<Theme> themeComboBox;
+	@FXML
+	private Label timerConfirmationLabel;
 
-	@FXML private Label themeLabel;
-
-	@FXML private Label timerCategoryLabel;
-
-	@FXML private Label tutorialResetLabel;
-
-	@FXML private MFXToggleButton tutorialResetToggleButton;
-
-	@FXML private MFXToggleButton tutorialToggleButton;
+	@FXML
+	private MFXToggleButton timerConfirmationToggleButton;
 
 	private SettingsHandler settingsHandler;
 
@@ -115,18 +134,13 @@ public class SettingsPageController implements Controller
 		updateSoundVolume();
 		updateMusicVolume();
 
-		updateTimerTextField();
-
-
-		updatePomodoroFocusTimeTextField();
-		updatePomodoroPauseTimeTextField();
+		updateMinimumTimerTextField();
+		updateTimerConfirmationToggleButton();
 
 		updateChronometerTextField();
+		updateChronometerConfirmationToggleButton();
 
 		updateThemeComboBox();
-
-		updateTutorialResetToggleButton();
-		updateTutorialShowingToggleButton();
 
 		updateAdvancedSettingsVisibility();
 		updateConfirmationRequestToggleBox();
@@ -136,16 +150,14 @@ public class SettingsPageController implements Controller
 		feedback = Feedback.getInstance();
 
 
-		inputValidation = Pattern.compile("[1-9]\\d{0,2}");
+		inputValidation = Pattern.compile("[0-9]\\d{0,2}");
 		setGlobalMeasureUnit("min", 0.5);
 
-
-		subscribePomodoroFocusTimeTextField();
-		subScribePomodoroPauseTimeTextField();
-
-		subscribeTimerTextField();
+		subscribeMinimumTimerTextField();
+		subscribeTimerConfirmationToggleButton();
 
 		subscribeChronometerTextField();
+		subscribeChronometerConfirmationToggleButton();
 
 		subscribeMusicSlider();
 		subscribeSoundSlider();
@@ -154,10 +166,6 @@ public class SettingsPageController implements Controller
 		subscribeThemesComboBox();
 
 		subscribeNavigationToggleButton();
-
-		subscribeShowingTutorialToggleButton();
-
-		subscribeTutorialResetToggleButton();
 
 		subscribeConfirmationRequestToggleButton();
 	}
@@ -178,25 +186,19 @@ public class SettingsPageController implements Controller
 		musicLabel.setText(Localization.get("settings.audio.music"));
 
 		timerCategoryLabel.setText(Localization.get("settings.timer.categoryName"));
-		minimumTimerLabel.setText(Localization.get("settings.timer.minimumActivityTime"));
-
-		pomodoroCategoryLabel.setText(Localization.get("settings.pomodoro.categoryName"));
-		pausePeriodLabel.setText(Localization.get("settings.pomodoro.focusPeriod"));
-		focusTimeLabel.setText(Localization.get("settings.pomodoro.pausePeriod"));
+		minimumTimerActivityLabel.setText(Localization.get("settings.timer.minimumActivityTime"));
+		timerConfirmationLabel.setText(Localization.get("settings.timer.confirmation"));
 
 		chronometerCategoryLabel.setText(Localization.get("settings.chronometer.categoryName"));
-		stopChronometerLabel.setText(Localization.get("settings.chronometer.stopActivityAfter"));
+		successfulActivityMinimumChronometeLabel.setText(Localization.get("settings.chronometer.stopActivityAfter"));
+		chronometerConfirmationLabel.setText(Localization.get("settings.chronometer.confirmation"));
 
 		themeLabel.setText(Localization.get("settings.theme"));
-
-		tutorialResetLabel.setText(Localization.get("settings.advancedOptions.tutorialReset"));
 
 		advancedOptionCategoryLabel.setText(Localization.get("settings.advancedOptions.categoryName"));
 		advancedSettingsButton.setText(Localization.get("settings.advancedOptions.show"));
 
 		confirmBeforeExitLabel.setText(Localization.get("settings.advancedOptions.askConfirmationBeforeQuitting"));
-
-		hideTutorialLabel.setText(Localization.get("settings.hideTutorial"));
 
 		themeComboBox.setText(settingsHandler.getSettings().currentTheme.getValue().toString());
 
@@ -341,12 +343,12 @@ public class SettingsPageController implements Controller
 
 
 	// Timer Behaviour
-	private void updateTimerTextField()
+	private void updateMinimumTimerTextField()
 	{
 		minimumTimerTextField.setText(settingsHandler.getSettings().minimumTimerTime.getValue().toString());
 	}
 
-	private void subscribeTimerTextField()
+	private void subscribeMinimumTimerTextField()
 	{
 		minimumTimerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
 		{
@@ -357,7 +359,7 @@ public class SettingsPageController implements Controller
 
 		settingsHandler.getSettings().minimumTimerTime.addListener(observable ->
 		{
-			updateTimerTextField();
+			updateMinimumTimerTextField();
 		});
 	}
 
@@ -378,82 +380,18 @@ public class SettingsPageController implements Controller
 			settingsHandler.getSettings().minimumTimerTime.setValue(Integer.valueOf(input));
 		}
 	}
-	// --------------------------
 
-
-	// Pomodoro behaviour
-	private void updatePomodoroFocusTimeTextField()
+	private void updateTimerConfirmationToggleButton()
 	{
-		pomodoroFocusTimeTextField.setText(settingsHandler.getSettings().pomodoroFocusTime.getValue().toString());
+		timerConfirmationToggleButton.setSelected(settingsHandler.getSettings().requestConfirmationOnFinishedTimerActivity.getValue());
 	}
 
-	private void subscribePomodoroFocusTimeTextField()
+	private void subscribeTimerConfirmationToggleButton()
 	{
-		pomodoroFocusTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
+		timerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
-			if (!newStatus) validatePomodoroFocusTimeValue();
+			settingsHandler.getSettings().requestConfirmationOnFinishedTimerActivity.setValue(newValue);
 		});
-
-		pomodoroFocusTimeTextField.setOnAction(event -> validatePomodoroFocusTimeValue());
-
-		settingsHandler.getSettings().pomodoroFocusTime.addListener(observable ->
-		{
-			updatePomodoroFocusTimeTextField();
-		});
-	}
-
-	private void validatePomodoroFocusTimeValue()
-	{
-		String input = removeLeadingZeros(pomodoroFocusTimeTextField.getText());
-
-		if (!validateInput(input))
-		{
-			feedback.showError(Localization.get("error.settings.invalidTime.header"),
-					Localization.get("error.settings.invalidTime.message"));
-			pomodoroFocusTimeTextField.setText(
-					settingsHandler.getSettings().pomodoroFocusTime.getValue().toString());
-		}
-		else
-		{
-			pomodoroFocusTimeTextField.setText(input);
-			settingsHandler.getSettings().pomodoroFocusTime.setValue(Integer.valueOf(input));
-		}
-	}
-
-	private void updatePomodoroPauseTimeTextField()
-	{
-		pomodoroPauseTimeTextField.setText(settingsHandler.getSettings().pomodoroPauseTime.getValue().toString());
-	}
-
-	private void subScribePomodoroPauseTimeTextField()
-	{
-		pomodoroPauseTimeTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
-		{
-			if (!newStatus) validatePomodoroPauseTimeValue();
-		});
-		pomodoroPauseTimeTextField.setOnAction(event -> validatePomodoroPauseTimeValue());
-
-		settingsHandler.getSettings().pomodoroPauseTime.addListener(observable ->
-		{
-			updatePomodoroPauseTimeTextField();
-		});
-	}
-
-	private void validatePomodoroPauseTimeValue()
-	{
-		String input = removeLeadingZeros(pomodoroPauseTimeTextField.getText());
-
-		if (!validateInput(input))
-		{
-			feedback.showError(Localization.get("error.settings.invalidTime.header"),
-					Localization.get("error.settings.invalidTime.message"));
-			updatePomodoroPauseTimeTextField();
-		}
-		else
-		{
-			settingsHandler.getSettings().pomodoroPauseTime.setValue(Integer.valueOf(input));
-			updatePomodoroPauseTimeTextField();
-		}
 	}
 	// --------------------------
 
@@ -461,18 +399,18 @@ public class SettingsPageController implements Controller
 	// Chronometer behaviour
 	private void updateChronometerTextField()
 	{
-		stopChronometerTextField.setText(settingsHandler.getSettings().stopChronometerAfter.getValue().toString());
+		successfulActivityMinimumChronometerTextField.setText(settingsHandler.getSettings().successfulActivityMinimumChronometerTime.getValue().toString());
 	}
 
 	private void subscribeChronometerTextField()
 	{
-		stopChronometerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
+		successfulActivityMinimumChronometerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
 		{
 			if (!newStatus) validateChronometerTextFieldValue();
 		});
-		stopChronometerTextField.setOnAction(event -> validateChronometerTextFieldValue());
+		successfulActivityMinimumChronometerTextField.setOnAction(event -> validateChronometerTextFieldValue());
 
-		settingsHandler.getSettings().stopChronometerAfter.addListener(observable ->
+		settingsHandler.getSettings().successfulActivityMinimumChronometerTime.addListener(observable ->
 		{
 			updateChronometerTextField();
 		});
@@ -480,7 +418,7 @@ public class SettingsPageController implements Controller
 
 	private void validateChronometerTextFieldValue()
 	{
-		String input = removeLeadingZeros(stopChronometerTextField.getText());
+		String input = removeLeadingZeros(successfulActivityMinimumChronometerTextField.getText());
 
 		if (!validateInput(input))
 		{
@@ -490,31 +428,23 @@ public class SettingsPageController implements Controller
 		}
 		else
 		{
-			settingsHandler.getSettings().stopChronometerAfter.setValue(Integer.valueOf(input));
+			settingsHandler.getSettings().successfulActivityMinimumChronometerTime.setValue(Integer.valueOf(input));
 			updateChronometerTextField();
 		}
 	}
-	// --------------------------
 
-
-	// Tutorial Behaviour
-	private void updateTutorialShowingToggleButton()
+	private void updateChronometerConfirmationToggleButton()
 	{
-		tutorialToggleButton.setSelected(settingsHandler.getSettings().hideTutorial.get());
+		chronometerConfirmationToggleButton.setSelected(settingsHandler.getSettings().requestConfirmationOnFinishedChronometerActivity.getValue());
 	}
-
-	private void subscribeShowingTutorialToggleButton()
+	private void subscribeChronometerConfirmationToggleButton()
 	{
-		tutorialToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
+		chronometerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
-			settingsHandler.getSettings().hideTutorial.setValue(newValue);
-		});
-
-		settingsHandler.getSettings().hideTutorial.addListener(observable ->
-		{
-			updateTutorialShowingToggleButton();
+			settingsHandler.getSettings().requestConfirmationOnFinishedChronometerActivity.setValue(newValue);
 		});
 	}
+
 	// --------------------------
 
 
@@ -543,24 +473,6 @@ public class SettingsPageController implements Controller
 		});
 	}
 
-	private void updateTutorialResetToggleButton()
-	{
-		tutorialResetToggleButton.setSelected(settingsHandler.getSettings().resetTutorial.get());
-	}
-
-	private void subscribeTutorialResetToggleButton()
-	{
-		tutorialResetToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
-		{
-			settingsHandler.getSettings().resetTutorial.setValue(newValue);
-		});
-
-		settingsHandler.getSettings().resetTutorial.addListener(observable ->
-		{
-			updateTutorialResetToggleButton();
-		});
-	}
-
 	@FXML
 	void onMouseClickedAdvancedSettingsButton(MouseEvent event)
 	{
@@ -586,14 +498,8 @@ public class SettingsPageController implements Controller
 		minimumTimerTextField.setMeasureUnit(measureUnit);
 		minimumTimerTextField.setMeasureUnitGap(gap);
 
-		pomodoroFocusTimeTextField.setMeasureUnit(measureUnit);
-		pomodoroFocusTimeTextField.setMeasureUnitGap(gap);
-
-		pomodoroPauseTimeTextField.setMeasureUnit(measureUnit);
-		pomodoroPauseTimeTextField.setMeasureUnitGap(gap);
-
-		stopChronometerTextField.setMeasureUnit(measureUnit);
-		stopChronometerTextField.setMeasureUnitGap(gap);
+		successfulActivityMinimumChronometerTextField.setMeasureUnit(measureUnit);
+		successfulActivityMinimumChronometerTextField.setMeasureUnitGap(gap);
 	}
 
 	Boolean validateInput(String input)
