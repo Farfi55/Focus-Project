@@ -8,432 +8,366 @@
 <?import io.github.palexdev.materialfx.controls.MFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="settingsRoot" prefHeight="552.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.SettingsPageController">
-    <Label fx:id="pageTitle" alignment="CENTER" layoutX="286.0" layoutY="122.0" prefHeight="18.0" prefWidth="114.0" text="title" />
-    <center>
-        <MFXScrollPane hbarPolicy="NEVER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: rgba(0,0,0,0);">
-            <VBox alignment="TOP_CENTER" prefHeight="561.0" prefWidth="599.0">
-                <padding>
-                    <Insets left="70.0" right="70.0" top="20.0" />
-                </padding>
-                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: rgba(0,0,0,0.1);">
-                    <Label fx:id="generalCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Generali" textAlignment="CENTER">
-                        <font>
-                            <Font size="16.0" />
-                        </font>
-                        <VBox.margin>
-                            <Insets bottom="10.0" top="10.0" />
-                        </VBox.margin>
-                    </Label>
-                    <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
-                        <VBox.margin>
-                            <Insets />
-                        </VBox.margin>
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                            <Label fx:id="languageLabel" alignment="CENTER" contentDisplay="CENTER" text="Lingua">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="20.0" top="10.0" />
-                                </HBox.margin>
-                                <font>
-                                    <Font size="14.0" />
-                                </font>
-                            </Label>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                            <MFXComboBox fx:id="languageComboBox" floatMode="ABOVE" prefHeight="40.0" prefWidth="32.0" text="italiano">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" right="20.0" top="10.0" />
-                                </HBox.margin>
-                            </MFXComboBox>
-                        </HBox>
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="41.0" prefWidth="519.0">
-                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                            <Label fx:id="themeLabel" alignment="CENTER" contentDisplay="CENTER" text="Tema">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" left="20.0" top="10.0" />
-                                </HBox.margin>
-                                <font>
-                                    <Font size="14.0" />
-                                </font>
-                            </Label>
-                        </HBox>
-                        <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                            <MFXComboBox fx:id="themeComboBox" floatMode="ABOVE" prefHeight="40.0" prefWidth="32.0" text="chiaro">
-                                <HBox.margin>
-                                    <Insets bottom="10.0" right="20.0" top="10.0" />
-                                </HBox.margin>
-                            </MFXComboBox>
-                        </HBox>
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="96.0" prefHeight="41.0" prefWidth="519.0">
+
+<AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.SettingsPageController">
+   <children>
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+          <Label fx:id="pageTitle" alignment="CENTER" layoutX="286.0" layoutY="122.0" prefHeight="18.0" prefWidth="114.0" text="title" />
+         <right>
+              <MFXScrollPane hbarPolicy="NEVER" prefHeight="487.0" prefWidth="491.0" style="-fx-background-color: rgba(0,0,0,0);" BorderPane.alignment="CENTER">
+                  <VBox alignment="TOP_CENTER" fillWidth="false">
+                      <VBox alignment="TOP_CENTER" prefHeight="190.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
+                          <Label fx:id="generalCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Generali" textAlignment="CENTER">
+                              <font>
+                                  <Font size="16.0" />
+                              </font>
+                              <VBox.margin>
+                                  <Insets bottom="10.0" top="10.0" />
+                              </VBox.margin>
+                          </Label>
+                          <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
+                              <VBox.margin>
+                                  <Insets />
+                              </VBox.margin>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                  <Label fx:id="languageLabel" alignment="CENTER" contentDisplay="CENTER" text="Lingua">
+                                      <HBox.margin>
+                                          <Insets bottom="10.0" left="20.0" top="10.0" />
+                                      </HBox.margin>
+                                      <font>
+                                          <Font size="14.0" />
+                                      </font>
+                                  </Label>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
+                                  <MFXComboBox fx:id="languageComboBox" floatMode="ABOVE" prefHeight="40.0" prefWidth="32.0" text="italiano">
+                                      <HBox.margin>
+                                          <Insets bottom="10.0" right="20.0" top="10.0" />
+                                      </HBox.margin>
+                                  </MFXComboBox>
+                              </HBox>
+                          </HBox>
+                          <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="41.0" prefWidth="519.0">
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                  <Label fx:id="themeLabel" alignment="CENTER" contentDisplay="CENTER" text="Tema">
+                                      <HBox.margin>
+                                          <Insets bottom="10.0" left="20.0" top="10.0" />
+                                      </HBox.margin>
+                                      <font>
+                                          <Font size="14.0" />
+                                      </font>
+                                  </Label>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
+                                  <MFXComboBox fx:id="themeComboBox" floatMode="ABOVE" prefHeight="40.0" prefWidth="32.0" text="chiaro">
+                                      <HBox.margin>
+                                          <Insets bottom="10.0" right="20.0" top="10.0" />
+                                      </HBox.margin>
+                                  </MFXComboBox>
+                              </HBox>
+                          </HBox>
+                          <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="96.0" prefHeight="41.0" prefWidth="519.0">
+                              <children>
+                                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                      <children>
+                                          <Label fx:id="navigationBlockLabel" contentDisplay="CENTER" prefHeight="20.0" prefWidth="359.0" text="Blocco della navigazione">
+                                              <HBox.margin>
+                                                  <Insets bottom="10.0" left="20.0" top="10.0" />
+                                              </HBox.margin>
+                                              <font>
+                                                  <Font size="14.0" />
+                                              </font>
+                                          </Label>
+                                      </children>
+                                  </HBox>
+                                  <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="15.0" HBox.hgrow="ALWAYS">
+                                      <children>
+                                          <MFXToggleButton fx:id="navigationToggleButton" alignment="CENTER">
+                                              <HBox.margin>
+                                                  <Insets right="30.0" />
+                                              </HBox.margin>
+                                          </MFXToggleButton>
+                                      </children>
+                                  </HBox>
+                              </children>
+                          </HBox>
+                      </VBox>
+                      <VBox alignment="TOP_CENTER" layoutX="80.0" layoutY="30.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
+                          <children>
+                              <Label fx:id="audioCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Audio" textAlignment="CENTER">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                                  <VBox.margin>
+                                      <Insets bottom="10.0" top="10.0" />
+                                  </VBox.margin>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
+                                  <children>
+                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                              <Label fx:id="musicLabel" alignment="CENTER" contentDisplay="CENTER" text="Musica">
+                                                  <HBox.margin>
+                                                      <Insets bottom="10.0" left="20.0" top="10.0" />
+                                                  </HBox.margin>
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </Label>
+                                          </children>
+                                      </HBox>
+                                      <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                              <MFXSlider fx:id="musicSlider" prefHeight="24.0" prefWidth="172.0">
+                                                  <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                  </HBox.margin>
+                                              </MFXSlider>
+                                          </children>
+                                      </HBox>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets bottom="10.0" />
+                                  </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="41.0" prefWidth="519.0">
+                                  <children>
+                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                              <Label fx:id="soundLabel" alignment="CENTER" contentDisplay="CENTER" text="Suoni">
+                                                  <HBox.margin>
+                                                      <Insets bottom="10.0" left="20.0" top="10.0" />
+                                                  </HBox.margin>
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </Label>
+                                          </children>
+                                      </HBox>
+                                      <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                              <MFXSlider fx:id="soundSlider" prefHeight="24.0" prefWidth="172.0">
+                                                  <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                  </HBox.margin>
+                                              </MFXSlider>
+                                          </children>
+                                      </HBox>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets bottom="10.0" />
+                                  </VBox.margin>
+                              </HBox>
+                          </children>
+                          <VBox.margin>
+                              <Insets top="15.0" />
+                          </VBox.margin>
+                      </VBox>
+                      <VBox alignment="TOP_CENTER" layoutX="80.0" layoutY="431.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
+                          <VBox.margin>
+                              <Insets top="15.0" />
+                          </VBox.margin>
+                          <Label fx:id="timerCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Timer" textAlignment="CENTER">
+                              <font>
+                                  <Font size="16.0" />
+                              </font>
+                              <VBox.margin>
+                                  <Insets bottom="10.0" top="10.0" />
+                              </VBox.margin>
+                          </Label>
+                          <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
+                              <children>
+                                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                      <children>
+                                          <Label fx:id="minimumTimerActivityLabel" contentDisplay="CENTER" prefHeight="20.0" prefWidth="287.0" text="Tempo minimo per ogni attività">
+                                              <HBox.margin>
+                                                  <Insets bottom="10.0" left="20.0" top="10.0" />
+                                              </HBox.margin>
+                                              <font>
+                                                  <Font size="14.0" />
+                                              </font>
+                                          </Label>
+                                      </children>
+                                  </HBox>
+                                  <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                                      <children>
+                                          <MFXTextField fx:id="minimumTimerTextField" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="0" prefHeight="30.0" prefWidth="80.0">
+                                              <HBox.margin>
+                                                  <Insets right="5.0" />
+                                              </HBox.margin>
+                                          </MFXTextField>
+                                      </children>
+                              <HBox.margin>
+                                 <Insets right="20.0" />
+                              </HBox.margin>
+                                  </HBox>
+                              </children>
+                              <VBox.margin>
+                                  <Insets bottom="10.0" />
+                              </VBox.margin>
+                          </HBox>
+                     <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
                         <children>
-                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <Label fx:id="navigationBlockLabel" alignment="CENTER" contentDisplay="CENTER" text="Blocco della navigazione">
-                                        <HBox.margin>
-                                            <Insets bottom="10.0" left="20.0" top="10.0" />
-                                        </HBox.margin>
-                                        <font>
-                                            <Font size="14.0" />
-                                        </font>
-                                    </Label>
-                                </children>
-                            </HBox>
-                            <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <MFXToggleButton fx:id="navigationToggleButton" alignment="CENTER">
-                                        <HBox.margin>
-                                            <Insets right="40.0" />
-                                        </HBox.margin>
-                                    </MFXToggleButton>
-                                </children>
-                            </HBox>
-                        </children>
-                    </HBox>
-                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="159.0" prefHeight="41.0" prefWidth="519.0">
-                        <children>
-                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <Label fx:id="hideTutorialLabel" alignment="CENTER" contentDisplay="CENTER" text="Nascondi tutorial">
-                                        <HBox.margin>
-                                            <Insets bottom="10.0" left="20.0" top="10.0" />
-                                        </HBox.margin>
-                                        <font>
-                                            <Font size="14.0" />
-                                        </font>
-                                    </Label>
-                                </children>
-                            </HBox>
-                            <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <MFXToggleButton fx:id="tutorialToggleButton" alignment="CENTER">
-                                        <HBox.margin>
-                                            <Insets right="40.0" />
-                                        </HBox.margin>
-                                    </MFXToggleButton>
-                                </children>
-                            </HBox>
-                        </children>
-                    </HBox>
-                </VBox>
-                <VBox alignment="TOP_CENTER" layoutX="80.0" layoutY="30.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
-                    <children>
-                        <Label fx:id="audioCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Audio" textAlignment="CENTER">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label fx:id="musicLabel" alignment="CENTER" contentDisplay="CENTER" text="Musica">
-                                            <HBox.margin>
-                                                <Insets bottom="10.0" left="20.0" top="10.0" />
-                                            </HBox.margin>
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <MFXSlider fx:id="musicSlider" prefHeight="24.0" prefWidth="172.0">
-                                            <HBox.margin>
-                                                <Insets right="20.0" />
-                                            </HBox.margin>
-                                        </MFXSlider>
-                                    </children>
-                                </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="45.0" prefHeight="41.0" prefWidth="519.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label fx:id="soundLabel" alignment="CENTER" contentDisplay="CENTER" text="Suoni">
-                                            <HBox.margin>
-                                                <Insets bottom="10.0" left="20.0" top="10.0" />
-                                            </HBox.margin>
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <MFXSlider fx:id="soundSlider" prefHeight="24.0" prefWidth="172.0">
-                                            <HBox.margin>
-                                                <Insets right="20.0" />
-                                            </HBox.margin>
-                                        </MFXSlider>
-                                    </children>
-                                </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
-                </VBox>
-                <VBox alignment="TOP_CENTER" layoutX="80.0" layoutY="276.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
-                    <children>
-                        <Label fx:id="pomodoroCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Pomodoro" textAlignment="CENTER">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label fx:id="focusTimeLabel" alignment="CENTER" contentDisplay="CENTER" text="Periodo di concentrazione">
-                                            <HBox.margin>
-                                                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                                            </HBox.margin>
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <MFXTextField fx:id="pomodoroFocusTimeTextField" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="0" prefHeight="30.0" prefWidth="80.0">
-                                            <HBox.margin>
-                                                <Insets right="5.0" />
-                                            </HBox.margin>
-                                        </MFXTextField>
-                                    </children>
+                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                              <children>
+                                 <Label fx:id="timerConfirmationLabel" alignment="CENTER" contentDisplay="CENTER" text="Chiedi conferma al termine dell'attività">
                                     <HBox.margin>
-                                        <Insets bottom="10.0" right="20.0" />
+                                       <Insets bottom="10.0" left="20.0" top="10.0" />
                                     </HBox.margin>
-                                </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" prefHeight="41.0" prefWidth="519.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label fx:id="pausePeriodLabel" alignment="CENTER" contentDisplay="CENTER" text="Periodo di pausa">
-                                            <HBox.margin>
-                                                <Insets bottom="10.0" left="20.0" top="10.0" />
-                                            </HBox.margin>
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <MFXTextField fx:id="pomodoroPauseTimeTextField" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="0" prefHeight="30.0" prefWidth="80.0">
-                                            <HBox.margin>
-                                                <Insets right="5.0" />
-                                            </HBox.margin>
-                                        </MFXTextField>
-                                    </children>
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                                </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
-                </VBox>
-                <VBox alignment="TOP_CENTER" layoutX="80.0" layoutY="431.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
-                    <Label fx:id="timerCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Timer" textAlignment="CENTER">
-                        <font>
-                            <Font size="16.0" />
-                        </font>
-                        <VBox.margin>
-                            <Insets bottom="10.0" top="10.0" />
-                        </VBox.margin>
-                    </Label>
-                    <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
-                        <children>
-                            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <Label fx:id="minimumTimerLabel" alignment="CENTER" contentDisplay="CENTER" text="Tempo minimo per ogni attività">
-                                        <HBox.margin>
-                                            <Insets bottom="10.0" left="20.0" top="10.0" />
-                                        </HBox.margin>
-                                        <font>
-                                            <Font size="14.0" />
-                                        </font>
-                                    </Label>
-                                </children>
-                            </HBox>
-                            <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                <children>
-                                    <MFXTextField fx:id="minimumTimerTextField" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="0" prefHeight="30.0" prefWidth="80.0">
-                                        <HBox.margin>
-                                            <Insets right="5.0" />
-                                        </HBox.margin>
-                                    </MFXTextField>
-                                </children>
-                        <HBox.margin>
-                           <Insets right="20.0" />
-                        </HBox.margin>
-                            </HBox>
+                                    <font>
+                                       <Font size="14.0" />
+                                    </font>
+                                 </Label>
+                              </children>
+                           </HBox>
+                           <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+                              <children>
+                                 <MFXToggleButton fx:id="timerConfirmationToggleButton" alignment="CENTER">
+                                    <HBox.margin>
+                                       <Insets right="30.0" />
+                                    </HBox.margin>
+                                 </MFXToggleButton>
+                              </children>
+                              <HBox.margin>
+                                 <Insets />
+                              </HBox.margin>
+                           </HBox>
                         </children>
-                        <VBox.margin>
-                            <Insets bottom="10.0" />
-                        </VBox.margin>
-                    </HBox>
-                </VBox>
-                <VBox alignment="TOP_CENTER" layoutX="80.0" layoutY="576.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
-                    <children>
-                        <Label fx:id="chronometerCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Cronometro" textAlignment="CENTER">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label fx:id="stopChronometerLabel" alignment="CENTER" contentDisplay="CENTER" text="Ferma il cronometro dopo">
-                                            <HBox.margin>
-                                                <Insets bottom="10.0" left="20.0" top="10.0" />
-                                            </HBox.margin>
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="218.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <MFXTextField fx:id="stopChronometerTextField" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="0" prefHeight="30.0" prefWidth="80.0">
-                                            <HBox.margin>
-                                                <Insets right="5.0" />
-                                            </HBox.margin>
-                                        </MFXTextField>
-                                    </children>
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                                </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="10.0" />
-                            </VBox.margin>
-                        </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
-                </VBox>
-                <MFXButton fx:id="advancedSettingsButton" onMouseClicked="#onMouseClickedAdvancedSettingsButton" style="-fx-background-color: rgba(0,0,0,0.1);" text="Impostazioni avanzate">
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
-                </MFXButton>
-                <VBox fx:id="advancedSettingsVBox" alignment="TOP_CENTER" cacheShape="false" centerShape="false" layoutX="80.0" layoutY="706.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
-                    <children>
-                        <Label fx:id="advancedOptionCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Impostazioni avanzate" textAlignment="CENTER">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="10.0" />
-                            </VBox.margin>
-                        </Label>
-                        <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label fx:id="tutorialResetLabel" alignment="CENTER" contentDisplay="CENTER" text="Reset del tutorial">
-                                            <HBox.margin>
-                                                <Insets bottom="10.0" left="20.0" top="10.0" />
-                                            </HBox.margin>
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
-                                    <children>
-                                        <MFXToggleButton fx:id="tutorialResetToggleButton" alignment="CENTER">
-                                            <HBox.margin>
-                                                <Insets right="40.0" />
-                                            </HBox.margin>
-                                        </MFXToggleButton>
-                                    </children>
-                                </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets />
-                            </VBox.margin>
-                        </HBox>
+                     </HBox>
+                      </VBox>
+                      <VBox alignment="TOP_CENTER" layoutX="80.0" layoutY="576.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
+                          <children>
+                              <Label fx:id="chronometerCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Cronometro" textAlignment="CENTER">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                                  <VBox.margin>
+                                      <Insets bottom="10.0" top="10.0" />
+                                  </VBox.margin>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
+                                  <VBox.margin>
+                                      <Insets bottom="10.0" />
+                                  </VBox.margin>
+                              </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" prefHeight="41.0" prefWidth="519.0">
-                            <children>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label fx:id="confirmBeforeExitLabel" alignment="CENTER" contentDisplay="CENTER" text="Richiedi conferma prima di uscire">
-                                            <HBox.margin>
-                                                <Insets bottom="10.0" left="20.0" top="10.0" />
-                                            </HBox.margin>
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
-                                    <children>
-                                        <MFXToggleButton fx:id="confirmationRequestToggleButton" alignment="CENTER">
-                                            <HBox.margin>
-                                                <Insets right="40.0" />
-                                            </HBox.margin>
-                                        </MFXToggleButton>
-                                    </children>
-                                </HBox>
-                            </children>
+                           <children>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label fx:id="successfulActivityMinimumChronometeLabel" contentDisplay="CENTER" text="Tempo minimo per completare un'attività">
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="26.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <MFXTextField fx:id="successfulActivityMinimumChronometerTextField" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefColumnCount="0" prefHeight="30.0" prefWidth="80.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </MFXTextField>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                              </HBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </HBox>
-                    </children>
-                    <VBox.margin>
-                        <Insets top="15.0" />
-                    </VBox.margin>
-                </VBox>
-            </VBox>
-        </MFXScrollPane>
-    </center>
-</BorderPane>
+                        <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="519.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <Label fx:id="chronometerConfirmationLabel" contentDisplay="CENTER" prefHeight="20.0" prefWidth="268.0" text="Chiedi conferma al termine dell'attività">
+                                       <HBox.margin>
+                                          <Insets bottom="10.0" left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="180.0" layoutY="10.0" prefHeight="41.0" prefWidth="38.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <MFXToggleButton fx:id="chronometerConfirmationToggleButton" alignment="CENTER">
+                                       <HBox.margin>
+                                          <Insets right="30.0" />
+                                       </HBox.margin>
+                                    </MFXToggleButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                          </children>
+                          <VBox.margin>
+                              <Insets top="15.0" />
+                          </VBox.margin>
+                      </VBox>
+                      <MFXButton fx:id="advancedSettingsButton" onMouseClicked="#onMouseClickedAdvancedSettingsButton" style="-fx-background-color: rgba(0,0,0,0.1);" text="Impostazioni avanzate">
+                          <VBox.margin>
+                              <Insets top="15.0" />
+                          </VBox.margin>
+                      </MFXButton>
+                      <VBox fx:id="advancedSettingsVBox" alignment="TOP_CENTER" cacheShape="false" centerShape="false" layoutX="80.0" layoutY="706.0" prefHeight="144.0" prefWidth="459.0" style="-fx-background-color: rgba(0,0,0,0.1);">
+                          <children>
+                              <Label fx:id="advancedOptionCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" text="Impostazioni avanzate" textAlignment="CENTER">
+                                  <font>
+                                      <Font size="16.0" />
+                                  </font>
+                                  <VBox.margin>
+                                      <Insets bottom="10.0" top="10.0" />
+                                  </VBox.margin>
+                              </Label>
+                              <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="55.0" prefHeight="41.0" prefWidth="519.0">
+                                  <children>
+                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                              <Label fx:id="confirmBeforeExitLabel" alignment="CENTER" contentDisplay="CENTER" text="Richiedi conferma prima di uscire">
+                                                  <HBox.margin>
+                                                      <Insets bottom="10.0" left="20.0" top="10.0" />
+                                                  </HBox.margin>
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </Label>
+                                          </children>
+                                      </HBox>
+                                      <HBox alignment="TOP_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                                          <children>
+                                              <MFXToggleButton fx:id="confirmationRequestToggleButton" alignment="CENTER">
+                                                  <HBox.margin>
+                                                      <Insets right="30.0" />
+                                                  </HBox.margin>
+                                              </MFXToggleButton>
+                                          </children>
+                                      </HBox>
+                                  </children>
+                              </HBox>
+                          </children>
+                          <VBox.margin>
+                              <Insets top="15.0" />
+                          </VBox.margin>
+                      </VBox>
+                  </VBox>
+              </MFXScrollPane>
+         </right>
+         <padding>
+            <Insets bottom="20.0" left="70.0" right="70.0" top="20.0" />
+         </padding>
+      </BorderPane>
+   </children>
+</AnchorPane>
