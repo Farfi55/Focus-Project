@@ -221,7 +221,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void initializeSpinnersSelectors()
 	{
-		// todo: move to settings
 		SimpleBooleanProperty focusNextSpinnerOnCommit = new SimpleBooleanProperty(true);
 
 		List<MFXSpinner<Integer>> spinners = List.of(hoursSpinnerSelector, minutesSpinnerSelector,
@@ -329,14 +328,22 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	{
 		switch (ActivityHandler.getInstance().getCurrentActivityType())
 		{
-			case TIMER, POMODORO -> {
-				if (Feedback.getInstance().askYesNoConfirmation(
+			case TIMER, POMODORO ->
+			{
+				if (!SettingsHandler.getInstance().getSettings().confirmInterruptTimerActivity.get()
+						|| Feedback.getInstance().askYesNoConfirmation(
 						Localization.get("warning.activity.stopActivity.header"),
 						Localization.get("warning.activity.stopActivity.message")))
 					ActivityHandler.getInstance().stopCurrentActivity();
-
 			}
-			case CHRONOMETER -> ActivityHandler.getInstance().stopCurrentActivity();
+			case CHRONOMETER ->
+			{
+				if (!SettingsHandler.getInstance().getSettings().confirmInterruptChronometerActivity.get()
+						|| Feedback.getInstance().askYesNoConfirmation(
+						Localization.get("warning.activity.stopActivity.header"),
+						Localization.get("warning.activity.stopActivity.message")))
+					ActivityHandler.getInstance().stopCurrentActivity();
+			}
 		}
 	}
 
@@ -360,8 +367,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private boolean canStartTimerActivity()
 	{
-		// todo: move this into settings
-		int minTimerDuration = 10; // 10 secondi
+		int minTimerDuration = SettingsHandler.getInstance().getSettings().minimumTimerDuration.get();
 		if (getInputTimerDuration() < minTimerDuration)
 		{
 			Feedback.getInstance().showNotification(Localization.get("error.time.invalidTime.header"),
@@ -379,9 +385,25 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 			updateActivityComboBoxSelectedItem();
 			System.out.println("Activity type changed from " + oldValue + " to " + newValue);
 
-			if (newValue == ActivityType.TIMER) showSpinners();
+			if (newValue == ActivityType.TIMER)
+			{
+				showSpinners();
+				setSpinnersToMinimumTimerDuration();
+			}
 			else hideSpinners();
 		};
+	}
+
+	private void setSpinnersToMinimumTimerDuration()
+	{
+		int totalSeconds = SettingsHandler.getInstance().getSettings().minimumTimerDuration.get();
+		int hours = totalSeconds / 3600;
+		int minutes = (totalSeconds % 3600) / 60;
+		int seconds = totalSeconds % 60;
+
+		hoursSpinnerSelector.setValue(hours);
+		minutesSpinnerSelector.setValue(minutes);
+		secondsSpinnerSelector.setValue(seconds);
 	}
 
 	public void onTimerUpdate(TimerActivity timerActivity)

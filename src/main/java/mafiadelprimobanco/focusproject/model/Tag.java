@@ -56,6 +56,4 @@ public class Tag
 	{
 		this.color = color;
 	}
-
-
 }
