@@ -243,6 +243,7 @@ public class Feedback
 
 	public void showError(String header, String message)
 	{
+		AudioHandler.getInstance().playNotificationAudioClip();
 		MFXFontIcon errorIcon = new MFXFontIcon("mfx-exclamation-circle-filled", 18);
 		dialogContent.setHeaderIcon(errorIcon);
 		dialogContent.setHeaderText(header);
@@ -329,6 +330,7 @@ public class Feedback
 
 	public void showActivityRecap(AbstractActivity activity)
 	{
+		AudioHandler.getInstance().playActivitySuccessAudioClip();
 		if (activity == null || !activity.hasEnded()) return;
 
 		String header;

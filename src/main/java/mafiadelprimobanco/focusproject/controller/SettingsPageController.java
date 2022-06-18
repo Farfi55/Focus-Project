@@ -9,10 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import mafiadelprimobanco.focusproject.handler.Localization;
-import mafiadelprimobanco.focusproject.handler.Feedback;
-import mafiadelprimobanco.focusproject.handler.SettingsHandler;
-import mafiadelprimobanco.focusproject.handler.StyleHandler;
+import mafiadelprimobanco.focusproject.handler.*;
 import mafiadelprimobanco.focusproject.utils.Language;
 import mafiadelprimobanco.focusproject.utils.Theme;
 
@@ -109,6 +106,8 @@ public class SettingsPageController implements Controller
 
 	private Pattern inputValidation;
 
+	private AudioHandler audioHandler;
+
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
@@ -196,7 +195,6 @@ public class SettingsPageController implements Controller
 		confirmBeforeExitLabel.setText(Localization.get("settings.advancedOptions.askConfirmationBeforeQuitting"));
 
 		themeComboBox.setText(settingsHandler.getSettings().theme.getValue().toString());
-
 	}
 
 	private void updateCurrentLanguage()
@@ -285,6 +283,7 @@ public class SettingsPageController implements Controller
 		navigationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().navigationDisabledDuringActivity.set(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 
 		settingsHandler.getSettings().navigationDisabledDuringActivity.addListener(observable -> updateNavigationToggleButton());
@@ -386,6 +385,7 @@ public class SettingsPageController implements Controller
 		timerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().confirmInterruptTimerActivity.setValue(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 	}
 	// --------------------------
@@ -437,6 +437,7 @@ public class SettingsPageController implements Controller
 		chronometerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().confirmInterruptChronometerActivity.setValue(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 	}
 
@@ -460,6 +461,7 @@ public class SettingsPageController implements Controller
 		confirmationRequestToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().confirmQuitApplication.setValue(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 
 		settingsHandler.getSettings().confirmQuitApplication.addListener(observable ->
