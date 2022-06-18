@@ -1,4 +1,4 @@
-.root{
+.root {
     -fx-background-color: palette1-1;
     -mfx-main: palette3-2
 }
@@ -468,25 +468,28 @@ FEEDBACK STYLE
     -fx-background-color: palette1-1;
 }
 
-.dialog .content-container, .dialog .content-container .content{
-    -fx-background-color: transparent;
-}
-.dialog .header-label{
+.dialog .content-container, .dialog .content-container .content {
     -fx-background-color: transparent;
 }
 
-.dialog .actions-pane .mfx-button{
+.dialog .header-label {
+    -fx-background-color: transparent;
+}
+
+.dialog .actions-pane .mfx-button {
     -fx-background-color: palette3-1;
     -fx-border-color: palette3-2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
     -fx-border-width: 2;
 }
-.dialog .actions-pane .mfx-button:hover{
+
+.dialog .actions-pane .mfx-button:hover {
     -fx-background-color: palette3-2;
     -fx-border-color: palette3-3;
 }
-.dialog .actions-pane .mfx-button .mfx-ripple-generator{
+
+.dialog .actions-pane .mfx-button .mfx-ripple-generator {
     -mfx-ripple-color: palette3-3;
 }
 
@@ -495,7 +498,7 @@ FEEDBACK STYLE
 }
 
 #endOfActivityRecap .content-container,
-#endOfActivityRecap .content-container .content{
+#endOfActivityRecap .content-container .content {
     -fx-background-color: transparent;
 }
 
@@ -506,8 +509,65 @@ FEEDBACK STYLE
 
 
 /*
-REGISTRATION STYLE
+PROGRESS STYLE
+ */
 
+#progressPageRoot {
+    -fx-background-color: palette1-1;
+}
+
+#progressPageRoot .mfx-scroll-pane {
+    -fx-background-color: transparent;
+}
+
+#progressTreeSelection {
+    -fx-background-color: palette1-2;
+}
+
+#progressUnlockedTreeDetailGrid {
+}
+
+#progressToUnlockTreeDetailGrid {
+}
+
+.progressTreeDetailGrid {
+    -fx-background-color: palette1-1;
+}
+
+.progressTreeCard{
+    -fx-background-color: palette1-0;
+    -fx-background-radius: 6px;
+    -fx-effect: dropshadow(gaussian, shadow1, 6, 0.3, 0, 3);
+}
+
+
+.selectedTreeToUnlockCard {
+    -fx-border-color: palette3-2;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
+    -fx-effect: dropshadow(gaussian, palette3-1, 10, 0, 0, 3);
+}
+
+.progressPlaceHolderTreeCard{
+    -fx-background-color: transparent;
+}
+
+.progressTreeSelectionButton {
+    -fx-background-color: palette1-0;
+    -fx-background-radius: 5;
+}
+
+#progressIntervalComboBox{
+
+}
+
+#progressTreeContainer{
+    -fx-background-radius: 30;
+    -fx-background-color: rgba(77, 136, 58, 0.49);
+}
+
+/*
+REGISTRATION STYLE
 */
 
 
@@ -607,7 +667,7 @@ SETTINGS STYLE
     -fx-background-color: palette1-1;
 }
 
-.mfx-combo-box .virtual-flow .mfx-combo-box-cell:selected{
+.mfx-combo-box .virtual-flow .mfx-combo-box-cell:selected {
     -fx-background-color: palette1-3;
 }
 
