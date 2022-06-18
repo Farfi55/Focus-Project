@@ -76,10 +76,6 @@ public class SettingsPageController implements Controller
 
 	@FXML
 	private MFXToggleButton navigationToggleButton;
-
-	@FXML
-	private Label pageTitle;
-
 	@FXML
 	private Label soundLabel;
 
@@ -117,7 +113,6 @@ public class SettingsPageController implements Controller
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-		Localization.setLabel(pageTitle, "settingsPage.name");
 		settingsHandler = SettingsHandler.getInstance();
 
 
