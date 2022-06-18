@@ -195,13 +195,13 @@ public class SettingsPageController implements Controller
 
 		confirmBeforeExitLabel.setText(Localization.get("settings.advancedOptions.askConfirmationBeforeQuitting"));
 
-		themeComboBox.setText(settingsHandler.getSettings().currentTheme.getValue().toString());
+		themeComboBox.setText(settingsHandler.getSettings().theme.getValue().toString());
 
 	}
 
 	private void updateCurrentLanguage()
 	{
-		languageComboBox.setText(settingsHandler.getSettings().currentLanguage.getValue().toString());
+		languageComboBox.setText(settingsHandler.getSettings().language.getValue().toString());
 	}
 
 	private void subscribeLanguageComboBox()
@@ -209,14 +209,14 @@ public class SettingsPageController implements Controller
 		languageComboBox.selectedItemProperty().addListener((observer, latestLanguage, newLanguage) ->
 		{
 			if (newLanguage != null && !newLanguage.toString().equals(
-					settingsHandler.getSettings().currentLanguage.toString()))
+					settingsHandler.getSettings().language.toString()))
 			{
-				settingsHandler.getSettings().currentLanguage.set(newLanguage);
+				settingsHandler.getSettings().language.set(newLanguage);
 				updateStringsBasedOnCurrentLanguage();
 			}
 		});
 
-		settingsHandler.getSettings().currentLanguage.addListener(observable ->
+		settingsHandler.getSettings().language.addListener(observable ->
 		{
 			updateCurrentLanguage();
 		});
@@ -244,13 +244,13 @@ public class SettingsPageController implements Controller
 				//todo refactor: a bit unsafe, theme localized in english has to be equal to file name
 				// also this should be in StyleHandler
 				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
-				settingsHandler.getSettings().currentTheme.set(newValue);
+				settingsHandler.getSettings().theme.set(newValue);
 				updateThemeComboBox();
 				updateSelectedTheme();
 			}
 		});
 
-		settingsHandler.getSettings().currentTheme.addListener(observable -> updateThemeComboBox());
+		settingsHandler.getSettings().theme.addListener(observable -> updateThemeComboBox());
 	}
 
 	private void updateAvailableThemes()
@@ -263,13 +263,13 @@ public class SettingsPageController implements Controller
 
 	private void updateSelectedTheme()
 	{
-		themeComboBox.selectItem(settingsHandler.getSettings().currentTheme.getValue());
-		themeComboBox.setText(Localization.get(settingsHandler.getSettings().currentTheme.getValue().key));
+		themeComboBox.selectItem(settingsHandler.getSettings().theme.getValue());
+		themeComboBox.setText(Localization.get(settingsHandler.getSettings().theme.getValue().key));
 	}
 
 	private void updateThemeComboBox()
 	{
-		themeComboBox.setText(settingsHandler.getSettings().currentTheme.getValue().toString());
+		themeComboBox.setText(settingsHandler.getSettings().theme.getValue().toString());
 	}
 	// --------------------------
 
@@ -277,17 +277,17 @@ public class SettingsPageController implements Controller
 	// Navigation Behaviour
 	private void updateNavigationToggleButton()
 	{
-		navigationToggleButton.setSelected(settingsHandler.getSettings().blockNavigation.getValue());
+		navigationToggleButton.setSelected(settingsHandler.getSettings().navigationDisabledDuringActivity.getValue());
 	}
 
 	private void subscribeNavigationToggleButton()
 	{
 		navigationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
-			settingsHandler.getSettings().blockNavigation.set(newValue);
+			settingsHandler.getSettings().navigationDisabledDuringActivity.set(newValue);
 		});
 
-		settingsHandler.getSettings().blockNavigation.addListener(observable -> updateNavigationToggleButton());
+		settingsHandler.getSettings().navigationDisabledDuringActivity.addListener(observable -> updateNavigationToggleButton());
 	}
 	// --------------------------
 
@@ -340,7 +340,7 @@ public class SettingsPageController implements Controller
 	// Timer Behaviour
 	private void updateMinimumTimerTextField()
 	{
-		minimumTimerTextField.setText(settingsHandler.getSettings().minimumTimerTime.getValue().toString());
+		minimumTimerTextField.setText(settingsHandler.getSettings().minimumTimerDuration.getValue().toString());
 	}
 
 	private void subscribeMinimumTimerTextField()
@@ -352,7 +352,7 @@ public class SettingsPageController implements Controller
 
 		minimumTimerTextField.setOnAction(event -> validateMinimumTimerValue());
 
-		settingsHandler.getSettings().minimumTimerTime.addListener(observable ->
+		settingsHandler.getSettings().minimumTimerDuration.addListener(observable ->
 		{
 			updateMinimumTimerTextField();
 		});
@@ -367,25 +367,25 @@ public class SettingsPageController implements Controller
 			feedback.showError(Localization.get("error.settings.invalidTime.header"),
 					Localization.get("error.settings.invalidTime.message"));
 			minimumTimerTextField.setText(
-					settingsHandler.getSettings().minimumTimerTime.getValue().toString());
+					settingsHandler.getSettings().minimumTimerDuration.getValue().toString());
 		}
 		else
 		{
 			minimumTimerTextField.setText(input);
-			settingsHandler.getSettings().minimumTimerTime.setValue(Integer.valueOf(input));
+			settingsHandler.getSettings().minimumTimerDuration.setValue(Integer.valueOf(input));
 		}
 	}
 
 	private void updateTimerConfirmationToggleButton()
 	{
-		timerConfirmationToggleButton.setSelected(settingsHandler.getSettings().requestConfirmationOnFinishedTimerActivity.getValue());
+		timerConfirmationToggleButton.setSelected(settingsHandler.getSettings().confirmInterruptTimerActivity.getValue());
 	}
 
 	private void subscribeTimerConfirmationToggleButton()
 	{
 		timerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
-			settingsHandler.getSettings().requestConfirmationOnFinishedTimerActivity.setValue(newValue);
+			settingsHandler.getSettings().confirmInterruptTimerActivity.setValue(newValue);
 		});
 	}
 	// --------------------------
@@ -394,7 +394,7 @@ public class SettingsPageController implements Controller
 	// Chronometer behaviour
 	private void updateChronometerTextField()
 	{
-		successfulActivityMinimumChronometerTextField.setText(settingsHandler.getSettings().successfulActivityMinimumChronometerTime.getValue().toString());
+		successfulActivityMinimumChronometerTextField.setText(settingsHandler.getSettings().minimumSuccessfulChronometerDuration.getValue().toString());
 	}
 
 	private void subscribeChronometerTextField()
@@ -405,7 +405,7 @@ public class SettingsPageController implements Controller
 		});
 		successfulActivityMinimumChronometerTextField.setOnAction(event -> validateChronometerTextFieldValue());
 
-		settingsHandler.getSettings().successfulActivityMinimumChronometerTime.addListener(observable ->
+		settingsHandler.getSettings().minimumSuccessfulChronometerDuration.addListener(observable ->
 		{
 			updateChronometerTextField();
 		});
@@ -423,20 +423,20 @@ public class SettingsPageController implements Controller
 		}
 		else
 		{
-			settingsHandler.getSettings().successfulActivityMinimumChronometerTime.setValue(Integer.valueOf(input));
+			settingsHandler.getSettings().minimumSuccessfulChronometerDuration.setValue(Integer.valueOf(input));
 			updateChronometerTextField();
 		}
 	}
 
 	private void updateChronometerConfirmationToggleButton()
 	{
-		chronometerConfirmationToggleButton.setSelected(settingsHandler.getSettings().requestConfirmationOnFinishedChronometerActivity.getValue());
+		chronometerConfirmationToggleButton.setSelected(settingsHandler.getSettings().confirmInterruptChronometerActivity.getValue());
 	}
 	private void subscribeChronometerConfirmationToggleButton()
 	{
 		chronometerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
-			settingsHandler.getSettings().requestConfirmationOnFinishedChronometerActivity.setValue(newValue);
+			settingsHandler.getSettings().confirmInterruptChronometerActivity.setValue(newValue);
 		});
 	}
 
@@ -446,23 +446,23 @@ public class SettingsPageController implements Controller
 	// -- Advanced Settings behavior --
 	private void updateAdvancedSettingsVisibility()
 	{
-		advancedSettingsVBox.setVisible(settingsHandler.getSettings().showAdvancedOptions.get());
+		advancedSettingsVBox.setVisible(settingsHandler.getSettings().areAdvancedOptionsShown.get());
 	}
 
 	private void updateConfirmationRequestToggleBox()
 	{
 		confirmationRequestToggleButton.setSelected(
-				settingsHandler.getSettings().confirmBeforeExit.get());
+				settingsHandler.getSettings().confirmQuitApplication.get());
 	}
 
 	private void subscribeConfirmationRequestToggleButton()
 	{
 		confirmationRequestToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
-			settingsHandler.getSettings().confirmBeforeExit.setValue(newValue);
+			settingsHandler.getSettings().confirmQuitApplication.setValue(newValue);
 		});
 
-		settingsHandler.getSettings().confirmBeforeExit.addListener(observable ->
+		settingsHandler.getSettings().confirmQuitApplication.addListener(observable ->
 		{
 			updateConfirmationRequestToggleBox();
 		});

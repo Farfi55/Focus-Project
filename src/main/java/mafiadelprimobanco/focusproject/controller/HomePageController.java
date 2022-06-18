@@ -233,7 +233,6 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void initializeSpinnersSelectors()
 	{
-		// todo: move to settings
 		SimpleBooleanProperty focusNextSpinnerOnCommit = new SimpleBooleanProperty(true);
 
 		List<MFXSpinner<Integer>> spinners = List.of(hoursSpinnerSelector, minutesSpinnerSelector,
@@ -343,13 +342,20 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		{
 			case TIMER, POMODORO ->
 			{
-				if (Feedback.getInstance().askYesNoConfirmation(
+				if (!SettingsHandler.getInstance().getSettings().confirmInterruptTimerActivity.get()
+						|| Feedback.getInstance().askYesNoConfirmation(
 						Localization.get("warning.activity.stopActivity.header"),
 						Localization.get("warning.activity.stopActivity.message")))
 					ActivityHandler.getInstance().stopCurrentActivity();
-
 			}
-			case CHRONOMETER -> ActivityHandler.getInstance().stopCurrentActivity();
+			case CHRONOMETER ->
+			{
+				if (!SettingsHandler.getInstance().getSettings().confirmInterruptChronometerActivity.get()
+						|| Feedback.getInstance().askYesNoConfirmation(
+						Localization.get("warning.activity.stopActivity.header"),
+						Localization.get("warning.activity.stopActivity.message")))
+					ActivityHandler.getInstance().stopCurrentActivity();
+			}
 		}
 	}
 
@@ -373,7 +379,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private boolean canStartTimerActivity()
 	{
-		int minTimerDuration = SettingsHandler.getInstance().getSettings().minimumTimerTime.get();
+		int minTimerDuration = SettingsHandler.getInstance().getSettings().minimumTimerDuration.get();
 		if (getInputTimerDuration() < minTimerDuration)
 		{
 			Feedback.getInstance().showNotification(Localization.get("error.time.invalidTime.header"),
@@ -402,7 +408,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 
 	private void setSpinnersToMinimumTimerDuration()
 	{
-		int totalSeconds = SettingsHandler.getInstance().getSettings().minimumTimerTime.get();
+		int totalSeconds = SettingsHandler.getInstance().getSettings().minimumTimerDuration.get();
 		int hours = totalSeconds / 3600;
 		int minutes = (totalSeconds % 3600) / 60;
 		int seconds = totalSeconds % 60;

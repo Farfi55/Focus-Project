@@ -1,6 +1,5 @@
 package mafiadelprimobanco.focusproject;
 
-import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
@@ -27,8 +26,8 @@ public final class Localization
 	{
 		locale = new SimpleObjectProperty<>(getDefaultLocale());
 		locale.addListener((observable, oldValue, newValue) -> Locale.setDefault(newValue));
-		SettingsHandler.getInstance().getSettings().currentLanguage.addListener((observable, oldValue, newValue) -> {
-			setLocale(SettingsHandler.getInstance().getSettings().currentLanguage.get().language);
+		SettingsHandler.getInstance().getSettings().language.addListener((observable, oldValue, newValue) -> {
+			setLocale(SettingsHandler.getInstance().getSettings().language.get().language);
 		});
 	}
 

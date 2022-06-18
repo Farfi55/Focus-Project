@@ -3,7 +3,6 @@ package mafiadelprimobanco.focusproject.handler;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -71,7 +70,7 @@ public class SceneHandler
 
 		stage.setOnCloseRequest(windowEvent ->
 		{
-			if (SettingsHandler.getInstance().getSettings().confirmBeforeExit.get() && !Feedback.getInstance()
+			if (SettingsHandler.getInstance().getSettings().confirmQuitApplication.get() && !Feedback.getInstance()
 					.askYesNoConfirmation("Chiudi applicazione Focus ", "Sei sicuro di voler chiudere l'applicazione?"))
 				windowEvent.consume();
 			else AutentificationHandler.getInstance().doLogout();

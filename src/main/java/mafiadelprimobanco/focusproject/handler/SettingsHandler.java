@@ -7,7 +7,7 @@ import mafiadelprimobanco.focusproject.utils.Theme;
 public class SettingsHandler
 {
 	private static final SettingsHandler instance = new SettingsHandler();
-	private Settings settings;
+	private final Settings settings;
 
 	public static SettingsHandler getInstance()
 	{
@@ -26,18 +26,18 @@ public class SettingsHandler
 	{
 
 		settings.musicVolume.setValue(30.0);
-		settings.showAdvancedOptions.setValue(true);
-		settings.confirmBeforeExit.setValue(true);
-		settings.currentLanguage.setValue(Language.ENGLISH);
-		settings.currentTheme.setValue(Theme.LIGHT);
-		settings.hideTutorial.setValue(true);
+		settings.areAdvancedOptionsShown.setValue(true);
+		settings.confirmQuitApplication.setValue(true);
+		settings.language.setValue(Language.ENGLISH);
+		settings.theme.setValue(Theme.LIGHT);
+		settings.isTutorialHidden.setValue(true);
 		settings.soundVolume.setValue(70.0);
-		settings.blockNavigation.setValue(false);
-		settings.showAdvancedOptions.setValue(false);
-		settings.successfulActivityMinimumChronometerTime.setValue(20);
-		settings.requestConfirmationOnFinishedChronometerActivity.setValue(true);
-		settings.requestConfirmationOnFinishedTimerActivity.setValue(true);
-		settings.minimumTimerTime.setValue(10);
+		settings.navigationDisabledDuringActivity.setValue(false);
+		settings.areAdvancedOptionsShown.setValue(false);
+		settings.minimumSuccessfulChronometerDuration.setValue(20);
+		settings.confirmInterruptChronometerActivity.setValue(true);
+		settings.confirmInterruptTimerActivity.setValue(true);
+		settings.minimumTimerDuration.setValue(10);
 		settings.resetTutorial.setValue(false);
 	}
 

@@ -64,7 +64,7 @@ public class PagesHandler
 			}
 		});
 
-		SettingsHandler.getInstance().getSettings().blockNavigation.addListener((observable, oldValue, newValue) ->
+		SettingsHandler.getInstance().getSettings().navigationDisabledDuringActivity.addListener((observable, oldValue, newValue) ->
 		{
 			isNavigationEnabled.set(!(ActivityHandler.getInstance().isActivityRunning() && newValue));
 		});
@@ -78,7 +78,7 @@ public class PagesHandler
 	private static void disableNavigation()
 	{
 		if (ActivityHandler.getInstance().getCurrentActivityType() != ActivityType.CHRONOMETER
-				&& SettingsHandler.getInstance().getSettings().blockNavigation.get())
+				&& SettingsHandler.getInstance().getSettings().navigationDisabledDuringActivity.get())
 		{
 			isNavigationEnabled.set(false);
 		}

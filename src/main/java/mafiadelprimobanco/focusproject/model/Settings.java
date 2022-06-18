@@ -6,23 +6,23 @@ import mafiadelprimobanco.focusproject.utils.Theme;
 
 public class Settings
 {
-	public final SimpleObjectProperty<Language> currentLanguage = new SimpleObjectProperty<>();
-	public final SimpleObjectProperty<Theme> currentTheme = new SimpleObjectProperty<>();
-	public final SimpleBooleanProperty blockNavigation = new SimpleBooleanProperty();
-	public final SimpleBooleanProperty hideTutorial = new SimpleBooleanProperty();
+	public final SimpleObjectProperty<Language> language = new SimpleObjectProperty<>();
+	public final SimpleObjectProperty<Theme> theme = new SimpleObjectProperty<>();
+	public final SimpleBooleanProperty navigationDisabledDuringActivity = new SimpleBooleanProperty();
+	public final SimpleBooleanProperty isTutorialHidden = new SimpleBooleanProperty();
 
 	public final SimpleDoubleProperty musicVolume = new SimpleDoubleProperty();
 	public final SimpleDoubleProperty soundVolume = new SimpleDoubleProperty();
 
-	public final SimpleIntegerProperty minimumTimerTime = new SimpleIntegerProperty();
-	public final SimpleBooleanProperty requestConfirmationOnFinishedTimerActivity = new SimpleBooleanProperty();
+	public final SimpleIntegerProperty minimumTimerDuration = new SimpleIntegerProperty();
+	public final SimpleBooleanProperty confirmInterruptTimerActivity = new SimpleBooleanProperty();
 
-	public final SimpleIntegerProperty successfulActivityMinimumChronometerTime = new SimpleIntegerProperty();
-	public final SimpleBooleanProperty requestConfirmationOnFinishedChronometerActivity = new SimpleBooleanProperty();
+	public final SimpleIntegerProperty minimumSuccessfulChronometerDuration = new SimpleIntegerProperty();
+	public final SimpleBooleanProperty confirmInterruptChronometerActivity = new SimpleBooleanProperty();
 
-	public final SimpleBooleanProperty showAdvancedOptions = new SimpleBooleanProperty();
+	public final SimpleBooleanProperty areAdvancedOptionsShown = new SimpleBooleanProperty();
 	public final SimpleBooleanProperty resetTutorial = new SimpleBooleanProperty();
-	public final SimpleBooleanProperty confirmBeforeExit = new SimpleBooleanProperty();
+	public final SimpleBooleanProperty confirmQuitApplication = new SimpleBooleanProperty();
 
 	public Settings()
 	{
