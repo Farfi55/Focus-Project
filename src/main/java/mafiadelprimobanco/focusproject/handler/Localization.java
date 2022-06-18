@@ -1,12 +1,12 @@
 package mafiadelprimobanco.focusproject.handler;
 
-import io.github.palexdev.materialfx.controls.MFXComboBox;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import mafiadelprimobanco.focusproject.handler.SettingsHandler;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -20,12 +20,15 @@ public final class Localization
 	/**
 	 * the current selected Locale.
 	 */
-	private static ObjectProperty<Locale> locale;
+	private static final ObjectProperty<Locale> locale;
 
 	static
 	{
 		locale = new SimpleObjectProperty<>(getDefaultLocale());
 		locale.addListener((observable, oldValue, newValue) -> Locale.setDefault(newValue));
+		SettingsHandler.getInstance().getSettings().language.addListener((observable, oldValue, newValue) -> {
+			setLocale(SettingsHandler.getInstance().getSettings().language.get().language);
+		});
 	}
 
 
@@ -77,6 +80,12 @@ public final class Localization
 	public static String get(final String key, final Object... args)
 	{
 		ResourceBundle bundle = ResourceBundle.getBundle("lang", getLocale());
+		return MessageFormat.format(bundle.getString(key), args);
+	}
+
+	public static String get(final String key, Locale local, final Object... args)
+	{
+		ResourceBundle bundle = ResourceBundle.getBundle("lang", local);
 		return MessageFormat.format(bundle.getString(key), args);
 	}
 

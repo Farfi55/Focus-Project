@@ -1,5 +1,6 @@
 .root{
     -fx-background-color: palette1-1;
+    -mfx-main: palette3-2
 }
 
 .text, .mfx-text-field {
@@ -548,4 +549,69 @@ REGISTRATION STYLE
 
 #loginPane {
     -fx-background-color: transparent;
+}
+
+
+/*
+SETTINGS STYLE
+*/
+
+#settingsPageRoot {
+
+}
+
+#settingsScrollPane {
+    -fx-background-color: palette1-1;
+}
+
+.settingsCategory {
+    -fx-background-color: palette1-2;
+}
+
+.settingsCategoryHeader {
+
+}
+
+
+.mfx-slider {
+    -mfx-main-color: palette3-1;
+    -mfx-main-color-hover: palette3-2;
+    -mfx-main-color-pressed: palette3-3;
+    -mfx-disabled-color: rgb(158, 158, 158);
+}
+
+.mfx-combo-box {
+    -mfx-track-color: rgb(230, 230, 230);
+    -mfx-thumb-color: rgb(137, 137, 137);
+    -mfx-thumb-hover-color: rgb(89, 88, 91);
+    -mfx-gap: 0;
+    -fx-padding: 3 5 3 5;
+}
+
+.mfx-combo-box:focus-within .caret .mfx-font-icon {
+    -mfx-color: palette3-1;
+}
+
+.mfx-combo-box:focus-within .floating-text {
+    -fx-color: palette3-1;
+    -fx-text-fill: palette3-1;
+}
+
+
+.mfx-combo-box .caret .mfx-ripple-generator {
+    -mfx-ripple-color: shadow1;
+    -mfx-ripple-radius: 14;
+}
+
+.mfx-combo-box .virtual-flow .mfx-combo-box-cell:hover {
+    -fx-background-color: palette1-1;
+}
+
+.mfx-combo-box .virtual-flow .mfx-combo-box-cell:selected{
+    -fx-background-color: palette1-3;
+}
+
+.mfx-toggle-button {
+    -mfx-main: palette3-2;
+    -mfx-secondary: rgb(90, 89, 89);
 }

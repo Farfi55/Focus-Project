@@ -21,7 +21,7 @@ public class PagesHandler
 	public static final Page statistics = new Page(2, STATISTICS, "statisticsPage.name", false, false, KeyCode.S);
 	public static final Page info = new Page(3, INFO, "infoPage.name", false, false, KeyCode.I);
 	public static final Page registration = new Page(4, REGISTRATION, "RegistrationPage.name", false, false, KeyCode.R);
-	public static final Page settings = new Page(5, SETTINGS, "settingsPage.name", true, false, KeyCode.COMMA);
+	public static final Page settings = new Page(5, SETTINGS, "settingsPage.name", true, true, KeyCode.COMMA);
 	private static final SimpleBooleanProperty isNavigationEnabled;
 	private static final SimpleObjectProperty<Page> currentPage;
 	private static List<Page> pages;
@@ -62,6 +62,11 @@ public class PagesHandler
 				enableNavigation();
 			}
 		});
+
+		SettingsHandler.getInstance().getSettings().navigationDisabledDuringActivity.addListener((observable, oldValue, newValue) ->
+		{
+			isNavigationEnabled.set(!(ActivityHandler.getInstance().isActivityRunning() && newValue));
+		});
 	}
 
 	private static void enableNavigation()
@@ -71,12 +76,8 @@ public class PagesHandler
 
 	private static void disableNavigation()
 	{
-		// TODO Move to settings
-		//  and listen for changes
-		boolean isNavigationDisabledOnActivityRunning = true;
-
 		if (ActivityHandler.getInstance().getCurrentActivityType() != ActivityType.CHRONOMETER
-				&& isNavigationDisabledOnActivityRunning)
+				&& SettingsHandler.getInstance().getSettings().navigationDisabledDuringActivity.get())
 		{
 			isNavigationEnabled.set(false);
 		}
