@@ -332,7 +332,9 @@ public class Feedback
 
 	public void showActivityRecap(AbstractActivity activity)
 	{
-		AudioHandler.getInstance().playActivitySuccessAudioClip();
+		if (activity.wasSuccessful()) AudioHandler.getInstance().playSuccessfulActivityAudioClip();
+		else AudioHandler.getInstance().playFailedActivityAudioClip();
+
 		if (activity == null || !activity.hasEnded()) return;
 
 		String header;
