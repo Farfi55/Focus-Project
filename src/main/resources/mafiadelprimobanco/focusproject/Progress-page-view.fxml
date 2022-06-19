@@ -14,20 +14,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<AnchorPane prefHeight="580.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.ProgressPageController">
+<AnchorPane id="progressPageRoot" prefHeight="580.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.ProgressPageController">
    <children>
       <MFXScrollPane fitToWidth="true" layoutY="91.0" prefHeight="548.0" prefWidth="659.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <VBox alignment="TOP_CENTER" prefHeight="258.0" prefWidth="599.0" spacing="10.0">
+            <VBox alignment="TOP_CENTER" prefHeight="258.0" prefWidth="599.0" spacing="30.0">
                <children>
                   <StackPane maxWidth="1000.0" minHeight="-Infinity" prefHeight="150.0" prefWidth="579.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="972.0">
+                        <HBox prefHeight="100.0" prefWidth="972.0" spacing="10.0">
                            <children>
                               <StackPane prefHeight="150.0" prefWidth="594.0">
                                  <children>
                                     <HBox fx:id="treeSelectionHBox" alignment="CENTER" prefHeight="130.0" prefWidth="481.0" spacing="10.0" />
-                                    <MFXButton fx:id="treeSelectPreviousButton" contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectPreviousAction" text="previous" translateX="-70.0">
+                                    <MFXButton fx:id="treeSelectPreviousButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onTreeSelectPreviousAction" prefHeight="30.0" prefWidth="30.0" text="previous" translateX="-70.0">
                                        <graphic>
                                           <FontIcon iconLiteral="mdi2a-arrow-left" iconSize="20" />
                                        </graphic>
@@ -35,7 +35,7 @@
                                           <Insets />
                                        </StackPane.margin>
                                     </MFXButton>
-                                    <MFXButton fx:id="treeSelectNextButton" contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectNextAction" text="next" translateX="70.0">
+                                    <MFXButton fx:id="treeSelectNextButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onTreeSelectNextAction" prefHeight="30.0" prefWidth="30.0" text="next" translateX="70.0">
                                        <graphic>
                                           <FontIcon iconLiteral="mdi2a-arrow-right" iconSize="20" />
                                        </graphic>
@@ -80,7 +80,7 @@
                      </children>
                   </StackPane>
                   <MFXComboBox fx:id="intervalComboBox" promptText="interval" />
-                  <FlowPane fx:id="treesRoot" prefHeight="200.0" prefWidth="200.0" />
+                  <FlowPane fx:id="treesRoot" minHeight="300.0" prefHeight="200.0" prefWidth="200.0" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

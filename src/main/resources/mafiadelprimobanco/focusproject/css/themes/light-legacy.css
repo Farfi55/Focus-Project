@@ -1,0 +1,31 @@
+/*
+    this css file should only include variables definitions
+*/
+
+* {
+    /*
+        color palette:
+        https://trello.com/c/Nz8HoTV3/17-color-design
+        https://coolors.co/palette/f0ead2-dde5b6-adc178-a98467-6c584c
+        https://coolors.co/palette/f0ead2-e7e8c4-dde5b6-c5d397-b9ca88-adc178-a98467-95755e-806755-6c584c
+
+    */
+
+    palette1-0: #faf6ef;
+    palette1-1: #F0EAD2;
+    palette1-2: #E7E8C4;
+    palette1-3: #DDE5B6;
+
+    palette2-1: #C5D397;
+    palette2-2: #B9CA88;
+    palette2-3: #acc273;
+
+    palette3-1: #A98467;
+    palette3-2: #95755E;
+    palette3-3: #806755;
+
+    palette4-1: #1e1715;
+    palette4-2: #525252;
+
+    shadow1: rgba(46, 75, 26, 0.3);
+}

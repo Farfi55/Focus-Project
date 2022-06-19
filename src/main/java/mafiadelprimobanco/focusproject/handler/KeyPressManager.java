@@ -38,7 +38,7 @@ public class KeyPressManager implements EventHandler<KeyEvent>
 		}
 		else if (event.isControlDown() && event.getCode().equals(KeyCode.L))
 		{
-			StyleHandler.getInstance().setTheme("light2");
+			StyleHandler.getInstance().setTheme("light-legacy");
 			event.consume();
 		}
 		else if (event.isControlDown() && event.getCode().equals(KeyCode.J))
