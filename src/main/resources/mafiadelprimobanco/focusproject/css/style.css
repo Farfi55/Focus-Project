@@ -1,18 +1,28 @@
 .root {
     -fx-background-color: palette1-1;
-    -mfx-main: palette3-2
+    -mfx-main: palette3-2;
+    -fx-text-fill: palette4-1;
+    -fx-fill: palette4-1;
 }
 
+.label {
+    -fx-background-color: transparent;
+    -fx-text-fill: palette4-1;
+}
 .text, .mfx-text-field {
-    /*just to make it obvious where it's missing*/
-    -fx-font-family: "Roboto";
+    -fx-font-family: "consolas";
     -fx-font-size: 14;
-    -fx-background-color: palette1-0;
-    -fx-border-color: palette4-1;
+    -fx-background-color: palette1-1;
     -fx-text-fill: palette4-1;
 }
 
+
+.mfx-text-field {
+    -fx-border-color: palette4-1;
+}
+
 .mfx-text-field:focused {
+    -fx-background-color: palette1-0;
     -fx-border-color: palette3-1;
 }
 
@@ -646,6 +656,11 @@ SETTINGS STYLE
     -mfx-thumb-hover-color: rgb(89, 88, 91);
     -mfx-gap: 0;
     -fx-padding: 3 5 3 5;
+}
+
+
+.mfx-combo-box .caret .mfx-font-icon {
+    -mfx-color: palette4-1;
 }
 
 .mfx-combo-box:focus-within .caret .mfx-font-icon {
