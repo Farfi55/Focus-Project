@@ -3,14 +3,16 @@
     -mfx-main: palette3-2;
     -fx-text-fill: palette4-1;
     -fx-fill: palette4-1;
+    -fx-font-family: "Roboto";
 }
 
 .label {
     -fx-background-color: transparent;
     -fx-text-fill: palette4-1;
+    -fx-font-family: "Roboto";
 }
-.text, .mfx-text-field {
-    -fx-font-family: "consolas";
+.text, .mfx-text-field, .mfx-text-field .measure-unit {
+    -fx-font-family: "Roboto";
     -fx-font-size: 14;
     -fx-background-color: palette1-1;
     -fx-text-fill: palette4-1;
@@ -31,14 +33,19 @@
 }
 
 .mfx-combo-box {
+    -fx-font-family: "Roboto";
     -fx-background-color: palette1-0;
     -fx-border-color: transparent;
-
 }
 
 .mfx-combo-box .combo-popup {
     -fx-background-color: palette1-0;
     -fx-min-height: 200;
+}
+
+.ikonli-font-icon, .mfx-font-icon {
+    -fx-fill: palette4-1;
+    -fx-text-fill: palette4-1;
 }
 
 
@@ -243,6 +250,7 @@
 }
 
 #homeActivityButton {
+    -fx-text-fill: palette4-1;
     -fx-border-color: palette3-2;
     -fx-border-width: 2;
     -fx-border-radius: 8;
@@ -341,6 +349,7 @@
 todo: this should be a reusable class
  */
 #newTagButton {
+    -fx-text-fill: palette4-1;
     -fx-border-color: palette3-2;
     -fx-border-width: 2;
     -fx-border-radius: 8;
@@ -487,6 +496,7 @@ FEEDBACK STYLE
 }
 
 .dialog .actions-pane .mfx-button {
+    -fx-text-fill: palette4-1;
     -fx-background-color: palette3-1;
     -fx-border-color: palette3-2;
     -fx-border-radius: 5;
@@ -530,24 +540,30 @@ PROGRESS STYLE
     -fx-background-color: transparent;
 }
 
-#progressTreeSelection {
+#progressTreeSelection, .progressTreeDetailGrid {
     -fx-background-color: palette1-2;
+    -fx-background-radius: 9;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-border-color: palette1-3;
+    -fx-padding: 4 8 4 8;
+    -fx-effect: innershadow(gaussian, shadow1, 12, 0.4, 0, 0);
 }
 
-#progressUnlockedTreeDetailGrid {
-}
-
+#progressUnlockedTreeDetailGrid,
 #progressToUnlockTreeDetailGrid {
 }
 
-.progressTreeDetailGrid {
-    -fx-background-color: palette1-1;
-}
 
 .progressTreeCard{
     -fx-background-color: palette1-0;
-    -fx-background-radius: 6px;
+    -fx-background-radius: 6;
     -fx-effect: dropshadow(gaussian, shadow1, 6, 0.3, 0, 3);
+}
+
+.progressTreeCard:hover {
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, shadow1, 12, 0.3, 0, 3);
 }
 
 
@@ -564,7 +580,13 @@ PROGRESS STYLE
 
 .progressTreeSelectionButton {
     -fx-background-color: palette1-0;
-    -fx-background-radius: 5;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: palette1-2;
+}
+.progressTreeSelectionButton:hover {
+    -fx-background-color: palette1-1;
+    -fx-border-color: palette3-1;
 }
 
 #progressIntervalComboBox{
@@ -609,7 +631,7 @@ REGISTRATION STYLE
 
 .outline-button:hover,
 .outline-button:focused {
-    -fx-text-fill: white;
+    -fx-text-fill: palette4-1;
 }
 
 
@@ -667,6 +689,9 @@ SETTINGS STYLE
     -mfx-color: palette3-1;
 }
 
+.mfx-combo-box .floating-text {
+    -fx-text-fill: palette4-1;
+}
 .mfx-combo-box:focus-within .floating-text {
     -fx-color: palette3-1;
     -fx-text-fill: palette3-1;
@@ -676,6 +701,11 @@ SETTINGS STYLE
 .mfx-combo-box .caret .mfx-ripple-generator {
     -mfx-ripple-color: shadow1;
     -mfx-ripple-radius: 14;
+}
+
+.mfx-combo-box .virtual-flow{
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette1-2;
 }
 
 .mfx-combo-box .virtual-flow .mfx-combo-box-cell:hover {

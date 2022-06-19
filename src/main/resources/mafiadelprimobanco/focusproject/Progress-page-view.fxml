@@ -22,12 +22,12 @@
                <children>
                   <StackPane maxWidth="1000.0" minHeight="-Infinity" prefHeight="150.0" prefWidth="579.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="972.0">
+                        <HBox prefHeight="100.0" prefWidth="972.0" spacing="10.0">
                            <children>
                               <StackPane prefHeight="150.0" prefWidth="594.0">
                                  <children>
                                     <HBox fx:id="treeSelectionHBox" alignment="CENTER" prefHeight="130.0" prefWidth="481.0" spacing="10.0" />
-                                    <MFXButton fx:id="treeSelectPreviousButton" contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectPreviousAction" text="previous" translateX="-70.0">
+                                    <MFXButton fx:id="treeSelectPreviousButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onTreeSelectPreviousAction" prefHeight="30.0" prefWidth="30.0" text="previous" translateX="-70.0">
                                        <graphic>
                                           <FontIcon iconLiteral="mdi2a-arrow-left" iconSize="20" />
                                        </graphic>
@@ -35,7 +35,7 @@
                                           <Insets />
                                        </StackPane.margin>
                                     </MFXButton>
-                                    <MFXButton fx:id="treeSelectNextButton" contentDisplay="GRAPHIC_ONLY" onAction="#onTreeSelectNextAction" text="next" translateX="70.0">
+                                    <MFXButton fx:id="treeSelectNextButton" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onTreeSelectNextAction" prefHeight="30.0" prefWidth="30.0" text="next" translateX="70.0">
                                        <graphic>
                                           <FontIcon iconLiteral="mdi2a-arrow-right" iconSize="20" />
                                        </graphic>
