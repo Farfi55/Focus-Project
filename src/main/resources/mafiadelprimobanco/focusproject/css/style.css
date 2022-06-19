@@ -620,6 +620,33 @@ PROGRESS STYLE
 REGISTRATION STYLE
 */
 
+#loginPopUp{
+    -fx-background-color: palette1-1;
+    -mfx-main: palette3-2;
+    -mfx-text-he: palette3-2;
+    -fx-text-fill: palette4-1;
+    -fx-fill: palette4-1;
+    -fx-font-family: "Roboto";
+    -fx-border-color: palette3-1;
+}
+
+
+#loginPopUp .text,
+#loginPopUp .label,
+#loginPopUp .text-field {
+    -fx-text-fill: palette4-1;
+}
+
+#loginPopUp .mfx-button {
+    -fx-background-color: palette1-0;
+    -fx-text-fill: palette4-1;
+}
+
+#loginPopUp .mfx-text-field,
+#loginPopUp .mfx-password-field{
+    -fx-background-color: palette1-0;
+    -fx-text-fill: palette4-1;
+}
 
 .mfx-stepper .mfx-text-field {
     -mfx-float-mode: disabled;
@@ -726,10 +753,14 @@ SETTINGS STYLE
     -mfx-color: palette3-1;
 }
 
-.mfx-combo-box .floating-text {
+.mfx-combo-box .floating-text,
+.mfx-password-field .floating-text,
+.mfx-text-field .floating-text {
     -fx-text-fill: palette4-1;
 }
 
+.mfx-text-field:focus-within .floating-text,
+.mfx-password-field:focus-within .floating-text,
 .mfx-combo-box:focus-within .floating-text {
     -fx-color: palette3-1;
     -fx-text-fill: palette3-1;
