@@ -14,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import mafiadelprimobanco.focusproject.handler.Feedback;
 import mafiadelprimobanco.focusproject.handler.Localization;
