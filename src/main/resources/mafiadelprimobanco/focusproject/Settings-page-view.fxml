@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-  <MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="500.0" style="-fx-background-color: rgba(0,0,0,0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.SettingsPageController">
+<MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="500.0" style="-fx-background-color: rgba(0,0,0,0);" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mafiadelprimobanco.focusproject.controller.SettingsPageController">
       <VBox alignment="TOP_CENTER" fillWidth="false">
           <VBox alignment="TOP_CENTER" prefHeight="190.0" prefWidth="459.0" styleClass="settingsCategory">
               <Label fx:id="generalCategoryLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="521.0" styleClass="settingsCategoryHeader" text="Generali" textAlignment="CENTER">
@@ -310,7 +309,7 @@
                   <Insets top="15.0" />
               </VBox.margin>
           </VBox>
-          <MFXButton fx:id="advancedSettingsButton" onMouseClicked="#onMouseClickedAdvancedSettingsButton" style="-fx-background-color: rgba(0,0,0,0.1);" text="Impostazioni avanzate">
+          <MFXButton fx:id="advancedSettingsButton" onMouseClicked="#onMouseClickedAdvancedSettingsButton" text="Impostazioni avanzate">
               <VBox.margin>
                   <Insets top="15.0" />
               </VBox.margin>

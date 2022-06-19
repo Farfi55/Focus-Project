@@ -5,6 +5,7 @@
     -fx-text-fill: palette4-1;
     -fx-fill: palette4-1;
     -fx-font-family: "Roboto";
+    -fx-font-size: 14;
 }
 
 .label {
@@ -15,9 +16,10 @@
 
 .text-field {
     -fx-highlight-fill: #fdede0;
+    -fx-prompt-text-fill: palette4-2;
+    -fx-text-fill: palette4-1;
     -fx-font-family: "Roboto";
     -fx-font-size: 14;
-    -fx-text-fill: palette4-1;
 }
 
 .text, .mfx-text-field .mfx-text-field .measure-unit {
@@ -38,6 +40,10 @@
 }
 
 .mfx-text-field .floating-text {
+    -fx-background-color: inherit;
+}
+
+.mfx-text-field . {
     -fx-background-color: inherit;
 }
 
@@ -644,6 +650,7 @@ REGISTRATION STYLE
 
 #loginPopUp .mfx-text-field,
 #loginPopUp .mfx-password-field {
+
     -fx-background-color: palette1-0;
     -fx-text-fill: palette4-1;
 }
@@ -652,43 +659,87 @@ REGISTRATION STYLE
     -fx-background-color: palette1-1;
 }
 
-#registrationPageRoot .mfx-stepper {
+.mfx-stepper {
     -mfx-base-color: palette3-2;
-    -mfx-alt-color: palette2-2;
+    -mfx-alt-color: palette1-1;
     -mfx-progress-color: palette2-2;
 }
 
-#registrationPageRoot .mfx-button,
-#registrationPageRoot .mfx-text-field {
+#registrationPageRoot .text-field{
+    -fx-max-height: 26;
+    -fx-pref-height: 26;
+    -fx-min-height: 26;
+
+}
+.mfx-stepper .mfx-button,
+.mfx-stepper .mfx-text-field {
     -fx-background-color: palette1-0;
     -fx-text-fill: palette4-1;
     -fx-pref-width: 200;
+    -fx-min-width: 200;
+    -fx-max-height: 34;
+    -fx-pref-height: 34;
+    -fx-min-height: 34;
 }
 
-#registrationPageRoot .text,
-#registrationPageRoot .text-field,
-#registrationPageRoot .label {
+.mfx-stepper .text,
+.mfx-stepper .text-field,
+.mfx-stepper .label {
     -fx-text-fill: palette4-1;
 }
 
-.mfx-stepper {
-    -mfx-main-color: palette3-2;
+#registrationPageRoot .header-label {
 }
 
-.outline-button {
-    -fx-background-color: palette1-0;
-    -fx-border-color: palette3-1;
-    -fx-border-radius: 3;
-
-    -fx-text-fill: palette4-1;
+#registrationPageRoo .hbox{
+    -fx-background-color: palette1-2;
+    -fx-background-radius: 6;
+    -fx-padding: 4;
 }
 
-.outline-button:hover,
-.outline-button:focused {
-    -fx-background-color: palette3-1;
-    -fx-text-fill: palette4-1;
-}
+/*.outline-button {*/
+/*    -fx-background-color: palette1-0;*/
+/*    -fx-border-color: palette3-1;*/
+/*    -fx-border-radius: 3;*/
 
+/*    -fx-text-fill: palette4-1;*/
+/*}*/
+
+/*.outline-button:hover,*/
+/*.outline-button:focused {*/
+/*    -fx-background-color: palette3-1;*/
+/*    -fx-text-fill: palette4-1;*/
+/*}*/
+
+
+/*.mfx-stepper-toggle,*/
+/*.mfx-stepper-toggle:none #circle,*/
+/*.mfx-stepper-toggle:selected #circle,*/
+/*.mfx-stepper-toggle:completed #circle,*/
+/*.mfx-stepper-toggle:invalid #circle,*/
+/*#circle {*/
+/*    -fx-background-color: #f00;*/
+/*    -fx-stroke: #00f;*/
+/*    -fx-fill: #0ff;*/
+/*    -mfx-main: #a0a;*/
+/*    -fx-border-color: #589;*/
+/*}*/
+
+
+/*.mfx-stepper-toggle:selected,*/
+/*.mfx-stepper-toggle:selected #circle {*/
+/*    -fx-stroke: palette2-2;*/
+/*}*/
+
+/*.mfx-stepper-toggle:selected .mfx-text-field {*/
+/*    -fx-text-fill: palette4-1;*/
+/*}*/
+
+/*.mfx-stepper-toggle:completed,*/
+/*.mfx-stepper-toggle:completed #circle {*/
+/*    -fx-stroke: palette2-2;*/
+/*    -fx-fill: palette2-2;*/
+/*}*/
 
 #loginPane {
     -fx-background-color: transparent;
@@ -739,15 +790,14 @@ SETTINGS STYLE
     -mfx-main-color: palette3-1;
     -mfx-main-color-hover: palette3-2;
     -mfx-main-color-pressed: palette3-3;
-    -mfx-disabled-color: rgb(158, 158, 158);
+    -mfx-disabled-color: palette4-2;
 }
 
 .mfx-combo-box {
     -mfx-track-color: rgb(230, 230, 230);
     -mfx-thumb-color: rgb(137, 137, 137);
     -mfx-thumb-hover-color: rgb(89, 88, 91);
-    -mfx-gap: 0;
-    -fx-padding: 3 5 3 5;
+    /*-mfx-gap: 0;*/
 }
 
 
@@ -768,8 +818,8 @@ SETTINGS STYLE
 .mfx-text-field:focus-within .floating-text,
 .mfx-password-field:focus-within .floating-text,
 .mfx-combo-box:focus-within .floating-text {
-    -fx-color: palette3-1;
-    -fx-text-fill: palette3-1;
+    -fx-color: palette3-2;
+    -fx-text-fill: palette3-2;
 }
 
 
@@ -793,5 +843,10 @@ SETTINGS STYLE
 
 .mfx-toggle-button {
     -mfx-main: palette3-2;
-    -mfx-secondary: rgb(90, 89, 89);
+    -mfx-secondary: palette4-2;
+}
+
+.mfx-checkbox {
+    -mfx-main: palette3-2;
+    -mfx-secondary: palette4-2;
 }
