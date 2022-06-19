@@ -357,6 +357,40 @@ public class Feedback
 		activityRecapDialog.showDialog();
 	}
 
+
+	public void showSimpleActivityRecap(AbstractActivity activity)
+	{
+		if (activity == null || !activity.hasEnded()) return;
+
+		String header;
+		activityRecapDialogContent.clearTextContent();
+		TextFlow textContent = activityRecapDialogContent.getTextContent();
+
+		baseActivityRecap(textContent, activity);
+
+		if (activity instanceof ChronometerActivity chronometerActivity)
+		{
+			header = Localization.get("feedback.EoAR.header.chronometer");
+			chronometerActivityRecap(textContent, chronometerActivity);
+		}
+		else if (activity instanceof TimerActivity timerActivity)
+		{
+			header = Localization.get("feedback.EoAR.header.timer");
+			timerActivityRecap(textContent, timerActivity);
+		}
+		else throw new IllegalArgumentException();
+
+		addText(textContent, Localization.get("feedback.EoAR.tag.selected"));
+		Tag tag = activity.getTag();
+		addText(textContent, tag.getName() + " ", FontWeight.BOLD);
+		textContent.getChildren().add(new Circle(6, tag.getColor()));
+
+
+		activityRecapDialogContent.setHeaderText(header);
+
+		activityRecapDialog.showDialog();
+	}
+
 	private void addBoldText(TextFlow textFlow, String text) { addText(textFlow, text, FontWeight.BOLD); }
 
 

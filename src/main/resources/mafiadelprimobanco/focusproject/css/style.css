@@ -1,6 +1,7 @@
 .root {
     -fx-background-color: palette1-1;
     -mfx-main: palette3-2;
+    -mfx-text-he: palette3-2;
     -fx-text-fill: palette4-1;
     -fx-fill: palette4-1;
     -fx-font-family: "Roboto";
@@ -12,7 +13,14 @@
     -fx-font-family: "Roboto";
 }
 
-.text, .mfx-text-field, .mfx-text-field .measure-unit {
+.text-field {
+    -fx-highlight-fill: #fdede0;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14;
+    -fx-text-fill: palette4-1;
+}
+
+.text, .mfx-text-field .mfx-text-field .measure-unit {
     -fx-font-family: "Roboto";
     -fx-font-size: 14;
     -fx-background-color: palette1-1;
@@ -598,6 +606,14 @@ PROGRESS STYLE
 #progressTreeContainer {
     -fx-background-radius: 30;
     -fx-background-color: palette2-1;
+}
+
+.progressTree {
+    -fx-background-color: transparent;
+}
+
+.progressTree .mfx-ripple-generator {
+    -mfx-paused: true;
 }
 
 /*

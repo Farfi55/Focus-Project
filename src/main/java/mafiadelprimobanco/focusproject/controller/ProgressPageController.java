@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -14,9 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
-import mafiadelprimobanco.focusproject.handler.ActivityStatsHandler;
-import mafiadelprimobanco.focusproject.handler.Localization;
-import mafiadelprimobanco.focusproject.handler.TreeHandler;
+import mafiadelprimobanco.focusproject.handler.*;
+import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Interval;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
@@ -159,7 +159,7 @@ public class ProgressPageController implements Controller
 			unlockProgressBar.setProgress(tree.getUnlockProgress());
 			// we want the progress bar to occupy the same space while it's hidden
 			unlockProgressBar.setVisible(tree.isNotUnlocked());
-			if (selectedPreviewTree.get().equals(tree)) updateTreePreviewDetails();
+			if (selectedPreviewTree.get().equals(tree)) Platform.runLater(this::updateTreePreviewDetails);
 		});
 		unlockProgressBar.setMinHeight(6);
 		unlockProgressBar.setVisible(tree.isNotUnlocked());
@@ -301,16 +301,17 @@ public class ProgressPageController implements Controller
 
 		for (AbstractActivity activity : activities)
 		{
-			StackPane node = buildTree(activity);
+			MFXButton node = buildTree(activity);
 			treesRoot.getChildren().add(node);
 		}
 
 	}
 
-	private StackPane buildTree(AbstractActivity activity)
+	private MFXButton buildTree(AbstractActivity activity)
 	{
 		ImageView imageView = new ImageView(ResourcesLoader.loadImage(activity.getFinalTreeSpritePath()));
-		StackPane treeRoot = new StackPane(imageView);
+		MFXButton treeRoot = new MFXButton("", imageView);
+		treeRoot.setOnAction(event -> Feedback.getInstance().showSimpleActivityRecap(activity));
 		treeRoot.getStyleClass().add("progressTree");
 		imageView.getStyleClass().add("progressTreeImageView");
 
@@ -428,8 +429,11 @@ public class ProgressPageController implements Controller
 		Tree tree = TreeHandler.getInstance().getTree(treeUuid);
 		this.selectedPreviewTree.set(tree);
 
-		updateTreeSelectionHBoxItems();
-		updateTreePreviewDetails();
+		Platform.runLater(() ->
+		{
+			updateTreeSelectionHBoxItems();
+			updateTreePreviewDetails();
+		});
 	}
 
 	private void setSelectedPreviewTree(Tree selectedPreviewTree)
