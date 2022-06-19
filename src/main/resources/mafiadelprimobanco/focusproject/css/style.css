@@ -597,7 +597,7 @@ PROGRESS STYLE
 
 #progressTreeContainer {
     -fx-background-radius: 30;
-    -fx-background-color: rgba(77, 136, 58, 0.49);
+    -fx-background-color: palette2-1;
 }
 
 /*
