@@ -14,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import mafiadelprimobanco.focusproject.handler.Feedback;
 import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.StyleHandler;
@@ -127,9 +129,11 @@ public class TreeChooserPopup extends MFXPopup
 		Label treeLabel = new Label(tree.getName(), image);
 		treeLabel.setMaxSize(-1, -1);
 		treeLabel.setMinSize(-1, -1);
-		treeLabel.setPrefSize(100, 110);
+		treeLabel.setPrefSize(100, 130);
+		treeLabel.setWrapText(true);
 		treeLabel.setPadding(Insets.EMPTY);
 		treeLabel.setAlignment(Pos.CENTER);
+		treeLabel.setTextAlignment(TextAlignment.CENTER);
 
 
 		treeLabel.setContentDisplay(ContentDisplay.TOP);
@@ -142,7 +146,7 @@ public class TreeChooserPopup extends MFXPopup
 		button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 		button.setMaxSize(-1, -1);
 		button.setMinSize(-1, -1);
-		button.setPrefSize(120, 120);
+		button.setPrefSize(120, 140);
 		button.setOnAction(event ->
 		{
 			if (tree.isUnlocked())
