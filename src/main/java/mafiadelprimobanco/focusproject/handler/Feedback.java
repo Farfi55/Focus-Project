@@ -366,6 +366,8 @@ public class Feedback
 		activityRecapDialogContent.clearTextContent();
 		TextFlow textContent = activityRecapDialogContent.getTextContent();
 
+		addText(textContent, Localization.get("feedback.EoAR.startDate"));
+		addBoldText(textContent, activity.getStartTime().toLocalDate().toString() + "\n");
 		baseActivityRecap(textContent, activity);
 
 		if (activity instanceof ChronometerActivity chronometerActivity)
