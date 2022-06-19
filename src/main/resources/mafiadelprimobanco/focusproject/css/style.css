@@ -620,7 +620,7 @@ PROGRESS STYLE
 REGISTRATION STYLE
 */
 
-#loginPopUp{
+#loginPopUp {
     -fx-background-color: palette1-1;
     -mfx-main: palette3-2;
     -mfx-text-he: palette3-2;
@@ -643,46 +643,52 @@ REGISTRATION STYLE
 }
 
 #loginPopUp .mfx-text-field,
-#loginPopUp .mfx-password-field{
+#loginPopUp .mfx-password-field {
     -fx-background-color: palette1-0;
     -fx-text-fill: palette4-1;
 }
 
-.mfx-stepper .mfx-text-field {
-    -mfx-float-mode: disabled;
+#registrationPageRoot {
+    -fx-background-color: palette1-1;
+}
+
+#registrationPageRoot .mfx-stepper {
+    -mfx-base-color: palette3-2;
+    -mfx-alt-color: palette2-2;
+    -mfx-progress-color: palette2-2;
+}
+
+#registrationPageRoot .mfx-button,
+#registrationPageRoot .mfx-text-field {
+    -fx-background-color: palette1-0;
+    -fx-text-fill: palette4-1;
     -fx-pref-width: 200;
 }
 
-.mfx-stepper .mfx-stepper-toggle .mfx-text-field {
-    -fx-border-color: transparent;
-    -fx-pref-width: 1;
+#registrationPageRoot .text,
+#registrationPageRoot .text-field,
+#registrationPageRoot .label {
+    -fx-text-fill: palette4-1;
 }
 
-
-.mfx-stepper .header-label {
-    -fx-border-color: transparent;
-}
-
-.mfx-stepper .completed-label {
-    -fx-border-color: transparent;
-    -fx-font-size: 24;
-    -fx-alignment: center;
+.mfx-stepper {
+    -mfx-main-color: palette3-2;
 }
 
 .outline-button {
-    -fx-background-color: transparent;
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette3-1;
     -fx-border-radius: 3;
+
+    -fx-text-fill: palette4-1;
 }
 
 .outline-button:hover,
 .outline-button:focused {
+    -fx-background-color: palette3-1;
     -fx-text-fill: palette4-1;
 }
 
-
-.progress-indicator .percentage {
-    -fx-fill: null;
-}
 
 #loginPane {
     -fx-background-color: transparent;
