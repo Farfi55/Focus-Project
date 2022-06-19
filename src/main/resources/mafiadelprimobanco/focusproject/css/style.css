@@ -22,6 +22,8 @@
     -fx-font-size: 14;
 }
 
+
+
 .text, .mfx-text-field .mfx-text-field .measure-unit {
     -fx-font-family: "Roboto";
     -fx-font-size: 14;
@@ -32,7 +34,13 @@
 
 .mfx-text-field {
     -fx-border-color: palette4-1;
+    -fx-background-color: palette1-0;
 }
+
+.mfx-text-field .measure-unit {
+    -fx-text-fill: palette4-1;
+}
+
 
 .mfx-text-field:focused {
     -fx-background-color: palette1-0;
@@ -43,9 +51,6 @@
     -fx-background-color: inherit;
 }
 
-.mfx-text-field . {
-    -fx-background-color: inherit;
-}
 
 .mfx-combo-box {
     -fx-font-family: "Roboto";
@@ -691,11 +696,13 @@ REGISTRATION STYLE
 #registrationPageRoot .header-label {
 }
 
-#registrationPageRoo .hbox{
+#registrationPageRoot .registrationFieldBox{
     -fx-background-color: palette1-2;
     -fx-background-radius: 6;
     -fx-padding: 4;
 }
+
+
 
 /*.outline-button {*/
 /*    -fx-background-color: palette1-0;*/
@@ -849,4 +856,6 @@ SETTINGS STYLE
 .mfx-checkbox {
     -mfx-main: palette3-2;
     -mfx-secondary: palette4-2;
+    -fx-text-fill: palette4-1;
 }
+

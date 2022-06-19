@@ -120,24 +120,28 @@ public class RegistrationPageController implements Controller
 		Label emailLabel = new Label("Email: ");
 		Label emailValueLabel = new Label("");
 		emailValueLabel.textProperty().bind(loginField.textProperty());
-		emailLabel.setMinWidth(100);
-		emailValueLabel.setMinWidth(200);
+		emailLabel.setMinWidth(80);
+		emailValueLabel.setMinWidth(100);
 
 		Label usernameLabel = new Label("Username: ");
-		usernameLabel.setMinWidth(100);
+		usernameLabel.setMinWidth(80);
 		Label usernameValueLabel = new Label("");
-		usernameValueLabel.setMinWidth(200);
+		usernameValueLabel.setMinWidth(100);
 		usernameValueLabel.textProperty().bind(usernameField.textProperty());
 
 
 		emailLabel.getStyleClass().add("header-label");
 		usernameLabel.getStyleClass().add("header-label");
 
-		HBox b1 = new HBox(30, emailLabel, emailValueLabel);
-		HBox b2 = new HBox(30, usernameLabel, usernameValueLabel);
+		HBox b1 = new HBox(20, emailLabel, emailValueLabel);
+		HBox b2 = new HBox(20, usernameLabel, usernameValueLabel);
+		b1.setAlignment(Pos.CENTER);
+		b2.setAlignment(Pos.CENTER);
+		b1.getStyleClass().add("registrationFieldBox");
+		b1.getStyleClass().add("registrationFieldBox");
 
 		VBox box = new VBox(20, b1, b2, checkbox);
-		box.getStyleClass().add("registrationRecapBox");
+		box.getStyleClass().add("registrationFieldsContainer");
 		box.setAlignment(Pos.CENTER);
 		StackPane.setAlignment(box, Pos.CENTER);
 
