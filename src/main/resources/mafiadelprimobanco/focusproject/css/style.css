@@ -11,6 +11,7 @@
     -fx-text-fill: palette4-1;
     -fx-font-family: "Roboto";
 }
+
 .text, .mfx-text-field, .mfx-text-field .measure-unit {
     -fx-font-family: "Roboto";
     -fx-font-size: 14;
@@ -555,7 +556,7 @@ PROGRESS STYLE
 }
 
 
-.progressTreeCard{
+.progressTreeCard {
     -fx-background-color: palette1-0;
     -fx-background-radius: 6;
     -fx-effect: dropshadow(gaussian, shadow1, 6, 0.3, 0, 3);
@@ -574,7 +575,7 @@ PROGRESS STYLE
     -fx-effect: dropshadow(gaussian, palette3-1, 10, 0, 0, 3);
 }
 
-.progressPlaceHolderTreeCard{
+.progressPlaceHolderTreeCard {
     -fx-background-color: transparent;
 }
 
@@ -584,16 +585,17 @@ PROGRESS STYLE
     -fx-border-radius: 15;
     -fx-border-color: palette1-2;
 }
+
 .progressTreeSelectionButton:hover {
     -fx-background-color: palette1-1;
     -fx-border-color: palette3-1;
 }
 
-#progressIntervalComboBox{
+#progressIntervalComboBox {
 
 }
 
-#progressTreeContainer{
+#progressTreeContainer {
     -fx-background-radius: 30;
     -fx-background-color: rgba(77, 136, 58, 0.49);
 }
@@ -641,6 +643,25 @@ REGISTRATION STYLE
 
 #loginPane {
     -fx-background-color: transparent;
+}
+
+/*
+    STATISTICS STYLE
+*/
+
+#statisticsPageRoot {
+    -fx-padding: 20;
+    -fx-background-color: palette1-1;
+}
+
+.chart,
+.chart .text,
+.axis,
+.axis .label,
+.axis .text {
+    -fx-text-fill: palette4-1;
+    -fx-fill: palette4-1;
+    -fx-tick-label-fill: palette4-1;
 }
 
 
@@ -692,6 +713,7 @@ SETTINGS STYLE
 .mfx-combo-box .floating-text {
     -fx-text-fill: palette4-1;
 }
+
 .mfx-combo-box:focus-within .floating-text {
     -fx-color: palette3-1;
     -fx-text-fill: palette3-1;
@@ -703,7 +725,7 @@ SETTINGS STYLE
     -mfx-ripple-radius: 14;
 }
 
-.mfx-combo-box .virtual-flow{
+.mfx-combo-box .virtual-flow {
     -fx-background-color: palette1-0;
     -fx-border-color: palette1-2;
 }
