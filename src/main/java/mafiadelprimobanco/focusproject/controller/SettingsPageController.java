@@ -364,15 +364,15 @@ public class SettingsPageController implements Controller
 
 		if (!validateInput(input))
 		{
-			feedback.showError(Localization.get("error.settings.invalidTime.header"),
-					Localization.get("error.settings.invalidTime.message"));
 			minimumTimerTextField.setText(
 					settingsHandler.getSettings().minimumTimerDuration.getValue().toString());
+			feedback.showError(Localization.get("error.settings.invalidTime.header"),
+					Localization.get("error.settings.invalidTime.message"));
 		}
 		else
 		{
 			minimumTimerTextField.setText(input);
-			settingsHandler.getSettings().minimumTimerDuration.setValue(Integer.valueOf(input));
+			settingsHandler.getSettings().minimumTimerDuration.setValue(Integer.parseInt(input) * 60);
 		}
 	}
 
@@ -417,13 +417,13 @@ public class SettingsPageController implements Controller
 
 		if (!validateInput(input))
 		{
+			updateChronometerTextField();
 			feedback.showError(Localization.get("error.settings.invalidTime.header"),
 					Localization.get("error.settings.invalidTime.message"));
-			updateChronometerTextField();
 		}
 		else
 		{
-			settingsHandler.getSettings().minimumSuccessfulChronometerDuration.setValue(Integer.valueOf(input));
+			settingsHandler.getSettings().minimumSuccessfulChronometerDuration.setValue(Integer.parseInt(input) * 60);
 			updateChronometerTextField();
 		}
 	}
