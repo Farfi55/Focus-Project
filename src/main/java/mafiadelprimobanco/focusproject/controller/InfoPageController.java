@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import java.util.ResourceBundle;
 
 public class InfoPageController implements Controller
 {
-	@FXML private Label helpHeaderLabel;
 	@FXML private Label helpLabel;
 
 	@FXML private VBox imageContainer;
@@ -61,8 +61,8 @@ public class InfoPageController implements Controller
 
 	private void initializeHelpSection()
 	{
-		helpHeaderLabel.getStyleClass().add("info-header");
-		LocalizationUtils.bindLabelText(helpHeaderLabel, "info.help.header");
+		homeImage.setImage(ResourcesLoader.loadImage("info/home.png"));
+		progressImage.setImage(ResourcesLoader.loadImage("info/progress.png"));
 
 		StringBuilder stringBuilder = new StringBuilder();
 
