@@ -17,6 +17,7 @@ public class AudioHandler
 	private Media activitySuccessAudioClip;
 	private Media failedActivityAudioClip;
 	private Media notificationAudioClip;
+	private Media selectedTreeAudioClip;
 	private Media backgroundMusic;
 	private final SettingsHandler settingsHandler;
 
@@ -41,6 +42,7 @@ public class AudioHandler
 		activitySuccessAudioClip = new Media(ResourcesLoader.load("audio/successful-activity.wav"));
 		failedActivityAudioClip = new Media(ResourcesLoader.load("audio/failed-activity.wav"));
 		notificationAudioClip = new Media(ResourcesLoader.load("audio/Retro9.wav"));
+		selectedTreeAudioClip = new Media(ResourcesLoader.load("audio/woodenTuck.wav"));
 
 		backgroundMusic = new Media(ResourcesLoader.load("audio/You-ve-been-in-the-dark-for-way-too-long.wav"));
 		musicPlayer = new MediaPlayer(backgroundMusic);
@@ -91,6 +93,14 @@ public class AudioHandler
 		mediaPlayer = new MediaPlayer(notificationAudioClip);
 		useGlobalSoundVolume();
 		mediaPlayer.seek(notificationAudioClip.getDuration());
+		mediaPlayer.play();
+	}
+
+	public void playSelectedTreeAudioClip()
+	{
+		mediaPlayer = new MediaPlayer(selectedTreeAudioClip);
+		useGlobalSoundVolume();
+		mediaPlayer.seek(selectedTreeAudioClip.getDuration());
 		mediaPlayer.play();
 	}
 
