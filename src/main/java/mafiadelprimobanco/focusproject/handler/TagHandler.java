@@ -21,9 +21,7 @@ public class TagHandler
 	private Tag selectedTag;
 	private Tag unsetTag;
 
-	private TagHandler()
-	{
-	}
+	private TagHandler() { }
 
 	public void loadTags()
 	{

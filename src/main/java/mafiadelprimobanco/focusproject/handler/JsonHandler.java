@@ -26,6 +26,7 @@ public final class JsonHandler
 {
 	private static Path localTagFile = Path.of("tags.json");
 	private static Path localActivitiesFile = Path.of("activities.json");
+	private static final Path localSettingsFile = Path.of("settings.json");
 	static JSONObject userTags;
 	static JSONObject userActivities;
 
@@ -33,11 +34,12 @@ public final class JsonHandler
 	{
 		try
 		{
-			if (!localTagFile.toFile().exists()) Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
-
+			if (!localTagFile.toFile().exists())
+				Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
 			if (!localActivitiesFile.toFile().exists()) Files.writeString(localActivitiesFile, "{}",
 					StandardOpenOption.CREATE);
-
+			if (!localSettingsFile.toFile().exists()) Files.writeString(localSettingsFile, "{}",
+					StandardOpenOption.CREATE);
 
 			userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
 			userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
@@ -162,6 +164,18 @@ public final class JsonHandler
 		ActivityStatsHandler.getInstance().loadActivities();
 	}
 
+	public static void updateSettingsFile(JSONObject settings)
+	{
+		try
+		{
+			Files.writeString(localSettingsFile, settings.toString());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 	static void loadTags(JSONObject data)
 	{
 		Map<String, Object> map = userTags.toMap();
@@ -183,6 +197,19 @@ public final class JsonHandler
 		return new JSONObject().put("tags", userTags.toString()).put("activities", userActivities.toString());
 	}
 
+	static JSONObject getSettings()
+	{
+		try
+		{
+			return new JSONObject(new String(Files.readAllBytes(localSettingsFile)));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	static void loadTags()
 	{
 		userTags.keys().forEachRemaining(key ->
@@ -195,7 +222,6 @@ public final class JsonHandler
 			TagHandler.getInstance().addTag(name, color, uuid);
 		});
 	}
-
 
 	public static void addTag(Tag tag)
 	{

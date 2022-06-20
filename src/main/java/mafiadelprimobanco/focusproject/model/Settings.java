@@ -1,8 +1,11 @@
 package mafiadelprimobanco.focusproject.model;
 
 import javafx.beans.property.*;
+import mafiadelprimobanco.focusproject.client.util.JSONUtil;
+import mafiadelprimobanco.focusproject.handler.JsonHandler;
 import mafiadelprimobanco.focusproject.utils.Language;
 import mafiadelprimobanco.focusproject.utils.Theme;
+import org.json.JSONObject;
 
 public class Settings
 {
@@ -27,17 +30,53 @@ public class Settings
 	@Override
 	public String toString()
 	{
-		return "Settings{" + "language=" + language + ", theme=" + theme + ", navigationDisabledDuringActivity="
-				+ navigationDisabledDuringActivity + ", isTutorialHidden=" + isTutorialHidden + ", musicVolume="
-				+ musicVolume + ", soundVolume=" + soundVolume + ", minimumTimerDuration=" + minimumTimerDuration
-				+ ", confirmInterruptTimerActivity=" + confirmInterruptTimerActivity
-				+ ", minimumSuccessfulChronometerDuration=" + minimumSuccessfulChronometerDuration
-				+ ", confirmInterruptChronometerActivity=" + confirmInterruptChronometerActivity
-				+ ", areAdvancedOptionsShown=" + areAdvancedOptionsShown + ", resetTutorial=" + resetTutorial
-				+ ", confirmQuitApplication=" + confirmQuitApplication + '}';
+		return '{' + "language:" + language.get().key + ", theme:" + theme.get().key + ", navigationDisabledDuringActivity:"
+				+ navigationDisabledDuringActivity.get() + ", isTutorialHidden:" + isTutorialHidden.get() + ", musicVolume:"
+				+ musicVolume.get() + ", soundVolume:" + soundVolume.get() + ", minimumTimerDuration:" + minimumTimerDuration.get()
+				+ ", confirmInterruptTimerActivity:" + confirmInterruptTimerActivity.get()
+				+ ", minimumSuccessfulChronometerDuration:" + minimumSuccessfulChronometerDuration.get()
+				+ ", confirmInterruptChronometerActivity:" + confirmInterruptChronometerActivity.get()
+				+ ", areAdvancedOptionsShown:" + areAdvancedOptionsShown.get() + ", resetTutorial:" + resetTutorial.get()
+				+ ", confirmQuitApplication:" + confirmQuitApplication.get() + '}';
 	}
 
 	public Settings()
 	{
 	}
+
+	public void setListeners()
+	{
+
+		//Settings listeners -- Used to keep update the json file
+
+		System.out.println(this);
+
+		language.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		theme.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		navigationDisabledDuringActivity.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		isTutorialHidden.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		musicVolume.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		soundVolume.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		minimumTimerDuration.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		confirmInterruptTimerActivity.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		minimumSuccessfulChronometerDuration.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		confirmInterruptChronometerActivity.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		areAdvancedOptionsShown.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		resetTutorial.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+		confirmQuitApplication.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
+				new JSONObject(this.toString())));
+	}
+
 }

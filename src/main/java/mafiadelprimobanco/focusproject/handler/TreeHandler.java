@@ -67,9 +67,6 @@ public class TreeHandler implements ActivityObserver
 
 	private void loadTrees()
 	{
-		// todo: implement using database
-
-
 		String deadTree = "trees/deadTree.png";
 		trees.put(0, new Tree(0, "Quercus Alba", "trees/tile000.png", deadTree, 0, 0));
 		trees.put(1, new Tree(1, "Salix Babylonica", "trees/tile001.png", deadTree, 300, 0));

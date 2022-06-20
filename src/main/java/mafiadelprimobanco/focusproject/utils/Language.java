@@ -17,6 +17,16 @@ public enum Language
 		this.language = language;
 	}
 
+	public static Language parse(String key)
+	{
+		for (var language : Language.values())
+		{
+			if (language.key.equals(key)) return language;
+		}
+		return null;
+	}
+
+
 	@Override
 	public String toString()
 	{

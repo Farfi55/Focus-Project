@@ -102,7 +102,6 @@ public class AuthenticationHandler
 			var jsonObject = jsonArray.getJSONObject(jsonArray.length() - 1);
 			JsonHandler.loadTags(new JSONObject(jsonObject.getString("tags")));
 			elementID = jsonObject.getString("element_id");
-			System.out.println(elementID);
 		},
 		err -> createTable = true);
 	}
