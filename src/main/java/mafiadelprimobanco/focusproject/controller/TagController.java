@@ -107,7 +107,7 @@ public class TagController implements TagsObserver, Controller
 	void onTextFieldAction(ActionEvent event)
 	{
 		// if the update didn't go through, reset textField text
-		if (TagHandler.getInstance().changeTag(textField.getText(), tag.getColor(), tag.getUuid()))
+		if (!TagHandler.getInstance().changeTag(textField.getText(), tag.getColor(), tag.getUuid()))
 		{
 			setText(tag.getName());
 		}

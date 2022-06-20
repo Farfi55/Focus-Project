@@ -385,6 +385,7 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		return (observable, oldValue, newValue) ->
 		{
 			updateActivityComboBoxSelectedItem();
+
 			if (newValue == ActivityType.TIMER)
 			{
 				showSpinners();

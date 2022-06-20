@@ -80,7 +80,10 @@
                      </children>
                   </StackPane>
                   <MFXComboBox fx:id="intervalComboBox" promptText="interval" />
-                  <FlowPane fx:id="treesRoot" minHeight="300.0" prefHeight="200.0" prefWidth="200.0" />
+                  <FlowPane fx:id="treesRoot">
+                     <padding>
+                        <Insets bottom="80.0" left="30.0" right="30.0" top="40.0" />
+                     </padding></FlowPane>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

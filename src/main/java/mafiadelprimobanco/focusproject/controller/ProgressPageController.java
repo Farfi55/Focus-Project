@@ -289,7 +289,7 @@ public class ProgressPageController implements Controller
 		treesRoot.setRowValignment(VPos.CENTER);
 		treesRoot.setHgap(5);
 		treesRoot.setVgap(5);
-		treesRoot.setPadding(new Insets(5, 20, 50, 20));
+
 		treesRoot.setId("progressTreeContainer");
 	}
 

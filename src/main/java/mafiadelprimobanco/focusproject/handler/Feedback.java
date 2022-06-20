@@ -369,6 +369,8 @@ public class Feedback
 	{
 		if (activity == null || !activity.hasEnded()) return;
 
+		AudioHandler.getInstance().playSelectedTreeAudioClip();
+
 		String header;
 		activityRecapDialogContent.clearTextContent();
 		TextFlow textContent = activityRecapDialogContent.getTextContent();
@@ -391,8 +393,15 @@ public class Feedback
 
 		addText(textContent, Localization.get("feedback.EoAR.tag.selected"));
 		Tag tag = activity.getTag();
-		addText(textContent, tag.getName() + " ", FontWeight.BOLD);
-		textContent.getChildren().add(new Circle(6, tag.getColor()));
+		if (tag != null)
+		{
+			addText(textContent, tag.getName() + " ", FontWeight.BOLD);
+			textContent.getChildren().add(new Circle(6, tag.getColor()));
+		}
+		else
+		{
+			addText(textContent, Localization.get("feedback.EoAR.tag.wasRemoved"), FontWeight.BOLD);
+		}
 
 
 		activityRecapDialogContent.setHeaderText(header);

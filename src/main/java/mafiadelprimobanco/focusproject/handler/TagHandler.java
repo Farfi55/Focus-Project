@@ -36,14 +36,6 @@ public class TagHandler
 		setSelectedTag(this.unsetTag);
 	}
 
-	private void debugLoad()
-	{
-		addTag("Studio Basi di Dati", Color.RED, 1);
-		addTag("Esercitazione Ukulele", Color.GREEN, 2);
-		addTag("Allenamento", Color.LIGHTCYAN, 3);
-		addTag("Studio Fisica", Color.BROWN, 4);
-	}
-
 	public boolean addTag(String name, Color color)
 	{
 		int uuid = rand.nextInt();
@@ -77,8 +69,7 @@ public class TagHandler
 	{
 		if (!tags.containsKey(uuid))
 		{
-//			Feedback.getInstance().showError("Error", "Tried to remove a tag that doesn't exists");
-			Feedback.getInstance().showError("Errore di rimozione", "Hai provato a rimuovere una tag che non esiste");
+			System.err.println("Tried to remove a tag that doesn't exists");
 			return false;
 		}
 		else if (uuid == 0)
@@ -91,11 +82,9 @@ public class TagHandler
 		Tag tag = tags.get(uuid);
 		if (tag.equals(selectedTag))
 		{
-			// "Tag error", "Can't delete the tag that is being used in an activity"
 			if (ActivityHandler.getInstance().isActivityRunning())
 			{
-				Feedback.getInstance().showError("Errore di rimozione",
-						"Non è possibile rimuovere una tag mentre viene usata in una attività");
+				System.err.println("can't remove a tag while its used in an activity");
 				return false;
 			}
 			else setSelectedTag(unsetTag);
@@ -120,8 +109,8 @@ public class TagHandler
 		}
 		else if (ActivityHandler.getInstance().isActivityRunning() && uuid.equals(selectedTag.getUuid()))
 		{
-			Feedback.getInstance().showError("Errore di modifica",
-					"Non è possibile modificare una tag mentre è usata in una attività");
+			Feedback.getInstance().showError(Localization.get("error.tags.changeDuringActivity.header"),
+					Localization.get("error.tags.changeDuringActivity.message"));
 			return false;
 		}
 
@@ -131,8 +120,14 @@ public class TagHandler
 		{
 			if (isNameUsed(name))
 			{
-				System.err.println("tag name '" + name + "' already in use");
-				Feedback.getInstance().showError("Nome già in uso", "Esiste già una tag con nome '" + name + "'.");
+				Feedback.getInstance().showError(Localization.get("error.tags.nameAlreadyUsed.header"),
+						Localization.get("error.tags.nameAlreadyUsed.message", name));
+				return false;
+			}
+			else if (name.isEmpty())
+			{
+				Feedback.getInstance().showError(Localization.get("error.tags.emptyName.header"),
+						Localization.get("error.tags.emptyName.message"));
 				return false;
 			}
 			names.remove(tag.getName());

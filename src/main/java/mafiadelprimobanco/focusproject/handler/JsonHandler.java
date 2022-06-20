@@ -76,7 +76,6 @@ public final class JsonHandler
 
 	private static void addTag(Tag tag)
 	{
-		System.out.println(tag.toString());
 		userTags.put(tag.getUuid().toString(), new JSONObject(tag.toString()));
 
 		updateTagFile();
