@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
+import mafiadelprimobanco.focusproject.handler.AudioHandler;
 import mafiadelprimobanco.focusproject.handler.Feedback;
 import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.TagHandler;
@@ -97,6 +98,7 @@ public class TagController implements TagsObserver, Controller
 				Localization.get("warning.tag.deleteTag.message")))
 		{
 			TagHandler.getInstance().removeTag(tag.getUuid());
+			AudioHandler.getInstance().playPopTagAudioClip();
 		}
 		event.consume();
 	}

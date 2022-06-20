@@ -3,6 +3,7 @@ package mafiadelprimobanco.focusproject.controller;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
+import io.github.palexdev.materialfx.enums.FloatMode;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -248,6 +249,7 @@ public class ProgressPageController implements Controller
 	private void initializeIntervalComboBox()
 	{
 		intervalComboBox.setId("progressIntervalComboBox");
+		intervalComboBox.setFloatMode(FloatMode.ABOVE);
 		intervalComboBox.setOnAction(event -> setTreesInterval(intervalComboBox.getValue()));
 		Localization.localeProperty().addListener(observable -> resetIntervalComboBox());
 

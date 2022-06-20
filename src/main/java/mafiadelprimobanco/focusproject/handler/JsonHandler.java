@@ -34,21 +34,21 @@ public final class JsonHandler
 	{
 		try
 		{
-			if (!localTagFile.toFile().exists())
-				Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
-			if (!localActivitiesFile.toFile().exists()) Files.writeString(localActivitiesFile, "{}",
-					StandardOpenOption.CREATE);
-			if (!localSettingsFile.toFile().exists()) Files.writeString(localSettingsFile, "{}",
-					StandardOpenOption.CREATE);
-
-			userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
-			userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
+			createJsonFiles();
+			loadJson();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 
+		setListeners();
+
+		loadTags();
+	}
+
+	private static void setListeners()
+	{
 		ActivityHandler.getInstance().addListener(new ActivityObserver()
 		{
 			@Override
@@ -72,11 +72,56 @@ public final class JsonHandler
 			@Override
 			public void onTagChanged(Tag tag) { editTag(tag); }
 		});
-
-		loadTags();
 	}
 
-	//Use an enum to deal with that
+	private static void addTag(Tag tag)
+	{
+		System.out.println(tag.toString());
+		userTags.put(tag.getUuid().toString(), new JSONObject(tag.toString()));
+
+		updateTagFile();
+	}
+
+	private static void editTag(Tag tag)
+	{
+		userTags.remove(tag.getUuid().toString());
+		addTag(tag);
+	}
+
+	private static void deleteTag(Tag tag)
+	{
+		userTags.remove(tag.getUuid().toString());
+		updateTagFile();
+	}
+
+	private static void loadJson() throws IOException
+	{
+		userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
+		userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
+	}
+
+	private static void createJsonFiles() throws IOException
+	{
+		if (!localTagFile.toFile().exists())
+			Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
+		if (!localActivitiesFile.toFile().exists()) Files.writeString(localActivitiesFile, "{}",
+				StandardOpenOption.CREATE);
+		if (!localSettingsFile.toFile().exists()) Files.writeString(localSettingsFile, "{}",
+				StandardOpenOption.CREATE);
+	}
+
+	public static void updateSettingsFile(JSONObject settings)
+	{
+		try
+		{
+			Files.writeString(localSettingsFile, settings.toString());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 	private static void updateTagFile()
 	{
 		try
@@ -105,11 +150,6 @@ public final class JsonHandler
 		AuthenticationHandler.getInstance().updateToServer();
 	}
 
-	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
-	{
-		userActivities.put(key.toString(), activity.toJsonObject());
-		updateActivitiesFile();
-	}
 
 	private static void getActivity(List<AbstractActivity> activityList, String dataKey)
 	{
@@ -128,6 +168,7 @@ public final class JsonHandler
 						LocalDateTime.parse(activity.getString("endTime")), activity.getInt("chosenDuration")));
 	}
 
+
 	public static List<AbstractActivity> getAllActivities()
 	{
 		List<AbstractActivity> activityList = new Vector<>();
@@ -135,61 +176,6 @@ public final class JsonHandler
 		userActivities.keys().forEachRemaining(dataKey -> getActivity(activityList, dataKey));
 
 		return activityList;
-	}
-
-
-	public static List<AbstractActivity> getAllActivitiesBetween(LocalDateTime startData, LocalDateTime endData)
-	{
-		List<AbstractActivity> activityList = new Vector<>();
-
-		userActivities.keys().forEachRemaining(dataKey ->
-		{
-			LocalDateTime data = LocalDateTime.parse(dataKey);
-
-			if (startData.isBefore(data) && endData.isAfter(data))
-			{
-				getActivity(activityList, dataKey);
-			}
-		});
-
-		return activityList;
-	}
-
-	static void loadActivities(JSONObject data)
-	{
-		Map<String, Object> map = userActivities.toMap();
-		map.putAll(data.toMap());
-		userActivities = new JSONObject(map);
-
-		ActivityStatsHandler.getInstance().loadActivities();
-	}
-
-	public static void updateSettingsFile(JSONObject settings)
-	{
-		try
-		{
-			Files.writeString(localSettingsFile, settings.toString());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	static void loadTags(JSONObject data)
-	{
-		Map<String, Object> map = userTags.toMap();
-		map.putAll(data.toMap());
-		userTags = new JSONObject(map);
-
-		data.keys().forEachRemaining(key ->
-		{
-			JSONObject currTag = (JSONObject)userTags.get(key);
-			String name = currTag.getString("name");
-			Color color = Color.valueOf(currTag.getString("color"));
-			Integer uuid = currTag.getInt("uuid");
-			TagHandler.getInstance().addTag(name, color, uuid);
-		});
 	}
 
 	static JSONObject getTagsActivities()
@@ -210,6 +196,47 @@ public final class JsonHandler
 		return null;
 	}
 
+
+	public static List<AbstractActivity> getAllActivitiesBetween(LocalDateTime startData, LocalDateTime endData)
+	{
+		List<AbstractActivity> activityList = new Vector<>();
+
+		userActivities.keys().forEachRemaining(dataKey ->
+		{
+			LocalDateTime data = LocalDateTime.parse(dataKey);
+
+			if (startData.isBefore(data) && endData.isAfter(data))
+			{
+				getActivity(activityList, dataKey);
+			}
+		});
+
+		return activityList;
+	}
+
+	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
+	{
+		userActivities.put(key.toString(), activity.toJsonObject());
+		updateActivitiesFile();
+	}
+
+	static void loadActivities(JSONObject data)
+	{
+		Map<String, Object> map = userActivities.toMap();
+		map.putAll(data.toMap());
+		userActivities = new JSONObject(map);
+
+		ActivityStatsHandler.getInstance().loadActivities();
+	}
+
+	static void loadTags(JSONObject data)
+	{
+		Map<String, Object> map = userTags.toMap();
+		map.putAll(data.toMap());
+		userTags = new JSONObject(map);
+		loadTags();
+	}
+
 	static void loadTags()
 	{
 		userTags.keys().forEachRemaining(key ->
@@ -221,26 +248,6 @@ public final class JsonHandler
 			Integer uuid = currTag.getInt("uuid");
 			TagHandler.getInstance().addTag(name, color, uuid);
 		});
-	}
-
-	public static void addTag(Tag tag)
-	{
-		System.out.println(tag.toString());
-		userTags.put(tag.getUuid().toString(), new JSONObject(tag.toString()));
-
-		updateTagFile();
-	}
-
-	public static void editTag(Tag tag)
-	{
-		userTags.remove(tag.getUuid().toString());
-		addTag(tag);
-	}
-
-	public static void deleteTag(Tag tag)
-	{
-		userTags.remove(tag.getUuid().toString());
-		updateTagFile();
 	}
 
 }

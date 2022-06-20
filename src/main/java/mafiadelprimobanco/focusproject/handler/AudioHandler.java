@@ -55,6 +55,11 @@ public class AudioHandler
 		mediaPlayer.play();
 	}
 
+	public void playPopTagAudioClip()
+	{
+		playToggleButtonAudioClip();
+	}
+
 	public void playButtonAudioClip()
 	{
 		mediaPlayer = new MediaPlayer(buttonAudioClip);
