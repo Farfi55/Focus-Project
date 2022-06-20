@@ -309,6 +309,8 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@FXML
 	void toggleActivityState()
 	{
+		AudioHandler.getInstance().playButtonAudioClip();
+
 		if (!ActivityHandler.getInstance().isActivityRunning())
 		{
 			if (canStartActivity()) startActivityDelegate();
@@ -428,8 +430,8 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 		int secondsElapsed = chronometerActivity.getSecondsSinceStart();
 		activityTimeLabel.setText(TimeUtils.formatTime(secondsElapsed));
 
-		// todo: move this into settings
-		int minSuccessChronometerDuration = 20; // 10 seconds
+		int minSuccessChronometerDuration = SettingsHandler.getInstance()
+			.getSettings().minimumSuccessfulChronometerDuration.getValue();
 
 		if (treePhase < 5 && secondsElapsed >= minSuccessChronometerDuration / 5f * (treePhase + 1))
 		{

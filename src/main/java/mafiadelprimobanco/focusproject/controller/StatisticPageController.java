@@ -1,6 +1,7 @@
 package mafiadelprimobanco.focusproject.controller;
 
 import io.github.palexdev.materialfx.controls.MFXComboBox;
+import io.github.palexdev.materialfx.controls.MFXTooltip;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,6 +13,7 @@ import mafiadelprimobanco.focusproject.handler.SettingsHandler;
 import mafiadelprimobanco.focusproject.handler.TagHandler;
 import mafiadelprimobanco.focusproject.model.Settings;
 import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.utils.ColorUtils;
 
 import java.net.URL;
 import java.text.DateFormatSymbols;
@@ -63,9 +65,9 @@ public class StatisticPageController implements Controller
 	{
 		Platform.runLater(() ->
 		{
-			newDataChart.getNode().setStyle("-fx-pie-color: #" + tag.getColor().toString().substring(2) + ";");
+			newDataChart.getNode().setStyle("-fx-pie-color:" + ColorUtils.toHex(tag.getColor()) + ";");
 			Tooltip.install(newDataChart.getNode(),
-					new Tooltip(String.format("%s = %.2f", tag.getName(), newDataChart.getPieValue())));
+					new Tooltip(String.format("%s = %.1f", tag.getName(), newDataChart.getPieValue())));
 		});
 	}
 
@@ -123,8 +125,10 @@ public class StatisticPageController implements Controller
 
 		Long bound = upperbound.stream().max(Long::compareTo).get();
 
-		numberAxisBar.setTickUnit(bound > 100 ? (int)(bound / 10) : 1);
-		numberAxisBar.setUpperBound(bound + 1);
+		int tickSize = bound > 100 ? (int)(bound / 10) : 1;
+
+		numberAxisBar.setTickUnit(tickSize);
+		numberAxisBar.setUpperBound(bound + tickSize);
 
 		setBarStyle(tags, tagUsed);
 	}
@@ -133,15 +137,12 @@ public class StatisticPageController implements Controller
 
 	private void setBarStyle(Collection<Tag> tags, List<Boolean> tagUsed)
 	{
-		//Load tag color. Used by the staked bar chart
-
 		for (int i = 0; i < tags.size(); ++i)
 		{
 			Tag t = ((Tag)tags.toArray()[i]);
-			//totalDataBarChart.lookup(".default-color" + i + ".chart-bar").setStyle("-fx-bar-fill: #" + t.getColor().toString().substring(2) + ";");
 			for (Node n : totalDataBarChart.lookupAll(".default-color" + i + ".chart-bar"))
 			{
-				n.setStyle("-fx-bar-fill: #" + t.getColor().toString().substring(2) + ";");
+				n.setStyle("-fx-bar-fill:" + ColorUtils.toHex(t.getColor())  + ";");
 			}
 		}
 	}
@@ -169,12 +170,12 @@ public class StatisticPageController implements Controller
 
 		Platform.runLater(() ->
 		{
-			String color = tag.getColor().toString().substring(2);
+			String color = ColorUtils.toHex(tag.getColor());
 
 			for (Node n : weekDayChart.lookupAll(".series0"))
-				n.setStyle("-fx-background-color: #" + color + ";");
+				n.setStyle("-fx-background-color:" + color + ";");
 
-			weekDayChartSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke: #" + color + ";");
+			weekDayChartSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke:" + color + ";");
 		});
 
 		DateFormatSymbols symbols = new DateFormatSymbols(SettingsHandler.getInstance().getSettings().language.get().language);

@@ -33,6 +33,8 @@ public class BaseController implements EventHandler<KeyEvent>
 	{
 		SceneHandler.getInstance().setRoot(root);
 
+		AudioHandler.getInstance().playBackgroundMusic();
+
 		navButtonsPages.add(new Pair<>(homeButton, PagesHandler.home));
 		navButtonsPages.add(new Pair<>(progressButton, PagesHandler.progress));
 		navButtonsPages.add(new Pair<>(statisticsButton, PagesHandler.statistics));

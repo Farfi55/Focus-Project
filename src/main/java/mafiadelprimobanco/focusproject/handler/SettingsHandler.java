@@ -1,8 +1,11 @@
 package mafiadelprimobanco.focusproject.handler;
 
+import javafx.application.Platform;
 import mafiadelprimobanco.focusproject.model.Settings;
 import mafiadelprimobanco.focusproject.utils.Language;
 import mafiadelprimobanco.focusproject.utils.Theme;
+
+import java.util.Locale;
 
 public class SettingsHandler
 {
@@ -14,16 +17,20 @@ public class SettingsHandler
 		return instance;
 	}
 
-
-
 	private SettingsHandler()
 	{
 		this.settings = new Settings();
-		loadSettingsFromDatabase(this.settings);
+		loadSettingsFromDatabase();
 	}
 
-	private void loadSettingsFromDatabase(Settings settings)
+	private void loadDefaultSettings()
 	{
+		setDefaultSettings(settings);
+	}
+
+	private void setDefaultSettings(Settings settings)
+	{
+		settings.musicVolume.setValue(30.0);
 		settings.areAdvancedOptionsShown.setValue(true);
 		settings.confirmQuitApplication.setValue(true);
 		settings.language.setValue(Language.ENGLISH);
@@ -39,6 +46,39 @@ public class SettingsHandler
 		settings.resetTutorial.setValue(false);
 	}
 
-	public Settings getSettings() {return settings;}
+	public void loadSettingsFromDatabase()
+	{
+		var settingsJson = JsonHandler.getSettings();
+
+		if (settingsJson == null || settingsJson.isEmpty())
+		{
+			loadDefaultSettings();
+			return;
+		}
+
+		settings.musicVolume.setValue(settingsJson.getNumber("musicVolume"));
+		settings.areAdvancedOptionsShown.setValue(settingsJson.getBoolean("areAdvancedOptionsShown"));
+		settings.confirmQuitApplication.setValue(settingsJson.getBoolean("confirmQuitApplication"));
+		settings.language.setValue(Language.parse(settingsJson.getString("language")));
+		settings.theme.setValue(Theme.parse(settingsJson.getString("theme")));
+		settings.isTutorialHidden.setValue(settingsJson.getBoolean("isTutorialHidden"));
+		settings.soundVolume.setValue(settingsJson.getNumber("soundVolume"));
+		settings.navigationDisabledDuringActivity.setValue(settingsJson.getBoolean("navigationDisabledDuringActivity"));
+		settings.areAdvancedOptionsShown.setValue(settingsJson.getBoolean("areAdvancedOptionsShown"));
+		settings.minimumSuccessfulChronometerDuration.setValue(
+				settingsJson.getNumber("minimumSuccessfulChronometerDuration"));
+		settings.confirmInterruptChronometerActivity.setValue(
+				settingsJson.getBoolean("confirmInterruptChronometerActivity"));
+		settings.confirmInterruptTimerActivity.setValue(settingsJson.getBoolean("confirmInterruptTimerActivity"));
+		settings.minimumTimerDuration.setValue(settingsJson.getNumber("minimumTimerDuration"));
+		settings.resetTutorial.setValue(settingsJson.getBoolean("resetTutorial"));
+
+		Platform.runLater(() -> {
+			Localization.setLocale(settings.language.getValue().language);
+			StyleHandler.getInstance().setTheme(settings.theme.get());
+		});
+	}
+
+	public Settings getSettings() { return settings; }
 
 }

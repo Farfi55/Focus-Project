@@ -67,17 +67,16 @@ public class TreeHandler implements ActivityObserver
 
 	private void loadTrees()
 	{
-		// todo: implement using database
-
-
-		String deadTree = "trees/testingDeadTree.png";
-		trees.put(0, new Tree(0, "albero 1", "trees/tile000.png", deadTree, 0, 0));
-		trees.put(1, new Tree(1, "albero 2", "trees/tile001.png", deadTree, 600, 200));
-		trees.put(2, new Tree(2, "albero 3", "trees/tile007.png", deadTree, 1200, 1200));
-		trees.put(3, new Tree(3, "albero 4", "trees/tile008.png", deadTree, 600, 598));
-		trees.put(4, new Tree(4, "albero 5", "trees/tile002.png", deadTree, 600, 600));
-		trees.put(5, new Tree(5, "albero 6", "trees/tile006.png", deadTree, 200, 200));
-		trees.put(6, new Tree(6, "albero 7", "trees/tile004.png", deadTree, 10, 0));
+		String deadTree = "trees/deadTree.png";
+		trees.put(0, new Tree(0, "Quercus Alba", "trees/tile000.png", deadTree, 0, 0));
+		trees.put(1, new Tree(1, "Salix Babylonica", "trees/tile001.png", deadTree, 300, 0));
+		trees.put(2, new Tree(2, "Acacia Dealbata", "trees/tile002.png", deadTree, 600, 0));
+		trees.put(3, new Tree(3, "Picea Abies", "trees/tile003.png", deadTree, 900, 0));
+		trees.put(4, new Tree(4, "Betula Lenta", "trees/tile004.png", deadTree, 1200, 0));
+		trees.put(5, new Tree(5, "Malus Domestica", "trees/tile005.png", deadTree, 1500, 0));
+		trees.put(6, new Tree(6, "Silvestris Rubi", "trees/tile006.png", deadTree, 1800, 0));
+		trees.put(7, new Tree(7, "Prunus Serrulata", "trees/tile007.png", deadTree, 2100, 0));
+		trees.put(8, new Tree(8, "Arbor Natalis", "trees/tile008.png", deadTree, 2400, 0));
 
 		for (Tree tree : trees.values())
 		{

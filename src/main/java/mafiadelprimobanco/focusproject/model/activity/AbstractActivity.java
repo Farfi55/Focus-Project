@@ -1,5 +1,6 @@
 package mafiadelprimobanco.focusproject.model.activity;
 
+import mafiadelprimobanco.focusproject.handler.AudioHandler;
 import mafiadelprimobanco.focusproject.handler.TagHandler;
 import mafiadelprimobanco.focusproject.handler.TreeHandler;
 import mafiadelprimobanco.focusproject.model.Tag;
@@ -62,8 +63,14 @@ public abstract class AbstractActivity implements Comparable<AbstractActivity>
 
 	public String getFinalTreeSpritePath()
 	{
-		if (wasSuccessful()) return getTree().getMatureTreeSprite();
-		else return getTree().getDeadTreeSprite();
+		if (wasSuccessful())
+		{
+			return getTree().getMatureTreeSprite();
+		}
+		else
+		{
+			return getTree().getDeadTreeSprite();
+		}
 	}
 
 	public Integer getTreeUuid()

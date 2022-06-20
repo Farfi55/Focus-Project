@@ -14,16 +14,14 @@ public class TagHandler
 
 	public static TagHandler getInstance() { return instance; }
 
-	private final Map<Integer, Tag> tags = new LinkedHashMap<>();
+	private final TreeMap<Integer, Tag> tags = new TreeMap<>();
 	private final HashSet<String> names = new HashSet<>();
 	private final List<TagsObserver> listeners = new ArrayList<>();
 	private final Random rand = new Random();
 	private Tag selectedTag;
 	private Tag unsetTag;
 
-	private TagHandler()
-	{
-	}
+	private TagHandler() { }
 
 	public void loadTags()
 	{

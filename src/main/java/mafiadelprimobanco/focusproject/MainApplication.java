@@ -22,6 +22,7 @@ public class MainApplication extends Application
 			JsonHandler.init();
 
 			TagHandler.getInstance().loadTags();
+			SettingsHandler.getInstance().getSettings().setListeners();
 
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);

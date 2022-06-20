@@ -1,9 +1,6 @@
 package mafiadelprimobanco.focusproject.handler;
 
-import mafiadelprimobanco.focusproject.model.ActivityObserver;
-import mafiadelprimobanco.focusproject.model.Interval;
-import mafiadelprimobanco.focusproject.model.Tag;
-import mafiadelprimobanco.focusproject.model.Tree;
+import mafiadelprimobanco.focusproject.model.*;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
@@ -11,7 +8,7 @@ import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class ActivityStatsHandler implements ActivityObserver
+public class ActivityStatsHandler implements ActivityObserver, TagsObserver
 {
 	private static final ActivityStatsHandler instance = new ActivityStatsHandler();
 
@@ -25,9 +22,20 @@ public class ActivityStatsHandler implements ActivityObserver
 	 */
 	HashMap<Integer, TreeSet<AbstractActivity>> activities = new HashMap<>();
 
+	@Override
+	public void onTagAdded(Tag tag)
+	{
+		activities.computeIfAbsent(tag.getUuid(), k -> new TreeSet<>());
+	}
+
+	@Override
+	public void onTagRemoving(Tag tag)
+	{
+	}
 
 	private ActivityStatsHandler()
 	{
+		TagHandler.getInstance().addListener(this);
 		TagHandler.getInstance().getTags().forEach(tag -> activities.put(tag.getUuid(), new TreeSet<>()));
 		loadActivities();
 	}
@@ -36,12 +44,6 @@ public class ActivityStatsHandler implements ActivityObserver
 	{
 		List<AbstractActivity> allActivities = JsonHandler.getAllActivities();
 		allActivities.forEach(this::addActivity);
-
-		/*for (int i = 0; i < 1000; i++){
-			AbstractActivity activity = createRandomActivity(i);
-			addActivity(activity);
-			JsonHandler.addFinishedActivity(activity.getStartTime(), activity);
-		}*/
 	}
 
 	private AbstractActivity createRandomActivity(int i)
@@ -56,9 +58,8 @@ public class ActivityStatsHandler implements ActivityObserver
 		LocalDateTime endDate = startDate.plusSeconds(duration);
 
 
-		if(i %2 == 0)
-			activity = new ChronometerActivity(tagUuid, treeUuid, startDate, endDate);
-		else if(i % 5==0) activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration*2);
+		if (i % 2 == 0) activity = new ChronometerActivity(tagUuid, treeUuid, startDate, endDate);
+		else if (i % 5 == 0) activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration * 2);
 		else activity = new TimerActivity(tagUuid, treeUuid, startDate, endDate, duration);
 		return activity;
 	}
@@ -106,7 +107,8 @@ public class ActivityStatsHandler implements ActivityObserver
 
 
 
-	public TreeSet<AbstractActivity> getAllActivitiesBetweenWithTag(LocalDateTime startData, LocalDateTime endData, Tag tag)
+	public TreeSet<AbstractActivity> getAllActivitiesBetweenWithTag(LocalDateTime startData, LocalDateTime endData,
+			Tag tag)
 	{
 		return new TreeSet<>(activities.get(tag.getUuid())
 				.stream()
@@ -160,9 +162,9 @@ public class ActivityStatsHandler implements ActivityObserver
 					}
 					if (activity instanceof ChronometerActivity chronometerActivity)
 					{
-						//TODO: move into settings
-						int successfulChronometerMinimumTime = 10;
-						if (chronometerActivity.getFinalDuration() < successfulChronometerMinimumTime) stats.totaDead++;
+
+						if (chronometerActivity.getFinalDuration() < SettingsHandler.getInstance()
+								.getSettings().minimumSuccessfulChronometerDuration.getValue()) stats.totaDead++;
 						else stats.totalMature++;
 					}
 

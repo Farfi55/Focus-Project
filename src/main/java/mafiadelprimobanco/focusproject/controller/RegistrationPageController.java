@@ -5,6 +5,11 @@ import io.github.palexdev.materialfx.font.MFXFontIcon;
 import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import io.github.palexdev.materialfx.validation.Validated;
+import javafx.beans.InvalidationListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanExpression;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,6 +27,8 @@ import mafiadelprimobanco.focusproject.model.User;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegistrationPageController implements Controller
 {
@@ -40,18 +47,43 @@ public class RegistrationPageController implements Controller
 		checkbox = new MFXCheckbox(Localization.get("registration.confirm"));
 	}
 
+	public static Boolean isValidEmail(String email)
+	{
+		String emailPattern = "^[a-zA-Z0-9_.]+@[a-zA-Z.]+?\\.[a-zA-Z]{2,3}$";
+		Pattern p = Pattern.compile(emailPattern);
+		return p.matcher(email).matches();
+	}
+
+	public static Boolean isValidPassword(String password)
+	{
+		//                           uppercase    lowercase    number    special
+		String passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[\\d])(?=.*?[^\\w]).{8,}$";
+		Pattern p = Pattern.compile(passwordPattern);
+		return p.matcher(password).matches();
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
 		loginField.setPromptText("Email");
+		passwordField.setPromptText("Password");
+		usernameField.setPromptText("Username");
+
+		loginField.setLeadingIcon(new MFXIconWrapper("mfx-user", 16, Color.web("#4D4D4D"), 24));
+
 		loginField.getValidator().constraint(Localization.get("registration.emailNotNull"),
 				loginField.textProperty().isNotEmpty());
-		loginField.setLeadingIcon(new MFXIconWrapper("mfx-user", 16, Color.web("#4D4D4D"), 24));
+
+		loginField.getValidator().constraint(Localization.get("registration.emailNotValid"),
+				Bindings.createBooleanBinding(() -> isValidEmail(loginField.getText()), loginField.textProperty()));
+
 		passwordField.getValidator().constraint(Localization.get("registration.passwordLengthError"),
 				passwordField.textProperty().length().greaterThanOrEqualTo(8));
-		passwordField.setPromptText("Password");
 
-		usernameField.setPromptText("Username");
+		passwordField.getValidator().constraint(Localization.get("registration.passwordWeakError"),
+				Bindings.createBooleanBinding(() -> isValidPassword(passwordField.getText()), passwordField.textProperty()));
+
+		usernameField.getValidator().constraint(Localization.get("registration.usernameNotNull"),usernameField.textProperty().isNotEmpty());
 
 		List<MFXStepperToggle> stepperToggles = createSteps();
 		stepper.getStepperToggles().addAll(stepperToggles);

@@ -19,6 +19,13 @@ public enum Theme
 		this.fileName = fileName;
 	}
 
+	public static Theme parse(String key){
+		for (var theme : Theme.values()){
+			if (theme.key.equals(key)) return theme;
+		}
+		return null;
+	}
+
 	@Override
 	public String toString()
 	{

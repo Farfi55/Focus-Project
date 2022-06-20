@@ -26,6 +26,7 @@ public final class JsonHandler
 {
 	private static Path localTagFile = Path.of("tags.json");
 	private static Path localActivitiesFile = Path.of("activities.json");
+	private static final Path localSettingsFile = Path.of("settings.json");
 	static JSONObject userTags;
 	static JSONObject userActivities;
 
@@ -33,20 +34,21 @@ public final class JsonHandler
 	{
 		try
 		{
-			if (!localTagFile.toFile().exists()) Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
-
-			if (!localActivitiesFile.toFile().exists()) Files.writeString(localActivitiesFile, "{}",
-					StandardOpenOption.CREATE);
-
-
-			userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
-			userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
+			createJsonFiles();
+			loadJson();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 
+		setListeners();
+
+		loadTags();
+	}
+
+	private static void setListeners()
+	{
 		ActivityHandler.getInstance().addListener(new ActivityObserver()
 		{
 			@Override
@@ -70,11 +72,56 @@ public final class JsonHandler
 			@Override
 			public void onTagChanged(Tag tag) { editTag(tag); }
 		});
-
-		loadTags();
 	}
 
-	//Use an enum to deal with that
+	private static void addTag(Tag tag)
+	{
+		System.out.println(tag.toString());
+		userTags.put(tag.getUuid().toString(), new JSONObject(tag.toString()));
+
+		updateTagFile();
+	}
+
+	private static void editTag(Tag tag)
+	{
+		userTags.remove(tag.getUuid().toString());
+		addTag(tag);
+	}
+
+	private static void deleteTag(Tag tag)
+	{
+		userTags.remove(tag.getUuid().toString());
+		updateTagFile();
+	}
+
+	private static void loadJson() throws IOException
+	{
+		userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
+		userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
+	}
+
+	private static void createJsonFiles() throws IOException
+	{
+		if (!localTagFile.toFile().exists())
+			Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
+		if (!localActivitiesFile.toFile().exists()) Files.writeString(localActivitiesFile, "{}",
+				StandardOpenOption.CREATE);
+		if (!localSettingsFile.toFile().exists()) Files.writeString(localSettingsFile, "{}",
+				StandardOpenOption.CREATE);
+	}
+
+	public static void updateSettingsFile(JSONObject settings)
+	{
+		try
+		{
+			Files.writeString(localSettingsFile, settings.toString());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 	private static void updateTagFile()
 	{
 		try
@@ -86,7 +133,7 @@ public final class JsonHandler
 			e.printStackTrace();
 		}
 
-		AuthenticationHandler.getInstance().updateTagsToServer();
+		AuthenticationHandler.getInstance().updateToServer();
 	}
 
 	private static void updateActivitiesFile()
@@ -100,14 +147,9 @@ public final class JsonHandler
 			e.printStackTrace();
 		}
 
-		AuthenticationHandler.getInstance().updateActivitiesToServer();
+		AuthenticationHandler.getInstance().updateToServer();
 	}
 
-	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
-	{
-		userActivities.put(key.toString(), activity.toJsonObject());
-		updateActivitiesFile();
-	}
 
 	private static void getActivity(List<AbstractActivity> activityList, String dataKey)
 	{
@@ -126,6 +168,7 @@ public final class JsonHandler
 						LocalDateTime.parse(activity.getString("endTime")), activity.getInt("chosenDuration")));
 	}
 
+
 	public static List<AbstractActivity> getAllActivities()
 	{
 		List<AbstractActivity> activityList = new Vector<>();
@@ -133,6 +176,24 @@ public final class JsonHandler
 		userActivities.keys().forEachRemaining(dataKey -> getActivity(activityList, dataKey));
 
 		return activityList;
+	}
+
+	static JSONObject getTagsActivities()
+	{
+		return new JSONObject().put("tags", userTags.toString()).put("activities", userActivities.toString());
+	}
+
+	static JSONObject getSettings()
+	{
+		try
+		{
+			return new JSONObject(new String(Files.readAllBytes(localSettingsFile)));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 
@@ -153,6 +214,12 @@ public final class JsonHandler
 		return activityList;
 	}
 
+	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
+	{
+		userActivities.put(key.toString(), activity.toJsonObject());
+		updateActivitiesFile();
+	}
+
 	static void loadActivities(JSONObject data)
 	{
 		Map<String, Object> map = userActivities.toMap();
@@ -167,17 +234,7 @@ public final class JsonHandler
 		Map<String, Object> map = userTags.toMap();
 		map.putAll(data.toMap());
 		userTags = new JSONObject(map);
-
-		data.keys().forEachRemaining(key ->
-		{
-			JSONObject currTag = (JSONObject)userTags.get(key);
-			TagHandler.getInstance().addTag(key, Color.valueOf(currTag.getString("Color")), currTag.getInt("UUID"));
-		});
-	}
-
-	static JSONObject getTagsActivities()
-	{
-		return new JSONObject().put("tags", userTags.toString()).put("activities", userActivities.toString());
+		loadTags();
 	}
 
 	static void loadTags()
@@ -191,25 +248,6 @@ public final class JsonHandler
 			Integer uuid = currTag.getInt("uuid");
 			TagHandler.getInstance().addTag(name, color, uuid);
 		});
-	}
-
-
-	public static void addTag(Tag tag)
-	{
-		userTags.put(tag.getUuid().toString(), new JSONObject(tag.toString()));
-		updateTagFile();
-	}
-
-	public static void editTag(Tag tag)
-	{
-		userTags.remove(tag.getUuid().toString());
-		addTag(tag);
-	}
-
-	public static void deleteTag(Tag tag)
-	{
-		userTags.remove(tag.getUuid().toString());
-		updateTagFile();
 	}
 
 }

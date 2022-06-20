@@ -20,38 +20,16 @@ public class AuthenticationHandler
 
 	private AuthenticationHandler() { }
 
+	private boolean createTable = false;
 	private boolean isLogged = false;
+	private String  elementID = "";
 
 	private User user;
 
-	private final Path idDatabaseFile = Path.of("ids.db");
-	JSONObject jsonFilesID = new JSONObject();
 
 	public static AuthenticationHandler getInstance()
 	{
 		return instance;
-	}
-
-	public void initIdDatabase()
-	{
-		try
-		{
-			if (idDatabaseFile.toFile().exists())
-			{
-				jsonFilesID = new JSONObject(new String(Files.readAllBytes(idDatabaseFile)));
-			}else{
-				jsonFilesID.put("tagFID", "");
-				jsonFilesID.put("activitiesFID", "");
-				Files.writeString(idDatabaseFile, jsonFilesID.toString(), StandardOpenOption.CREATE);
-			}
-		}
-		catch (IOException e)
-		{
-			Feedback.getInstance().showError(Localization.get("error.authentication.connectionError.header"),
-					Localization.get("error.authentication.connectionError.message"));
-		}
-
-		isLogged = false;
 	}
 
 	public void registerUser(User user)
@@ -67,8 +45,8 @@ public class AuthenticationHandler
 				return;
 			}
 
-			if (Client.getInstance().sendEmailVerification()) Feedback.getInstance().showError(Localization.get(
-							"info.authentication.emailConfirm.header"),
+			if (Client.getInstance().sendEmailVerification()) Feedback.getInstance().showError(
+					Localization.get("info.authentication.emailConfirm.header"),
 					Localization.get("info.authentication.emailConfirm.message"));
 		}
 		catch (IOException | ConnectionException e)
@@ -98,8 +76,6 @@ public class AuthenticationHandler
 				return false;
 			}
 
-			initIdDatabase();
-
 			Feedback.getInstance().showNotification(Localization.get("info.authentication.loginSuccessful.header"),
 					Localization.get("info.authentication.loginSuccessful.message", user.username()));
 
@@ -120,29 +96,27 @@ public class AuthenticationHandler
 	public void getDataFromServer()
 	{
 		if (!isLogged) return;
-
-		Client.getInstance().get("userdata",
-			result -> {
-				var jsonArray = result.result().getJSONArray("userdata");
-				var jsonObject = jsonArray.getJSONObject(jsonArray.length() - 1);
-				JsonHandler.loadTags(new JSONObject(jsonObject.getString("tags")));
-				JsonHandler.loadActivities(new JSONObject(jsonObject.getString("activities")));
-			}, e -> { System.out.println(e); }
-		);
+		Client.getInstance().get("userdata", result ->
+		{
+			var jsonArray = result.result().getJSONArray("userdata");
+			var jsonObject = jsonArray.getJSONObject(jsonArray.length() - 1);
+			JsonHandler.loadTags(new JSONObject(jsonObject.getString("tags")));
+			elementID = jsonObject.getString("element_id");
+		},
+		err -> createTable = true);
 	}
 
-	public void updateTagsToServer()
+
+	public void updateToServer()
 	{
 		if (!isLogged) return;
 
-		Client.getInstance().insert("userdata", JsonHandler.getTagsActivities(), e -> {},databaseReference -> {System.out.println(databaseReference);});
-	}
+		if (createTable) Client.getInstance().insert("userdata", JsonHandler.getTagsActivities(), succ ->
+				elementID = succ.result().getJSONObject("response").getString("element_id") , System.out::println);
+		else Client.getInstance().update("userdata", elementID, JsonHandler.getTagsActivities(), succ ->
+		{ }, System.out::println);
 
-	public void updateActivitiesToServer()
-	{
-		if (!isLogged) return;
-
-		Client.getInstance().insert("userdata", JsonHandler.getTagsActivities(), e -> {},databaseReference -> {System.out.println(databaseReference);});
+		createTable = false;
 	}
 
 	public void doLogout()
@@ -160,5 +134,6 @@ public class AuthenticationHandler
 	}
 
 	public boolean isUserLogged() { return isLogged; }
+
 	public String getUser() { return user.username(); }
 }
