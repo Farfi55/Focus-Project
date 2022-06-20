@@ -14,9 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,6 +29,9 @@ import mafiadelprimobanco.focusproject.utils.TimeUtils;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
+
+import static mafiadelprimobanco.focusproject.utils.TextFlowUtils.addBoldText;
+import static mafiadelprimobanco.focusproject.utils.TextFlowUtils.addText;
 
 public class Feedback
 {
@@ -408,26 +409,6 @@ public class Feedback
 		activityRecapDialog.showDialog();
 	}
 
-	private void addBoldText(TextFlow textFlow, String text) { addText(textFlow, text, FontWeight.BOLD); }
-
-
-	private void addText(TextFlow textFlow, String text)
-	{ addText(textFlow, text, FontWeight.NORMAL, 14); }
-
-	private void addText(TextFlow textFlow, String text, FontWeight weight)
-	{ addText(textFlow, text, weight, 14); }
-
-	private void addText(TextFlow textFlow, String text, FontWeight weight, double size)
-	{
-		Text boldText = new Text(text);
-		boldText.setFont(Font.font("Roboto", weight, size));
-		textFlow.getChildren().add(boldText);
-	}
-
-	private void addText(TextFlow textFlow, Text text)
-	{
-		textFlow.getChildren().add(text);
-	}
 
 	private void baseActivityRecap(TextFlow textContent, AbstractActivity activity)
 	{
