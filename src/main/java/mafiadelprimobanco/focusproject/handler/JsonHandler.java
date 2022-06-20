@@ -86,7 +86,7 @@ public final class JsonHandler
 			e.printStackTrace();
 		}
 
-		AuthenticationHandler.getInstance().updateTagsToServer();
+		AuthenticationHandler.getInstance().updateToServer();
 	}
 
 	private static void updateActivitiesFile()
@@ -100,7 +100,7 @@ public final class JsonHandler
 			e.printStackTrace();
 		}
 
-		AuthenticationHandler.getInstance().updateActivitiesToServer();
+		AuthenticationHandler.getInstance().updateToServer();
 	}
 
 	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
@@ -171,7 +171,10 @@ public final class JsonHandler
 		data.keys().forEachRemaining(key ->
 		{
 			JSONObject currTag = (JSONObject)userTags.get(key);
-			TagHandler.getInstance().addTag(key, Color.valueOf(currTag.getString("Color")), currTag.getInt("UUID"));
+			String name = currTag.getString("name");
+			Color color = Color.valueOf(currTag.getString("color"));
+			Integer uuid = currTag.getInt("uuid");
+			TagHandler.getInstance().addTag(name, color, uuid);
 		});
 	}
 
