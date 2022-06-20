@@ -88,4 +88,12 @@ public class Tree
 		else return (float)getProgressTime() / getTotalRequiredTime();
 	}
 
+
+	public String toJson()
+	{
+		return "uuid:" + uuid + ", name:'" + name + '\'' + ", matureTreeSprite:'" + matureTreeSprite + '\''
+				+ ", deadTreeSprite:'" + deadTreeSprite + '\'' + ", totalRequiredTime:" + totalRequiredTime
+				+ ", progressTime:" + progressTime.get();
+	}
+
 }

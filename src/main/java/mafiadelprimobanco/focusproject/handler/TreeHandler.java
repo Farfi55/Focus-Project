@@ -9,6 +9,7 @@ import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 import mafiadelprimobanco.focusproject.utils.TimeUtils;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -83,6 +84,34 @@ public class TreeHandler implements ActivityObserver
 			if (tree.isUnlocked()) unlockedTrees.add(tree.getUuid());
 			else treesToUnlock.add(tree.getUuid());
 		}
+	}
+
+	public void loadFromJson(JSONObject treeJsonObj)
+	{
+		//selectedTreeToUnlock.set(treeJsonObj.getInt());
+
+		var treesList  = treeJsonObj.getJSONObject("treesList");
+		treesList.keys().forEachRemaining(treeUUID -> {
+			treesList.getString(treeUUID)
+		});
+
+	}
+
+	public JSONObject toJson()
+	{
+		JSONObject treeJsonObj = new JSONObject();
+
+		treeJsonObj.put("selectedTreeToUnlockUuid", selectedTreeToUnlock.get().getUuid());
+
+		JSONObject treesList = new JSONObject();
+		for (Tree tree : trees.values())
+		{
+			treesList.put(String.valueOf(tree.getUuid()), tree.toJson());
+		}
+
+		treeJsonObj.put("treesList", treesList);
+
+		return treeJsonObj;
 	}
 
 	private void addProgressTime(int seconds)
