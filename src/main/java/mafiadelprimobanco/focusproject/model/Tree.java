@@ -92,9 +92,9 @@ public class Tree
 
 	public String toJson()
 	{
-		return "uuid:" + uuid + ", name:'" + name + '\'' + ", matureTreeSprite:'" + matureTreeSprite + '\''
+		return "{uuid:" + uuid + ", name:'" + name + '\'' + ", matureTreeSprite:'" + matureTreeSprite + '\''
 				+ ", deadTreeSprite:'" + deadTreeSprite + '\'' + ", totalRequiredTime:" + totalRequiredTime
-				+ ", progressTime:" + progressTime.get();
+				+ ", progressTime:" + getProgressTime() + '}';
 	}
 
 	public Tree(JSONObject jsonObject)

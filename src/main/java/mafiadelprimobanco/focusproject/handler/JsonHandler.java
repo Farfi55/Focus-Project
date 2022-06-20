@@ -26,6 +26,7 @@ public final class JsonHandler
 {
 	private static Path localTagFile = Path.of("tags.json");
 	private static Path localActivitiesFile = Path.of("activities.json");
+	private static Path localTreesFile = Path.of("trees.json");
 	private static final Path localSettingsFile = Path.of("settings.json");
 	static JSONObject userTags;
 	static JSONObject userActivities;
@@ -52,7 +53,7 @@ public final class JsonHandler
 		ActivityHandler.getInstance().addListener(new ActivityObserver()
 		{
 			@Override
-			public void onActivityEnd(AbstractActivity currentActivity)
+			public void onActivityEndSafe(AbstractActivity currentActivity)
 			{
 				JsonHandler.addFinishedActivity(currentActivity.getStartTime(), currentActivity);
 			}
@@ -76,7 +77,6 @@ public final class JsonHandler
 
 	private static void addTag(Tag tag)
 	{
-		System.out.println(tag.toString());
 		userTags.put(tag.getUuid().toString(), new JSONObject(tag.toString()));
 
 		updateTagFile();
@@ -98,13 +98,30 @@ public final class JsonHandler
 	{
 		userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
 		userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
+
 	}
+
+	public static JSONObject loadTreeJson(){
+		try
+		{
+			return new JSONObject(new String(Files.readAllBytes(localTreesFile)));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 
 	private static void createJsonFiles() throws IOException
 	{
 		if (!localTagFile.toFile().exists())
 			Files.writeString(localTagFile, "{}", StandardOpenOption.CREATE);
 		if (!localActivitiesFile.toFile().exists()) Files.writeString(localActivitiesFile, "{}",
+				StandardOpenOption.CREATE);
+		if (!localTreesFile.toFile().exists()) Files.writeString(localTreesFile, "{}",
 				StandardOpenOption.CREATE);
 		if (!localSettingsFile.toFile().exists()) Files.writeString(localSettingsFile, "{}",
 				StandardOpenOption.CREATE);
@@ -136,11 +153,12 @@ public final class JsonHandler
 		AuthenticationHandler.getInstance().updateToServer();
 	}
 
-	private static void updateActivitiesFile()
+	private static void updateActivitiesTreeFiles()
 	{
 		try
 		{
 			Files.writeString(localActivitiesFile, userActivities.toString());
+			Files.writeString(localTreesFile, TreeHandler.getInstance().toJson().toString());
 		}
 		catch (IOException e)
 		{
@@ -217,7 +235,7 @@ public final class JsonHandler
 	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
 	{
 		userActivities.put(key.toString(), activity.toJsonObject());
-		updateActivitiesFile();
+		updateActivitiesTreeFiles();
 	}
 
 	static void loadActivities(JSONObject data)

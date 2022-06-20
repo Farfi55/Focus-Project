@@ -33,6 +33,7 @@ public class TreeHandler implements ActivityObserver
 	private TreeHandler()
 	{
 		loadTrees();
+		loadFromJson(JsonHandler.loadTreeJson());
 		setSelectedTreeToUnlock(getFirstTreeToUnlock());
 		setSelectedActivityTree(getFirstUnlockedTree());
 		loadTreePhasesImages();
@@ -88,20 +89,30 @@ public class TreeHandler implements ActivityObserver
 
 	public void loadFromJson(JSONObject treeJsonObj)
 	{
-		//selectedTreeToUnlock.set(treeJsonObj.getInt());
+		if (treeJsonObj == null || treeJsonObj.isEmpty()) return;
 
-		var treesList  = treeJsonObj.getJSONObject("treesList");
-		treesList.keys().forEachRemaining(treeUUID -> {
-			treesList.getString(treeUUID)
-		});
+		var treesList = treeJsonObj.getJSONObject("treesList");
 
+		var selectedTreeJSVal = treeJsonObj.getInt("selectedTreeToUnlockUuid");
+
+		if (selectedTreeJSVal != -1) selectedTreeToUnlock.set(trees.get(selectedTreeJSVal));
+
+		unusedProgressTime.set(treeJsonObj.getInt("unusedProgressTime"));
+
+		treesList.keys().forEachRemaining(treeUUID -> trees.get(Integer.valueOf(treeUUID))
+				.updateProgressFromJson(new JSONObject(treesList.getString(treeUUID))));
 	}
 
 	public JSONObject toJson()
 	{
 		JSONObject treeJsonObj = new JSONObject();
 
-		treeJsonObj.put("selectedTreeToUnlockUuid", selectedTreeToUnlock.get().getUuid());
+		if (selectedTreeToUnlock != null)
+			treeJsonObj.put("selectedTreeToUnlockUuid",selectedTreeToUnlock.get().getUuid());
+		else
+			treeJsonObj.put("selectedTreeToUnlockUuid", -1);
+
+		treeJsonObj.put("unusedProgressTime", unusedProgressTime.getValue());
 
 		JSONObject treesList = new JSONObject();
 		for (Tree tree : trees.values())
