@@ -45,7 +45,6 @@ public class AudioHandler
 		backgroundMusic = new Media(ResourcesLoader.load("audio/You-ve-been-in-the-dark-for-way-too-long.wav"));
 		musicPlayer = new MediaPlayer(backgroundMusic);
 		musicPlayer.setAutoPlay(true);
-
 	}
 
 	public void playToggleButtonAudioClip()
@@ -98,12 +97,18 @@ public class AudioHandler
 	public void playBackgroundMusic()
 	{
 		musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+		useGlobalMusicVolume();
 		musicPlayer.play();
 	}
 
 	void useGlobalSoundVolume()
 	{
 		mediaPlayer.setVolume(settingsHandler.getSettings().soundVolume.get() / 100.0);
+	}
+
+	void useGlobalMusicVolume()
+	{
+		musicPlayer.setVolume(settingsHandler.getSettings().musicVolume.get() / 100.0);
 	}
 
 	public MediaPlayer getMusicPlayer() {return musicPlayer;}
