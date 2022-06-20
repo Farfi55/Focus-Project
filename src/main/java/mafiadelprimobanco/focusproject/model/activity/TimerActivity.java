@@ -48,7 +48,8 @@ public class TimerActivity extends AbstractActivity
 	public double getProgress()
 	{
 		if (chosenDuration == null || chosenDuration == 0) return 1.0d;
-		else return Math.min(1.0d, (double)getSecondsSinceStart() / chosenDuration);
+		else if (isRunning()) return Math.min(1.0d, (double)getSecondsSinceStart() / chosenDuration);
+		else return Math.min(1.0d, (double)getFinalDuration() / chosenDuration);
 	}
 
 	public int getRemainingDuration()

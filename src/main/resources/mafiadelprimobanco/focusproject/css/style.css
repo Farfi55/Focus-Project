@@ -705,11 +705,11 @@ REGISTRATION STYLE
 #registrationPageRoot .header-label {
 }
 
-#registrationPageRoot .registrationFieldBox {
-    -fx-background-color: palette1-2;
-    -fx-background-radius: 6;
-    -fx-padding: 4;
-}
+/*#registrationPageRoot .registrationFieldBox {*/
+/*    -fx-background-color: palette1-2;*/
+/*    -fx-background-radius: 6;*/
+/*    -fx-padding: 4;*/
+/*}*/
 
 
 /*.outline-button {*/
