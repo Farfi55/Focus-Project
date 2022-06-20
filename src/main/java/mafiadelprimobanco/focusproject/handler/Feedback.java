@@ -232,6 +232,7 @@ public class Feedback
 
 	public void showWarning(String header, String message)
 	{
+		AudioHandler.getInstance().playNotificationAudioClip();
 		MFXFontIcon warnIcon = new MFXFontIcon("mfx-do-not-enter-circle", 18);
 		dialogContent.setHeaderIcon(warnIcon);
 		dialogContent.setHeaderText(header);
@@ -243,6 +244,7 @@ public class Feedback
 
 	public void showError(String header, String message)
 	{
+		AudioHandler.getInstance().playErrorAudioClip();
 		MFXFontIcon errorIcon = new MFXFontIcon("mfx-exclamation-circle-filled", 18);
 		dialogContent.setHeaderIcon(errorIcon);
 		dialogContent.setHeaderText(header);
@@ -291,6 +293,7 @@ public class Feedback
 	 */
 	public Boolean askYesNoConfirmation(String header, String message)
 	{
+		AudioHandler.getInstance().playNotificationAudioClip();
 		addButton(ButtonData.YES);
 		addButton(ButtonData.NO);
 
@@ -329,6 +332,9 @@ public class Feedback
 
 	public void showActivityRecap(AbstractActivity activity)
 	{
+		if (activity.wasSuccessful()) AudioHandler.getInstance().playSuccessfulActivityAudioClip();
+		else AudioHandler.getInstance().playFailedActivityAudioClip();
+
 		if (activity == null || !activity.hasEnded()) return;
 
 		String header;

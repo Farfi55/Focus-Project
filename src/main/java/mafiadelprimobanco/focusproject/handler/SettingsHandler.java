@@ -24,6 +24,12 @@ public class SettingsHandler
 
 	private void loadSettingsFromDatabase(Settings settings)
 	{
+		setDefaultSettings(settings);
+	}
+
+	private void setDefaultSettings(Settings settings)
+	{
+		settings.musicVolume.setValue(30.0);
 		settings.areAdvancedOptionsShown.setValue(true);
 		settings.confirmQuitApplication.setValue(true);
 		settings.language.setValue(Language.ENGLISH);

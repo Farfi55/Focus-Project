@@ -9,11 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import mafiadelprimobanco.focusproject.handler.Localization;
-import mafiadelprimobanco.focusproject.handler.Feedback;
-import mafiadelprimobanco.focusproject.handler.SettingsHandler;
-import mafiadelprimobanco.focusproject.handler.StyleHandler;
+import mafiadelprimobanco.focusproject.handler.*;
 import mafiadelprimobanco.focusproject.utils.Language;
+import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 import mafiadelprimobanco.focusproject.utils.Theme;
 
 import java.net.URL;
@@ -82,6 +80,8 @@ public class SettingsPageController implements Controller
 
 	private Pattern inputValidation;
 
+	private AudioHandler audioHandler;
+
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
@@ -142,34 +142,33 @@ public class SettingsPageController implements Controller
 	// Language combo box behaviour
 	void updateStringsBasedOnCurrentLanguage()
 	{
-		//todo: bind label text using LocalizationUtils
-		generalCategoryLabel.setText(Localization.get("settings.general.categoryName"));
 
-		languageLabel.setText(Localization.get("settings.language"));
+		LocalizationUtils.bindLabelText(generalCategoryLabel, "settings.general.categoryName");
 
-		navigationBlockLabel.setText(Localization.get("settings.navigationBlock"));
+		LocalizationUtils.bindLabelText(languageLabel, "settings.language");
 
-		audioCategoryLabel.setText(Localization.get("settings.audio.categoryName"));
-		soundLabel.setText(Localization.get("settings.audio.sound"));
-		musicLabel.setText(Localization.get("settings.audio.music"));
+		LocalizationUtils.bindLabelText(navigationBlockLabel, "settings.navigationBlock");
 
-		timerCategoryLabel.setText(Localization.get("settings.timer.categoryName"));
-		minimumTimerActivityLabel.setText(Localization.get("settings.timer.minimumActivityTime"));
-		timerConfirmationLabel.setText(Localization.get("settings.timer.confirmation"));
+		LocalizationUtils.bindLabelText(audioCategoryLabel, "settings.audio.categoryName");
+		LocalizationUtils.bindLabelText(soundLabel, "settings.audio.sound");
+		LocalizationUtils.bindLabelText(musicLabel, "settings.audio.music");
 
-		chronometerCategoryLabel.setText(Localization.get("settings.chronometer.categoryName"));
-		successfulActivityMinimumChronometeLabel.setText(Localization.get("settings.chronometer.stopActivityAfter"));
-		chronometerConfirmationLabel.setText(Localization.get("settings.chronometer.confirmation"));
+		LocalizationUtils.bindLabelText(timerCategoryLabel, "settings.timer.categoryName");
+		LocalizationUtils.bindLabelText(minimumTimerActivityLabel, "settings.timer.minimumActivityTime");
+		LocalizationUtils.bindLabelText(timerConfirmationLabel, "settings.timer.confirmation");
 
-		themeLabel.setText(Localization.get("settings.theme"));
+		LocalizationUtils.bindLabelText(chronometerCategoryLabel, "settings.chronometer.categoryName");
+		LocalizationUtils.bindLabelText(successfulActivityMinimumChronometeLabel, "settings.chronometer.stopActivityAfter");
+		LocalizationUtils.bindLabelText(chronometerConfirmationLabel, "settings.chronometer.confirmation");
 
-		advancedOptionCategoryLabel.setText(Localization.get("settings.advancedOptions.categoryName"));
-		advancedSettingsButton.setText(Localization.get("settings.advancedOptions.show"));
+		LocalizationUtils.bindLabelText(themeLabel, "settings.theme");
 
-		confirmBeforeExitLabel.setText(Localization.get("settings.advancedOptions.askConfirmationBeforeQuitting"));
+		LocalizationUtils.bindLabelText(advancedOptionCategoryLabel,"settings.advancedOptions.categoryName");
+		LocalizationUtils.bindLabelText(advancedSettingsButton, "settings.advancedOptions.show");
+
+		LocalizationUtils.bindLabelText(confirmBeforeExitLabel, "settings.advancedOptions.askConfirmationBeforeQuitting");
 
 		themeComboBox.setText(settingsHandler.getSettings().theme.getValue().toString());
-
 	}
 
 	private void updateCurrentLanguage()
@@ -255,6 +254,7 @@ public class SettingsPageController implements Controller
 		navigationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().navigationDisabledDuringActivity.set(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 
 		settingsHandler.getSettings().navigationDisabledDuringActivity.addListener(
@@ -281,6 +281,7 @@ public class SettingsPageController implements Controller
 			if (!whenScrollStarts)
 			{
 				settingsHandler.getSettings().musicVolume.set(musicSlider.getValue());
+				AudioHandler.getInstance().getMusicPlayer().setVolume(settingsHandler.getSettings().musicVolume.getValue() / 100.0);
 			}
 		});
 
@@ -357,6 +358,7 @@ public class SettingsPageController implements Controller
 		timerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().confirmInterruptTimerActivity.setValue(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 	}
 	// --------------------------
@@ -412,6 +414,7 @@ public class SettingsPageController implements Controller
 		chronometerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().confirmInterruptChronometerActivity.setValue(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 	}
 
@@ -434,6 +437,7 @@ public class SettingsPageController implements Controller
 		confirmationRequestToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
 		{
 			settingsHandler.getSettings().confirmQuitApplication.setValue(newValue);
+			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 
 		settingsHandler.getSettings().confirmQuitApplication.addListener(observable ->
@@ -448,13 +452,13 @@ public class SettingsPageController implements Controller
 		if (!advancedSettingsVBox.isVisible())
 		{
 			advancedSettingsVBox.setVisible(true);
-			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.hide"));
+			LocalizationUtils.bindButtonText(advancedSettingsButton, "settings.advancedOptions.hide");
 			advancedSettingsVBox.setManaged(true);
 		}
 		else
 		{
 			advancedSettingsVBox.setVisible(false);
-			advancedSettingsButton.setText(Localization.get("settings.advancedOptions.show"));
+			LocalizationUtils.bindButtonText(advancedSettingsButton, "settings.advancedOptions.show");
 			advancedSettingsVBox.setManaged(false);
 		}
 	}

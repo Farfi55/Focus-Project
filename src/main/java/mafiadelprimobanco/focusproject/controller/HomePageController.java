@@ -309,6 +309,8 @@ public class HomePageController implements Controller, ActivityObserver, EventHa
 	@FXML
 	void toggleActivityState()
 	{
+		AudioHandler.getInstance().playButtonAudioClip();
+
 		if (!ActivityHandler.getInstance().isActivityRunning())
 		{
 			if (canStartActivity()) startActivityDelegate();

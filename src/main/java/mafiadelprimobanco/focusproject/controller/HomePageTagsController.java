@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import mafiadelprimobanco.focusproject.handler.AudioHandler;
 import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.handler.SceneHandler;
 import mafiadelprimobanco.focusproject.handler.TagHandler;
@@ -94,6 +95,7 @@ public class HomePageTagsController implements TagsObserver, Controller
 	void onNewTagAction(ActionEvent event)
 	{
 		TagHandler.getInstance().addTag();
+		AudioHandler.getInstance().playButtonAudioClip();
 	}
 
 	private void populateTagsList()
