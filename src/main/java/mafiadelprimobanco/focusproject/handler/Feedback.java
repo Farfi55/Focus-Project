@@ -368,6 +368,8 @@ public class Feedback
 	{
 		if (activity == null || !activity.hasEnded()) return;
 
+		AudioHandler.getInstance().playSelectedTreeAudioClip();
+
 		String header;
 		activityRecapDialogContent.clearTextContent();
 		TextFlow textContent = activityRecapDialogContent.getTextContent();
