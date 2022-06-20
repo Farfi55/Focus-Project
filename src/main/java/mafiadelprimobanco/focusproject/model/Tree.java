@@ -1,10 +1,11 @@
 package mafiadelprimobanco.focusproject.model;
 
 import javafx.beans.property.SimpleIntegerProperty;
+import org.json.JSONObject;
 
 public class Tree
 {
-	private final Integer uuid;
+	private Integer uuid;
 	private final String name;
 	private final String matureTreeSprite;
 	private final String deadTreeSprite;
@@ -96,4 +97,17 @@ public class Tree
 				+ ", progressTime:" + progressTime.get();
 	}
 
+	public Tree(JSONObject jsonObject)
+	{
+		this.uuid = jsonObject.getInt("uuid");
+		this.name = jsonObject.getString("name");
+		this.matureTreeSprite = jsonObject.getString("matureTreeSprite");
+		this.deadTreeSprite = jsonObject.getString("deadTreeSprite");
+		this.totalRequiredTime = jsonObject.getInt("totalRequiredTime");
+		this.progressTime.set(jsonObject.getInt("progressTime"));
+	}
+
+	public void updateProgressFromJson(JSONObject jsonObject){
+		this.progressTime.set(jsonObject.getInt("progressTime"));
+	}
 }
