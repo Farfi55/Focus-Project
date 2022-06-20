@@ -117,25 +117,31 @@ public class RegistrationPageController implements Controller
 
 	private Node createGrid()
 	{
-		MFXTextField usernameLabel1 = createLabel("Email: ");
-		MFXTextField usernameLabel2 = createLabel("");
-		usernameLabel2.textProperty().bind(loginField.textProperty());
+		Label emailLabel = new Label("Email: ");
+		Label emailValueLabel = new Label("");
+		emailValueLabel.textProperty().bind(loginField.textProperty());
+		emailLabel.setMinWidth(80);
+		emailValueLabel.setMinWidth(100);
 
-		MFXTextField firstNameLabel1 = createLabel("Username: ");
-		MFXTextField firstNameLabel2 = createLabel("");
-		firstNameLabel2.textProperty().bind(usernameField.textProperty());
+		Label usernameLabel = new Label("Username: ");
+		usernameLabel.setMinWidth(80);
+		Label usernameValueLabel = new Label("");
+		usernameValueLabel.setMinWidth(100);
+		usernameValueLabel.textProperty().bind(usernameField.textProperty());
 
 
-		usernameLabel1.getStyleClass().add("header-label");
-		firstNameLabel1.getStyleClass().add("header-label");
+		emailLabel.getStyleClass().add("header-label");
+		usernameLabel.getStyleClass().add("header-label");
 
-		HBox b1 = new HBox(usernameLabel1, usernameLabel2);
-		HBox b2 = new HBox(firstNameLabel1, firstNameLabel2);
+		HBox b1 = new HBox(20, emailLabel, emailValueLabel);
+		HBox b2 = new HBox(20, usernameLabel, usernameValueLabel);
+		b1.setAlignment(Pos.CENTER);
+		b2.setAlignment(Pos.CENTER);
+		b1.getStyleClass().add("registrationFieldBox");
+		b1.getStyleClass().add("registrationFieldBox");
 
-		b1.setMaxWidth(Region.USE_PREF_SIZE);
-		b2.setMaxWidth(Region.USE_PREF_SIZE);
-
-		VBox box = new VBox(10, b1, b2, checkbox);
+		VBox box = new VBox(20, b1, b2, checkbox);
+		box.getStyleClass().add("registrationFieldsContainer");
 		box.setAlignment(Pos.CENTER);
 		StackPane.setAlignment(box, Pos.CENTER);
 
@@ -144,7 +150,6 @@ public class RegistrationPageController implements Controller
 			User user = new User(loginField.getText(), usernameField.getText(), passwordField.getText());
 			AuthenticationHandler.getInstance().registerUser(user);
 			PagesHandler.navigateTo(PagesHandler.home);
-
 		});
 		stepper.setOnBeforePrevious(event ->
 		{

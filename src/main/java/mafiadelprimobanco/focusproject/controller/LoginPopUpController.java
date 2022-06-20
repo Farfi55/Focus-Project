@@ -38,6 +38,7 @@ public class LoginPopUpController {
 				new User(emailField.getText(), emailField.getText(), passwordField.getText()))
 			)
 		{
+			AuthenticationHandler.getInstance().getDataFromServer();
 			SceneHandler.getInstance().closeLoginPopup();
 			clean();
 		}

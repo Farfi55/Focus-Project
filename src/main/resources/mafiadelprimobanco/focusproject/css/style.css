@@ -1,18 +1,49 @@
-.root{
+.root {
     -fx-background-color: palette1-1;
-    -mfx-main: palette3-2
-}
-
-.text, .mfx-text-field {
-    /*just to make it obvious where it's missing*/
+    -mfx-main: palette3-2;
+    -mfx-text-he: palette3-2;
+    -fx-text-fill: palette4-1;
+    -fx-fill: palette4-1;
     -fx-font-family: "Roboto";
     -fx-font-size: 14;
-    -fx-background-color: palette1-0;
-    -fx-border-color: palette4-1;
+}
+
+.label {
+    -fx-background-color: transparent;
+    -fx-text-fill: palette4-1;
+    -fx-font-family: "Roboto";
+}
+
+.text-field {
+    -fx-highlight-fill: #fdede0;
+    -fx-prompt-text-fill: palette4-2;
+    -fx-text-fill: palette4-1;
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14;
+}
+
+
+
+.text, .mfx-text-field .mfx-text-field .measure-unit {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 14;
+    -fx-background-color: palette1-1;
     -fx-text-fill: palette4-1;
 }
 
+
+.mfx-text-field {
+    -fx-border-color: palette4-1;
+    -fx-background-color: palette1-0;
+}
+
+.mfx-text-field .measure-unit {
+    -fx-text-fill: palette4-1;
+}
+
+
 .mfx-text-field:focused {
+    -fx-background-color: palette1-0;
     -fx-border-color: palette3-1;
 }
 
@@ -20,15 +51,21 @@
     -fx-background-color: inherit;
 }
 
+
 .mfx-combo-box {
+    -fx-font-family: "Roboto";
     -fx-background-color: palette1-0;
     -fx-border-color: transparent;
-
 }
 
 .mfx-combo-box .combo-popup {
     -fx-background-color: palette1-0;
     -fx-min-height: 200;
+}
+
+.ikonli-font-icon, .mfx-font-icon {
+    -fx-fill: palette4-1;
+    -fx-text-fill: palette4-1;
 }
 
 
@@ -233,6 +270,7 @@
 }
 
 #homeActivityButton {
+    -fx-text-fill: palette4-1;
     -fx-border-color: palette3-2;
     -fx-border-width: 2;
     -fx-border-radius: 8;
@@ -331,6 +369,7 @@
 todo: this should be a reusable class
  */
 #newTagButton {
+    -fx-text-fill: palette4-1;
     -fx-border-color: palette3-2;
     -fx-border-width: 2;
     -fx-border-radius: 8;
@@ -468,25 +507,29 @@ FEEDBACK STYLE
     -fx-background-color: palette1-1;
 }
 
-.dialog .content-container, .dialog .content-container .content{
-    -fx-background-color: transparent;
-}
-.dialog .header-label{
+.dialog .content-container, .dialog .content-container .content {
     -fx-background-color: transparent;
 }
 
-.dialog .actions-pane .mfx-button{
+.dialog .header-label {
+    -fx-background-color: transparent;
+}
+
+.dialog .actions-pane .mfx-button {
+    -fx-text-fill: palette4-1;
     -fx-background-color: palette3-1;
     -fx-border-color: palette3-2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
     -fx-border-width: 2;
 }
-.dialog .actions-pane .mfx-button:hover{
+
+.dialog .actions-pane .mfx-button:hover {
     -fx-background-color: palette3-2;
     -fx-border-color: palette3-3;
 }
-.dialog .actions-pane .mfx-button .mfx-ripple-generator{
+
+.dialog .actions-pane .mfx-button .mfx-ripple-generator {
     -mfx-ripple-color: palette3-3;
 }
 
@@ -495,7 +538,7 @@ FEEDBACK STYLE
 }
 
 #endOfActivityRecap .content-container,
-#endOfActivityRecap .content-container .content{
+#endOfActivityRecap .content-container .content {
     -fx-background-color: transparent;
 }
 
@@ -506,49 +549,241 @@ FEEDBACK STYLE
 
 
 /*
-REGISTRATION STYLE
+PROGRESS STYLE
+ */
 
+#progressPageRoot {
+    -fx-background-color: palette1-1;
+}
+
+#progressPageRoot .mfx-scroll-pane {
+    -fx-background-color: transparent;
+}
+
+#progressTreeSelection, .progressTreeDetailGrid {
+    -fx-background-color: palette1-2;
+    -fx-background-radius: 9;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-border-color: palette1-3;
+    -fx-padding: 4 8 4 8;
+    -fx-effect: innershadow(gaussian, shadow1, 12, 0.4, 0, 0);
+}
+
+#progressUnlockedTreeDetailGrid,
+#progressToUnlockTreeDetailGrid {
+}
+
+
+.progressTreeCard {
+    -fx-background-color: palette1-0;
+    -fx-background-radius: 6;
+    -fx-effect: dropshadow(gaussian, shadow1, 6, 0.3, 0, 3);
+}
+
+.progressTreeCard:hover {
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, shadow1, 12, 0.3, 0, 3);
+}
+
+
+.selectedTreeToUnlockCard {
+    -fx-border-color: palette3-2;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
+    -fx-effect: dropshadow(gaussian, palette3-1, 10, 0, 0, 3);
+}
+
+.progressPlaceHolderTreeCard {
+    -fx-background-color: transparent;
+}
+
+.progressTreeSelectionButton {
+    -fx-background-color: palette1-0;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: palette1-2;
+}
+
+.progressTreeSelectionButton:hover {
+    -fx-background-color: palette1-1;
+    -fx-border-color: palette3-1;
+}
+
+#progressIntervalComboBox {
+
+}
+
+#progressTreeContainer {
+    -fx-background-radius: 30;
+    -fx-background-color: palette2-1;
+}
+
+.progressTree {
+    -fx-background-color: transparent;
+}
+
+.progressTree .mfx-ripple-generator {
+    -mfx-paused: true;
+}
+
+/*
+REGISTRATION STYLE
 */
 
+#loginPopUp {
+    -fx-background-color: palette1-1;
+    -mfx-main: palette3-2;
+    -mfx-text-he: palette3-2;
+    -fx-text-fill: palette4-1;
+    -fx-fill: palette4-1;
+    -fx-font-family: "Roboto";
+    -fx-border-color: palette3-1;
+}
 
+
+#loginPopUp .text,
+#loginPopUp .label,
+#loginPopUp .text-field {
+    -fx-text-fill: palette4-1;
+}
+
+#loginPopUp .mfx-button {
+    -fx-background-color: palette1-0;
+    -fx-text-fill: palette4-1;
+}
+
+#loginPopUp .mfx-text-field,
+#loginPopUp .mfx-password-field {
+
+    -fx-background-color: palette1-0;
+    -fx-text-fill: palette4-1;
+}
+
+#registrationPageRoot {
+    -fx-background-color: palette1-1;
+}
+
+.mfx-stepper {
+    -mfx-base-color: palette3-2;
+    -mfx-alt-color: palette1-1;
+    -mfx-progress-color: palette2-2;
+}
+
+#registrationPageRoot .text-field{
+    -fx-max-height: 26;
+    -fx-pref-height: 26;
+    -fx-min-height: 26;
+
+}
+.mfx-stepper .mfx-button,
 .mfx-stepper .mfx-text-field {
-    -mfx-float-mode: disabled;
+    -fx-background-color: palette1-0;
+    -fx-text-fill: palette4-1;
     -fx-pref-width: 200;
+    -fx-min-width: 200;
+    -fx-max-height: 34;
+    -fx-pref-height: 34;
+    -fx-min-height: 34;
 }
 
-.mfx-stepper .mfx-stepper-toggle .mfx-text-field {
-    -fx-border-color: transparent;
-    -fx-pref-width: 1;
+.mfx-stepper .text,
+.mfx-stepper .text-field,
+.mfx-stepper .label {
+    -fx-text-fill: palette4-1;
 }
 
-
-.mfx-stepper .header-label {
-    -fx-border-color: transparent;
+#registrationPageRoot .header-label {
 }
 
-.mfx-stepper .completed-label {
-    -fx-border-color: transparent;
-    -fx-font-size: 24;
-    -fx-alignment: center;
-}
-
-.outline-button {
-    -fx-background-color: transparent;
-    -fx-border-radius: 3;
-}
-
-.outline-button:hover,
-.outline-button:focused {
-    -fx-text-fill: white;
+#registrationPageRoot .registrationFieldBox{
+    -fx-background-color: palette1-2;
+    -fx-background-radius: 6;
+    -fx-padding: 4;
 }
 
 
-.progress-indicator .percentage {
-    -fx-fill: null;
-}
+
+/*.outline-button {*/
+/*    -fx-background-color: palette1-0;*/
+/*    -fx-border-color: palette3-1;*/
+/*    -fx-border-radius: 3;*/
+
+/*    -fx-text-fill: palette4-1;*/
+/*}*/
+
+/*.outline-button:hover,*/
+/*.outline-button:focused {*/
+/*    -fx-background-color: palette3-1;*/
+/*    -fx-text-fill: palette4-1;*/
+/*}*/
+
+
+/*.mfx-stepper-toggle,*/
+/*.mfx-stepper-toggle:none #circle,*/
+/*.mfx-stepper-toggle:selected #circle,*/
+/*.mfx-stepper-toggle:completed #circle,*/
+/*.mfx-stepper-toggle:invalid #circle,*/
+/*#circle {*/
+/*    -fx-background-color: #f00;*/
+/*    -fx-stroke: #00f;*/
+/*    -fx-fill: #0ff;*/
+/*    -mfx-main: #a0a;*/
+/*    -fx-border-color: #589;*/
+/*}*/
+
+
+/*.mfx-stepper-toggle:selected,*/
+/*.mfx-stepper-toggle:selected #circle {*/
+/*    -fx-stroke: palette2-2;*/
+/*}*/
+
+/*.mfx-stepper-toggle:selected .mfx-text-field {*/
+/*    -fx-text-fill: palette4-1;*/
+/*}*/
+
+/*.mfx-stepper-toggle:completed,*/
+/*.mfx-stepper-toggle:completed #circle {*/
+/*    -fx-stroke: palette2-2;*/
+/*    -fx-fill: palette2-2;*/
+/*}*/
 
 #loginPane {
     -fx-background-color: transparent;
+}
+
+
+/*
+    INFO STYLE
+*/
+
+#infoPageRoot {
+    -fx-background-color: palette1-1;
+}
+
+#infoPageRoot .mfx-scroll-pane{
+    -fx-background-color: transparent;
+
+}
+
+
+/*
+    STATISTICS STYLE
+*/
+
+#statisticsPageRoot {
+    -fx-padding: 20;
+    -fx-background-color: palette1-1;
+}
+
+.chart,
+.chart .text,
+.axis,
+.axis .label,
+.axis .text {
+    -fx-text-fill: palette4-1;
+    -fx-fill: palette4-1;
+    -fx-tick-label-fill: palette4-1;
 }
 
 
@@ -577,24 +812,36 @@ SETTINGS STYLE
     -mfx-main-color: palette3-1;
     -mfx-main-color-hover: palette3-2;
     -mfx-main-color-pressed: palette3-3;
-    -mfx-disabled-color: rgb(158, 158, 158);
+    -mfx-disabled-color: palette4-2;
 }
 
 .mfx-combo-box {
     -mfx-track-color: rgb(230, 230, 230);
     -mfx-thumb-color: rgb(137, 137, 137);
     -mfx-thumb-hover-color: rgb(89, 88, 91);
-    -mfx-gap: 0;
-    -fx-padding: 3 5 3 5;
+    /*-mfx-gap: 0;*/
+}
+
+
+.mfx-combo-box .caret .mfx-font-icon {
+    -mfx-color: palette4-1;
 }
 
 .mfx-combo-box:focus-within .caret .mfx-font-icon {
     -mfx-color: palette3-1;
 }
 
+.mfx-combo-box .floating-text,
+.mfx-password-field .floating-text,
+.mfx-text-field .floating-text {
+    -fx-text-fill: palette4-1;
+}
+
+.mfx-text-field:focus-within .floating-text,
+.mfx-password-field:focus-within .floating-text,
 .mfx-combo-box:focus-within .floating-text {
-    -fx-color: palette3-1;
-    -fx-text-fill: palette3-1;
+    -fx-color: palette3-2;
+    -fx-text-fill: palette3-2;
 }
 
 
@@ -603,15 +850,27 @@ SETTINGS STYLE
     -mfx-ripple-radius: 14;
 }
 
+.mfx-combo-box .virtual-flow {
+    -fx-background-color: palette1-0;
+    -fx-border-color: palette1-2;
+}
+
 .mfx-combo-box .virtual-flow .mfx-combo-box-cell:hover {
     -fx-background-color: palette1-1;
 }
 
-.mfx-combo-box .virtual-flow .mfx-combo-box-cell:selected{
+.mfx-combo-box .virtual-flow .mfx-combo-box-cell:selected {
     -fx-background-color: palette1-3;
 }
 
 .mfx-toggle-button {
     -mfx-main: palette3-2;
-    -mfx-secondary: rgb(90, 89, 89);
+    -mfx-secondary: palette4-2;
 }
+
+.mfx-checkbox {
+    -mfx-main: palette3-2;
+    -mfx-secondary: palette4-2;
+    -fx-text-fill: palette4-1;
+}
+

@@ -1,10 +1,10 @@
 package mafiadelprimobanco.focusproject.handler;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
+import mafiadelprimobanco.focusproject.utils.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +17,23 @@ public class StyleHandler
 	{
 		return instance;
 	}
+
 	private final List<String> loadedStyles = new ArrayList<>();
 	private final ObservableList<String> observableStyles = FXCollections.observableList(loadedStyles);
 
-	private final StringProperty currentTheme = new SimpleStringProperty("light");
+	private final SimpleObjectProperty<Theme> currentTheme = new SimpleObjectProperty<>();
 	private final List<String> baseStyles = List.of("fonts", "style");
 
 
-	private StyleHandler() {
+	private StyleHandler()
+	{
+		updateTheme();
+		SettingsHandler.getInstance().getSettings().theme.addListener(observable -> updateTheme());
+	}
+
+	private void updateTheme()
+	{
+		currentTheme.setValue(SettingsHandler.getInstance().getSettings().theme.get());
 		reloadStyles();
 	}
 
@@ -36,7 +45,7 @@ public class StyleHandler
 			String resource = ResourcesLoader.load("css/" + style + ".css");
 			tmpStyles.add(resource);
 		}
-		String themeStylesheet = ResourcesLoader.load("css/themes/" + currentTheme.get() + ".css");
+		String themeStylesheet = ResourcesLoader.load("css/themes/" + currentTheme.get().fileName + ".css");
 		tmpStyles.add(themeStylesheet);
 
 		// to only trigger changes in loadedStyle once
@@ -46,18 +55,18 @@ public class StyleHandler
 
 	public void toggleLightDarkTheme()
 	{
-		currentTheme.setValue(currentTheme.getValue().equals("light") ? "dark" : "light");
+		currentTheme.setValue(currentTheme.getValue().equals(Theme.LIGHT) ? Theme.DARK : Theme.LIGHT);
 		reloadStyles();
 	}
 
-	public void setTheme(String newTheme)
+	public void setTheme(Theme newTheme)
 	{
 		// if the user can use custom themes then sanitize 'newTheme'
 		currentTheme.setValue(newTheme);
 		reloadStyles();
 	}
 
-	public StringProperty getCurrentTheme()
+	public SimpleObjectProperty<Theme> getCurrentTheme()
 	{
 		return currentTheme;
 	}

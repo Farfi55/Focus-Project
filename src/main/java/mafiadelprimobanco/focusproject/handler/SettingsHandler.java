@@ -35,13 +35,13 @@ public class SettingsHandler
 		settings.language.setValue(Language.ENGLISH);
 		settings.theme.setValue(Theme.LIGHT);
 		settings.isTutorialHidden.setValue(true);
+		settings.musicVolume.setValue(30.0);
 		settings.soundVolume.setValue(70.0);
 		settings.navigationDisabledDuringActivity.setValue(false);
-		settings.areAdvancedOptionsShown.setValue(false);
-		settings.minimumSuccessfulChronometerDuration.setValue(20);
 		settings.confirmInterruptChronometerActivity.setValue(true);
 		settings.confirmInterruptTimerActivity.setValue(true);
-		settings.minimumTimerDuration.setValue(10);
+		settings.minimumSuccessfulChronometerDuration.setValue(120);
+		settings.minimumTimerDuration.setValue(20);
 		settings.resetTutorial.setValue(false);
 	}
 

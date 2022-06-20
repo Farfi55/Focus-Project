@@ -24,6 +24,19 @@ public class Settings
 	public final SimpleBooleanProperty resetTutorial = new SimpleBooleanProperty();
 	public final SimpleBooleanProperty confirmQuitApplication = new SimpleBooleanProperty();
 
+	@Override
+	public String toString()
+	{
+		return "Settings{" + "language=" + language + ", theme=" + theme + ", navigationDisabledDuringActivity="
+				+ navigationDisabledDuringActivity + ", isTutorialHidden=" + isTutorialHidden + ", musicVolume="
+				+ musicVolume + ", soundVolume=" + soundVolume + ", minimumTimerDuration=" + minimumTimerDuration
+				+ ", confirmInterruptTimerActivity=" + confirmInterruptTimerActivity
+				+ ", minimumSuccessfulChronometerDuration=" + minimumSuccessfulChronometerDuration
+				+ ", confirmInterruptChronometerActivity=" + confirmInterruptChronometerActivity
+				+ ", areAdvancedOptionsShown=" + areAdvancedOptionsShown + ", resetTutorial=" + resetTutorial
+				+ ", confirmQuitApplication=" + confirmQuitApplication + '}';
+	}
+
 	public Settings()
 	{
 	}

@@ -1,11 +1,13 @@
 package mafiadelprimobanco.focusproject.handler;
 
-import mafiadelprimobanco.focusproject.handler.TagHandler;
 import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.ActivityType;
+import mafiadelprimobanco.focusproject.model.Tag;
+import mafiadelprimobanco.focusproject.model.TagsObserver;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
+import mafiadelprimobanco.focusproject.utils.ColorUtils;
 import org.json.JSONObject;
 
 
@@ -13,12 +15,11 @@ import javafx.scene.paint.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.Vector;
 
 public final class JsonHandler
@@ -46,12 +47,28 @@ public final class JsonHandler
 			e.printStackTrace();
 		}
 
-		ActivityHandler.getInstance().addListener(new ActivityObserver() {
+		ActivityHandler.getInstance().addListener(new ActivityObserver()
+		{
 			@Override
 			public void onActivityEnd(AbstractActivity currentActivity)
 			{
 				JsonHandler.addFinishedActivity(currentActivity.getStartTime(), currentActivity);
 			}
+		});
+
+		TagHandler.getInstance().addListener(new TagsObserver()
+		{
+			@Override
+			public void onTagAdded(Tag tag)
+			{
+				if(tag.getUuid() != 0) addTag(tag);
+			}
+
+			@Override
+			public void onTagRemoving(Tag tag) { deleteTag(tag); }
+
+			@Override
+			public void onTagChanged(Tag tag) { editTag(tag); }
 		});
 
 		loadTags();
@@ -68,6 +85,8 @@ public final class JsonHandler
 		{
 			e.printStackTrace();
 		}
+
+		AuthenticationHandler.getInstance().updateTagsToServer();
 	}
 
 	private static void updateActivitiesFile()
@@ -80,6 +99,8 @@ public final class JsonHandler
 		{
 			e.printStackTrace();
 		}
+
+		AuthenticationHandler.getInstance().updateActivitiesToServer();
 	}
 
 	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
@@ -132,31 +153,64 @@ public final class JsonHandler
 		return activityList;
 	}
 
-
-	static void loadTags()
+	static void loadActivities(JSONObject data)
 	{
-		userTags.keys().forEachRemaining(key ->
+		Map<String, Object> map = userActivities.toMap();
+		map.putAll(data.toMap());
+		userActivities = new JSONObject(map);
+
+		ActivityStatsHandler.getInstance().loadActivities();
+	}
+
+	static void loadTags(JSONObject data)
+	{
+		Map<String, Object> map = userTags.toMap();
+		map.putAll(data.toMap());
+		userTags = new JSONObject(map);
+
+		data.keys().forEachRemaining(key ->
 		{
 			JSONObject currTag = (JSONObject)userTags.get(key);
 			TagHandler.getInstance().addTag(key, Color.valueOf(currTag.getString("Color")), currTag.getInt("UUID"));
 		});
 	}
 
-	public static void addTag(String name, String colorHex, Integer UUID)
+	static JSONObject getTagsActivities()
 	{
-		userTags.put(name, new JSONObject("{" + "UUID:" + UUID + ", Color:" + colorHex + "}"));
+		return new JSONObject().put("tags", userTags.toString()).put("activities", userActivities.toString());
+	}
+
+	static void loadTags()
+	{
+		userTags.keys().forEachRemaining(key ->
+		{
+			JSONObject currTag = (JSONObject)userTags.get(key);
+
+			String name = currTag.getString("name");
+			Color color = Color.valueOf(currTag.getString("color"));
+			Integer uuid = currTag.getInt("uuid");
+			TagHandler.getInstance().addTag(name, color, uuid);
+		});
+	}
+
+
+	public static void addTag(Tag tag)
+	{
+		System.out.println(tag.toString());
+		userTags.put(tag.getUuid().toString(), new JSONObject(tag.toString()));
+
 		updateTagFile();
 	}
 
-	public static void editTag(String oldTagName, String name, String colorHex, Integer UUID)
+	public static void editTag(Tag tag)
 	{
-		userTags.remove(oldTagName);
-		addTag(name, colorHex, UUID);
+		userTags.remove(tag.getUuid().toString());
+		addTag(tag);
 	}
 
-	public static void deleteTag(String tagName)
+	public static void deleteTag(Tag tag)
 	{
-		userTags.remove(tagName);
+		userTags.remove(tag.getUuid().toString());
 		updateTagFile();
 	}
 

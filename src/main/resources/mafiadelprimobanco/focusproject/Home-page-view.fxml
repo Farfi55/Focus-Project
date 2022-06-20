@@ -100,7 +100,7 @@
                   </HBox>
                   <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <MFXButton id="homeActivityButton" fx:id="activityButton" buttonType="RAISED" depthLevel="LEVEL4" onAction="#toggleActivityState" prefHeight="40.0" prefWidth="125.0" text="Avvia" />
+                        <MFXButton id="homeActivityButton" fx:id="activityButton" buttonType="RAISED" depthLevel="LEVEL4" onAction="#toggleActivityState" prefHeight="40.0" prefWidth="150.0" text="Avvia" />
                      </children>
                   </HBox>
                   <Region prefHeight="0.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />

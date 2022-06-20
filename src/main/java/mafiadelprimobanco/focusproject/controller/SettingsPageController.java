@@ -21,85 +21,58 @@ import java.util.regex.*;
 
 public class SettingsPageController implements Controller
 {
-	@FXML
-	private Label advancedOptionCategoryLabel;
+	@FXML private Label advancedOptionCategoryLabel;
 
-	@FXML
-	private MFXButton advancedSettingsButton;
+	@FXML private MFXButton advancedSettingsButton;
 
-	@FXML
-	private VBox advancedSettingsVBox;
+	@FXML private VBox advancedSettingsVBox;
 
-	@FXML
-	private Label audioCategoryLabel;
+	@FXML private Label audioCategoryLabel;
 
-	@FXML
-	private Label chronometerCategoryLabel;
+	@FXML private Label chronometerCategoryLabel;
 
-	@FXML
-	private Label chronometerConfirmationLabel;
+	@FXML private Label chronometerConfirmationLabel;
 
-	@FXML
-	private MFXToggleButton chronometerConfirmationToggleButton;
+	@FXML private MFXToggleButton chronometerConfirmationToggleButton;
 
-	@FXML
-	private Label confirmBeforeExitLabel;
+	@FXML private Label confirmBeforeExitLabel;
 
-	@FXML
-	private MFXToggleButton confirmationRequestToggleButton;
+	@FXML private MFXToggleButton confirmationRequestToggleButton;
 
-	@FXML
-	private Label generalCategoryLabel;
+	@FXML private Label generalCategoryLabel;
 
-	@FXML
-	private MFXComboBox<Language> languageComboBox;
+	@FXML private MFXComboBox<Language> languageComboBox;
 
-	@FXML
-	private Label languageLabel;
+	@FXML private Label languageLabel;
 
-	@FXML
-	private Label minimumTimerActivityLabel;
+	@FXML private Label minimumTimerActivityLabel;
 
-	@FXML
-	private MFXTextField minimumTimerTextField;
+	@FXML private MFXTextField minimumTimerTextField;
 
-	@FXML
-	private Label musicLabel;
+	@FXML private Label musicLabel;
 
-	@FXML
-	private MFXSlider musicSlider;
+	@FXML private MFXSlider musicSlider;
 
-	@FXML
-	private Label navigationBlockLabel;
+	@FXML private Label navigationBlockLabel;
 
-	@FXML
-	private MFXToggleButton navigationToggleButton;
-	@FXML
-	private Label soundLabel;
+	@FXML private MFXToggleButton navigationToggleButton;
+	@FXML private Label soundLabel;
 
-	@FXML
-	private MFXSlider soundSlider;
+	@FXML private MFXSlider soundSlider;
 
-	@FXML
-	private Label successfulActivityMinimumChronometeLabel;
+	@FXML private Label successfulActivityMinimumChronometeLabel;
 
-	@FXML
-	private MFXTextField successfulActivityMinimumChronometerTextField;
+	@FXML private MFXTextField successfulActivityMinimumChronometerTextField;
 
-	@FXML
-	private MFXComboBox<Theme> themeComboBox;
+	@FXML private MFXComboBox<Theme> themeComboBox;
 
-	@FXML
-	private Label themeLabel;
+	@FXML private Label themeLabel;
 
-	@FXML
-	private Label timerCategoryLabel;
+	@FXML private Label timerCategoryLabel;
 
-	@FXML
-	private Label timerConfirmationLabel;
+	@FXML private Label timerConfirmationLabel;
 
-	@FXML
-	private MFXToggleButton timerConfirmationToggleButton;
+	@FXML private MFXToggleButton timerConfirmationToggleButton;
 
 	private SettingsHandler settingsHandler;
 
@@ -240,11 +213,7 @@ public class SettingsPageController implements Controller
 		{
 			if (newValue != null)
 			{
-				//todo refactor: a bit unsafe, theme localized in english has to be equal to file name
-				// also this should be in StyleHandler
-				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
 				settingsHandler.getSettings().theme.set(newValue);
-				updateThemeComboBox();
 				updateSelectedTheme();
 			}
 		});
@@ -263,8 +232,9 @@ public class SettingsPageController implements Controller
 	private void updateSelectedTheme()
 	{
 		themeComboBox.selectItem(settingsHandler.getSettings().theme.getValue());
-		themeComboBox.setText(Localization.get(settingsHandler.getSettings().theme.getValue().key));
+		updateThemeComboBox();
 	}
+
 
 	private void updateThemeComboBox()
 	{
@@ -287,7 +257,8 @@ public class SettingsPageController implements Controller
 			AudioHandler.getInstance().playToggleButtonAudioClip();
 		});
 
-		settingsHandler.getSettings().navigationDisabledDuringActivity.addListener(observable -> updateNavigationToggleButton());
+		settingsHandler.getSettings().navigationDisabledDuringActivity.addListener(
+				observable -> updateNavigationToggleButton());
 	}
 	// --------------------------
 
@@ -341,7 +312,7 @@ public class SettingsPageController implements Controller
 	// Timer Behaviour
 	private void updateMinimumTimerTextField()
 	{
-		minimumTimerTextField.setText(settingsHandler.getSettings().minimumTimerDuration.getValue().toString());
+		minimumTimerTextField.setText(String.valueOf(settingsHandler.getSettings().minimumTimerDuration.getValue()/ 60));
 	}
 
 	private void subscribeMinimumTimerTextField()
@@ -365,21 +336,21 @@ public class SettingsPageController implements Controller
 
 		if (!validateInput(input))
 		{
+			updateMinimumTimerTextField();
 			feedback.showError(Localization.get("error.settings.invalidTime.header"),
 					Localization.get("error.settings.invalidTime.message"));
-			minimumTimerTextField.setText(
-					settingsHandler.getSettings().minimumTimerDuration.getValue().toString());
 		}
 		else
 		{
 			minimumTimerTextField.setText(input);
-			settingsHandler.getSettings().minimumTimerDuration.setValue(Integer.valueOf(input));
+			settingsHandler.getSettings().minimumTimerDuration.setValue(Integer.parseInt(input) * 60);
 		}
 	}
 
 	private void updateTimerConfirmationToggleButton()
 	{
-		timerConfirmationToggleButton.setSelected(settingsHandler.getSettings().confirmInterruptTimerActivity.getValue());
+		timerConfirmationToggleButton.setSelected(
+				settingsHandler.getSettings().confirmInterruptTimerActivity.getValue());
 	}
 
 	private void subscribeTimerConfirmationToggleButton()
@@ -396,15 +367,17 @@ public class SettingsPageController implements Controller
 	// Chronometer behaviour
 	private void updateChronometerTextField()
 	{
-		successfulActivityMinimumChronometerTextField.setText(settingsHandler.getSettings().minimumSuccessfulChronometerDuration.getValue().toString());
+		successfulActivityMinimumChronometerTextField.setText(
+				String.valueOf(settingsHandler.getSettings().minimumSuccessfulChronometerDuration.getValue()/60));
 	}
 
 	private void subscribeChronometerTextField()
 	{
-		successfulActivityMinimumChronometerTextField.delegateFocusedProperty().addListener((observable, oldStatus, newStatus) ->
-		{
-			if (!newStatus) validateChronometerTextFieldValue();
-		});
+		successfulActivityMinimumChronometerTextField.delegateFocusedProperty().addListener(
+				(observable, oldStatus, newStatus) ->
+				{
+					if (!newStatus) validateChronometerTextFieldValue();
+				});
 		successfulActivityMinimumChronometerTextField.setOnAction(event -> validateChronometerTextFieldValue());
 
 		settingsHandler.getSettings().minimumSuccessfulChronometerDuration.addListener(observable ->
@@ -419,21 +392,23 @@ public class SettingsPageController implements Controller
 
 		if (!validateInput(input))
 		{
+			updateChronometerTextField();
 			feedback.showError(Localization.get("error.settings.invalidTime.header"),
 					Localization.get("error.settings.invalidTime.message"));
-			updateChronometerTextField();
 		}
 		else
 		{
-			settingsHandler.getSettings().minimumSuccessfulChronometerDuration.setValue(Integer.valueOf(input));
+			settingsHandler.getSettings().minimumSuccessfulChronometerDuration.setValue(Integer.parseInt(input) * 60);
 			updateChronometerTextField();
 		}
 	}
 
 	private void updateChronometerConfirmationToggleButton()
 	{
-		chronometerConfirmationToggleButton.setSelected(settingsHandler.getSettings().confirmInterruptChronometerActivity.getValue());
+		chronometerConfirmationToggleButton.setSelected(
+				settingsHandler.getSettings().confirmInterruptChronometerActivity.getValue());
 	}
+
 	private void subscribeChronometerConfirmationToggleButton()
 	{
 		chronometerConfirmationToggleButton.selectedProperty().addListener((observableValue, oldValue, newValue) ->
@@ -454,8 +429,7 @@ public class SettingsPageController implements Controller
 
 	private void updateConfirmationRequestToggleBox()
 	{
-		confirmationRequestToggleButton.setSelected(
-				settingsHandler.getSettings().confirmQuitApplication.get());
+		confirmationRequestToggleButton.setSelected(settingsHandler.getSettings().confirmQuitApplication.get());
 	}
 
 	private void subscribeConfirmationRequestToggleButton()

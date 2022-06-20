@@ -63,7 +63,14 @@ public class BaseController implements EventHandler<KeyEvent>
 		}
 
 		// override behaviour
-		accountButton.setOnAction(event -> SceneHandler.getInstance().toggleLoginPopup());
+		accountButton.setOnAction(event -> {
+			if (AuthenticationHandler.getInstance().isUserLogged() && Feedback.getInstance()
+			.askYesNoConfirmation("Logout", "Vuoi eseguire il logout?"))
+			{
+				AuthenticationHandler.getInstance().doLogout();
+			}else if(!AuthenticationHandler.getInstance().isUserLogged())
+				SceneHandler.getInstance().toggleLoginPopup();
+		});
 
 		KeyPressManager.getInstance().addHandler(this);
 		SceneHandler.getInstance().setContentPane(contentRoot);

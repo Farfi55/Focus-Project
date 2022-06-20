@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import mafiadelprimobanco.focusproject.utils.Theme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class KeyPressManager implements EventHandler<KeyEvent>
 		}
 		else if (event.isControlDown() && event.getCode().equals(KeyCode.L))
 		{
-			StyleHandler.getInstance().setTheme("light2");
+			StyleHandler.getInstance().setTheme(Theme.LEGACY);
 			event.consume();
 		}
 		else if (event.isControlDown() && event.getCode().equals(KeyCode.J))

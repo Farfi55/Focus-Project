@@ -6,8 +6,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.Tooltip;
-import mafiadelprimobanco.focusproject.handler.JsonHandler;
+import mafiadelprimobanco.focusproject.handler.ActivityStatsHandler;
+import mafiadelprimobanco.focusproject.handler.Localization;
+import mafiadelprimobanco.focusproject.handler.SettingsHandler;
 import mafiadelprimobanco.focusproject.handler.TagHandler;
+import mafiadelprimobanco.focusproject.model.Settings;
 import mafiadelprimobanco.focusproject.model.Tag;
 
 import java.net.URL;
@@ -15,15 +18,10 @@ import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.*;
 
-import static java.time.DayOfWeek.MONDAY;
-import static java.time.temporal.TemporalAdjusters.previousOrSame;
-
-public class StatisticPageController implements Controller{
+public class StatisticPageController implements Controller
+{
 
 	@FXML private MFXComboBox<String> dateComboBox;
 
@@ -34,82 +32,127 @@ public class StatisticPageController implements Controller{
 	@FXML private PieChart tagsPieChart;
 
 	@FXML private StackedBarChart<String, Number> totalDataBarChart;
-	@FXML private NumberAxis numberAxisBar;
 
 	@FXML private NumberAxis lineChartNumberAxis;
+	@FXML private CategoryAxis dayAxisStackedBar;
+	@FXML private NumberAxis numberAxisBar;
+	@FXML private CategoryAxis weekAxisLineChart;
 
 	public StatisticPageController() { }
 
+	private void setPieChart(Tag tag, long seconds)
+	{
+		var dataChart = tagsPieChart.getData().stream().filter(piece -> piece.getName().equals(tag.getName())).toList();
+
+		if (dataChart.size() > 0)
+		{
+			var newVal = dataChart.get(0).getPieValue() + seconds;
+			dataChart.get(0).setPieValue(newVal);
+		}
+		else
+		{
+			var newDataChart = new PieChart.Data(tag.getName(), seconds);
+
+			setPieColor(tag, newDataChart);
+
+			tagsPieChart.getData().add(newDataChart);
+		}
+	}
+
+	private void setPieColor(Tag tag, PieChart.Data newDataChart)
+	{
+		Platform.runLater(() ->
+		{
+			newDataChart.getNode().setStyle("-fx-pie-color: #" + tag.getColor().toString().substring(2) + ";");
+			Tooltip.install(newDataChart.getNode(),
+					new Tooltip(String.format("%s = %.2f", tag.getName(), newDataChart.getPieValue())));
+		});
+	}
+
 	private void setMonthChart(int monthsToSub)
 	{
-        LocalDate thisMonth = LocalDate.now().withDayOfMonth(1).minusMonths(monthsToSub);
-		List<XYChart.Series<String, Number>> series = new ArrayList<>();
-
 		var tags = TagHandler.getInstance().getTags();
 
-		AtomicReference<Long> upperbound = new AtomicReference<>(0L);
+		LocalDate thisMonth = LocalDate.now().withDayOfMonth(1).minusMonths(monthsToSub);
 
-		for (int i = 0; i < thisMonth.lengthOfMonth(); ++i)
+		TreeMap<Integer, XYChart.Series<String, Number>> tagSeries = new TreeMap<>();
+
+		List<Long> upperbound = new ArrayList<>();
+		List<Boolean> tagUsed = new ArrayList<>();
+
+		for (int i = 0; i < thisMonth.lengthOfMonth(); ++i) upperbound.add(0L);
+
+		tags.forEach(tag ->
 		{
-			LocalDate day = thisMonth.plusDays(i);
-			var tagsOfTheDay = JsonHandler.getAllActivitiesBetween(day.atStartOfDay(), day.plusDays(1).atStartOfDay());
-            long oldUpperBound = upperbound.get();
+			var ActivitiesMapDay = ActivityStatsHandler.getInstance().getAllActivitiesBetweenWithTag(
+					thisMonth.atStartOfDay(), thisMonth.plusDays(thisMonth.lengthOfMonth() - 1).atStartOfDay(), tag);
 
-			upperbound.set(0L);
+			tagSeries.put(tag.getUuid(), new XYChart.Series<>());
+			var serie = tagSeries.get(tag.getUuid());
 
-			tags.forEach(tag ->
+			for (int day = 1; day <= thisMonth.lengthOfMonth(); ++day)
 			{
-				long seconds = tagsOfTheDay.stream()
-						.filter(activity -> tag.equals(activity.getTag()))
-						.mapToLong(activity -> activity.getStartTime().until(activity.getEndTime(), ChronoUnit.SECONDS))
-						.sum();
+				serie.getData().add(new XYChart.Data<>(String.valueOf(day), 0));
+			}
 
-					XYChart.Series<String, Number> serie = new XYChart.Series<>();
-					serie.getData().add(new XYChart.Data<>(String.valueOf(day.getDayOfMonth()), seconds));
-					serie.setName(tag.getName());
+			tagUsed.add(false);
 
-					//our upperbound will be the sum of the value
-					upperbound.set(upperbound.get() + seconds);
+			ActivitiesMapDay.forEach(activity ->
+			{
+
+				var activityDay = activity.getStartTime().getDayOfMonth();
+				var seconds = activity.getFinalDuration();
+				var oldValue = serie.getData().get(activityDay - 1).getYValue().intValue();
+				var newVal = seconds + oldValue;
+				var idx = activityDay - 1;
+
+				upperbound.set(idx, upperbound.get(idx) + seconds);
+
+				serie.getData().get(idx).setYValue(newVal);
+				serie.setName(tag.getName());
 
 				if (seconds > 0)
-				{
-					var dataChart = new PieChart.Data(tag.getName(), seconds);
+					setPieChart(tag, seconds);
 
-					Platform.runLater(() ->
-					{
-						dataChart.getNode().setStyle("-fx-pie-color: #" + tag.getColor().toString().substring(2) + ";");
-						Tooltip.install(dataChart.getNode(),
-								new Tooltip(String.format("%s = %.2f", tag.getName(), dataChart.getPieValue())));
-					});
-
-
-					tagsPieChart.getData().add(dataChart);
-				}
-
-				series.add(serie);
+				tagUsed.set(tagUsed.size() - 1, true);
 			});
 
-			upperbound.set(Math.max(upperbound.get() + 1, oldUpperBound));
-		}
+			totalDataBarChart.getData().add(tagSeries.get(tag.getUuid()));
+		});
 
-		numberAxisBar.upperBoundProperty().set(upperbound.get());
-		totalDataBarChart.getData().addAll(series);
 
+		Long bound = upperbound.stream().max(Long::compareTo).get();
+
+		numberAxisBar.setTickUnit(bound > 100 ? (int)(bound / 10) : 1);
+		numberAxisBar.setUpperBound(bound + 1);
+
+		setBarStyle(tags, tagUsed);
+	}
+
+
+
+	private void setBarStyle(Collection<Tag> tags, List<Boolean> tagUsed)
+	{
 		//Load tag color. Used by the staked bar chart
+
 		for (int i = 0; i < tags.size(); ++i)
+		{
+			Tag t = ((Tag)tags.toArray()[i]);
+			//totalDataBarChart.lookup(".default-color" + i + ".chart-bar").setStyle("-fx-bar-fill: #" + t.getColor().toString().substring(2) + ";");
 			for (Node n : totalDataBarChart.lookupAll(".default-color" + i + ".chart-bar"))
 			{
-				n.setStyle("-fx-bar-fill: #" + ((Tag)tags.toArray()[i]).getColor().toString().substring(2) + ";");
+				n.setStyle("-fx-bar-fill: #" + t.getColor().toString().substring(2) + ";");
 			}
+		}
 	}
 
 
 	private void setWeekChart(Tag tag)
 	{
 		LocalDate today = LocalDate.now();
-		LocalDate firstDay = today.with(previousOrSame(MONDAY));
-		var activities = JsonHandler.getAllActivitiesBetween(firstDay.atStartOfDay(), LocalDateTime.MAX).stream().filter(
-					activity -> tag.equals(activity.getTag()));
+		LocalDate firstDay = today.minusDays(28);
+		var activities = ActivityStatsHandler.getInstance().getAllActivitiesBetweenWithTag(firstDay.atStartOfDay(),
+				LocalDateTime.MAX, tag);
 
 		XYChart.Series<String, Number> weekDayChartSeries = new XYChart.Series<>();
 
@@ -117,26 +160,42 @@ public class StatisticPageController implements Controller{
 
 		long[] valuesDay = {0, 0, 0, 0, 0, 0, 0};
 
-		activities.forEach(activity ->{
+		activities.forEach(activity ->
+		{
 			final int index = activity.getStartTime().getDayOfWeek().ordinal();
 
-			valuesDay[index] += activity.getStartTime().until(activity.getEndTime(),
-					ChronoUnit.SECONDS);
+			valuesDay[index] += activity.getStartTime().until(activity.getEndTime(), ChronoUnit.SECONDS);
 		});
 
 		Platform.runLater(() ->
-			weekDayChartSeries.getNode().setStyle("-fx-stroke: #"+ tag.getColor().toString().substring(2) + ";")
-		);
+		{
+			String color = tag.getColor().toString().substring(2);
 
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Lunedì", valuesDay[0]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Martedì", valuesDay[1]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Mercoledì", valuesDay[2]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Giovedì", valuesDay[3]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Venerdì", valuesDay[4]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Sabato", valuesDay[5]));
-		weekDayChartSeries.getData().add(new XYChart.Data<>("Domenica", valuesDay[6]));
+			for (Node n : weekDayChart.lookupAll(".series0"))
+				n.setStyle("-fx-background-color: #" + color + ";");
+
+			weekDayChartSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke: #" + color + ";");
+		});
+
+		DateFormatSymbols symbols = new DateFormatSymbols(SettingsHandler.getInstance().getSettings().language.get().language);
+		String[] dayNames = symbols.getShortWeekdays();
+
+		for (int day = 0; day < 7; day++)
+		weekDayChartSeries.getData().add(new XYChart.Data<>(dayNames[((day+1)%7) + 1], valuesDay[day]));
+
 
 		weekDayChart.getData().add(weekDayChartSeries);
+	}
+
+	@FXML void selectTagToShow() {
+		weekDayChart.getData().clear();
+		setWeekChart((Tag)TagHandler.getInstance().getTags().toArray()[tagComboBox.getSelectedIndex()]);
+	}
+
+	@FXML void setMonth() {
+		totalDataBarChart.getData().clear();
+		tagsPieChart.getData().clear();
+		setMonthChart(LocalDate.now().getMonthValue() - dateComboBox.getSelectedIndex() - 1);
 	}
 
 	@Override
@@ -154,23 +213,20 @@ public class StatisticPageController implements Controller{
 		//select the current month as first data to display
 		dateComboBox.selectIndex(LocalDate.now().getMonthValue() - 1);
 
-		dateComboBox.setOnAction(e -> {
-			totalDataBarChart.getData().clear();
-			tagsPieChart.getData().clear();
-			setMonthChart(LocalDate.now().getMonthValue() - dateComboBox.getSelectedIndex() -1);
-		});
+		dayAxisStackedBar.labelProperty().setValue(Localization.get("statistics.chart.day"));
+		numberAxisBar.labelProperty().setValue(Localization.get("statistics.chart.seconds"));
+		weekAxisLineChart.labelProperty().setValue(Localization.get("statistics.chart.day"));
+		lineChartNumberAxis.labelProperty().setValue(Localization.get("statistics.chart.seconds"));
 
-		tagComboBox.setOnAction(e -> {
-			weekDayChart.getData().clear();
-			setWeekChart(
-					(Tag)TagHandler.getInstance().getTags().toArray()[tagComboBox.getSelectedIndex()]);
-		});
+		dateComboBox.floatingTextProperty().setValue(Localization.get("statistics.monthRange"));
+		tagComboBox.floatingTextProperty().setValue(Localization.get("statistics.tagWeekRange"));
 
-		totalDataBarChart.getYAxis().autoRangingProperty().set(false);
+		totalDataBarChart.getYAxis().setAutoRanging(false);
+		totalDataBarChart.legendVisibleProperty().set(false);
+
 		weekDayChart.legendVisibleProperty().setValue(false);
 		tagsPieChart.legendVisibleProperty().setValue(false);
 
-		numberAxisBar.setTickUnit(1.0);
 		lineChartNumberAxis.setTickUnit(1.0);
 	}
 

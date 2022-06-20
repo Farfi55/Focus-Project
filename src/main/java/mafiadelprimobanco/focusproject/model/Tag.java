@@ -1,6 +1,7 @@
 package mafiadelprimobanco.focusproject.model;
 
 import javafx.scene.paint.Color;
+import mafiadelprimobanco.focusproject.utils.ColorUtils;
 
 import java.util.Objects;
 
@@ -55,5 +56,12 @@ public class Tag
 	public void setColor(Color color)
 	{
 		this.color = color;
+	}
+
+
+	@Override
+	public String toString()
+	{
+		return "{" + "uuid:" + uuid + ", name:'" + name + "', color:'" + color.toString() + "'}";
 	}
 }

@@ -9,10 +9,7 @@ import mafiadelprimobanco.focusproject.model.activity.ChronometerActivity;
 import mafiadelprimobanco.focusproject.model.activity.TimerActivity;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.TreeSet;
+import java.util.*;
 
 public class ActivityStatsHandler implements ActivityObserver
 {
@@ -31,21 +28,21 @@ public class ActivityStatsHandler implements ActivityObserver
 
 	private ActivityStatsHandler()
 	{
+		TagHandler.getInstance().getTags().forEach(tag -> activities.put(tag.getUuid(), new TreeSet<>()));
 		loadActivities();
 	}
 
-	private void loadActivities()
+	public void loadActivities()
 	{
 		List<AbstractActivity> allActivities = JsonHandler.getAllActivities();
 		allActivities.forEach(this::addActivity);
 
-//		for (int i = 0; i < 100; i++){
-//			AbstractActivity activity = createRandomActivity(i);
-//			addActivity(activity);
-//			JsonHandler.addFinishedActivity(activity.getStartTime(), activity);
-//		}
-
-}
+		/*for (int i = 0; i < 1000; i++){
+			AbstractActivity activity = createRandomActivity(i);
+			addActivity(activity);
+			JsonHandler.addFinishedActivity(activity.getStartTime(), activity);
+		}*/
+	}
 
 	private AbstractActivity createRandomActivity(int i)
 	{
@@ -53,7 +50,7 @@ public class ActivityStatsHandler implements ActivityObserver
 		Random random = new Random();
 		Integer tagUuid = TagHandler.getInstance().getRandomTagUuid();
 		Integer treeUuid = TreeHandler.getInstance().getRandomUnlockedTreeUuid();
-		LocalDateTime startDate = LocalDateTime.now().minusDays(random.nextInt(400));
+		LocalDateTime startDate = LocalDateTime.now().minusDays(random.nextInt(7));
 
 		int duration = random.nextInt(1200);
 		LocalDateTime endDate = startDate.plusSeconds(duration);
@@ -105,6 +102,17 @@ public class ActivityStatsHandler implements ActivityObserver
 					.toList());
 		}
 		return allActivities;
+	}
+
+
+
+	public TreeSet<AbstractActivity> getAllActivitiesBetweenWithTag(LocalDateTime startData, LocalDateTime endData, Tag tag)
+	{
+		return new TreeSet<>(activities.get(tag.getUuid())
+				.stream()
+				.filter(activity -> startData.isBefore(activity.getStartTime()) && endData.isAfter(
+						activity.getStartTime()))
+				.toList());
 	}
 
 

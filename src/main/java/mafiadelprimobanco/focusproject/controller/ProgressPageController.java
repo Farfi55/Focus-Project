@@ -4,22 +4,19 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXProgressBar;
 import io.github.palexdev.materialfx.factories.InsetsFactory;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
-import mafiadelprimobanco.focusproject.handler.ActivityStatsHandler;
-import mafiadelprimobanco.focusproject.handler.Localization;
-import mafiadelprimobanco.focusproject.handler.TreeHandler;
+import mafiadelprimobanco.focusproject.handler.*;
+import mafiadelprimobanco.focusproject.model.ActivityObserver;
 import mafiadelprimobanco.focusproject.model.Interval;
 import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
@@ -83,8 +80,12 @@ public class ProgressPageController implements Controller
 		// also builds the trees
 		setTreesInterval(Interval.DAY);
 
-		if (TreeHandler.getInstance().isValidSelectedTreeToUnlock()) setSelectedPreviewTree(
-				TreeHandler.getInstance().getSelectedTreeToUnlock());
+
+		if (TreeHandler.getInstance().isValidSelectedTreeToUnlock())
+		{
+			setSelectedPreviewTree(TreeHandler.getInstance().getSelectedTreeToUnlock());
+			updateTreeToUnlockPreviewCard();
+		}
 		else setSelectedPreviewTree(extraTreesShownInSelectionHBox); // selects the first tree in HBox
 
 	}
@@ -144,8 +145,8 @@ public class ProgressPageController implements Controller
 	private Node buildTreeSelectionCard(Tree tree)
 	{
 		ImageView treeImageView = new ImageView(ResourcesLoader.loadImage(tree.getMatureTreeSprite()));
-		treeImageView.setFitWidth(80);
-		treeImageView.setFitHeight(80);
+		treeImageView.setFitWidth(76);
+		treeImageView.setFitHeight(76);
 
 		Label treeNameLabel = new Label(tree.getName());
 		treeNameLabel.setAlignment(Pos.CENTER);
@@ -158,15 +159,15 @@ public class ProgressPageController implements Controller
 			unlockProgressBar.setProgress(tree.getUnlockProgress());
 			// we want the progress bar to occupy the same space while it's hidden
 			unlockProgressBar.setVisible(tree.isNotUnlocked());
-			if (selectedPreviewTree.get().equals(tree)) updateTreePreviewDetails();
+			if (selectedPreviewTree.get().equals(tree)) Platform.runLater(this::updateTreePreviewDetails);
 		});
-		unlockProgressBar.setMinHeight(8);
+		unlockProgressBar.setMinHeight(6);
 		unlockProgressBar.setVisible(tree.isNotUnlocked());
 
 
-		VBox vBox = new VBox(6, treeImageView, treeNameLabel, unlockProgressBar);
+		VBox vBox = new VBox(4, treeImageView, treeNameLabel, unlockProgressBar);
 		vBox.setFillWidth(true);
-		vBox.setPadding(InsetsFactory.all(5));
+		vBox.setPadding(InsetsFactory.all(8));
 		vBox.setMaxSize(100, 120);
 		vBox.setMinSize(100, 120);
 		vBox.setPrefSize(100, 120);
@@ -188,8 +189,8 @@ public class ProgressPageController implements Controller
 
 	private void initializeUnlockedTreeDetailGrid()
 	{
-		toUnlockTreeDetailsGrid.setId("progressUnlockedTreeDetailGrid");
-		toUnlockTreeDetailsGrid.getStyleClass().add("progressTreeDetailGrid");
+		unlockedTreeDetailsGrid.setId("progressUnlockedTreeDetailGrid");
+		unlockedTreeDetailsGrid.getStyleClass().add("progressTreeDetailGrid");
 
 		int row = 0;
 		for (var key : List.of("progress.plantedTrees", "progress.matureTrees", "progress.deadTrees",
@@ -229,8 +230,11 @@ public class ProgressPageController implements Controller
 		selectTreeToUnlockButton = new MFXButton();
 
 		LocalizationUtils.bindButtonText(selectTreeToUnlockButton, "progress.selectTreeButton");
-		TreeHandler.getInstance().getSelectedTreeToUnlockProperty().addListener(
-				observable -> updateSelectTreeToUnlockButtonDisable());
+		TreeHandler.getInstance().getSelectedTreeToUnlockProperty().addListener(observable ->
+		{
+			updateSelectTreeToUnlockButtonDisable();
+			updateTreeToUnlockPreviewCard();
+		});
 
 
 		toUnlockTreeDetailsGrid.addColumn(1, treeRequiredTimeLabel, treeProgressTimeLabel);
@@ -283,6 +287,7 @@ public class ProgressPageController implements Controller
 		treesRoot.setRowValignment(VPos.CENTER);
 		treesRoot.setHgap(5);
 		treesRoot.setVgap(5);
+		treesRoot.setPadding(new Insets(5, 20, 50, 20));
 		treesRoot.setId("progressTreeContainer");
 	}
 
@@ -296,16 +301,17 @@ public class ProgressPageController implements Controller
 
 		for (AbstractActivity activity : activities)
 		{
-			StackPane node = buildTree(activity);
+			MFXButton node = buildTree(activity);
 			treesRoot.getChildren().add(node);
 		}
 
 	}
 
-	private StackPane buildTree(AbstractActivity activity)
+	private MFXButton buildTree(AbstractActivity activity)
 	{
 		ImageView imageView = new ImageView(ResourcesLoader.loadImage(activity.getFinalTreeSpritePath()));
-		StackPane treeRoot = new StackPane(imageView);
+		MFXButton treeRoot = new MFXButton("", imageView);
+		treeRoot.setOnAction(event -> Feedback.getInstance().showSimpleActivityRecap(activity));
 		treeRoot.getStyleClass().add("progressTree");
 		imageView.getStyleClass().add("progressTreeImageView");
 
@@ -343,9 +349,21 @@ public class ProgressPageController implements Controller
 	{
 		for (int i = 0; i < treeSelectionHBox.getChildren().size(); i++)
 		{
-			boolean isVisible = Math.abs(selectedPreviewTreeIndex.get() - i) <= extraTreesShownInSelectionHBox;
+			int distanceFromSelected = Math.abs(selectedPreviewTreeIndex.get() - i);
+			boolean isVisible = distanceFromSelected <= extraTreesShownInSelectionHBox;
 			Node node = treeSelectionHBox.getChildren().get(i);
 			NodeUtils.setNodeVisible(node, isVisible);
+		}
+	}
+
+	private void updateTreeToUnlockPreviewCard()
+	{
+		treeSelectionHBox.getChildren().forEach(node -> node.getStyleClass().remove("selectedTreeToUnlockCard"));
+
+		if (TreeHandler.getInstance().isValidSelectedTreeToUnlock())
+		{
+			Node node = previewSelectionTreesNodes.get(TreeHandler.getInstance().getSelectedTreeToUnlock());
+			node.getStyleClass().add("selectedTreeToUnlockCard");
 		}
 	}
 
@@ -411,8 +429,11 @@ public class ProgressPageController implements Controller
 		Tree tree = TreeHandler.getInstance().getTree(treeUuid);
 		this.selectedPreviewTree.set(tree);
 
-		updateTreeSelectionHBoxItems();
-		updateTreePreviewDetails();
+		Platform.runLater(() ->
+		{
+			updateTreeSelectionHBoxItems();
+			updateTreePreviewDetails();
+		});
 	}
 
 	private void setSelectedPreviewTree(Tree selectedPreviewTree)
