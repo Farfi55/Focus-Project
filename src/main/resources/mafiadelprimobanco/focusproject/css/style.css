@@ -262,6 +262,15 @@
     -fx-effect: dropshadow(gaussian, shadow1, 20, 0.3, 0, 5);
     -fx-background-color: palette1-3;
     -fx-background-radius: 50%;
+    -fx-border-color: palette1-3;
+    -fx-border-width: 2;
+    -fx-border-radius: 50%;
+}
+
+#homeTreeButton:hover{
+    -fx-effect: dropshadow(gaussian, shadow1, 20, 0.5, 0, 2);
+    -fx-border-color: palette3-1;
+    /*-fx-background-color: palette1-3;*/
 }
 
 #homeTreeButton .mfx-ripple-generator {

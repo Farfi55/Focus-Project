@@ -1,24 +1,18 @@
 package mafiadelprimobanco.focusproject.controller;
 
-import java.awt.*;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.sun.javafx.application.HostServicesDelegate;
 import io.github.palexdev.materialfx.controls.MFXTooltip;
-import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import mafiadelprimobanco.focusproject.handler.Feedback;
+import javafx.scene.layout.VBox;
 import mafiadelprimobanco.focusproject.handler.Localization;
 import mafiadelprimobanco.focusproject.utils.LocalizationUtils;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,6 +21,8 @@ public class InfoPageController implements Controller
 {
 	@FXML private Label helpHeaderLabel;
 	@FXML private Label helpLabel;
+
+	@FXML private VBox imageContainer;
 
 	@FXML private ImageView homeImage;
 
@@ -44,7 +40,7 @@ public class InfoPageController implements Controller
 		initializeHelpSection();
 		githubLink.setText(Localization.get("info.githubLink"));
 
-		MFXTooltip.of(githubLink, "https://github.com/Farfi55/Focus-Project/");
+//		(githubLink, "https://github.com/Farfi55/Focus-Project/");
 		githubLink.setOnAction(event ->
 		{
 			try
@@ -59,7 +55,8 @@ public class InfoPageController implements Controller
 
 		madeByLabel.setText(Localization.get("info.madeBy") + "Alessio Farfaglia,\t Lorenzo Grillo,\t Pasquale Tudda.  ");
 
-
+		homeImage.fitWidthProperty().bind(imageContainer.widthProperty());
+		progressImage.fitWidthProperty().bind(imageContainer.widthProperty());
 	}
 
 	private void initializeHelpSection()
