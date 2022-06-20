@@ -46,7 +46,7 @@ public class TagController implements TagsObserver, Controller
 	}
 
 	@Override
-	public void onTagChanged(Tag tag)
+	public void onTagChanged(Tag tag, String prevName)
 	{
 		if (this.tag.equals(tag)) updateGraphics();
 	}
