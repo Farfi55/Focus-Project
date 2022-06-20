@@ -49,8 +49,7 @@ public class TagHandler
 	public boolean addTag(String name, Color color)
 	{
 		int uuid = rand.nextInt();
-		while (tags.containsKey(uuid)) uuid = rand.nextInt();
-		JsonHandler.addTag(name, color.toString().substring(2), uuid);
+		while (uuid <= 0 || tags.containsKey(uuid)) uuid = rand.nextInt();
 		return addTag(name, color, uuid);
 	}
 
@@ -104,7 +103,6 @@ public class TagHandler
 			else setSelectedTag(unsetTag);
 		}
 		invokeOnTagRemoving(tag);
-		JsonHandler.deleteTag(tag.getName());
 		names.remove(tag.getName());
 		tags.remove(uuid);
 		return true;
@@ -131,7 +129,6 @@ public class TagHandler
 
 		var tag = tags.get(uuid);
 
-
 		if (!name.equals(tag.getName()))
 		{
 			if (isNameUsed(name))
@@ -140,7 +137,6 @@ public class TagHandler
 				Feedback.getInstance().showError("Nome già in uso", "Esiste già una tag con nome '" + name + "'.");
 				return false;
 			}
-			JsonHandler.editTag(tag.getName(), name, color.toString().substring(2), uuid);
 			names.remove(tag.getName());
 			tag.setName(name);
 			names.add(tag.getName());

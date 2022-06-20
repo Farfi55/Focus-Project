@@ -752,6 +752,21 @@ REGISTRATION STYLE
     -fx-background-color: transparent;
 }
 
+
+/*
+    INFO STYLE
+*/
+
+#infoPageRoot {
+    -fx-background-color: palette1-1;
+}
+
+#infoPageRoot .mfx-scroll-pane{
+    -fx-background-color: transparent;
+
+}
+
+
 /*
     STATISTICS STYLE
 */
