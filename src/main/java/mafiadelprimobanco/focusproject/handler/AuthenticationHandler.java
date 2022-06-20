@@ -71,7 +71,7 @@ public class AuthenticationHandler
 
 			if (!Client.getInstance().isEmailVerified())
 			{
-				Feedback.getInstance().showError(Localization.get("error.authentication.emailNotValid.header"),
+				Feedback.getInstance().showInfo(Localization.get("error.authentication.emailNotValid.header"),
 						Localization.get("error.authentication.emailNotValid.message"));
 				return false;
 			}
