@@ -23,7 +23,6 @@
 }
 
 
-
 .text, .mfx-text-field .mfx-text-field .measure-unit {
     -fx-font-family: "Roboto";
     -fx-font-size: 14;
@@ -670,12 +669,13 @@ REGISTRATION STYLE
     -mfx-progress-color: palette2-2;
 }
 
-#registrationPageRoot .text-field{
+#registrationPageRoot .text-field {
     -fx-max-height: 26;
     -fx-pref-height: 26;
     -fx-min-height: 26;
 
 }
+
 .mfx-stepper .mfx-button,
 .mfx-stepper .mfx-text-field {
     -fx-background-color: palette1-0;
@@ -696,12 +696,11 @@ REGISTRATION STYLE
 #registrationPageRoot .header-label {
 }
 
-#registrationPageRoot .registrationFieldBox{
+#registrationPageRoot .registrationFieldBox {
     -fx-background-color: palette1-2;
     -fx-background-radius: 6;
     -fx-padding: 4;
 }
-
 
 
 /*.outline-button {*/
@@ -761,11 +760,17 @@ REGISTRATION STYLE
     -fx-background-color: palette1-1;
 }
 
-#infoPageRoot .mfx-scroll-pane{
+#infoPageRoot .mfx-scroll-pane {
     -fx-background-color: transparent;
-
 }
 
+#infoPageRoot .image-viewer {
+    -fx-effect: dropshadow(gaussian, palette3-1, 10, 0.2, 3, 3);;
+}
+
+#infoPageRoot .info-header {
+    -fx-font-size: 22;
+}
 
 /*
     STATISTICS STYLE
