@@ -24,19 +24,17 @@ public class SettingsHandler
 
 	private void loadSettingsFromDatabase(Settings settings)
 	{
-
-		settings.musicVolume.setValue(30.0);
 		settings.areAdvancedOptionsShown.setValue(true);
 		settings.confirmQuitApplication.setValue(true);
 		settings.language.setValue(Language.ENGLISH);
 		settings.theme.setValue(Theme.LIGHT);
 		settings.isTutorialHidden.setValue(true);
+		settings.musicVolume.setValue(30.0);
 		settings.soundVolume.setValue(70.0);
 		settings.navigationDisabledDuringActivity.setValue(false);
-		settings.areAdvancedOptionsShown.setValue(false);
-		settings.minimumSuccessfulChronometerDuration.setValue(120);
 		settings.confirmInterruptChronometerActivity.setValue(true);
 		settings.confirmInterruptTimerActivity.setValue(true);
+		settings.minimumSuccessfulChronometerDuration.setValue(120);
 		settings.minimumTimerDuration.setValue(20);
 		settings.resetTutorial.setValue(false);
 	}

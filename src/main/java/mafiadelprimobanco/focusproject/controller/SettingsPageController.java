@@ -241,11 +241,7 @@ public class SettingsPageController implements Controller
 		{
 			if (newValue != null)
 			{
-				//todo refactor: a bit unsafe, theme localized in english has to be equal to file name
-				// also this should be in StyleHandler
-				StyleHandler.getInstance().setTheme(Localization.get(newValue.key, Locale.ENGLISH));
 				settingsHandler.getSettings().theme.set(newValue);
-				updateThemeComboBox();
 				updateSelectedTheme();
 			}
 		});
@@ -264,8 +260,9 @@ public class SettingsPageController implements Controller
 	private void updateSelectedTheme()
 	{
 		themeComboBox.selectItem(settingsHandler.getSettings().theme.getValue());
-		themeComboBox.setText(Localization.get(settingsHandler.getSettings().theme.getValue().key));
+		updateThemeComboBox();
 	}
+
 
 	private void updateThemeComboBox()
 	{
