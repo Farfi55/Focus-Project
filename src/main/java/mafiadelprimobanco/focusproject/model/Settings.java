@@ -49,8 +49,6 @@ public class Settings
 
 		//Settings listeners -- Used to keep update the json file
 
-		System.out.println(this);
-
 		language.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(
 				new JSONObject(this.toString())));
 		theme.addListener((observableValue, ignored, t1) -> JsonHandler.updateSettingsFile(

@@ -3,9 +3,10 @@ package mafiadelprimobanco.focusproject;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import mafiadelprimobanco.focusproject.handler.*;
+import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 
+import java.awt.*;
 import java.io.IOException;
-import java.util.Locale;
 
 public class MainApplication extends Application
 {
@@ -20,6 +21,11 @@ public class MainApplication extends Application
 		try
 		{
 			JsonHandler.init();
+
+			stage.getIcons().add(ResourcesLoader.loadImage("icon/icon.png"));
+
+			stage.setMinWidth(690);
+			stage.setMinHeight(445);
 
 			TagHandler.getInstance().loadTags();
 			SettingsHandler.getInstance().getSettings().setListeners();
