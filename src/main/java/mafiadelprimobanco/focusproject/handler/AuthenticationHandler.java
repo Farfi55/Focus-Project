@@ -45,7 +45,7 @@ public class AuthenticationHandler
 				return;
 			}
 
-			if (Client.getInstance().sendEmailVerification()) Feedback.getInstance().showError(
+			if (Client.getInstance().sendEmailVerification()) Feedback.getInstance().showInfo(
 					Localization.get("info.authentication.emailConfirm.header"),
 					Localization.get("info.authentication.emailConfirm.message"));
 		}
@@ -71,7 +71,7 @@ public class AuthenticationHandler
 
 			if (!Client.getInstance().isEmailVerified())
 			{
-				Feedback.getInstance().showInfo(Localization.get("error.authentication.emailNotValid.header"),
+				Feedback.getInstance().showError(Localization.get("error.authentication.emailNotValid.header"),
 						Localization.get("error.authentication.emailNotValid.message"));
 				return false;
 			}
