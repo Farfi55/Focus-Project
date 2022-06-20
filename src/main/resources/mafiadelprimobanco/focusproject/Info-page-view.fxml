@@ -31,7 +31,10 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
                      <children>
-                        <Label fx:id="madeByLabel" maxWidth="1.7976931348623157E308" text="Label" />
+                        <Label fx:id="madeByLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Label">
+                           <HBox.margin>
+                              <Insets top="3.0" />
+                           </HBox.margin></Label>
                         <Hyperlink fx:id="githubLink" text="Project on GitHub" />
                      </children>
                   </HBox>
