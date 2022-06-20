@@ -26,7 +26,6 @@ public class KeyPressManager implements EventHandler<KeyEvent>
 	@Override
 	public void handle(KeyEvent event)
 	{
-		debug(event);
 		invokeHandlersEvent(event);
 	}
 
