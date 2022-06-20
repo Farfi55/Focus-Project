@@ -76,8 +76,7 @@ public class PagesHandler
 
 	private static void disableNavigation()
 	{
-		if (ActivityHandler.getInstance().getCurrentActivityType() != ActivityType.CHRONOMETER
-				&& SettingsHandler.getInstance().getSettings().navigationDisabledDuringActivity.get())
+		if (SettingsHandler.getInstance().getSettings().navigationDisabledDuringActivity.get())
 		{
 			isNavigationEnabled.set(false);
 		}

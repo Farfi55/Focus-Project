@@ -30,19 +30,19 @@ public class SettingsHandler
 
 	private void setDefaultSettings(Settings settings)
 	{
-		settings.musicVolume.setValue(30.0);
-		settings.areAdvancedOptionsShown.setValue(true);
 		settings.confirmQuitApplication.setValue(true);
 		settings.language.setValue(Language.ENGLISH);
 		settings.theme.setValue(Theme.LIGHT);
-		settings.isTutorialHidden.setValue(true);
 		settings.musicVolume.setValue(30.0);
-		settings.soundVolume.setValue(70.0);
-		settings.navigationDisabledDuringActivity.setValue(false);
-		settings.confirmInterruptChronometerActivity.setValue(true);
+		settings.soundVolume.setValue(30.0);
+		settings.navigationDisabledDuringActivity.setValue(true);
+		settings.confirmInterruptChronometerActivity.setValue(false);
 		settings.confirmInterruptTimerActivity.setValue(true);
 		settings.minimumSuccessfulChronometerDuration.setValue(120);
-		settings.minimumTimerDuration.setValue(20);
+		settings.minimumTimerDuration.setValue(120);
+		settings.areAdvancedOptionsShown.setValue(false);
+
+		settings.isTutorialHidden.setValue(false);
 		settings.resetTutorial.setValue(false);
 	}
 
