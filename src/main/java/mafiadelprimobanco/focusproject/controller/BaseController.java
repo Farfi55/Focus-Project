@@ -8,9 +8,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
-import mafiadelprimobanco.focusproject.handler.KeyPressManager;
-import mafiadelprimobanco.focusproject.handler.PagesHandler;
-import mafiadelprimobanco.focusproject.handler.SceneHandler;
+import mafiadelprimobanco.focusproject.handler.*;
 import mafiadelprimobanco.focusproject.model.Page;
 
 import java.util.ArrayList;
@@ -60,7 +58,14 @@ public class BaseController implements EventHandler<KeyEvent>
 		}
 
 		// override behaviour
-		accountButton.setOnAction(event -> SceneHandler.getInstance().toggleLoginPopup());
+		accountButton.setOnAction(event -> {
+			if (AuthenticationHandler.getInstance().isUserLogged() && Feedback.getInstance()
+			.askYesNoConfirmation("Logout", "Vuoi eseguire il logout?"))
+			{
+				AuthenticationHandler.getInstance().doLogout();
+			}else if(!AuthenticationHandler.getInstance().isUserLogged())
+				SceneHandler.getInstance().toggleLoginPopup();
+		});
 
 		KeyPressManager.getInstance().addHandler(this);
 		SceneHandler.getInstance().setContentPane(contentRoot);

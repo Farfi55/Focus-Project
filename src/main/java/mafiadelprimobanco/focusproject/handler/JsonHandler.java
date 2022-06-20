@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
@@ -68,6 +69,8 @@ public final class JsonHandler
 		{
 			e.printStackTrace();
 		}
+
+		AuthenticationHandler.getInstance().updateTagsToServer();
 	}
 
 	private static void updateActivitiesFile()
@@ -80,6 +83,8 @@ public final class JsonHandler
 		{
 			e.printStackTrace();
 		}
+
+		AuthenticationHandler.getInstance().updateActivitiesToServer();
 	}
 
 	public static void addFinishedActivity(LocalDateTime key, AbstractActivity activity)
@@ -132,6 +137,32 @@ public final class JsonHandler
 		return activityList;
 	}
 
+	static void loadActivities(JSONObject data)
+	{
+        Map<String, Object> map = userActivities.toMap();
+		map.putAll(data.toMap());
+		userActivities = new JSONObject( map );
+
+		ActivityStatsHandler.getInstance().loadActivities();
+	}
+
+	static void loadTags(JSONObject data)
+	{
+		Map<String, Object> map = userTags.toMap();
+		map.putAll(data.toMap());
+		userTags = new JSONObject( map );
+
+		data.keys().forEachRemaining(key ->
+		{
+			JSONObject currTag = (JSONObject)userTags.get(key);
+			TagHandler.getInstance().addTag(key, Color.valueOf(currTag.getString("Color")), currTag.getInt("UUID"));
+		});
+	}
+
+	static JSONObject getTagsActivities()
+	{
+		return new JSONObject().put("tags",userTags.toString()).put("activities", userActivities.toString());
+	}
 
 	static void loadTags()
 	{
@@ -141,6 +172,7 @@ public final class JsonHandler
 			TagHandler.getInstance().addTag(key, Color.valueOf(currTag.getString("Color")), currTag.getInt("UUID"));
 		});
 	}
+
 
 	public static void addTag(String name, String colorHex, Integer UUID)
 	{

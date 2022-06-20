@@ -23,13 +23,12 @@ public class TagHandler
 
 	private TagHandler()
 	{
-		loadTags();
 	}
 
-	private void loadTags()
+	public void loadTags()
 	{
 		createUnsetTag();
-		//debugLoad();
+		JsonHandler.loadTags();
 	}
 
 	private void createUnsetTag()

@@ -19,10 +19,9 @@ public class MainApplication extends Application
 	{
 		try
 		{
-			Localization.setLocale(Locale.ITALIAN);
 			JsonHandler.init();
 
-			AuthenticationHandler.getInstance().doLoginFromDatabase();
+			TagHandler.getInstance().loadTags();
 
 			Feedback.getInstance().init(stage);
 			SceneHandler.getInstance().init(stage);
