@@ -9,6 +9,7 @@ import mafiadelprimobanco.focusproject.model.Tree;
 import mafiadelprimobanco.focusproject.model.activity.AbstractActivity;
 import mafiadelprimobanco.focusproject.utils.ResourcesLoader;
 import mafiadelprimobanco.focusproject.utils.TimeUtils;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -32,6 +33,7 @@ public class TreeHandler implements ActivityObserver
 	private TreeHandler()
 	{
 		loadTrees();
+		loadFromJson(JsonHandler.loadTreeJson());
 		setSelectedTreeToUnlock(getFirstTreeToUnlock());
 		setSelectedActivityTree(getFirstUnlockedTree());
 		loadTreePhasesImages();
@@ -83,6 +85,44 @@ public class TreeHandler implements ActivityObserver
 			if (tree.isUnlocked()) unlockedTrees.add(tree.getUuid());
 			else treesToUnlock.add(tree.getUuid());
 		}
+	}
+
+	public void loadFromJson(JSONObject treeJsonObj)
+	{
+		if (treeJsonObj == null || treeJsonObj.isEmpty()) return;
+
+		var treesList = treeJsonObj.getJSONObject("treesList");
+
+		var selectedTreeJSVal = treeJsonObj.getInt("selectedTreeToUnlockUuid");
+
+		if (selectedTreeJSVal != -1) selectedTreeToUnlock.set(trees.get(selectedTreeJSVal));
+
+		unusedProgressTime.set(treeJsonObj.getInt("unusedProgressTime"));
+
+		treesList.keys().forEachRemaining(treeUUID -> trees.get(Integer.valueOf(treeUUID))
+				.updateProgressFromJson(new JSONObject(treesList.getString(treeUUID))));
+	}
+
+	public JSONObject toJson()
+	{
+		JSONObject treeJsonObj = new JSONObject();
+
+		if (selectedTreeToUnlock != null)
+			treeJsonObj.put("selectedTreeToUnlockUuid",selectedTreeToUnlock.get().getUuid());
+		else
+			treeJsonObj.put("selectedTreeToUnlockUuid", -1);
+
+		treeJsonObj.put("unusedProgressTime", unusedProgressTime.getValue());
+
+		JSONObject treesList = new JSONObject();
+		for (Tree tree : trees.values())
+		{
+			treesList.put(String.valueOf(tree.getUuid()), tree.toJson());
+		}
+
+		treeJsonObj.put("treesList", treesList);
+
+		return treeJsonObj;
 	}
 
 	private void addProgressTime(int seconds)

@@ -31,6 +31,11 @@ public class ActivityStatsHandler implements ActivityObserver, TagsObserver
 	@Override
 	public void onTagRemoving(Tag tag)
 	{
+		activities.get(tag.getUuid()).forEach(activity -> {
+			activity.setTagUuid(0);
+			activities.get(0).add(activity);
+		});
+		activities.remove(tag.getUuid());
 	}
 
 	private ActivityStatsHandler()
