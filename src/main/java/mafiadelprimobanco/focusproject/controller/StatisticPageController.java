@@ -115,8 +115,6 @@ public class StatisticPageController implements Controller
 
 				if (seconds > 0)
 					setPieChart(tag, seconds);
-
-				tagUsed.set(tagUsed.size() - 1, true);
 			});
 
 			totalDataBarChart.getData().add(tagSeries.get(tag.getUuid()));
@@ -168,24 +166,20 @@ public class StatisticPageController implements Controller
 			valuesDay[index] += activity.getStartTime().until(activity.getEndTime(), ChronoUnit.SECONDS);
 		});
 
-		Platform.runLater(() ->
-		{
-			String color = ColorUtils.toHex(tag.getColor());
-
-			for (Node n : weekDayChart.lookupAll(".series0"))
-				n.setStyle("-fx-background-color:" + color + ";");
-
-			weekDayChartSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke:" + color + ";");
-		});
-
 		DateFormatSymbols symbols = new DateFormatSymbols(SettingsHandler.getInstance().getSettings().language.get().language);
 		String[] dayNames = symbols.getShortWeekdays();
 
 		for (int day = 0; day < 7; day++)
 		weekDayChartSeries.getData().add(new XYChart.Data<>(dayNames[((day+1)%7) + 1], valuesDay[day]));
 
-
 		weekDayChart.getData().add(weekDayChartSeries);
+
+		String color = ColorUtils.toHex(tag.getColor());
+
+		for (Node n : weekDayChart.lookupAll(".series0"))
+			n.setStyle("-fx-background-color:" + color + ";");
+
+		weekDayChartSeries.getNode().lookup(".chart-series-line").setStyle("-fx-stroke:" + color + ";");
 	}
 
 	@FXML void selectTagToShow() {

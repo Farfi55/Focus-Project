@@ -32,6 +32,11 @@ import java.util.regex.Pattern;
 
 public class RegistrationPageController implements Controller
 {
+	/*
+	 * Parte di questa classe è stato copiato dalla libreria MaterialFX
+	 * https://github.com/palexdev/MaterialFX/wiki
+	 */
+
 	private final MFXTextField loginField;
 	private final MFXPasswordField passwordField;
 	private final MFXTextField usernameField;
@@ -110,6 +115,10 @@ public class RegistrationPageController implements Controller
 
 	private <T extends Node & Validated> Node wrapNodeForValidation(T node)
 	{
+		/*
+		 * Parte di questa funzione è stato copiato dalla libreria MaterialFX
+		 * https://github.com/palexdev/MaterialFX/wiki
+		 */
 		Label errorLabel = new Label();
 		errorLabel.getStyleClass().add("error-label");
 		errorLabel.setManaged(false);
@@ -149,6 +158,10 @@ public class RegistrationPageController implements Controller
 
 	private Node createGrid()
 	{
+		/*
+		 * Parte di questa funzione è stato copiato dalla libreria MaterialFX
+		 * https://github.com/palexdev/MaterialFX/wiki
+		 */
 		Label emailLabel = new Label("Email: ");
 		Label emailValueLabel = new Label("");
 		emailValueLabel.textProperty().bind(loginField.textProperty());
@@ -193,16 +206,6 @@ public class RegistrationPageController implements Controller
 		});
 
 		return box;
-	}
-
-	private MFXTextField createLabel(String text)
-	{
-		MFXTextField label = MFXTextField.asLabel(text);
-		label.setAlignment(Pos.CENTER_LEFT);
-		label.setPrefWidth(200);
-		label.setMinWidth(Region.USE_PREF_SIZE);
-		label.setMaxWidth(Region.USE_PREF_SIZE);
-		return label;
 	}
 
 	@Override

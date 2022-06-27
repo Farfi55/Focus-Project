@@ -107,7 +107,7 @@ public class TreeHandler implements ActivityObserver
 	{
 		JSONObject treeJsonObj = new JSONObject();
 
-		if (selectedTreeToUnlock != null)
+		if (isValidSelectedTreeToUnlock())
 			treeJsonObj.put("selectedTreeToUnlockUuid",selectedTreeToUnlock.get().getUuid());
 		else
 			treeJsonObj.put("selectedTreeToUnlockUuid", -1);

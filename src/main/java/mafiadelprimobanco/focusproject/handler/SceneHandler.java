@@ -173,7 +173,8 @@ public class SceneHandler
 	public void loadPage(Page page) throws IOException
 	{
 		FXMLLoader loader = getFXMLLoader(page.FXMLPath());
-		page.pageRoot().set(loader.load());
+		page.pageRoot().set(loader.
+				load());
 		page.controller().set(loader.getController());
 		showPage(page);
 	}

@@ -98,7 +98,6 @@ public final class JsonHandler
 	{
 		userTags = new JSONObject(new String(Files.readAllBytes(localTagFile)));
 		userActivities = new JSONObject(new String(Files.readAllBytes(localActivitiesFile)));
-
 	}
 
 	public static JSONObject loadTreeJson(){
