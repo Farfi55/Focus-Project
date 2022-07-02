@@ -6,6 +6,7 @@ public enum Theme
 {
 	LIGHT("settings.theme.light", "light"),
 	LIGHT_ALT("settings.theme.lightAlt", "light-alt"),
+	EXAM("settings.theme.exam", "exam"),
 	DARK("settings.theme.dark", "dark"),
 	DARK_ALT("settings.theme.darkAlt", "dark-alt"),
 	LEGACY("settings.theme.legacy", "light-legacy");
