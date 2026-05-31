@@ -142,5 +142,6 @@ replay_pid*
 target/*
 
 activities.json
+trees.json
 
 tags.json

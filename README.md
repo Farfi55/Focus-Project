@@ -13,3 +13,23 @@ Libraries used:
 
 
 Inspired by the mobile app [Forest](https://www.forestapp.cc/)
+
+
+## How to run
+
+> [!IMPORTANT]  
+> Make sure you have Java 17 or higher installed on your machine.
+
+```bash
+git clone https://github.com/Farfi55/Focus-Project.git
+cd Focus-Project
+mvn clean javafx:run
+```
+
+## Screenshots
+
+![Home Screen](./screenshots/home.png)
+![Garden Screen](./screenshots/garden.png)
+![Tutorial Screen](./screenshots/tutorial.png)
+
+
